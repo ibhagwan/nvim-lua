@@ -76,6 +76,20 @@ function M.list_buffers()
 end
 ]]
 
+function M.toggle_colorcolumn()
+  local wininfo = vim.fn.getwininfo()
+  for _, win in pairs(wininfo) do
+    local ft = vim.api.nvim_buf_get_option(win['bufnr'], 'filetype')
+    -- print(win['winnr'], win['width'], ft)
+    if ft == nil or ft == '' or ft == 'TelescopePrompt' then return end
+    if win['width'] < vim.g.colorcolumn then
+      vim.api.nvim_win_set_option(win['winid'], 'colorcolumn', '')
+    else
+      vim.api.nvim_win_set_option(win['winid'], 'colorcolumn', string.format(vim.g.colorcolumn))
+    end
+  end
+end
+
 -- 'q': find the quickfix window
 -- 'l': find all loclist windows
 function M.find_qf(type)

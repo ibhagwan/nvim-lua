@@ -26,6 +26,9 @@ local autocmds = {
   resize_windows_proportionally = {
     { "VimResized", "*", [[tabdo wincmd =]]};
   };
+  toggle_colorcolumn = {
+    { "VimResized,WinEnter,BufWinEnter", "*", [[lua require'utils'.toggle_colorcolumn()]]};
+  },
   toggle_search_highlighting = {
     { "InsertEnter", "*", ":nohl | redraw" };
   };
