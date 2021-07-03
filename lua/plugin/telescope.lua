@@ -114,21 +114,20 @@ require("telescope").setup {
     color_devicons = true,
     winblend = 0,
 
-    layout_strategy = "vertical",
+    layout_strategy = "flex",
     layout_config = {
       width = 0.95,
       height = 0.85,
-      -- preview_cutoff = 120,
       prompt_position = "top",
 
       horizontal = {
         -- width_padding = 0.1,
         -- height_padding = 0.1,
-        -- preview_width = 0.7,
         width = 0.9,
+        preview_cutoff = 60,
         preview_width = function(_, cols, _)
           if cols > 200 then
-            return math.floor(cols * 0.4)
+            return math.floor(cols * 0.7)
           else
             return math.floor(cols * 0.6)
           end
@@ -143,9 +142,8 @@ require("telescope").setup {
         mirror = true,
       },
       flex = {
-        horizontal = {
-          preview_width = 0.9,
-        },
+        -- change to horizontal after 120 cols
+        flip_columns = 120,
       },
     },
 
