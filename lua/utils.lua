@@ -7,6 +7,13 @@ end
 
 local M = {}
 
+function M.has_neovim_v05()
+  if vim.fn.has('nvim-0.5') == 1 then
+    return true
+  end
+  return false
+end
+
 function M.is_root()
   local output = vim.fn.systemlist "id -u"
   return ((output[1] or "") == "0")

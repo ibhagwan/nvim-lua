@@ -1,5 +1,5 @@
 vim.o.mouse             = ''        -- disable the mouse
-vim.o.exrc              = true
+vim.o.exrc              = false     -- ignore '~/.exrc'
 vim.o.secure            = true
 vim.o.modelines         = 1         -- read a modeline at EOF
 vim.o.errorbells        = false     -- disable error bells (no beep/flash)

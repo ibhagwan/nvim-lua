@@ -1,5 +1,5 @@
--- Do not use plugins when running as root
-if require'utils'.is_root() then
+-- Do not use plugins when running as root or neovim < 0.5
+if require'utils'.is_root() or not require'utils'.has_neovim_v05() then
   return { sync_if_not_compiled = function() return end }
 end
 
