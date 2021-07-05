@@ -104,7 +104,7 @@ release](https://github.com/neovim/neovim/releases/tag/v0.5.0)**
 
 ### Appearence
 
-- [feline.nvim](https://github.com/folke/which-key.nvim): a fancy statusline
+- [feline.nvim](https://github.com/famiu/feline.nvim): a fancy statusline
 
 - [nvcode-color-schemes](https://github.com/christianchiarulli/nvcode-color-schemes.vim):
   a collection of treesitter compatible color schemes
