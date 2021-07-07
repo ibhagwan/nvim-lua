@@ -7,7 +7,7 @@ local execute = vim.api.nvim_command
 
 -- check if packer is installed (~/.local/share/nvim/site/pack)
 local install_path = vim.fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
-local compile_path = install_path .. "/plugin/packer_compiled.vim"
+local compile_path = install_path .. "/plugin/packer_compiled.lua"
 local is_installed = vim.fn.empty(vim.fn.glob(install_path)) == 0
 local is_compiled = vim.fn.empty(vim.fn.glob(compile_path)) == 0
 
