@@ -72,7 +72,7 @@ local function init()
         config = "require('plugin.gitsigns')" }
 
     -- Add indentation guides even on blank lines
-    use { 'lukas-reineke/indent-blankline.nvim', branch="lua",
+    use { 'lukas-reineke/indent-blankline.nvim', --branch="lua",
         config = "require('plugin.indent-blankline')",
         opt = true, cmd = { 'IndentBlanklineToggle' } }
 
@@ -81,17 +81,25 @@ local function init()
     -- ':lua require("nvim-reload").Reload()'
     use { 'famiu/nvim-reload',
         requires = { 'nvim-lua/plenary.nvim' },
-        config = "require('plugin.nvim-reload')" }
+        config = "require('plugin.nvim-reload')",
+        -- skip this since we manually lazy load
+        -- cmd = { 'NvimReload', 'NvimRestart' },
+        opt = true,
+    }
 
     -- Neoterm (REPLs)
     use { 'kassio/neoterm',
-        config = "require('plugin.neoterm')" }
+        config = "require('plugin.neoterm')",
+        keys = {'gxx', 'gx'},
+        cmd = { 'T' },
+    }
 
     -- yank over ssh with ':OCSYank' or ':OSCYankReg +'
     use { 'ojroques/vim-oscyank',
         config = function()
             vim.g.oscyank_term = 'tmux'
-        end
+        end,
+        cmd = { 'OSCYank', 'OSCYankReg' },
     }
 
     -- sudo when we need to
@@ -100,6 +108,7 @@ local function init()
 
     -- Autocompletion
     use { 'hrsh7th/nvim-compe',
+        -- event = "InsertEnter",
         config = "require('plugin.completion')" }
 
     -- nvim-treesitter
@@ -120,7 +129,9 @@ local function init()
     -- nvim-tree
     use { 'kyazdani42/nvim-tree.lua',
         requires = { 'kyazdani42/nvim-web-devicons' },
-        config = "require('plugin.nvim-tree')" }
+        config = "require('plugin.nvim-tree')",
+        cmd = { 'NvimTreeToggle', 'NvimTreeFindFile' }
+    }
 
     -- Telescope
     use { 'nvim-telescope/telescope.nvim',
@@ -129,7 +140,10 @@ local function init()
             {'nvim-lua/plenary.nvim'},
             {'nvim-telescope/telescope-fzy-native.nvim'},
         },
-        config = "require('plugin.telescope')" }
+        setup = "require('plugin.telescope.mappings')",
+        config = "require('plugin.telescope')",
+        opt = true
+    }
 
     -- Lazy-load fzf as alternative for Telescope
     -- set command prefix here to avoid all kinds of woes

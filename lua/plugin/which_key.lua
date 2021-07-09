@@ -84,7 +84,10 @@ local keymaps = {
   ["K"]         = 'LSP hover info under cursor',
   ["<leader>"]  = {
     ['?']       = 'Which key help',
-    ['"']       = { ':IndentBlanklineToggle<CR>', 'toggle IndentBlankline on/off' },
+    ['"']       = { [[:lua require('utils').ensure_loaded_fnc(]] ..
+                    [[{'indent-blankline.nvim'}, function()]] ..
+                    [[ require('indent_blankline.commands').toggle('<bang>' == '!')]] ..
+                    [[ end)<CR> ]], 'toggle IndentBlankline on/off' },
     ['<F1>']    = { ':FzfHelptags<CR>', 'fzf help tags' },
     ['<Up>']    = 'horizontal split increase',
     ['<Down>']  = 'horizontal split decrease',
@@ -113,8 +116,8 @@ local keymaps = {
     K = 'signature help   (LSP)',
     e = {
         name = '+explore/edit',
-        e = 'nvim-tree on/off',
-        f = 'nvim-tree current file',
+        e = { ':NvimTreeToggle<CR>', 'nvim-tree on/off' },
+        f = { ':NvimTreeFindFile<CR>', 'nvim-tree current file' },
         d = 'fzy ~/dots',
         n = 'fzy ~/.config/nvim',
         z = 'fzy ~/.config/zsh',

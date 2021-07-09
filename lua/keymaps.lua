@@ -4,8 +4,8 @@ local remap = vim.api.nvim_set_keymap
 vim.cmd [[command! -nargs=* NvimEditInit split | edit $MYVIMRC]]
 vim.cmd [[command! -nargs=* NvimEditKeymap split | edit ~/.config/nvim/lua/keymaps.lua]]
 vim.cmd [[command! -nargs=* NvimSourceInit luafile $MYVIMRC]]
-vim.cmd [[command! -nargs=* NvimReload lua require('nvim-reload').Reload()]]
-vim.cmd [[command! -nargs=* NvimRestart lua require('nvim-reload').Restart()]]
+vim.cmd [[command! -nargs=* NvimReload lua require('utils').ensure_loaded_fnc({'nvim-reload'}, function() require('nvim-reload').Reload() end)]]
+vim.cmd [[command! -nargs=* NvimRestart lua require('utils').ensure_loaded_fnc({'nvim-reload'}, function() require('nvim-reload').Restart() end)]]
 
 -- Use ':Grep' or ':LGrep' to grep into quickfix|loclist
 -- without output or jumping to first match

@@ -75,6 +75,14 @@ function M.ensure_loaded_cmd(modules, cmds)
   end
 end
 
+function M.ensure_loaded_fnc(modules, fnc)
+  vim.cmd[[packadd packer.nvim]]
+  for _, m in ipairs(modules) do
+    vim.cmd([[PackerLoad ]] .. m)
+  end
+  fnc()
+end
+
 --[[
 function M.list_buffers()
   for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
