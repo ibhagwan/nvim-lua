@@ -184,7 +184,7 @@ end
 -- use ':grep' to send resulsts to quickfix
 -- use ':lgrep' to send resulsts to loclist
 if require'utils'.shell_type('rg') then
-    vim.o.grepprg = 'rg --vimgrep --no-heading --smart-case'
+    vim.o.grepprg = 'rg --vimgrep --no-heading --smart-case --hidden'
     vim.o.grepformat = '%f:%l:%c:%m'
 end
 
@@ -205,6 +205,22 @@ local disabled_built_ins = {
 for _, plugin in pairs(disabled_built_ins) do
   vim.g['loaded_' .. plugin] = 1
 end
+
+vim.g.markdown_fenced_languages = {
+  'vim',
+  'lua',
+  'cpp',
+  'sql',
+  'python',
+  'bash=sh',
+  'console=sh',
+  'javascript',
+  'typescript',
+  'js=javascript',
+  'ts=typescript',
+  'yaml',
+  'json',
+}
 
 -- Map leader to <space>
 -- vim.api.nvim_set_keymap('', '<Space>', '<Nop>', { noremap = true, silent=true})
