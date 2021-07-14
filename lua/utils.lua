@@ -5,7 +5,20 @@ function _G.dump(...)
   print(unpack(objects))
 end
 
+function _G.reload(package)
+    package.loaded[package] = nil
+    return require(package)
+end
+
 local M = {}
+
+M._if = function(bool, a, b)
+    if bool then
+        return a
+    else
+        return b
+    end
+end
 
 function M.has_neovim_v05()
   if vim.fn.has('nvim-0.5') == 1 then
@@ -26,10 +39,19 @@ function M.is_darwin()
   return not not string.find(output[1] or "", "Darwin") ]]
 end
 
+function M.shell_error()
+  return vim.v.shell_error ~= 0
+end
+
 function M.shell_type(file)
   vim.fn.system(string.format("type '%s'", file))
   if vim.v.shell_error ~= 0 then return false
   else return true end
+end
+
+function M.is_git_repo()
+  vim.fn.system("git status")
+  return M._if(M.shell_error(), false, true)
 end
 
 function M.have_compiler()
@@ -42,6 +64,7 @@ function M.have_compiler()
   return false
 end
 
+-- Can also use #T ?
 function M.tablelength(T)
   local count = 0
   for _ in pairs(T) do count = count + 1 end
@@ -82,14 +105,6 @@ function M.ensure_loaded_fnc(modules, fnc)
   end
   fnc()
 end
-
---[[
-function M.list_buffers()
-  for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
-    print(bufnr, vim.api.nvim_buf_get_name(bufnr))
-  end
-end
-]]
 
 function M.toggle_colorcolumn()
   local wininfo = vim.fn.getwininfo()

@@ -88,13 +88,14 @@ local keymaps = {
                     [[{'indent-blankline.nvim'}, function()]] ..
                     [[ require('indent_blankline.commands').toggle('<bang>' == '!')]] ..
                     [[ end)<CR> ]], 'toggle IndentBlankline on/off' },
-    ['<F1>']    = { ':FzfHelptags<CR>', 'fzf help tags' },
+    ['<F1>']    = 'Fuzzy find help tags',
     ['<Up>']    = 'horizontal split increase',
     ['<Down>']  = 'horizontal split decrease',
     ['<Left>']  = 'vertical split decrease',
     ['<Right>'] = 'vertical split increase',
     ['=']       = 'normalize split layout',
     [';']       = 'fzy buffers',
+    [',']       = 'fzf buffers',
     ['|']       = 'toggle color column on/off',
     ['\'']      = "toggle 'listchars' on/off",
     ['c.']      = 'search and replace WORD under cursor',
@@ -202,43 +203,31 @@ local keymaps = {
     },
     z = {
         name = '+fzf',
-        [';'] = { ':FzfBuffers<CR>', 'Buffers' },
-        ['\\'] = 'Rg',
-        b = { [[:lua require('utils').ensure_loaded_cmd(]] ..
-              [[{'fzf.vim', 'fzf-preview.vim'},]] ..
-              [[{'FZFBLines'})<CR>]],
-              'buffer' },
-        B = { [[:lua require('utils').ensure_loaded_cmd(]] ..
-              [[{'fzf.vim', 'fzf-checkout.vim'},]] ..
-              [[{'FzfGBranches'})<CR>]],
-              'git branches' },
+        -- B = { [[:lua require('utils').ensure_loaded_cmd(]] ..
+              -- [[{'fzf.vim', 'fzf-checkout.vim'},]] ..
+              -- [[{'FzfGBranches'})<CR>]],
+              -- 'git branches' },
+        b = 'buffer',
         c = 'nvim commands',
         C = 'git commits',
-        f = { [[:lua require('utils').ensure_loaded_cmd(]] ..
-              [[{'fzf.vim'},{'FzfDevicons'})<CR>]],
-              'Files' },
+        f = 'Files',
         g = 'GitFiles',
         G = 'git grep',
         h = 'file history',
-        l = {':FzfRG<CR>', 'live grep' },
+        l = 'live grep',
         m = 'marks',
         o = 'color schemes',
-        q = { [[:lua require('utils').ensure_loaded_cmd(]] ..
-              [[{'fzf.vim', 'fzf-preview.vim'},]] ..
-              [[{'cclose', 'FZFQuickFix'})<CR>]],
-              'quickfix list' },
-        Q = { [[:lua require('utils').ensure_loaded_cmd(]] ..
-              [[{'fzf.vim', 'fzf-preview.vim'},]] ..
-              [[{'lclose', 'FZFLocList'})<CR>]],
-              'location list' },
-        r = 'Rg',
-        R = 'Grep',
+        q = 'quickfix list',
+        Q = 'location list',
+        r = 'grep prompt',
+        R = 'live grep',
         s = 'fzy search history',
         t = 'tags (buffer)',
         T = 'tags (project)',
         v = 'grep visual selection',
         w = 'grep word under cursor',
         W = 'grep WORD under cursor',
+        z = 'grep last fzf search',
         x = 'executed commands',
     },
     l = {

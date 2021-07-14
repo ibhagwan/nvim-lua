@@ -24,8 +24,8 @@ local map_tele = function(mode, key, f, options, buffer)
 end
 
 -- mappings
-map_tele('n', '<F1>', "help_tags")
-map_tele('n', '<c-p>', "find_files")
+map_tele('n', '<leader><F1>', "help_tags")
+map_tele('n', '<leader>ff', "find_files")
 map_tele('n', '<leader>;', "buffers")
 map_tele('n', '<space>fd', "fd")
 map_tele('n', '<leader>fg', "git_files")
@@ -50,7 +50,7 @@ map_tele('n', '<leader>fl', "live_grep")
 map_tele('n', "<space>f/", "grep_last_search", {
   layout_strategy = "vertical",
 })
-map_tele('n', '<leader>fW', "grep_cword")
+map_tele('n', '<leader>fw', "grep_cword")
 map_tele('n', '<leader>fW', "grep_cWORD")
 map_tele('n', '<leader>fr', "grep_prompt")
 map_tele('n', '<leader>fv', "grep_visual")
@@ -60,12 +60,6 @@ map_tele('v', '<leader>fv', "grep_visual")
 map_tele('n', '<leader>fB', "git_branches")
 map_tele('n', '<leader>gB', "git_branches")
 map_tele('n', '<leader>gC', "git_commits")
-
--- Nvim & Dots
-map_tele('n', '<leader>en', "edit_neovim")
-map_tele('n', '<leader>ed', "edit_dotfiles")
-map_tele('n', '<leader>ez', "edit_zsh")
-map_tele('n', '<leader>ep', "installed_plugins")
 
 -- LSP
 map_tele('n', '<leader>lr', "lsp_references")

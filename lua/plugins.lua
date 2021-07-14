@@ -130,7 +130,7 @@ local function init()
     use { 'kyazdani42/nvim-tree.lua',
         requires = { 'kyazdani42/nvim-web-devicons' },
         config = "require('plugin.nvim-tree')",
-        cmd = { 'NvimTreeToggle', 'NvimTreeFindFile' }
+        -- cmd = { 'NvimTreeToggle', 'NvimTreeFindFile' }
     }
 
     -- Telescope
@@ -145,33 +145,15 @@ local function init()
         opt = true
     }
 
-    -- Lazy-load fzf as alternative for Telescope
-    -- set command prefix here to avoid all kinds of woes
-    vim.g.fzf_command_prefix = 'Fzf'
-    use { 'junegunn/fzf.vim',
-        requires = {
-            'junegunn/fzf',
-            run = './install --bin',
-        },
-        -- lazy-loading from other plugins
-        -- setup = function() vim.g.fzf_command_prefix = 'Fzf' end,
-        config = "require('plugin.fzf')",
+    -- only required if you do not have fzf binary
+    -- use = { 'junegunn/fzf', run = './install --bin', }
+    -- use { '~/Sources/nvim/fzf-lua',
+    use { 'ibhagwan/fzf-lua',
+        requires = { 'vijaymarupudi/nvim-fzf' },
+        setup = "require('plugin.fzf-lua.mappings')",
+        config = "require('plugin.fzf-lua')",
         opt = true,
-        cmd = {'FzfFiles', 'FzfGFiles', 'FzfBuffers', 'FzfHelptags',
-            'FzfBLines', 'FzfRg', 'FzfRG',
-    }}
-    use { 'stsewd/fzf-checkout.vim',
-        requires = { 'junegunn/fzf', 'junegunn/fzf.vim' },
-        config = "require('plugin.fzf-checkout')",
-        opt = true, cmd = {'FzfGBranches'},
     }
-    use { 'chengzeyi/fzf-preview.vim',
-        requires = { 'junegunn/fzf', 'junegunn/fzf.vim' },
-        config = "require('plugin.fzf-preview')",
-        opt = true, cmd = {
-            'FZFQuickFix', 'FZFLocList', 'FZFFiles',
-            'FZFGFiles', 'FZFBuffers', 'FZFRg', 'FZFBLines',
-   }}
 
    -- better quickfix
    use { 'kevinhwang91/nvim-bqf',

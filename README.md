@@ -2,6 +2,13 @@
 
 ![screenshot](https://github.com/ibhagwan/nvim-lua/raw/main/screenshot.png)
 
+## fzf-lua update, 2021-07-14
+
+**Shameless plug, I wrote my own fzf plugin in pure lua, I removed the
+lefover fzf vim files and now proudly using 
+[fzf-lua](https://github.com/ibhagwan/fzf-lua)!**
+
+
 ## What's in this repo?
 
 **Yet another nvim-as-IDE setup in lua for the [0.5
@@ -69,12 +76,12 @@ release](https://github.com/neovim/neovim/releases/tag/v0.5.0)**
 
 - [nvim-tree](https://github.com/kyazdani42/nvim-tree.lua): file-explorer tree
 
+- [fzf-lua](https://github.com/ibhagwan/fzf-lua): the original, tried and
+  tested fuzzy finder in a lua plugin written by me
+
 - [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim): fuzzy
   search framework for searching project files, buffers, live grep (`rg`), and
   much more
-
-- [fzf.vim](https://github.com/junegunn/fzf.vim): non-lua tried and tested
-  alternative to telescope
 
 - [nvim-bqf](https://github.com/kevinhwang91/nvim-bqf): better quickfix and
   location list, provides quickfix previews, history and fuzzy search, great
