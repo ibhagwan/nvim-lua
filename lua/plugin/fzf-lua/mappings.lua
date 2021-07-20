@@ -26,29 +26,46 @@ end
 -- mappings
 map_fzf('n', '<F1>', "help_tags")
 map_fzf('n', '<c-P>', "files", {})
-map_fzf('n', '<leader>,', "buffers")
-map_fzf('n', '<leader>zr', "grep", {})
-map_fzf('n', '<leader>zl', "live_grep", {})
-map_fzf('n', '<leader>zR', "live_grep", {})
-map_fzf('n', '<leader>zz', "grep", { repeat_last_search = true} )
-map_fzf('n', '<leader>zw', "grep_cword")
-map_fzf('n', '<leader>zW', "grep_cWORD")
-map_fzf('n', '<leader>zv', "grep_visual")
-map_fzf('v', '<leader>zv', "grep_visual")
-map_fzf('n', '<leader>zb', "grep_curbuf", { prompt = 'Buffer❯ ' })
-map_fzf('n', '<leader>zf', "files", {})
-map_fzf('n', '<leader>zg', "git_files", {})
-map_fzf('n', '<leader>zh', "oldfiles")
-map_fzf('n', '<leader>zq', "quickfix")
-map_fzf('n', '<leader>zQ', "loclist")
-map_fzf('n', '<leader>zo', "colorschemes")
-map_fzf('n', '<leader>zM', "man_pages")
+map_fzf('n', '<leader>;', "buffers")
+map_fzf('n', '<leader>fr', "grep", {})
+map_fzf('n', '<leader>fl', "live_grep", {})
+map_fzf('n', '<leader>fR', "live_grep", {})
+map_fzf('n', '<leader>ff', "grep", { repeat_last_search = true} )
+map_fzf('n', '<leader>fw', "grep_cword")
+map_fzf('n', '<leader>fW', "grep_cWORD")
+map_fzf('n', '<leader>fv', "grep_visual")
+map_fzf('v', '<leader>fv', "grep_visual")
+map_fzf('n', '<leader>fb', "grep_curbuf", { prompt = 'Buffer❯ ' })
+map_fzf('n', '<leader>fp', "files", {})
+map_fzf('n', '<leader>fg', "git_files", {})
+map_fzf('n', '<leader>fh', "oldfiles")
+map_fzf('n', '<leader>fq', "quickfix")
+map_fzf('n', '<leader>fQ', "loclist")
+map_fzf('n', '<leader>fo', "colorschemes")
+map_fzf('n', '<leader>fM', "man_pages")
 
 -- Nvim & Dots
 map_fzf('n', '<leader>en', "edit_neovim")
 map_fzf('n', '<leader>ed', "edit_dotfiles")
 map_fzf('n', '<leader>ez', "edit_zsh")
 map_fzf('n', '<leader>ep', "installed_plugins")
+
+-- LSP
+map_fzf('n', '<leader>lr', "lsp_references")
+map_fzf('n', '<leader>ld', "lsp_definitions")
+map_fzf('n', '<leader>lD', "lsp_declarations")
+map_fzf('n', '<leader>ly', "lsp_typedefs")
+map_fzf('n', '<leader>lm', "lsp_implementations")
+map_fzf('n', '<leader>ls', "lsp_document_symbols")
+map_fzf('n', '<leader>lS', "lsp_workspace_symbols")
+map_fzf('n', '<leader>la', "lsp_code_actions", {
+  winopts = {
+    win_height       = 0.30,
+    win_width        = 0.70,
+    win_row          = 0.40,
+  }})
+map_fzf('n', '<leader>lg', "lsp_document_diagnostics", { file_icons = false })
+map_fzf('n', '<leader>lG', "lsp_workspace_diagnostics", { file_icons = false })
 
 --[[
 map_fzf('n', '<leader>fc', "commands")
@@ -67,16 +84,6 @@ map_fzf('n', '<leader>fB', "git_branches")
 map_fzf('n', '<leader>gB', "git_branches")
 map_fzf('n', '<leader>gC', "git_commits")
 
--- LSP
-map_fzf('n', '<leader>lr', "lsp_references")
-map_fzf('n', '<leader>la', "lsp_code_actions")
-map_fzf('n', '<leader>lA', "lsp_range_code_actions")
-map_fzf('n', '<leader>ld', "lsp_definitions")
-map_fzf('n', '<leader>lm', "lsp_implementations")
-map_fzf('n', '<leader>lg', "lsp_document_diagnostics")
-map_fzf('n', '<leader>lG', "lsp_workspace_diagnostics")
-map_fzf('n', '<leader>ls', "lsp_document_symbols")
-map_fzf('n', '<leader>lS', "lsp_workspace_symbols")
 
 -- Telescope Meta
 map_fzf('n', "<leader>f?", "builtin") ]]

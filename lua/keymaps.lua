@@ -160,6 +160,9 @@ remap('n', '<leader>|',
     ':execute "set colorcolumn=" . (&colorcolumn == "" ? "81" : "")<CR>', 
     { noremap = true, silent = true })
 
+-- Change current working dir (:pwd) to curent file's folder
+remap('n', '<leader>%', '<Esc>:cd %:h | pwd<CR>',   { noremap = true, silent = true })
+
 -- Map <leader>o & <leader>O to newline without insert mode
 remap('n', '<leader>o',
     ':<C-u>call append(line("."), repeat([""], v:count1))<CR>',

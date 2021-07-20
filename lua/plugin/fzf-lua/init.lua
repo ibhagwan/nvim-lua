@@ -40,10 +40,27 @@ require'fzf-lua'.setup {
       ["ctrl-y"]      = function(selected) print(selected[2]) end,
     }
   },
+  git = {
+    prompt            = 'GitFiles❯ ',
+    cmd               = 'git ls-files --exclude-standard',
+    git_icons         = true,         -- show git icons?
+    file_icons        = true,         -- show file icons?
+    color_icons       = true,         -- colorize file|git icons
+    icons = {
+        ["M"]     = { icon = "M", color = "yellow" },
+        ["D"]     = { icon = "D", color = "red" },
+        ["A"]     = { icon = "A", color = "green" },
+        ["?"]     = { icon = "?", color = "magenta" },
+        -- ["M"]     = { icon = "★", color = "red" },
+        -- ["D"]     = { icon = "✗", color = "red" },
+        -- ["A"]     = { icon = "+", color = "green" },
+    },
+  },
   grep = {
     prompt            = 'Rg❯ ',
     input_prompt      = 'Grep For❯ ',
     -- cmd               = "rg --vimgrep",
+    rg_opts           = "--hidden --column --line-number --no-heading --color=always --smart-case -g '!{.git,node_modules}/*'",
     git_icons         = true,         -- show git icons?
     file_icons        = true,         -- show file icons?
     color_icons       = true,         -- colorize file|git icons
@@ -59,13 +76,6 @@ require'fzf-lua'.setup {
   oldfiles = {
     prompt            = 'History❯ ',
     cwd_only          = false,
-  },
-  git = {
-    prompt            = 'GitFiles❯ ',
-    cmd               = 'git ls-files --exclude-standard',
-    git_icons         = true,         -- show git icons?
-    file_icons        = true,         -- show file icons?
-    color_icons       = true,         -- colorize file|git icons
   },
   buffers = {
     prompt            = 'Buffers❯ ',
@@ -99,8 +109,23 @@ require'fzf-lua'.setup {
     end,
   },
   quickfix = {
-    cwd               = vim.loop.cwd(),
+    -- cwd               = vim.loop.cwd(),
     file_icons        = true,
+    git_icons         = true,
+  },
+  lsp = {
+    prompt            = '❯ ',
+    -- cwd               = vim.loop.cwd(),
+    file_icons        = true,
+    git_icons         = false,
+    lsp_icons         = true,
+    severity          = "hint",
+    icons = {
+      ["Error"]       = { icon = "", color = "red" },       -- error
+      ["Warning"]     = { icon = "", color = "yellow" },    -- warning
+      ["Information"] = { icon = "", color = "blue" },      -- info
+      ["Hint"]        = { icon = "", color = "magenta" },   -- hint
+    },
   },
   -- placeholders for additional user customizations
   loclist = {},
@@ -108,18 +133,6 @@ require'fzf-lua'.setup {
   manpages = {},
   file_icon_colors = {                -- override colors for extensions
     ["lua"]   = "blue",
-  },
-  git_icons = {                       -- override colors for git icons
-    ["M"]     = "M", --"★",
-    ["D"]     = "D", --"✗",
-    ["A"]     = "A", --"+",
-    ["?"]     = "?"
-  },
-  git_icon_colors = {                 -- override colors for git icon colors
-    ["M"]     = "yellow",
-    ["D"]     = "red",
-    ["A"]     = "green",
-    ["?"]     = "magenta"
   },
   fzf_binds           = {             -- fzf '--bind=' options
     'f2:toggle-preview',
@@ -131,10 +144,30 @@ require'fzf-lua'.setup {
     'ctrl-f:page-down',
     'ctrl-b:page-up',
     'ctrl-a:toggle-all',
-    'ctrl-u:clear-query',
+    'ctrl-l:clear-query',
   },
   window_on_create = function()         -- nvim window options override
     vim.cmd("set winhl=Normal:Normal")  -- popup bg match normal windows
+  end,
+  _winopts_raw = function() -- remove _underscore to enable (winopts_raw)
+    local width = math.floor(vim.o.columns * 0.60)
+    local height = math.floor(vim.o.lines * 0.65)
+    if vim.o.columns < 120 then
+      width = math.floor(vim.o.columns * 0.80)
+    end
+    local row = math.floor((vim.o.lines - height) * 0.50)
+    local col = math.floor((vim.o.columns - width) * 0.50)
+
+    return {
+      height = height,
+      width = width,
+      row = row,
+      col = col,
+      -- border = 'none',
+      window_on_create = function()
+        vim.cmd("set winhl=Normal:Normal,FloatBorder:VertSplit")
+      end
+    }
   end
 }
 

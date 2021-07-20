@@ -149,6 +149,7 @@ local function init()
     -- use = { 'junegunn/fzf', run = './install --bin', }
     -- use { '~/Sources/nvim/fzf-lua',
     use { 'ibhagwan/fzf-lua',
+        -- requires = { 'ibhagwan/nvim-fzf' },
         requires = { 'vijaymarupudi/nvim-fzf' },
         setup = "require('plugin.fzf-lua.mappings')",
         config = "require('plugin.fzf-lua')",
@@ -192,9 +193,8 @@ local function init()
     use { 'famiu/feline.nvim', config = "require'plugin.feline'" }
 
     -- Color scheme, requires nvim-treesitter
-    use {"christianchiarulli/nvcode-color-schemes.vim",
-        setup = function() vim.g.nvcode_termcolors = 256 end,
-        opt = true}
+    vim.g.nvcode_termcolors = 256
+    use {"christianchiarulli/nvcode-color-schemes.vim", opt = true}
 
     -- Colorizer
     use { 'norcalli/nvim-colorizer.lua',

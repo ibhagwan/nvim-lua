@@ -1,5 +1,7 @@
 -- 'zf' requires fzf
-pcall(vim.cmd, [[PackerLoad fzf]])
+-- since changing fzf.vim for fzf-lua we don't need this anymore
+-- use `:lua require('fzf-lua').quickfix()` instead
+-- pcall(vim.cmd, [[PackerLoad fzf]])
 
 require('bqf').setup({
     auto_enable = true,
