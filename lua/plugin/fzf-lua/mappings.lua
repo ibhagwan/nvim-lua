@@ -52,7 +52,7 @@ map_fzf('n', '<leader>ep', "installed_plugins")
 
 -- LSP
 map_fzf('n', '<leader>lr', "lsp_references")
-map_fzf('n', '<leader>ld', "lsp_definitions")
+map_fzf('n', '<leader>ld', "lsp_definitions", { jump_to_single_result = false })
 map_fzf('n', '<leader>lD', "lsp_declarations")
 map_fzf('n', '<leader>ly', "lsp_typedefs")
 map_fzf('n', '<leader>lm', "lsp_implementations")

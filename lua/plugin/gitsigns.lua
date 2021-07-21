@@ -39,5 +39,5 @@ require('gitsigns').setup {
   update_debounce = 100,
   status_formatter = nil, -- Use default
   use_decoration_api = true,
-  use_internal_diff = true,  -- If luajit is present
+  use_internal_diff = false,  -- If luajit is present
 }

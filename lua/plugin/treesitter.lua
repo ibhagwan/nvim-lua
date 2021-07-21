@@ -88,6 +88,13 @@ require'nvim-treesitter.configs'.setup {
                        w __gmon_start__
       00000000000232e0 T tree_sitter_solidity
   ```
+  To install:
+  ```
+    ❯ mkdir ~/.local/share/nvim/site/pack/packer/start/nvim-treesitter/queries/solidity/
+    ❯ curl -L https://raw.githubusercontent.com/JoranHonig/tree-sitter-solidity/master/queries/highlights.scm -o ~/.local/share/nvim/site/pack/packer/start/nvim-treesitter/queries/solidity/highlights.scm
+    ❯ vi ~/.local/share/nvim/site/pack/packer/start/nvim-treesitter/queries/solidity/highlights.scm
+  ```
+  ** comment out lines 68-69
 ]]
 if pcall(require, "nvim-treesitter.parsers") then
   require "nvim-treesitter.parsers".get_parser_configs().solidity = {
