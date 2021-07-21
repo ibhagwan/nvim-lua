@@ -5,7 +5,7 @@
 ## fzf-lua update, 2021-07-14
 
 **Shameless plug, I wrote my own fzf plugin in pure lua, I removed the
-lefover fzf vim files and now proudly using 
+leftover fzf vim files and now proudly using 
 [fzf-lua](https://github.com/ibhagwan/fzf-lua)!**
 
 
