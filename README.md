@@ -48,8 +48,8 @@ release](https://github.com/neovim/neovim/releases/tag/v0.5.0)**
 
 ### Coding, completion & LSP
 
-- [kommentary](https://github.com/b3nj5m1n/kommentary): use `gc` and `gcc` to
-  comment visual-blocks and lines
+- [commented.nvim](https://github.com/winston0410/commented.nvim): use `gc` and
+  `gcc` to comment visual-blocks and lines
 
 - [indent-blankline](https://github.com/lukas-reineke/indent-blankline.nvim):
   add indentation markers based on `tabstop | shiftwidth`

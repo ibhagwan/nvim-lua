@@ -51,8 +51,10 @@ local function init()
     use { 'tpope/vim-repeat' }
 
     -- "gc" to comment visual regions/lines
-    -- use { 'tpope/vim-commentary' }
-    use { 'b3nj5m1n/kommentary',
+    use { 'winston0410/commented.nvim',
+        config = function() require('commented').setup({
+          keybindings = {n = "gc", v = "gc", nl = "gcc"},
+        }) end,
         -- uncomment for lazy loading
         -- keys = {'gcc', 'gc'}
     }
@@ -147,9 +149,7 @@ local function init()
 
     -- only required if you do not have fzf binary
     -- use = { 'junegunn/fzf', run = './install --bin', }
-    -- use { '~/Sources/nvim/fzf-lua',
     use { 'ibhagwan/fzf-lua',
-        -- requires = { 'ibhagwan/nvim-fzf' },
         requires = { 'vijaymarupudi/nvim-fzf' },
         setup = "require('plugin.fzf-lua.mappings')",
         config = "require('plugin.fzf-lua')",

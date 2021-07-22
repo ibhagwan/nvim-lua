@@ -67,6 +67,9 @@ map_fzf('n', '<leader>la', "lsp_code_actions", {
 map_fzf('n', '<leader>lg', "lsp_document_diagnostics", { file_icons = false })
 map_fzf('n', '<leader>lG', "lsp_workspace_diagnostics", { file_icons = false })
 
+-- Fzf-lua methods
+map_fzf('n', "<leader>f?", "builtin")
+
 --[[
 map_fzf('n', '<leader>fc', "commands")
 map_fzf('n', '<leader>fx', "command_history")
@@ -84,6 +87,4 @@ map_fzf('n', '<leader>fB', "git_branches")
 map_fzf('n', '<leader>gB', "git_branches")
 map_fzf('n', '<leader>gC', "git_commits")
 
-
--- Telescope Meta
-map_fzf('n', "<leader>f?", "builtin") ]]
+]]
