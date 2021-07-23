@@ -176,6 +176,7 @@ local keymaps = {
     },
     f = {
         name = '+find (fzf)',
+        ['?'] = 'fzf-lua builtin commands',
         -- c = 'nvim commands',
         -- C = 'git commits',
         p = 'files',
@@ -204,7 +205,7 @@ local keymaps = {
         name = '+find (telescope)',
         -- ['/'] = 'grep last search',
         ["/"] = 'fzy search history',
-        ['?'] = 'fzy telescope meta',
+        ['?'] = 'telescope builtin commands',
         [':'] = 'fzy nvim commands',
         ['"'] = 'fzy registers',
         b = 'fzy current buffer',

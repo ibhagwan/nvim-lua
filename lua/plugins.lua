@@ -5,12 +5,26 @@ end
 
 local execute = vim.api.nvim_command
 
+local compile_suffix = "/plugin/packer_compiled.lua"
+local install_suffix = "/site/pack/packer/%s/packer.nvim"
+local install_path = vim.fn.stdpath("data") .. string.format(install_suffix, "opt")
+local compile_path = vim.fn.stdpath("data") .. compile_suffix
+
+-- Do we need to migrate from previous nvim-lua setup?
+local old_install_path = vim.fn.stdpath("data") .. string.format(install_suffix, "start")
+local old_is_installed = vim.fn.empty(vim.fn.glob(old_install_path)) == 0
+if old_is_installed then
+  -- delete 'package_compiled.lua'
+  -- forces sync in 'sync_if_not_compiled'
+  vim.fn.delete(old_install_path .. "/plugin", 'rf')
+  local success, msg = os.rename(old_install_path, install_path)
+  if not success then print("failed to moved packer.nvim: " .. msg)
+  else print("packer.nvim successfully moved to " .. install_path) end
+end
+
 -- check if packer is installed (~/.local/share/nvim/site/pack)
-local install_path = vim.fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
-local compile_path = install_path .. "/plugin/packer_compiled.lua"
 local is_installed = vim.fn.empty(vim.fn.glob(install_path)) == 0
 local is_compiled = vim.fn.empty(vim.fn.glob(compile_path)) == 0
-
 if not is_installed then
     if vim.fn.input("Install packer.nvim? (y for yes) ") == "y" then
         execute("!git clone https://github.com/wbthomason/packer.nvim " .. install_path)
@@ -30,6 +44,11 @@ vim.cmd [[command! PC PackerCompile]]
 vim.cmd [[command! PS PackerStatus]]
 vim.cmd [[command! PU PackerSync]]
 
+-- Since we are lazy loading packer itself
+-- and also changed the compiled lazy loading file
+vim.cmd [[packadd packer.nvim]]
+if is_compiled then vim.cmd("luafile " .. compile_path) end
+
 local packer = nil
 local function init()
     if not is_installed then return end
@@ -44,7 +63,10 @@ local function init()
     local use = packer.use
 
     -- Packer can manage itself as an optional plugin
-    use { 'wbthomason/packer.nvim' }
+    use { 'wbthomason/packer.nvim', opt = true }
+
+    -- Analyze startuptime
+    use { 'tweekmonster/startuptime.vim', cmd = 'StartupTime' }
 
     -- tpope's plugins that should be part of vim
     use { 'tpope/vim-surround' }
@@ -56,22 +78,28 @@ local function init()
           keybindings = {n = "gc", v = "gc", nl = "gcc"},
         }) end,
         -- uncomment for lazy loading
+        -- causes delay with visual mapping
         -- keys = {'gcc', 'gc'}
     }
 
     -- needs no introduction
     use { 'tpope/vim-fugitive',
-        config = "require('plugin.fugitive')" }
+        config = "require('plugin.fugitive')",}
+        -- event = "VimEnter" }
 
     -- :DiffViewOpen :DiffViewClose
     use { 'sindrets/diffview.nvim', opt = true,
         cmd = { 'DiffviewOpen', 'DiffviewClose' }}
 
+    -- plenary is required by gitsigns, telescope and nvim-reload
+    -- lazy load so gitsigns doesn't abuse our startup time
+    use { "nvim-lua/plenary.nvim", event = "BufRead" }
+
     -- Add git related info in the signs columns and popups
-    -- TODO: causes splash screen to flash
     use { 'lewis6991/gitsigns.nvim',
         requires = { 'nvim-lua/plenary.nvim' },
-        config = "require('plugin.gitsigns')" }
+        config = "require('plugin.gitsigns')",
+        after = "plenary.nvim" }
 
     -- Add indentation guides even on blank lines
     use { 'lukas-reineke/indent-blankline.nvim', --branch="lua",
@@ -85,8 +113,9 @@ local function init()
         requires = { 'nvim-lua/plenary.nvim' },
         config = "require('plugin.nvim-reload')",
         -- skip this since we manually lazy load
+        -- in our command / binding
         -- cmd = { 'NvimReload', 'NvimRestart' },
-        opt = true,
+        after = 'plenary.nvim', opt = true,
     }
 
     -- Neoterm (REPLs)
@@ -110,7 +139,7 @@ local function init()
 
     -- Autocompletion
     use { 'hrsh7th/nvim-compe',
-        -- event = "InsertEnter",
+        event = "InsertEnter",
         config = "require('plugin.completion')" }
 
     -- nvim-treesitter
@@ -118,7 +147,8 @@ local function init()
     if require'utils'.have_compiler() then
         use { 'nvim-treesitter/nvim-treesitter',
             config = "require('plugin.treesitter')",
-            run = ':TSUpdate' }
+            run = ':TSUpdate',
+            event = 'BufRead' }
         use { 'nvim-treesitter/nvim-treesitter-textobjects',
             after = { 'nvim-treesitter' } }
         -- debuging treesitter
@@ -128,11 +158,15 @@ local function init()
             opt = true }
     end
 
+    -- optional for fzf-lua, telescope, nvim-tree, feline
+    use { 'kyazdani42/nvim-web-devicons', event = 'VimEnter' }
+
     -- nvim-tree
     use { 'kyazdani42/nvim-tree.lua',
         requires = { 'kyazdani42/nvim-web-devicons' },
         config = "require('plugin.nvim-tree')",
-        -- cmd = { 'NvimTreeToggle', 'NvimTreeFindFile' }
+        cmd = { 'NvimTreeToggle', 'NvimTreeFindFile' },
+        opt = true,
     }
 
     -- Telescope
@@ -149,8 +183,13 @@ local function init()
 
     -- only required if you do not have fzf binary
     -- use = { 'junegunn/fzf', run = './install --bin', }
+    -- use { '~/Sources/nvim/fzf-lua',
     use { 'ibhagwan/fzf-lua',
-        requires = { 'vijaymarupudi/nvim-fzf' },
+        requires = {
+          -- { '~/Sources/nvim/nvim-fzf' },
+          { 'vijaymarupudi/nvim-fzf' },
+          { 'kyazdani42/nvim-web-devicons' },
+        },
         setup = "require('plugin.fzf-lua.mappings')",
         config = "require('plugin.fzf-lua')",
         opt = true,
@@ -162,9 +201,9 @@ local function init()
         ft = { 'qf' } }
 
     -- LSP
-    use { 'neovim/nvim-lspconfig',
-        'ray-x/lsp_signature.nvim',
-        'kabouzeid/nvim-lspinstall' }
+    use { 'neovim/nvim-lspconfig',      event = 'BufRead' }
+    use { 'kabouzeid/nvim-lspinstall',  event = 'BufRead' }
+    use { 'ray-x/lsp_signature.nvim',   event = 'BufRead' }
 
     --[[ use { 'glepnir/lspsaga.nvim',
         config = function()
@@ -187,10 +226,8 @@ local function init()
 
     -- key bindings cheatsheet
     use { 'folke/which-key.nvim',
-        config = "require('plugin.which_key')" }
-
-    -- fancy statusline
-    use { 'famiu/feline.nvim', config = "require'plugin.feline'" }
+        config = "require('plugin.which_key')",
+        event = "VimEnter" }
 
     -- Color scheme, requires nvim-treesitter
     vim.g.nvcode_termcolors = 256
@@ -201,6 +238,13 @@ local function init()
         config = function() require'colorizer'.setup() end,
         cmd = {'ColorizerAttachToBuffer', 'ColorizerDetachFromBuffer' },
         opt = true }
+
+    -- fancy statusline
+    -- TODO: causes splash screen to flash
+    use { 'famiu/feline.nvim',
+        requires = { 'kyazdani42/nvim-web-devicons' },
+        config = "require'plugin.feline'",
+        event = 'VimEnter' }
 
 end
 
