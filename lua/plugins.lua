@@ -201,9 +201,16 @@ local function init()
         ft = { 'qf' } }
 
     -- LSP
-    use { 'neovim/nvim-lspconfig',      event = 'BufRead' }
-    use { 'kabouzeid/nvim-lspinstall',  event = 'BufRead' }
-    use { 'ray-x/lsp_signature.nvim',   event = 'BufRead' }
+    use { 'neovim/nvim-lspconfig',    event = 'BufRead' }
+    use { 'ray-x/lsp_signature.nvim', event = 'BufRead' }
+    use { 'kabouzeid/nvim-lspinstall',
+        config = function()
+          require('lsp')
+          -- ':command LspStart'
+          require'lspconfig'._root.commands.LspStart[1]()
+        end,
+        after  = { 'nvim-lspconfig', 'lsp_signature.nvim' },
+      }
 
     --[[ use { 'glepnir/lspsaga.nvim',
         config = function()

@@ -248,7 +248,6 @@ vim.api.nvim_command('set rtp-=/usr/share/vim/vimfiles')
 require 'plugins'
 require 'autocmd'
 require 'keymaps'
-require 'lsp'
 
 -- set colorscheme to modified embark
 -- https://github.com/embark-theme/vim

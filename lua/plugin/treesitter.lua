@@ -90,9 +90,9 @@ require'nvim-treesitter.configs'.setup {
   ```
   To install:
   ```
-    ❯ mkdir ~/.local/share/nvim/site/pack/packer/start/nvim-treesitter/queries/solidity/
-    ❯ curl -L https://raw.githubusercontent.com/JoranHonig/tree-sitter-solidity/master/queries/highlights.scm -o ~/.local/share/nvim/site/pack/packer/start/nvim-treesitter/queries/solidity/highlights.scm
-    ❯ vi ~/.local/share/nvim/site/pack/packer/start/nvim-treesitter/queries/solidity/highlights.scm
+    ❯ mkdir ~/.local/share/nvim/site/pack/packer/opt/nvim-treesitter/queries/solidity/
+    ❯ curl -L https://raw.githubusercontent.com/JoranHonig/tree-sitter-solidity/master/queries/highlights.scm -o ~/.local/share/nvim/site/pack/packer/opt/nvim-treesitter/queries/solidity/highlights.scm
+    ❯ vi ~/.local/share/nvim/site/pack/packer/opt/nvim-treesitter/queries/solidity/highlights.scm
   ```
   ** comment out lines 68-69
 ]]

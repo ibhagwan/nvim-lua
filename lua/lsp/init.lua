@@ -8,14 +8,16 @@ end
 local signature  = require('lsp_signature')
 
 local on_attach = function(client, bufnr)
-  signature.on_attach({
-    bind         = true,
-    hint_enable  = true,
-    hint_prefix  = " ",
-    hint_scheme  = "String",
-    handler_opts = { border = "single" },
-    decorator    = {"`", "`"}
-  })
+  if signature then
+    signature.on_attach({
+      bind         = true,
+      hint_enable  = true,
+      hint_prefix  = " ",
+      hint_scheme  = "String",
+      handler_opts = { border = "single" },
+      decorator    = {"`", "`"}
+    })
+  end
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
   if client.config.flags then
