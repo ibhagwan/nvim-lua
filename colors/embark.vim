@@ -211,6 +211,12 @@ call s:h("DiffChange",    {"fg": s:bg, "bg": s:dark_yellow})
 call s:h("DiffText",      {"fg": s:bg, "bg": s:dark_yellow, "gui": "bold"})
 call s:h("SignColumn",    {"fg": s:green})
 
+" tpope/vim-fugitive
+call s:h("diffLine",       {"fg": s:purple})
+call s:h("diffAdded",      {"fg": s:green})
+call s:h("diffRemoved",    {"fg": s:red})
+call s:h("diffNoEOL",      {"fg": s:purple})
+
 if has("gui_running")
   call s:h("SpellBad",    {"gui": "underline", "sp": s:dark_red})
   call s:h("SpellCap",    {"gui": "underline", "sp": s:green})

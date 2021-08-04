@@ -12,9 +12,9 @@ vim.cmd [[command! -nargs=* NvimRestart lua require('utils').ensure_loaded_fnc({
 -- Use ':Grep <pattern> %' to search only current file
 -- Use ':Grep <pattern> %:h' to search the current file dir
 vim.cmd("command! -nargs=+ -complete=file Grep " ..
-    "lua vim.api.nvim_exec([[grep! <args> | redraw! | copen]], true)")
+    "lua vim.api.nvim_exec([[noautocmd grep! <args> | redraw! | copen]], true)")
 vim.cmd("command! -nargs=+ -complete=file LGrep " ..
-    "lua vim.api.nvim_exec([[lgrep! <args> | redraw! | lopen]], true)")
+    "lua vim.api.nvim_exec([[noautocmd lgrep! <args> | redraw! | lopen]], true)")
 
 remap('', '<leader>ei', '<Esc>:NvimEditInit<CR>',   { silent = true })
 remap('', '<leader>ek', '<Esc>:NvimEditKeymap<CR>', { silent = true })
@@ -23,13 +23,21 @@ remap('', '<leader>R',  "<Esc>:NvimReload<CR>",     { silent = true })
 -- Fix common typos
 vim.cmd([[
     cnoreabbrev W! w!
+    cnoreabbrev W1 w!
+    cnoreabbrev w1 w!
     cnoreabbrev Q! q!
+    cnoreabbrev Q1 q!
+    cnoreabbrev q1 q!
     cnoreabbrev Qa! qa!
     cnoreabbrev Qall! qall!
-    cnoreabbrev Wq wq
     cnoreabbrev Wa wa
+    cnoreabbrev Wq wq
     cnoreabbrev wQ wq
     cnoreabbrev WQ wq
+    cnoreabbrev wq1 wq!
+    cnoreabbrev Wq1 wq!
+    cnoreabbrev wQ1 wq!
+    cnoreabbrev WQ1 wq!
     cnoreabbrev W w
     cnoreabbrev Q q
     cnoreabbrev Qa qa

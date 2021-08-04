@@ -70,7 +70,7 @@ vim.o.completeopt       = 'noinsert,menuone,noselect'
 vim.o.wildmenu          = true
 vim.o.wildmode          = 'longest:full,full'
 vim.o.wildoptions       = 'pum'     -- Show completion items using the pop-up-menu (pum)
-vim.o.pumblend          = 30        -- Give the pum some transparency
+vim.o.pumblend          = 15        -- Give the pum some transparency
 
 vim.o.joinspaces        = true      -- insert spaces after '.?!' when joining lines
 vim.o.autoindent        = true      -- copy indent from current line on newline
@@ -251,4 +251,5 @@ require 'keymaps'
 
 -- set colorscheme to modified embark
 -- https://github.com/embark-theme/vim
-pcall(vim.cmd, [[colorscheme embark]])
+vim.g.colorscheme_terminal_italics = true
+pcall(vim.cmd, [[colorscheme lua-embark]])

@@ -73,10 +73,8 @@ local function init()
     use { 'tpope/vim-repeat' }
 
     -- "gc" to comment visual regions/lines
-    use { 'winston0410/commented.nvim',
-        config = function() require('commented').setup({
-          keybindings = {n = "gc", v = "gc", nl = "gcc"},
-        }) end,
+    vim.g.kommentary_create_default_mappings = false
+    use { 'b3nj5m1n/kommentary',
         -- uncomment for lazy loading
         -- causes delay with visual mapping
         -- keys = {'gcc', 'gc'}
@@ -91,7 +89,7 @@ local function init()
     use { 'sindrets/diffview.nvim', opt = true,
         cmd = { 'DiffviewOpen', 'DiffviewClose' }}
 
-    -- plenary is required by gitsigns, telescope and nvim-reload
+    -- plenary is required by gitsigns and telescope
     -- lazy load so gitsigns doesn't abuse our startup time
     use { "nvim-lua/plenary.nvim", event = "BufRead" }
 
@@ -106,10 +104,8 @@ local function init()
         config = "require('plugin.indent-blankline')",
         opt = true, cmd = { 'IndentBlanklineToggle' } }
 
-    -- ':source' & ':luafile' don't reload `require()` properly
-    -- Use ':Reload' & ':Restart' instead, alternatively:
-    -- ':lua require("nvim-reload").Reload()'
-    use { 'famiu/nvim-reload',
+    -- 'famiu/nvim-reload' has been archived and no longer maintained
+    use { vim.fn.stdpath("config") .. "/lua/plugin/nvim-reload",
         requires = { 'nvim-lua/plenary.nvim' },
         config = "require('plugin.nvim-reload')",
         -- skip this since we manually lazy load
@@ -247,8 +243,7 @@ local function init()
         opt = true }
 
     -- fancy statusline
-    -- TODO: causes splash screen to flash
-    use { 'famiu/feline.nvim',
+    use { 'ibhagwan/feline.nvim',
         requires = { 'kyazdani42/nvim-web-devicons' },
         config = "require'plugin.feline'",
         event = 'VimEnter' }
