@@ -68,6 +68,11 @@ map_fzf('n', '<leader>la', "lsp_code_actions", {
 map_fzf('n', '<leader>lg', "lsp_document_diagnostics", { file_icons = false })
 map_fzf('n', '<leader>lG', "lsp_workspace_diagnostics", { file_icons = false })
 
+-- Git
+map_fzf('n', '<leader>fB', "git_branches")
+map_fzf('n', '<leader>fc', "git_commits")
+map_fzf('n', '<leader>fC', "git_bcommits")
+
 -- Fzf-lua methods
 map_fzf('n', "<leader>f?", "builtin")
 
@@ -83,9 +88,5 @@ map_fzf('n', '<leader>fz', "spell_suggest")
 map_fzf('n', '<leader>ft', "current_buffer_tags")
 map_fzf('n', '<leader>fT', "tags")
 
--- Git
-map_fzf('n', '<leader>fB', "git_branches")
-map_fzf('n', '<leader>gB', "git_branches")
-map_fzf('n', '<leader>gC', "git_commits")
 
 ]]

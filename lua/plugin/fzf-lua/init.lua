@@ -84,19 +84,45 @@ M.setup = function()
       }
     },
     git = {
-      prompt            = 'GitFiles❯ ',
-      cmd               = 'git ls-files --exclude-standard',
-      git_icons         = true,           -- show git icons?
-      file_icons        = true,           -- show file icons?
-      color_icons       = true,           -- colorize file|git icons
+      files = {
+        prompt        = 'GitFiles❯ ',
+        cmd           = 'git ls-files --exclude-standard',
+        git_icons     = true,           -- show git icons?
+        file_icons    = true,           -- show file icons?
+        color_icons   = true,           -- colorize file|git icons
+      },
+      commits = {
+        prompt        = 'Commits❯ ',
+        cmd           = "git log --pretty=oneline --abbrev-commit --color",
+        preview       = "git show --pretty='%Cred%H%n%Cblue%an%n%Cgreen%s' --color {1}",
+        actions = {
+          ["default"] = nil,
+        },
+      },
+      bcommits = {
+        prompt        = 'BCommits❯ ',
+        cmd           = "git log --pretty=oneline --abbrev-commit --color --",
+        preview       = "git show --pretty='%Cred%H%n%Cblue%an%n%Cgreen%s' --color {1}",
+        actions = {
+          ["default"] = nil,
+        },
+      },
+      branches = {
+        prompt        = 'Branches❯ ',
+        cmd           = "git branch --all --color",
+        preview       = "git log --graph --pretty=oneline --abbrev-commit --color {1}",
+        actions = {
+          ["default"] = actions.git_switch,
+        },
+      },
       icons = {
-        ["M"]           = { icon = "M", color = "yellow" },
-        ["D"]           = { icon = "D", color = "red" },
-        ["A"]           = { icon = "A", color = "green" },
-        ["?"]           = { icon = "?", color = "magenta" },
-        -- ["M"]          = { icon = "★", color = "red" },
-        -- ["D"]          = { icon = "✗", color = "red" },
-        -- ["A"]          = { icon = "+", color = "green" },
+          ["M"]       = { icon = "M", color = "yellow" },
+          ["D"]       = { icon = "D", color = "red" },
+          ["A"]       = { icon = "A", color = "green" },
+          ["?"]       = { icon = "?", color = "magenta" },
+          -- ["M"]    = { icon = "★", color = "red" },
+          -- ["D"]    = { icon = "✗", color = "red" },
+          -- ["A"]    = { icon = "+", color = "green" },
       },
     },
     grep = {

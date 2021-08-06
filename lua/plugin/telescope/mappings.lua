@@ -61,8 +61,8 @@ map_tele('n', "<leader>z?", "builtin")
 
 -- Git
 map_tele('n', '<leader>zB', "git_branches")
-map_tele('n', '<leader>gB', "git_branches")
-map_tele('n', '<leader>gC', "git_commits")
+map_tele('n', '<leader>zc', "git_commits")
+map_tele('n', '<leader>zC', "git_bcommits")
 
 -- LSP
 map_tele('n', '<leader>zlr', "lsp_references")
