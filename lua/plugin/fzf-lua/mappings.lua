@@ -70,6 +70,10 @@ map_fzf('n', '<leader>lG', "lsp_workspace_diagnostics", { file_icons = false })
 
 -- Git
 map_fzf('n', '<leader>fB', "git_branches")
+map_fzf('n', '<leader>fs', "git_status", {
+  preview_vertical = "down:70%",
+  preview_horizontal = "right:70%",
+})
 map_fzf('n', '<leader>fc', "git_commits")
 map_fzf('n', '<leader>fC', "git_bcommits")
 

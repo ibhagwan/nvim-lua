@@ -65,6 +65,10 @@ M.setup = function()
         cmd             = "head",
         args            = nil,
       },
+      git_diff = {
+        cmd             = "git diff",
+        args            = "--color",
+      },
     },
     -- provider setup
     files = {
@@ -90,6 +94,14 @@ M.setup = function()
         git_icons     = true,           -- show git icons?
         file_icons    = true,           -- show file icons?
         color_icons   = true,           -- colorize file|git icons
+      },
+      status = {
+        prompt        = 'GitStatus❯ ',
+        cmd           = "git status -s",
+        previewer     = "git_diff",
+        file_icons    = true,
+        git_icons     = true,
+        color_icons   = true,
       },
       commits = {
         prompt        = 'Commits❯ ',

@@ -61,6 +61,7 @@ map_tele('n', "<leader>z?", "builtin")
 
 -- Git
 map_tele('n', '<leader>zB', "git_branches")
+map_tele('n', '<leader>zs', "git_status")
 map_tele('n', '<leader>zc', "git_commits")
 map_tele('n', '<leader>zC', "git_bcommits")
 

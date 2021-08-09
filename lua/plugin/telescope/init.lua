@@ -411,7 +411,7 @@ function M.file_browser()
   require("telescope.builtin").file_browser(opts)
 end
 
-function M.git_status()
+--[[ function M.git_status()
   local opts = themes.get_dropdown {
     winblend = 10,
     border = true,
@@ -420,12 +420,12 @@ function M.git_status()
   }
 
   -- Can change the git icons using this.
-  -- opts.git_icons = {
-  --   changed = "M"
-  -- }
+  opts.git_icons = {
+    changed = "M"
+  }
 
   require("telescope.builtin").git_status(opts)
-end
+end ]]
 
 function M.git_commits()
   require("telescope.builtin").git_commits {
