@@ -99,8 +99,7 @@ require'nvim-treesitter.configs'.setup {
 if pcall(require, "nvim-treesitter.parsers") then
   require "nvim-treesitter.parsers".get_parser_configs().solidity = {
     install_info = {
-      -- url = "https://github.com/JoranHonig/tree-sitter-solidity",
-      url = "https://github.com/ibhagwan/tree-sitter-solidity",
+      url = "https://github.com/JoranHonig/tree-sitter-solidity",
       files = {"src/parser.c"},
       requires_generate_from_grammar = true,
     },

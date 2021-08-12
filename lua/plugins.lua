@@ -106,7 +106,6 @@ local function init()
 
     -- 'famiu/nvim-reload' has been archived and no longer maintained
     use { vim.fn.stdpath("config") .. "/lua/plugin/nvim-reload",
-        requires = { 'nvim-lua/plenary.nvim' },
         config = "require('plugin.nvim-reload')",
         -- skip this since we manually lazy load
         -- in our command / binding
@@ -128,10 +127,6 @@ local function init()
         end,
         cmd = { 'OSCYank', 'OSCYankReg' },
     }
-
-    -- sudo when we need to
-    use { 'lambdalisue/suda.vim',
-        config = "require('plugin.suda')" }
 
     -- Autocompletion
     use { 'hrsh7th/nvim-compe',
@@ -246,6 +241,7 @@ local function init()
     use { 'ibhagwan/feline.nvim',
         requires = { 'kyazdani42/nvim-web-devicons' },
         config = "require'plugin.feline'",
+        after = 'nvim-web-devicons',
         event = 'VimEnter' }
 
 end

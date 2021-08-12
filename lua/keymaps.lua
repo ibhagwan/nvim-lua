@@ -49,6 +49,9 @@ remap('n', '<C-S>', '<esc>:update<cr>', { silent = true })
 remap('v', '<C-S>', '<esc>:update<cr>', { silent = true })
 remap('i', '<C-S>', '<esc>:update<cr>', { silent = true })
 
+-- w!! to save with sudo
+remap('c', 'w!!', "<esc>:lua require'utils'.sudo_write()<CR>", { silent = true })
+
 -- Beginning and end of line in `:` command mode
 remap('c', '<C-a>', '<home>', {})
 remap('c', '<C-e>', '<end>' , {})

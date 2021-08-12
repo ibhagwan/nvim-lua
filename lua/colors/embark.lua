@@ -165,7 +165,7 @@ hl.ts = {
   TSStringRegex     = { fg = hl.c.cyan },
   TSStringEscape    = { fg = hl.c.cyan },
   TSSymbol          = { fg = hl.c.cyan },
-  TSTag             = { fg = hl.c.dark_red },
+  TSTag             = { fg = hl.c.dark_blue },
   TSTagDelimiter    = { fg = hl.c.comment_grey },
   TSText            = { fg = hl.c.fg },
   TSStrong          = { fg = hl.c.fg },
