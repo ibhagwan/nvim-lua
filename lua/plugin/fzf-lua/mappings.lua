@@ -79,18 +79,19 @@ map_fzf('n', '<leader>fC', "git_bcommits")
 
 -- Fzf-lua methods
 map_fzf('n', "<leader>f?", "builtin")
-
---[[
-map_fzf('n', '<leader>fc', "commands")
-map_fzf('n', '<leader>fx', "command_history")
-map_fzf('n', '<leader>fs', "search_history")
-map_fzf('n', '<leader>fm', "marks")
-map_fzf('n', '<leader>fR', "registers")
-map_fzf('n', '<leader>fo', "vim_options")
+map_fzf('n', '<leader>fx', "commands")
+map_fzf('n', '<leader>f:', "command_history")
+map_fzf('n', '<leader>f/', "search_history")
+map_fzf('n', '<leader>f"', "registers")
 map_fzf('n', '<leader>fk', "keymaps")
-map_fzf('n', '<leader>fz', "spell_suggest")
-map_fzf('n', '<leader>ft', "current_buffer_tags")
+map_fzf('n', '<leader>fz', "spell_suggest", {
+  winopts = {
+    win_height       = 0.60,
+    win_width        = 0.50,
+    win_row          = 0.40,
+  }})
+--[[
+map_fzf('n', '<leader>fm', "marks")
 map_fzf('n', '<leader>fT', "tags")
-
-
+map_fzf('n', '<leader>ft', "current_buffer_tags")
 ]]
