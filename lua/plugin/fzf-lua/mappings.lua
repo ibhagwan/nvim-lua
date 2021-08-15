@@ -79,6 +79,7 @@ map_fzf('n', '<leader>fC', "git_bcommits")
 
 -- Fzf-lua methods
 map_fzf('n', "<leader>f?", "builtin")
+map_fzf('n', '<leader>fm', "marks")
 map_fzf('n', '<leader>fx', "commands")
 map_fzf('n', '<leader>f:', "command_history")
 map_fzf('n', '<leader>f/', "search_history")
@@ -91,7 +92,6 @@ map_fzf('n', '<leader>fz', "spell_suggest", {
     win_row          = 0.40,
   }})
 --[[
-map_fzf('n', '<leader>fm', "marks")
 map_fzf('n', '<leader>fT', "tags")
 map_fzf('n', '<leader>ft', "current_buffer_tags")
 ]]
