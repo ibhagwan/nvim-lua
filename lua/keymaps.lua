@@ -4,8 +4,8 @@ local remap = vim.api.nvim_set_keymap
 vim.cmd [[command! -nargs=* NvimEditInit split | edit $MYVIMRC]]
 vim.cmd [[command! -nargs=* NvimEditKeymap split | edit ~/.config/nvim/lua/keymaps.lua]]
 vim.cmd [[command! -nargs=* NvimSourceInit luafile $MYVIMRC]]
-vim.cmd [[command! -nargs=* NvimReload lua require('utils').ensure_loaded_fnc({'plenary.nvim','nvim-reload'}, function() require('nvim-reload').Reload() end)]]
-vim.cmd [[command! -nargs=* NvimRestart lua require('utils').ensure_loaded_fnc({'plenary.nvim','nvim-reload'}, function() require('nvim-reload').Restart() end)]]
+vim.cmd [[command! -nargs=* NvimReload lua require('utils').ensure_loaded_fnc({'nvim-reload'}, function() require('nvim-reload').Reload() end)]]
+vim.cmd [[command! -nargs=* NvimRestart lua require('utils').ensure_loaded_fnc({'nvim-reload'}, function() require('nvim-reload').Restart() end)]]
 
 -- Use ':Grep' or ':LGrep' to grep into quickfix|loclist
 -- without output or jumping to first match
@@ -18,7 +18,7 @@ vim.cmd("command! -nargs=+ -complete=file LGrep " ..
 
 remap('', '<leader>ei', '<Esc>:NvimEditInit<CR>',   { silent = true })
 remap('', '<leader>ek', '<Esc>:NvimEditKeymap<CR>', { silent = true })
-remap('', '<leader>R',  "<Esc>:NvimReload<CR>",     { silent = true })
+remap('', '<leader>R',  "<Esc>:NvimRestart<CR>",    { silent = true })
 
 -- Fix common typos
 vim.cmd([[

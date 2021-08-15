@@ -110,7 +110,7 @@ local function init()
         -- skip this since we manually lazy load
         -- in our command / binding
         -- cmd = { 'NvimReload', 'NvimRestart' },
-        after = 'plenary.nvim', opt = true,
+        opt = true,
     }
 
     -- Neoterm (REPLs)
