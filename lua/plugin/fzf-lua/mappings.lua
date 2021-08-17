@@ -91,7 +91,5 @@ map_fzf('n', '<leader>fz', "spell_suggest", {
     win_width        = 0.50,
     win_row          = 0.40,
   }})
---[[
 map_fzf('n', '<leader>fT', "tags")
-map_fzf('n', '<leader>ft', "current_buffer_tags")
-]]
+map_fzf('n', '<leader>ft', "btags")
