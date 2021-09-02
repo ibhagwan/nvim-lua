@@ -129,7 +129,13 @@ local function init()
     }
 
     -- Autocompletion
-    use { 'hrsh7th/nvim-compe',
+    -- use { 'hrsh7th/nvim-compe',
+    use { 'hrsh7th/nvim-cmp',
+        requires = {
+          { 'hrsh7th/cmp-path', after = 'nvim-cmp' },
+          { 'hrsh7th/cmp-buffer', after = 'nvim-cmp' },
+          { 'hrsh7th/cmp-nvim-lsp', after = 'nvim-cmp' },
+        },
         event = "InsertEnter",
         config = "require('plugin.completion')" }
 
@@ -193,14 +199,13 @@ local function init()
 
     -- LSP
     use { 'neovim/nvim-lspconfig',    event = 'BufRead' }
-    use { 'ray-x/lsp_signature.nvim', event = 'BufRead' }
     use { 'kabouzeid/nvim-lspinstall',
         config = function()
           require('lsp')
           -- ':command LspStart'
           require'lspconfig'._root.commands.LspStart[1]()
         end,
-        after  = { 'nvim-lspconfig', 'lsp_signature.nvim' },
+        after  = { 'nvim-lspconfig' },
       }
 
     --[[ use { 'glepnir/lspsaga.nvim',

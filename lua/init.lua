@@ -70,7 +70,7 @@ vim.o.completeopt       = 'noinsert,menuone,noselect'
 vim.o.wildmenu          = true
 vim.o.wildmode          = 'longest:full,full'
 vim.o.wildoptions       = 'pum'     -- Show completion items using the pop-up-menu (pum)
-vim.o.pumblend          = 15        -- Give the pum some transparency
+vim.o.pumblend          = 0         -- completion menu transparency
 
 vim.o.joinspaces        = true      -- insert spaces after '.?!' when joining lines
 vim.o.autoindent        = true      -- copy indent from current line on newline

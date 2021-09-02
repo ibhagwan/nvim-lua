@@ -1,6 +1,4 @@
-if not pcall(require, "lspconfig") then
-  return
-end
+local M = {}
 
 --[[
 -- Autocompletion symbols
@@ -53,7 +51,7 @@ vim.lsp.protocol.CompletionItemKind = {
   ' (type param)';   -- type parameter
 }]]
 
-local lsp_symbols = {
+M.map = {
   Text           = ' (text)',
   Method         = ' (method)',
   Function       = ' (func)',
@@ -81,7 +79,7 @@ local lsp_symbols = {
   TypeParameter  = ' (type param)',
 }
 
-for kind, symbol in pairs(lsp_symbols) do
+for kind, symbol in pairs(M.map) do
   local kinds = vim.lsp.protocol.CompletionItemKind
   local index = kinds[kind]
 
@@ -124,3 +122,5 @@ vim.fn.sign_define("LspDiagnosticsSignHint", {
   linehl = "",
   numhl = "",
 })
+
+return M

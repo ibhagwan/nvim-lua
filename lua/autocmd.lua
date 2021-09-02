@@ -49,9 +49,11 @@ local autocmds = {
   solidity = {
     { "BufRead,BufNewFile", "*.sol", "set filetype=solidity" };
   };
-  lua = {
+  -- wasn't the consistent heavior I wanted
+  -- disable for now
+  --[[ lua = {
     { "BufRead,BufNewFile", "*.lua", "setlocal indentkeys-=0=end,0=until" };
-  };
+  }; ]]
 }
 
 nvim_create_augroups(autocmds)

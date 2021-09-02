@@ -54,7 +54,7 @@ release](https://github.com/neovim/neovim/releases/tag/v0.5.0)**
 - [indent-blankline](https://github.com/lukas-reineke/indent-blankline.nvim):
   add indentation markers based on `tabstop | shiftwidth`
 
-- [nvim-compe](https://github.com/hrsh7th/nvim-compe): autocompletion
+- [nvim-cmp](https://github.com/hrsh7th/nvim-cmp): autocompletion
   framework
 
 - [treesitter](https://github.com/nvim-treesitter/nvim-treesitter): text

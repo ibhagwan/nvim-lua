@@ -10,17 +10,20 @@ M.setup = function()
   -- require'fzf-lua'.setup({})
   require'fzf-lua'.setup {
     winopts = {
+      -- split            = "new",
       win_height       = 0.85,            -- window height
       win_width        = 0.80,            -- window width
       win_row          = 0.30,            -- window row position (0=top, 1=bottom)
       win_col          = 0.50,            -- window col position (0=left, 1=right)
       -- win_border    = false,           -- window border? or borderchars?
       win_border       = { '╭', '─', '╮', '│', '╯', '─', '╰', '│' },
-      window_on_create = function()         -- nvim window options override
-        vim.cmd("set winhl=Normal:Normal")  -- popup bg match normal windows
-      end,
+      hl_normal        = 'Normal',        -- window normal color
+      hl_border        = 'FloatBorder',   -- window border color
+      -- window_on_create = function()
+        -- vim.cmd("set winhl=Normal:NormalFloat,FloatBorder:Normal")
+      -- end,
     },
-    -- fzf_bin             = 'sk',        -- use skim instead of fzf?
+    fzf_bin             = 'sk',        -- use skim instead of fzf?
     fzf_layout          = 'reverse',      -- fzf '--layout='
     fzf_args            = '',             -- adv: fzf extra args, empty unless adv
     fzf_binds           = {               -- fzf '--bind=' options
@@ -43,7 +46,7 @@ M.setup = function()
     preview_layout      = 'flex',         -- horizontal|vertical|flex
     flip_columns        = 120,            -- #cols to switch to horizontal on flex
     -- default_previewer   = "bat",       -- override the default previewer?
-                                          -- by default auto-detect bat|cat
+                                          -- by default uses the builtin previewer
     previewers = {
       cmd = {
         -- custom previewer, will execute:
@@ -69,10 +72,32 @@ M.setup = function()
         cmd             = "git diff",
         args            = "--color",
       },
+      builtin = {
+        title           = true,         -- preview title?
+        scrollbar       = true,         -- scrollbar?
+        scrollchar      = '█',          -- scrollbar character
+        wrap            = false,        -- wrap lines?
+        syntax          = true,         -- preview syntax highlight?
+        syntax_limit_b  = 1024*1024,    -- syntax limit (bytes), 0=nolimit
+        syntax_limit_l  = 0,            -- syntax limit (lines), 0=nolimit
+        expand          = false,        -- preview max size?
+        hidden          = false,         -- start hidden?
+        hl_cursor       = 'Cursor',     -- cursor highlight
+        hl_cursorline   = 'CursorLine', -- cursor line highlight
+        hl_range        = 'IncSearch',  -- ranger highlight (not yet in use)
+        keymap = {
+          toggle_full   = '<F2>',       -- toggle full screen
+          toggle_wrap   = '<F3>',       -- toggle line wrap
+          toggle_hide   = '<F4>',       -- toggle on/off (not yet in use)
+          page_up       = '<S-up>',     -- preview scroll up
+          page_down     = '<S-down>',   -- preview scroll down
+          page_reset    = '<S-left>',      -- reset scroll to orig pos
+        },
+      },
     },
     -- provider setup
     files = {
-      -- previewer         = "cat",       -- uncomment to override previewer
+      -- previewer         = "builtin",      -- uncomment to override previewer
       prompt            = 'Files❯ ',
       cmd               = '',             -- "find . -type f -printf '%P\n'",
       git_icons         = true,           -- show git icons?
@@ -85,6 +110,10 @@ M.setup = function()
         ["ctrl-t"]      = actions.file_tabedit,
         ["ctrl-q"]      = actions.file_sel_to_qf,
         ["ctrl-y"]      = function(selected) print(selected[2]) end,
+      },
+      winopts = {
+        -- hl_normal       = 'Normal',       -- window normal color
+        -- hl_border       = 'Normal',       -- window border color
       }
     },
     git = {
@@ -160,6 +189,7 @@ M.setup = function()
       cwd_only          = false,
     },
     buffers = {
+      -- previewer         = false,        -- disable the builtin previewer?
       prompt            = 'Buffers❯ ',
       file_icons        = true,         -- show file icons?
       color_icons       = true,         -- colorize file|git icons
@@ -172,6 +202,16 @@ M.setup = function()
         ["ctrl-x"]      = actions.buf_del,
       }
     },
+    blines = {
+      previewer         = "builtin",    -- set to 'false' to disable
+      prompt            = 'BLines❯ ',
+      actions = {
+        ["default"]     = actions.buf_edit,
+        ["ctrl-s"]      = actions.buf_split,
+        ["ctrl-v"]      = actions.buf_vsplit,
+        ["ctrl-t"]      = actions.buf_tabedit,
+      }
+    },
     colorschemes = {
       prompt            = 'Colorschemes❯ ',
       live_preview      = true,         -- apply the colorscheme on preview?
@@ -182,9 +222,6 @@ M.setup = function()
       winopts = {
         win_height        = 0.55,
         win_width         = 0.30,
-        window_on_create  = function()
-          vim.cmd("set winhl=Normal:Normal")
-        end,
       },
       post_reset_cb     = function()
         -- reset statusline highlights after
@@ -239,11 +276,12 @@ M.setup = function()
         col = col,
         -- border = 'none',
         window_on_create = function()
-          vim.cmd("set winhl=Normal:Normal,FloatBorder:VertSplit")
+          print("window_on_create")
+          vim.cmd("set winhl=Normal:NormalFloat,FloatBorder:VertSplit")
         end
       }
     end
-    }
+  }
 end
 
 

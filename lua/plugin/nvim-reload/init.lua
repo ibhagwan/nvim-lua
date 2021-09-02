@@ -42,7 +42,6 @@ reload.post_reload_hook = function()
   end
   if reload.lsp_was_loaded and vim.fn.exists(':PackerLoad') ~= 0 then
     vim.cmd("PackerLoad nvim-lspconfig")
-    vim.cmd("PackerLoad lsp_signature.nvim")
     vim.cmd("PackerLoad nvim-lspinstall")
   end
 end

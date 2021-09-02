@@ -5,10 +5,10 @@ end
 -- 'lspinstall' loads 'lspconfig'
 -- local nvim_lsp   = require('lspconfig')
 -- requires: 'https://github.com/ray-x/lsp_signature.nvim'
-local signature  = require('lsp_signature')
+-- local signature  = require('lsp_signature')
 
 local on_attach = function(client, bufnr)
-  if signature then
+  --[[ if signature then
     signature.on_attach({
       bind         = true,
       hint_enable  = true,
@@ -17,7 +17,7 @@ local on_attach = function(client, bufnr)
       handler_opts = { border = "single" },
       decorator    = {"`", "`"}
     })
-  end
+  end ]]
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
   if client.config.flags then
@@ -160,6 +160,9 @@ local lua_settings = {
 local function make_config()
   local capabilities = vim.lsp.protocol.make_client_capabilities()
   capabilities.textDocument.completion.completionItem.snippetSupport = true
+  if pcall(require, 'cmp_nvim_lsp') then
+    capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+  end
   return {
     -- enable snippet support
     capabilities = capabilities,
