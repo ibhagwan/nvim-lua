@@ -144,16 +144,31 @@ remap('x', 'J', ":move '>+1<CR>gv=gv", { noremap = true })
 -- Select last pasted/yanked text
 remap('n', 'g<C-v>', '`[v`]', { noremap = true })
 
+-- Keep matches center screen when cycling with n|N
+remap('n', 'n', 'nzzzv', { noremap = true })
+remap('n', 'N', 'Nzzzv', { noremap = true })
+
+-- Break undo chain on punctuation so we can
+-- use 'u' to undo sections of an edit
+for _, c in ipairs({',', '.', '!', '?', ';'}) do
+   remap('i', c, c .. "<C-g>u", { noremap = true })
+end
+
+-- any jump over 5 modifies the jumplist
+-- so we can use <C-o> <C-i> to jump back and forth
+for _, c in ipairs({'j', 'k'}) do
+  remap('n', c, ([[(v:count > 5 ? "m'" . v:count : "") . '%s']]):format(c),
+    { noremap=true, expr = true, silent = true})
+end
+
 -- move along visual lines, not numbered ones
 -- without interferring with {count}<down|up>
-vim.api.nvim_set_keymap('n', '<up>', "v:count == 0 ? 'gk' : '<up>'",
-    { noremap=true, expr = true, silent = true})
-vim.api.nvim_set_keymap('v', '<up>', "v:count == 0 ? 'gk' : '<up>'",
-    { noremap=true, expr = true, silent = true})
-vim.api.nvim_set_keymap('n', '<down>', "v:count == 0 ? 'gj' : '<down>'",
-    {noremap= true, expr = true, silent = true})
-vim.api.nvim_set_keymap('v', '<down>', "v:count == 0 ? 'gj' : '<down>'",
-    {noremap= true, expr = true, silent = true})
+for _, m in ipairs({'n', 'v'}) do
+  for _, c in ipairs({'<up>', '<down>'}) do
+    remap(m, c, ([[v:count == 0 ? 'g%s' : '%s']]):format(c, c),
+        { noremap=true, expr = true, silent = true})
+  end
+end
 
 -- Search and Replace
 -- 'c.' for word, '<leader>c.' for WORD
