@@ -7,6 +7,7 @@ local plugin_dirs_autoload = vim.fn.stdpath('data') .. '/site/pack/*/start/*'
 local plugin_dirs_lazyload = {
   vim.fn.stdpath('data') .. '/site/pack/*/opt/fzf-lua',
   vim.fn.stdpath('data') .. '/site/pack/*/opt/nvim-fzf',
+  vim.fn.stdpath('data') .. '/site/pack/*/opt/telescope.nvim',
   vim.fn.stdpath('data') .. '/site/pack/*/opt/which-key.nvim',
 }
 

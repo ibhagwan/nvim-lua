@@ -36,6 +36,7 @@ map_fzf('n', '<leader>fW', "grep_cWORD")
 map_fzf('n', '<leader>fv', "grep_visual")
 map_fzf('v', '<leader>fv', "grep_visual")
 map_fzf('n', '<leader>fb', "grep_curbuf", { prompt = 'Buffer❯ ' })
+map_fzf('n', '<leader>fB', "blines")
 map_fzf('n', '<leader>fp', "files", {})
 map_fzf('n', '<leader>fg', "git_files", {})
 map_fzf('n', '<leader>fh', "oldfiles", { cwd = vim.loop.cwd() })
@@ -69,13 +70,15 @@ map_fzf('n', '<leader>lg', "lsp_document_diagnostics", { file_icons = false })
 map_fzf('n', '<leader>lG', "lsp_workspace_diagnostics", { file_icons = false })
 
 -- Git
-map_fzf('n', '<leader>fB', "git_branches")
+map_fzf('n', '<leader>gB', "git_branches")
 map_fzf('n', '<leader>fs', "git_status", {
   preview_vertical = "down:70%",
   preview_horizontal = "right:70%",
 })
-map_fzf('n', '<leader>fc', "git_commits")
-map_fzf('n', '<leader>fC', "git_bcommits")
+map_fzf('n', '<leader>fc', "git_bcommits")
+map_fzf('n', '<leader>fC', "git_commits")
+map_fzf('n', '<leader>gc', "git_bcommits")
+map_fzf('n', '<leader>gC', "git_commits")
 
 -- Fzf-lua methods
 map_fzf('n', "<leader>f?", "builtin")
