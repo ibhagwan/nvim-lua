@@ -83,15 +83,21 @@ end
 function M.virtual_text_redraw()
   -- NOTE: This function might become obsolete after the merge of
   -- 'https://github.com/neovim/neovim/pull/13748', who knows !
-  for _,lsp_client_id in pairs(vim.tbl_keys(vim.lsp.buf_get_clients())) do
-    vim.lsp.handlers['textDocument/publishDiagnostics'](
-      nil,
-      'textDocument/publishDiagnostics', {
-          diagnostics = vim.lsp.diagnostic.get(0, lsp_client_id),
-          uri = vim.uri_from_bufnr(0)
-      },
-      lsp_client_id
-    )
+  local method = 'textDocument/publishDiagnostics'
+  local pr_15504 = false
+  if vim.fn.has('nvim-0.5.1') == 1 then pr_15504 = true end
+  for _, lsp_client_id in pairs(vim.tbl_keys(vim.lsp.buf_get_clients())) do
+    -- https://github.com/neovim/neovim/pull/15504
+    local params = {
+      diagnostics = vim.lsp.diagnostic.get(0, lsp_client_id),
+      uri = vim.uri_from_bufnr(0)
+    }
+    if pr_15504 then
+      vim.lsp.handlers[method](
+        nil, params, { method = method, client_id = lsp_client_id })
+    else
+      vim.lsp.handlers[method](nil, method, params, lsp_client_id)
+    end
   end
 end
 
