@@ -16,20 +16,21 @@ cmp.setup {
   -- must define this if we aren't using a snippet engine
   snippet = {
     expand = function(args)
-      local _, lnum, col, _ = unpack(vim.fn.getpos("."))
+      local lnum, col = unpack(vim.api.nvim_win_get_cursor(0))
       local ltext = vim.api.nvim_buf_get_lines(0, lnum - 1, lnum, true)[1]
       if args.body:match('\n') ~= nil then
         local indent = string.match(ltext, '^%s*')
         local lines = vim.split(args.body, '\n', true)
-        lines[1] = (string.match(ltext, '%S.*') or '')..lines[1]
+        local surround = string.match(ltext, '%S.*') or ''
+        lines[1] = surround:sub(0, col - 2)..lines[1]..surround:sub(col - 1)
         if indent ~= '' then
           for i, line in ipairs(lines) do
-              lines[i] = indent..line
+            lines[i] = indent..line
           end
         end
         vim.api.nvim_buf_set_lines(0, lnum - 1, lnum, true, lines)
       else
-        local line = ltext:sub(1, col-1) .. args.body .. ltext:sub(col)
+        local line = ltext:sub(1, col) .. args.body .. ltext:sub(col+1)
         vim.api.nvim_buf_set_lines(0, lnum - 1, lnum, true, {line})
       end
       vim.api.nvim_win_set_cursor(0, {lnum, col+#args.body})

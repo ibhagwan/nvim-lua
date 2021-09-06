@@ -134,7 +134,7 @@ M.setup = function()
       },
       commits = {
         prompt        = 'Commits❯ ',
-        cmd           = "git log --pretty=oneline --abbrev-commit --color",
+        cmd           = "git log --pretty=oneline --abbrev-commit --color --reflog",
         preview       = "git show --pretty='%Cred%H%n%Cblue%an%n%Cgreen%s' --color {1}",
         actions = {
           ["default"] = nil,
@@ -142,7 +142,7 @@ M.setup = function()
       },
       bcommits = {
         prompt        = 'BCommits❯ ',
-        cmd           = "git log --pretty=oneline --abbrev-commit --color --",
+        cmd           = "git log --pretty=oneline --abbrev-commit --color --reflog",
         preview       = "git show --pretty='%Cred%H%n%Cblue%an%n%Cgreen%s' --color {1}",
         actions = {
           ["default"] = nil,
@@ -151,7 +151,7 @@ M.setup = function()
       branches = {
         prompt        = 'Branches❯ ',
         cmd           = "git branch --all --color",
-        preview       = "git log --graph --pretty=oneline --abbrev-commit --color {1}",
+        preview       = "git log --graph --pretty=oneline --abbrev-commit --reflog --color {1}",
         actions = {
           ["default"] = actions.git_switch,
         },
@@ -262,7 +262,7 @@ M.setup = function()
     -- double-width icon rendering
     file_icon_padding = '',
     file_icon_colors = {
-      ["lua"]   = "blue",
+      ["sh"]    = "green",
     },
     _winopts_raw = function() -- remove _underscore to enable (winopts_raw)
       local width = math.floor(vim.o.columns * 0.60)
