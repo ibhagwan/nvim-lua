@@ -25,11 +25,27 @@ end
 
 -- mappings
 map_fzf('n', '<F1>', "help_tags")
-map_fzf('n', '<c-P>', "files", {})
+map_fzf('n', '<c-P>', "files", {
+  --[[ fzf_colors = {
+      ["fg"] = { "fg", "CursorLine" },
+      ["bg"] = { "bg", "Normal" },
+      ["hl"] = { "fg", "Comment" },
+      ["fg+"] = { "fg", "Normal" },
+      ["bg+"] = { "bg", "CursorLine" },
+      ["hl+"] = { "fg", "Statement" },
+      ["info"] = { "fg", "PreProc" },
+      ["prompt"] = { "fg", "Conditional" },
+      ["pointer"] = { "fg", "Exception" },
+      ["marker"] = { "fg", "Keyword" },
+      ["spinner"] = { "fg", "Label" },
+      ["header"] = { "fg", "Comment" },
+      ["gutter"] = { "bg", "Normal" },
+  }, ]]
+})
 map_fzf('n', '<leader>;', "buffers")
 map_fzf('n', '<leader>fr', "grep", {})
 map_fzf('n', '<leader>fl', "live_grep", {})
-map_fzf('n', '<leader>fR', "live_grep", { repeat_last_search = true })
+map_fzf('n', '<leader>fR', "live_grep", { repeat_last_search = false })
 map_fzf('n', '<leader>ff', "grep", { repeat_last_search = true} )
 map_fzf('n', '<leader>fw', "grep_cword")
 map_fzf('n', '<leader>fW', "grep_cWORD")

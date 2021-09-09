@@ -10,7 +10,7 @@ M.setup = function()
   -- require'fzf-lua'.setup({})
   require'fzf-lua'.setup {
     winopts = {
-      -- split            = "new",
+      -- split            = "belowright new",
       win_height       = 0.85,            -- window height
       win_width        = 0.80,            -- window width
       win_row          = 0.30,            -- window row position (0=top, 1=bottom)
@@ -31,12 +31,25 @@ M.setup = function()
         'f3:toggle-preview-wrap',
         'shift-down:preview-page-down',
         'shift-up:preview-page-up',
-        'ctrl-d:half-page-down',
-        'ctrl-u:half-page-up',
-        'ctrl-f:page-down',
-        'ctrl-b:page-up',
-        'ctrl-a:toggle-all',
-        'ctrl-l:clear-query',
+        'ctrl-u:unix-line-discard',
+        'ctrl-f:half-page-down',
+        'ctrl-b:half-page-up',
+        'alt-a:toggle-all',
+    },
+    fzf_colors = {
+        ["fg"] = { "fg", "CursorLine" },
+        ["bg"] = { "bg", "Normal" },
+        ["hl"] = { "fg", "Comment" },
+        ["fg+"] = { "fg", "Normal" },
+        ["bg+"] = { "bg", "CursorLine" },
+        ["hl+"] = { "fg", "Statement" },
+        ["info"] = { "fg", "PreProc" },
+        ["prompt"] = { "fg", "Conditional" },
+        ["pointer"] = { "fg", "Exception" },
+        ["marker"] = { "fg", "Keyword" },
+        ["spinner"] = { "fg", "Label" },
+        ["header"] = { "fg", "Comment" },
+        ["gutter"] = { "bg", "Normal" },
     },
     preview_border      = 'border',       -- border|noborder
     preview_wrap        = 'nowrap',       -- wrap|nowrap
@@ -104,11 +117,13 @@ M.setup = function()
       file_icons        = true,           -- show file icons?
       color_icons       = true,           -- colorize file|git icons
       actions = {
+        -- set bind to 'false' to disable
         ["default"]     = actions.file_edit,
         ["ctrl-s"]      = actions.file_split,
         ["ctrl-v"]      = actions.file_vsplit,
         ["ctrl-t"]      = actions.file_tabedit,
-        ["ctrl-q"]      = actions.file_sel_to_qf,
+        ["alt-q"]       = actions.file_sel_to_qf,
+        -- custom actions are available too
         ["ctrl-y"]      = function(selected) print(selected[2]) end,
       },
       winopts = {
@@ -151,7 +166,7 @@ M.setup = function()
       branches = {
         prompt        = 'Branches❯ ',
         cmd           = "git branch --all --color",
-        preview       = "git log --graph --pretty=oneline --abbrev-commit --reflog --color {1}",
+        preview       = "git log --graph --pretty=oneline --abbrev-commit --color {1}",
         actions = {
           ["default"] = actions.git_switch,
         },
@@ -175,14 +190,7 @@ M.setup = function()
       git_icons         = true,           -- show git icons?
       file_icons        = true,           -- show file icons?
       color_icons       = true,           -- colorize file|git icons
-      actions = {
-        ["default"]     = actions.file_edit,
-        ["ctrl-s"]      = actions.file_split,
-        ["ctrl-v"]      = actions.file_vsplit,
-        ["ctrl-t"]      = actions.file_tabedit,
-        ["ctrl-q"]      = actions.file_sel_to_qf,
-        ["ctrl-y"]      = function(selected) print(selected[2]) end,
-      }
+      actions           = { ["ctrl-q"] = false }
     },
     oldfiles = {
       prompt            = 'History❯ ',
@@ -250,10 +258,17 @@ M.setup = function()
         ["Hint"]        = { icon = "", color = "magenta" },   -- hint
       },
     },
-    -- placeholders for additional user customizations
-    loclist = {},
-    helptags = {},
-    manpages = {},
+    -- uncomment to disable the previewer
+    -- helptags = { previewer = { _new = false } },
+    -- manpages = { previewer = { _new = false } },
+    -- uncomment to set dummy win split (top bar)
+    -- "topleft"  : up
+    -- "botright" : down
+    -- helptags = { previewer = { split = "topleft" } },
+    -- manpages = { previewer = { split = "topleft" } },
+    -- uncomment 2 lines to use `man` command as native fzf previewer
+    -- manpages = { previewer = { cmd  = "man", _new = function()
+        -- return require 'fzf-lua.previewer'.man_pages end } },
     -- optional override of file extension icon colors
     -- available colors (terminal):
     --    clear, bold, black, red, green, yellow
@@ -314,6 +329,63 @@ function M.installed_plugins(opts)
   opts.prompt = 'Plugins❯ '
   opts.cwd = vim.fn.stdpath "data" .. "/site/pack/packer/"
   require'fzf-lua'.files(opts)
+end
+
+function M.branch_compare(opts)
+  if not opts then opts = {} end
+  local function branch_compare(selected, o)
+    -- remove anything past space
+    local branch = selected[1]:match("[^ ]+")
+    -- do nothing for active branch
+    if branch:find("%*") ~= nil then return end
+    -- git_cwd is only required if you want to also run
+    -- this outside your current working directory
+    -- all it does is add `git -C <cwd_path>`
+    -- this enables you to run:
+    -- branch_compare({ cwd = "~/Sources/nvim/fzf-lua" })
+    o.cmd = require'fzf-lua.path'.git_cwd(
+      -- change this to whaetever command works best for you:
+      -- git diff --name-only $(git merge-base HEAD [SELECTED_BRANCH])
+      ("git diff --name-only %s"):format(branch), o.cwd)
+    -- replace the previewer with our custom command
+    o.previewer = {
+      cmd       = require'fzf-lua.path'.git_cwd("git diff", o.cwd),
+      args      = ("--color main %s -- "):format(branch),
+      -- tells the previewer not to add cwd to the
+      -- file path when executing the preview command
+      -- relative  = true,
+      _new      = function() return require 'fzf-lua.previewer'.cmd_async end,
+    }
+    -- disable git icons, without adjustments they will
+    -- display their current status and not the branch status
+    -- TODO: supply `files` with `git_diff_cmd`, `git_untracked_cmd`
+    o.git_icons = false
+    -- reset the default action that was carried over from the
+    -- `git_branches` call
+    o.actions = nil
+    require'fzf-lua'.files(o)
+  end
+  opts.prompt = 'BranchCompare❯ '
+  opts.actions = { ["default"] = branch_compare }
+  require'fzf-lua'.git_branches(opts)
+end
+
+
+function M.git_history(opts)
+  if not opts then opts = {} end
+  opts.prompt = opts.prompt or "Git History> "
+  opts.input_prompt = opts.input_prompt or "Search For> "
+
+  opts.cmd = require'fzf-lua.path'.git_cwd("git log --pretty --oneline --color", opts.cwd)
+  opts.preview = "git show --pretty='%Cred%H%n%Cblue%an%n%Cgreen%s' --color {1}"
+
+  if not opts.search then
+    opts.search = vim.fn.input(opts.input_prompt) or ""
+  end
+
+  opts.cmd = opts.cmd .. " -S " .. vim.fn.shellescape(opts.search)
+  print(opts.cmd)
+  require'fzf-lua'.git_commits(opts)
 end
 
 -- call the setup function automatically
