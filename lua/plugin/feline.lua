@@ -248,40 +248,33 @@ local properties = {
 }
 
 local components = {
-    left = {
-        active = {
-            comps.vi_mode.left,
-            comps.file.info,
-            comps.git.branch,
-            comps.git.add,
-            comps.git.change,
-            comps.git.remove,
-        },
-        inactive = {
-            comps.vi_mode.left,
-            comps.file.info
-        }
-    },
-    mid = {
-        active = {},
-        inactive = {}
-    },
-    right = {
-        active = {
-            comps.diagnos.err,
-            comps.diagnos.warn,
-            comps.diagnos.hint,
-            comps.diagnos.info,
-            comps.lsp.name,
-            comps.file.os,
-            comps.file.position,
-            comps.line_percentage,
-            comps.scroll_bar,
-            comps.vi_mode.right
-        },
-        inactive = {}
-    }
+  active = {},
+  inactive = {},
 }
+
+table.insert(components.active, {})
+table.insert(components.active, {})
+table.insert(components.inactive, {})
+table.insert(components.inactive, {})
+
+table.insert(components.active[1], comps.vi_mode.left)
+table.insert(components.active[1], comps.file.info)
+table.insert(components.active[1], comps.git.branch)
+table.insert(components.active[1], comps.git.add)
+table.insert(components.active[1], comps.git.change)
+table.insert(components.active[1], comps.git.remove)
+table.insert(components.inactive[1], comps.vi_mode.left)
+table.insert(components.inactive[1], comps.file.info)
+table.insert(components.active[2], comps.diagnos.err)
+table.insert(components.active[2], comps.diagnos.warn)
+table.insert(components.active[2], comps.diagnos.hint)
+table.insert(components.active[2], comps.diagnos.info)
+table.insert(components.active[2], comps.lsp.name)
+table.insert(components.active[2], comps.file.os)
+table.insert(components.active[2], comps.file.position)
+table.insert(components.active[2], comps.line_percentage)
+table.insert(components.active[2], comps.scroll_bar)
+table.insert(components.active[2], comps.vi_mode.right)
 
 -- LuaFormatter on
 

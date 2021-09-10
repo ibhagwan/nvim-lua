@@ -27,6 +27,7 @@ M.setup = function()
     fzf_layout          = 'reverse',      -- fzf '--layout='
     fzf_args            = '',             -- adv: fzf extra args, empty unless adv
     fzf_binds           = {               -- fzf '--bind=' options
+        'f4:abort',
         'f2:toggle-preview',
         'f3:toggle-preview-wrap',
         'shift-down:preview-page-down',
@@ -34,6 +35,8 @@ M.setup = function()
         'ctrl-u:unix-line-discard',
         'ctrl-f:half-page-down',
         'ctrl-b:half-page-up',
+        'ctrl-a:beginning-of-line',
+        'ctrl-e:end-of-line',
         'alt-a:toggle-all',
     },
     fzf_colors = {
@@ -61,12 +64,6 @@ M.setup = function()
     -- default_previewer   = "bat",       -- override the default previewer?
                                           -- by default uses the builtin previewer
     previewers = {
-      cmd = {
-        -- custom previewer, will execute:
-        -- `<cmd> <args> <filename>`
-        cmd             = "echo",
-        args            = "",
-      },
       cat = {
         cmd             = "cat",
         args            = "--number",
@@ -259,16 +256,16 @@ M.setup = function()
       },
     },
     -- uncomment to disable the previewer
-    -- helptags = { previewer = { _new = false } },
-    -- manpages = { previewer = { _new = false } },
+    -- nvim = { marks    = { previewer = { _ctor = false } } },
+    -- helptags = { previewer = { _ctor = false } },
+    -- manpages = { previewer = { _ctor = false } },
     -- uncomment to set dummy win split (top bar)
     -- "topleft"  : up
     -- "botright" : down
     -- helptags = { previewer = { split = "topleft" } },
     -- manpages = { previewer = { split = "topleft" } },
-    -- uncomment 2 lines to use `man` command as native fzf previewer
-    -- manpages = { previewer = { cmd  = "man", _new = function()
-        -- return require 'fzf-lua.previewer'.man_pages end } },
+    -- uncomment to use `man` command as native fzf previewer
+    -- manpages = { previewer = { _ctor = require'fzf-lua.previewer'.fzf.man_pages } },
     -- optional override of file extension icon colors
     -- available colors (terminal):
     --    clear, bold, black, red, green, yellow
