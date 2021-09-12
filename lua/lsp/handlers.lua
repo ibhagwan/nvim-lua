@@ -4,6 +4,11 @@ end
 
 -- Taken from https://www.reddit.com/r/neovim/comments/gyb077/nvimlsp_peek_defination_javascript_ttserver/
 local M = {}
+
+local _winopts = {
+    border = { '╭', '─', '╮', '│', '╯', '─', '╰', '│' },
+}
+
 function M.preview_location(location, context, before_context)
   -- location may be LocationLink or Location (more useful for the former)
   context = context or 10
@@ -21,6 +26,8 @@ function M.preview_location(location, context, before_context)
     vim.api.nvim_buf_get_lines(bufnr, range.start.line - before_context, range["end"].line + 1 + context, false)
   local filetype = vim.api.nvim_buf_get_option(bufnr, "filetype")
   local _, winnr = vim.lsp.util.open_floating_preview(contents, filetype)
+  vim.api.nvim_win_set_config(winnr, _winopts)
+  vim.api.nvim_win_set_option(win, 'winhighlight', 'Normal:Normal,FloatBorder:FloatBorder')
   vim.api.nvim_win_set_option(winnr, 'cursorline', true)
   vim.api.nvim_win_set_cursor(winnr, {6,1})
   return _, winnr

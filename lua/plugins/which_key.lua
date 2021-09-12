@@ -1,3 +1,7 @@
+if not pcall(require, "which-key") then
+  return
+end
+
 -- If we do not wish to wait for timeoutlen
 vim.api.nvim_set_keymap('n', '<Leader>?', "<Esc>:WhichKey '' n<CR>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap('v', '<Leader>?', "<Esc>:WhichKey '' v<CR>", { noremap = true, silent = true })
@@ -13,7 +17,7 @@ vim.cmd([[highlight default link WhichKeyValue     Comment]])
 require("which-key").setup {
     plugins = {
         marks = true, -- shows a list of your marks on ' and `
-        registers = true, -- shows your registers on " in NORMAL or <C-r> in INSERT mode
+        registers = false, -- shows your registers on " in NORMAL or <C-r> in INSERT mode
         -- the presets plugin, adds help for a bunch of default keybindings in Neovim
         -- No actual key bindings are created
         spelling = {
@@ -21,9 +25,9 @@ require("which-key").setup {
             suggestions = 20 -- how many suggestions should be shown in the list?
         },
         presets = {
-            operators = true, -- adds help for operators like d, y, ... and registers them for motion / text object completion
-            motions = true, -- adds help for motions
-            text_objects = true, -- help for text objects triggered after entering an operator
+            operators = false, -- adds help for operators like d, y, ... and registers them for motion / text object completion
+            motions = false, -- adds help for motions
+            text_objects = false, -- help for text objects triggered after entering an operator
             windows = true, -- default bindings on <c-w>
             nav = true, -- misc bindings to work with windows
             z = true, -- bindings for folds, spelling and others prefixed with z
@@ -84,10 +88,15 @@ local keymaps = {
   ["K"]         = 'LSP hover info under cursor',
   ["<leader>"]  = {
     ['?']       = 'Which key help',
-    ['"']       = { [[:lua require('utils').ensure_loaded_fnc(]] ..
-                    [[{'indent-blankline.nvim'}, function()]] ..
-                    [[ require('indent_blankline.commands').toggle('<bang>' == '!')]] ..
-                    [[ end)<CR> ]], 'toggle IndentBlankline on/off' },
+    ['"']       = {
+      function()
+        if not pcall(require, 'indent-blankline.nvim') then
+          require('packer').loader('indent-blankline.nvim')
+        end
+        require('indent_blankline.commands').toggle('<bang>' == '!')
+      end,
+      'toggle IndentBlankline on/off'
+    },
     ['<F1>']    = 'Fuzzy find help tags',
     ['<Up>']    = 'horizontal split increase',
     ['<Down>']  = 'horizontal split decrease',
@@ -204,8 +213,8 @@ local keymaps = {
         x = 'neovim commands',
         k = 'neovim keymaps',
         z = 'spell suggestions under cursor',
-        -- t = 'tags (buffer)',
-        -- T = 'tags (project)',
+        t = 'tags (buffer)',
+        T = 'tags (project)',
     },
     z = {
         name = '+find (telescope)',

@@ -1,66 +1,15 @@
--- Do not use plugins when running as root or neovim < 0.5
-if require'utils'.is_root() or not require'utils'.has_neovim_v05() then
-  return { sync_if_not_compiled = function() return end }
+if not require("plugins.bootstrap") then
+  return
 end
 
-local execute = vim.api.nvim_command
+local packer = require'packer'
+return packer.startup({
+  function(use)
 
-local compile_suffix = "/plugin/packer_compiled.lua"
-local install_suffix = "/site/pack/packer/%s/packer.nvim"
-local install_path = vim.fn.stdpath("data") .. string.format(install_suffix, "opt")
-local compile_path = vim.fn.stdpath("data") .. compile_suffix
-
--- Do we need to migrate from previous nvim-lua setup?
-local old_install_path = vim.fn.stdpath("data") .. string.format(install_suffix, "start")
-local old_is_installed = vim.fn.empty(vim.fn.glob(old_install_path)) == 0
-if old_is_installed then
-  -- delete 'package_compiled.lua'
-  -- forces sync in 'sync_if_not_compiled'
-  vim.fn.delete(old_install_path .. "/plugin", 'rf')
-  local success, msg = os.rename(old_install_path, install_path)
-  if not success then print("failed to moved packer.nvim: " .. msg)
-  else print("packer.nvim successfully moved to " .. install_path) end
-end
-
--- check if packer is installed (~/.local/share/nvim/site/pack)
-local is_installed = vim.fn.empty(vim.fn.glob(install_path)) == 0
-local is_compiled = vim.fn.empty(vim.fn.glob(compile_path)) == 0
-if not is_installed then
-    if vim.fn.input("Install packer.nvim? (y for yes) ") == "y" then
-        execute("!git clone https://github.com/wbthomason/packer.nvim " .. install_path)
-        execute("packadd packer.nvim")
-        print("Installed packer.nvim.")
-        is_installed = 1
-    end
-end
-
--- Packer commands
-vim.cmd [[command! PackerInstall packadd packer.nvim | lua require('plugins').install()]]
-vim.cmd [[command! PackerUpdate packadd packer.nvim | lua require('plugins').update()]]
-vim.cmd [[command! PackerSync packadd packer.nvim | lua require('plugins').sync()]]
-vim.cmd [[command! PackerClean packadd packer.nvim | lua require('plugins').clean()]]
-vim.cmd [[command! PackerCompile packadd packer.nvim | lua require('plugins').compile()]]
-vim.cmd [[command! PC PackerCompile]]
-vim.cmd [[command! PS PackerStatus]]
-vim.cmd [[command! PU PackerSync]]
-
--- Since we are lazy loading packer itself
--- and also changed the compiled lazy loading file
-vim.cmd [[packadd packer.nvim]]
-if is_compiled then vim.cmd("luafile " .. compile_path) end
-
-local packer = nil
-local function init()
-    if not is_installed then return end
-    if packer == nil then
-        packer = require('packer')
-        packer.init({
-            -- we don't want the compilation file in '~/.config/nvim'
-            compile_path = compile_path
-        })
-    end
-
-    local use = packer.use
+    -- TODO: causes issies with lspconfig
+    -- speed up 'require', must be the first plugin
+    -- use { "lewis6991/impatient.nvim",
+      -- config = 'pcall(require, "impatient")' }
 
     -- Packer can manage itself as an optional plugin
     use { 'wbthomason/packer.nvim', opt = true }
@@ -73,8 +22,8 @@ local function init()
     use { 'tpope/vim-repeat' }
 
     -- "gc" to comment visual regions/lines
-    vim.g.kommentary_create_default_mappings = false
     use { 'b3nj5m1n/kommentary',
+        config = "require('plugins.kommentary')",
         -- uncomment for lazy loading
         -- causes delay with visual mapping
         -- keys = {'gcc', 'gc'}
@@ -82,7 +31,7 @@ local function init()
 
     -- needs no introduction
     use { 'tpope/vim-fugitive',
-        config = "require('plugin.fugitive')",}
+        config = "require('plugins.fugitive')",}
         -- event = "VimEnter" }
 
     -- :DiffViewOpen :DiffViewClose
@@ -96,17 +45,17 @@ local function init()
     -- Add git related info in the signs columns and popups
     use { 'lewis6991/gitsigns.nvim',
         requires = { 'nvim-lua/plenary.nvim' },
-        config = "require('plugin.gitsigns')",
+        config = "require('plugins.gitsigns')",
         after = "plenary.nvim" }
 
     -- Add indentation guides even on blank lines
     use { 'lukas-reineke/indent-blankline.nvim', --branch="lua",
-        config = "require('plugin.indent-blankline')",
+        config = "require('plugins.indent-blankline')",
         opt = true, cmd = { 'IndentBlanklineToggle' } }
 
     -- 'famiu/nvim-reload' has been archived and no longer maintained
-    use { vim.fn.stdpath("config") .. "/lua/plugin/nvim-reload",
-        config = "require('plugin.nvim-reload')",
+    use { vim.fn.stdpath("config") .. "/lua/plugins/nvim-reload",
+        config = "require('plugins.nvim-reload')",
         -- skip this since we manually lazy load
         -- in our command / binding
         -- cmd = { 'NvimReload', 'NvimRestart' },
@@ -115,7 +64,7 @@ local function init()
 
     -- Neoterm (REPLs)
     use { 'kassio/neoterm',
-        config = "require('plugin.neoterm')",
+        config = "require('plugins.neoterm')",
         keys = {'gxx', 'gx'},
         cmd = { 'T' },
     }
@@ -128,22 +77,27 @@ local function init()
         cmd = { 'OSCYank', 'OSCYankReg' },
     }
 
-    -- Autocompletion
-    -- use { 'hrsh7th/nvim-compe',
+    -- Autocompletion & snippets
+    use { 'L3MON4D3/LuaSnip',
+      config = 'require("plugins.luasnip")',
+      event = 'InsertEnter' }
+
     use { 'hrsh7th/nvim-cmp',
         requires = {
           { 'hrsh7th/cmp-path', after = 'nvim-cmp' },
           { 'hrsh7th/cmp-buffer', after = 'nvim-cmp' },
           { 'hrsh7th/cmp-nvim-lsp', after = 'nvim-cmp' },
+          { 'saadparwaiz1/cmp_luasnip', after = 'nvim-cmp' },
         },
-        event = "InsertEnter",
-        config = "require('plugin.completion')" }
+        config = "require('plugins.cmp')",
+        -- event = "InsertEnter", }
+        after = 'LuaSnip', }
 
     -- nvim-treesitter
     -- verify a compiler exists before installing
     if require'utils'.have_compiler() then
         use { 'nvim-treesitter/nvim-treesitter',
-            config = "require('plugin.treesitter')",
+            config = "require('plugins.treesitter')",
             run = ':TSUpdate',
             event = 'BufRead' }
         use { 'nvim-treesitter/nvim-treesitter-textobjects',
@@ -161,7 +115,7 @@ local function init()
     -- nvim-tree
     use { 'kyazdani42/nvim-tree.lua',
         requires = { 'kyazdani42/nvim-web-devicons' },
-        config = "require('plugin.nvim-tree')",
+        config = "require('plugins.nvim-tree')",
         cmd = { 'NvimTreeToggle', 'NvimTreeFindFile' },
         opt = true,
     }
@@ -173,8 +127,8 @@ local function init()
             {'nvim-lua/plenary.nvim'},
             {'nvim-telescope/telescope-fzy-native.nvim'},
         },
-        setup = "require('plugin.telescope.mappings')",
-        config = "require('plugin.telescope')",
+        setup = "require('plugins.telescope.mappings')",
+        config = "require('plugins.telescope')",
         opt = true
     }
 
@@ -187,14 +141,14 @@ local function init()
           { 'vijaymarupudi/nvim-fzf' },
           { 'kyazdani42/nvim-web-devicons' },
         },
-        setup = "require('plugin.fzf-lua.mappings')",
-        config = "require('plugin.fzf-lua')",
+        setup = "require('plugins.fzf-lua.mappings')",
+        config = "require('plugins.fzf-lua')",
         opt = true,
     }
 
    -- better quickfix
    use { 'kevinhwang91/nvim-bqf',
-        config = "require'plugin.bqf'",
+        config = "require'plugins.bqf'",
         ft = { 'qf' } }
 
     -- LSP
@@ -229,7 +183,7 @@ local function init()
 
     -- key bindings cheatsheet
     use { 'folke/which-key.nvim',
-        config = "require('plugin.which_key')",
+        config = "require('plugins.which_key')",
         event = "VimEnter" }
 
     -- Color scheme, requires nvim-treesitter
@@ -245,32 +199,8 @@ local function init()
     -- fancy statusline
     use { 'ibhagwan/feline.nvim',
         requires = { 'kyazdani42/nvim-web-devicons' },
-        config = "require'plugin.feline'",
+        config = "require('plugins.feline')",
         after = 'nvim-web-devicons',
         event = 'VimEnter' }
-
-end
-
--- called from 'lua/autocmd.lua' at `VimEnter`
-local function sync_if_not_compiled()
-    if packer == nil then return end
-    if not is_compiled then
-        packer.sync()
-        --execute("luafile $MYVIMRC")
-    end
-end
-
-local plugins = setmetatable({}, {
-    __index = function(_, key)
-        init()
-        -- workaround for error when packer not installed
-        if packer == nil then return function() end end
-        if key == "sync_if_not_compiled" then
-            return sync_if_not_compiled
-        else
-            return packer[key]
-        end
-    end
+  end
 })
-
-return plugins

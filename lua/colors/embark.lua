@@ -56,7 +56,7 @@ hl.common = {
   ModeMsg =           { fg = hl.c.white, gui = 'bold', cterm = 'bold' },
   MoreMsg =           { fg = hl.c.white, gui = 'bold', cterm = 'bold' },
   NonText =           { fg = hl.c.special_grey },
-  Pmenu =             { bg = hl.c.menu_grey },
+  Pmenu =             { bg = hl.c.black },
   PmenuSel =          { fg = hl.c.black, bg = hl.c.dark_blue },
   PmenuSbar =         { bg = hl.c.special_grey },
   PmenuThumb =        { bg = hl.c.fg },

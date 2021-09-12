@@ -5,22 +5,23 @@ local map_tele = function(mode, key, f, options, buffer)
 
   TelescopeMapArgs[map_key] = options or {}
 
-  local rhs = string.format([[<cmd>lua require'utils'.ensure_loaded_fnc(]] ..
-    [[ {'plenary.nvim', 'popup.nvim', 'telescope-fzy-native.nvim', 'telescope.nvim' }, function()]] ..
-    [[ require('plugin.telescope')['%s'](TelescopeMapArgs['%s'])]] ..
-    [[ end)<CR>]]
-    , f, map_key)
+  local rhs = function()
+    if not pcall(require, 'telescope.nvim') then
+      require('packer').loader('plenary.nvim')
+      require('packer').loader('popup.nvim')
+      require('packer').loader('telescope-fzy-native.nvim')
+      require('packer').loader('telescope.nvim')
+    end
+    require('plugins.telescope')[f](TelescopeMapArgs[map_key])
+  end
 
   local map_options = {
     noremap = true,
     silent = true,
+    buffer = buffer,
   }
 
-  if not buffer then
-    vim.api.nvim_set_keymap(mode, key, rhs, map_options)
-  else
-    vim.api.nvim_buf_set_keymap(0, mode, key, rhs, map_options)
-  end
+  require('utils').remap(mode, key, rhs, map_options)
 end
 
 -- mappings

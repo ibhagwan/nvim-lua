@@ -61,11 +61,14 @@ end
 local comps = {
     vi_mode = {
         left = {
-            provider = '  ',
+            provider = function()
+              return '  ' .. vi_mode_utils.get_vim_mode()
+            end,
             hl = function()
                 local val = {
                     name = vi_mode_utils.get_mode_highlight_name(),
-                    fg = vi_mode_utils.get_mode_color()
+                    fg = vi_mode_utils.get_mode_color(),
+                    -- fg = colors.bg
                 }
                 return val
             end,
@@ -232,21 +235,6 @@ local comps = {
     }
 }
 
-local properties = {
-    force_inactive = {
-        filetypes = {
-            'NvimTree',
-            'dbui',
-            'packer',
-            'startify',
-            'fugitive',
-            'fugitiveblame'
-        },
-        buftypes = {'terminal'},
-        bufnames = {}
-    }
-}
-
 local components = {
   active = {},
   inactive = {},
@@ -279,9 +267,17 @@ table.insert(components.active[2], comps.vi_mode.right)
 -- LuaFormatter on
 
 require'feline'.setup {
-    default_bg = colors.bg,
-    default_fg = colors.fg,
+    colors = { bg = colors.bg, fg = colors.fg },
     components = components,
-    properties = properties,
-    vi_mode_colors = vi_mode_colors
+    vi_mode_colors = vi_mode_colors,
+    force_inactive = {
+        filetypes = {
+            'packer',
+            'NvimTree',
+            'fugitive',
+            'fugitiveblame'
+        },
+        buftypes = {'terminal'},
+        bufnames = {}
+    }
 }

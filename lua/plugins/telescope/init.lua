@@ -163,10 +163,6 @@ require('telescope').load_extension('fzy_native')
 
 local M = {}
 
---[[
-lua require('plenary.reload').reload_module("plugin.telescope")
-nnoremap <leader>en <cmd>lua require('plugin.telescope').edit_neovim()<CR>
---]]
 function M.edit_neovim()
   require("telescope.builtin").find_files {
     prompt_title = "< VimRC >",

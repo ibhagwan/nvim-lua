@@ -1,11 +1,19 @@
 local remap = vim.api.nvim_set_keymap
+local command = require'utils'.command
 
 -- Shortcuts for editing the keymap file and reloading the config
 vim.cmd [[command! -nargs=* NvimEditInit split | edit $MYVIMRC]]
 vim.cmd [[command! -nargs=* NvimEditKeymap split | edit ~/.config/nvim/lua/keymaps.lua]]
 vim.cmd [[command! -nargs=* NvimSourceInit luafile $MYVIMRC]]
-vim.cmd [[command! -nargs=* NvimReload lua require('utils').ensure_loaded_fnc({'nvim-reload'}, function() require('nvim-reload').Reload() end)]]
-vim.cmd [[command! -nargs=* NvimRestart lua require('utils').ensure_loaded_fnc({'nvim-reload'}, function() require('nvim-reload').Restart() end)]]
+
+command({
+    "-nargs=*", "NvimRestart", function()
+    if not pcall(require, 'nvim-reload') then
+      require('packer').loader('nvim-reload')
+    end
+    require('nvim-reload').Restart()
+    require('plugins.nvim-reload')
+  end})
 
 -- Use ':Grep' or ':LGrep' to grep into quickfix|loclist
 -- without output or jumping to first match
@@ -187,7 +195,7 @@ remap('n', '<leader>|',
     { noremap = true, silent = true })
 
 -- Change current working dir (:pwd) to curent file's folder
-remap('n', '<leader>%', '<Esc>:cd %:h | pwd<CR>',   { noremap = true, silent = true })
+remap('n', '<leader>%', '<Esc>:lua require"utils".set_cwd()<CR>',   { noremap = true, silent = true })
 
 -- Map <leader>o & <leader>O to newline without insert mode
 remap('n', '<leader>o',

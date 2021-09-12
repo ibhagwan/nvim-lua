@@ -1,4 +1,9 @@
-require('gitsigns').setup {
+local res, gitsigns = pcall(require, "gitsigns")
+if not res then
+  return
+end
+
+gitsigns.setup {
   signs = {
     add          = {hl = 'GitSignsAdd'   , text = '│', numhl='GitSignsAddNr'   , linehl='GitSignsAddLn'},
     change       = {hl = 'GitSignsChange', text = '│', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
@@ -37,5 +42,5 @@ require('gitsigns').setup {
   sign_priority = 6,
   update_debounce = 100,
   status_formatter = nil, -- Use default
-  use_internal_diff = true,  -- If luajit is present
+  diff_opts = { internal = true, },  -- If luajit is present
 }

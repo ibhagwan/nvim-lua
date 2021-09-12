@@ -1,47 +1,30 @@
 FzfMapArgs = FzfMapArgs or {}
 
 local map_fzf = function(mode, key, f, options, buffer)
-  local map_fzf = vim.api.nvim_replace_termcodes(key .. f, true, true, true)
+  local map_key = vim.api.nvim_replace_termcodes(key .. f, true, true, true)
 
-  FzfMapArgs[map_fzf] = options or {}
+  FzfMapArgs[map_key] = options or {}
 
-  local rhs = string.format([[<cmd>lua require'utils'.ensure_loaded_fnc(]] ..
-    [[ {'nvim-fzf','fzf-lua'}, function()]] ..
-    [[ require('plugin.fzf-lua')['%s'](FzfMapArgs['%s'])]] ..
-    [[ end)<CR>]]
-    , f, map_fzf)
+  local rhs = function()
+    if not pcall(require, 'fzf-lua') then
+      require('packer').loader('nvim-fzf')
+      require('packer').loader('fzf-lua')
+    end
+    require('plugins.fzf-lua')[f](FzfMapArgs[map_key])
+  end
 
   local map_options = {
     noremap = true,
     silent = true,
+    buffer = buffer,
   }
 
-  if not buffer then
-    vim.api.nvim_set_keymap(mode, key, rhs, map_options)
-  else
-    vim.api.nvim_buf_set_keymap(0, mode, key, rhs, map_options)
-  end
+  require('utils').remap(mode, key, rhs, map_options)
 end
 
 -- mappings
 map_fzf('n', '<F1>', "help_tags")
-map_fzf('n', '<c-P>', "files", {
-  --[[ fzf_colors = {
-      ["fg"] = { "fg", "CursorLine" },
-      ["bg"] = { "bg", "Normal" },
-      ["hl"] = { "fg", "Comment" },
-      ["fg+"] = { "fg", "Normal" },
-      ["bg+"] = { "bg", "CursorLine" },
-      ["hl+"] = { "fg", "Statement" },
-      ["info"] = { "fg", "PreProc" },
-      ["prompt"] = { "fg", "Conditional" },
-      ["pointer"] = { "fg", "Exception" },
-      ["marker"] = { "fg", "Keyword" },
-      ["spinner"] = { "fg", "Label" },
-      ["header"] = { "fg", "Comment" },
-      ["gutter"] = { "bg", "Normal" },
-  }, ]]
-})
+map_fzf('n', '<c-P>', "files", {})
 map_fzf('n', '<leader>;', "buffers")
 map_fzf('n', '<leader>fr', "grep", {})
 map_fzf('n', '<leader>fl', "live_grep", {})

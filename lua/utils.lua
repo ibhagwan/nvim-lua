@@ -12,14 +12,6 @@ end
 
 local M = {}
 
-M._if = function(bool, a, b)
-    if bool then
-        return a
-    else
-        return b
-    end
-end
-
 function M._echo_multiline(msg)
   for _, s in ipairs(vim.fn.split(msg, "\n")) do
     vim.cmd("echom '" .. s:gsub("'", "''").."'")
@@ -45,47 +37,59 @@ function M.err(msg)
 end
 
 function M.has_neovim_v05()
-  if vim.fn.has('nvim-0.5') == 1 then
-    return true
-  end
-  return false
+  return (vim.fn.has('nvim-0.5') == 1)
 end
 
 function M.is_root()
-  local output = vim.fn.systemlist "id -u"
-  return ((output[1] or "") == "0")
+  return (vim.loop.getuid() == 0)
 end
 
 function M.is_darwin()
   local os_name = vim.loop.os_uname().sysname
   return os_name == 'Darwin'
-  --[[ local output = vim.fn.systemlist "uname -s"
-  return not not string.find(output[1] or "", "Darwin") ]]
 end
 
 function M.shell_error()
   return vim.v.shell_error ~= 0
 end
 
-function M.shell_type(file)
-  vim.fn.system(string.format("type '%s'", file))
-  if vim.v.shell_error ~= 0 then return false
-  else return true end
-end
-
-function M.is_git_repo()
-  vim.fn.system("git status")
-  return M._if(M.shell_error(), false, true)
-end
-
 function M.have_compiler()
-  if M.shell_type('cc') or
-    M.shell_type('gcc') or
-    M.shell_type('clang') or
-    M.shell_type('cl') then
+  if vim.fn.executable('cc') == 1 or
+    vim.fn.executable('gcc') == 1 or
+    vim.fn.executable('clang') == 1 or
+    vim.fn.executable('cl') == 1 then
     return true
   end
   return false
+end
+
+function M.git_cwd(cmd, cwd)
+  if not cwd then return cmd end
+  cwd = vim.fn.expand(cwd)
+  local arg_cwd = ("-C %s "):format(vim.fn.shellescape(cwd))
+  cmd = cmd:gsub("^git ", "git " ..  arg_cwd)
+  return cmd
+end
+
+function M.git_root(cwd, noerr)
+  local cmd = M.git_cwd("git rev-parse --show-toplevel", cwd)
+  local output = vim.fn.systemlist(cmd)
+  if M.shell_error() then
+    if not noerr then M.info(unpack(output)) end
+    return nil
+  end
+  return output[1]
+end
+
+function M.is_git_repo(cwd, noerr)
+  return not not M.git_root(cwd, noerr)
+end
+
+function M.set_cwd()
+  local parent = vim.fn.expand("%:h")
+  local pwd = M.git_root(parent, true) or parent
+  vim.cmd("cd " .. pwd)
+  M.info(("pwd set to %s"):format(vim.fn.shellescape(pwd)))
 end
 
 -- Can also use #T ?
@@ -127,24 +131,6 @@ function M.get_visual_selection()
     lines[n] = string.sub(lines[n], 1, cecol)
     lines[1] = string.sub(lines[1], cscol)
     return table.concat(lines, "\n")
-end
-
-function M.ensure_loaded_cmd(modules, cmds)
-  vim.cmd[[packadd packer.nvim]]
-  for _, m in ipairs(modules) do
-    vim.cmd([[PackerLoad ]] .. m)
-  end
-  for _, c in ipairs(cmds) do
-    vim.cmd(c)
-  end
-end
-
-function M.ensure_loaded_fnc(modules, fnc)
-  vim.cmd[[packadd packer.nvim]]
-  for _, m in ipairs(modules) do
-    vim.cmd([[PackerLoad ]] .. m)
-  end
-  fnc()
 end
 
 function M.toggle_colorcolumn()
@@ -330,6 +316,103 @@ M.sudo_write = function(tmpfile, filepath)
     vim.cmd("e!")
   end
   vim.fn.delete(tmpfile)
+end
+
+-- Credit to uga-rosa@github
+-- https://github.com/uga-rosa/dotfiles/blob/main/.config/nvim/lua/utils.lua
+
+---Return a string for vim from a lua function.
+---Functions are stored in _G.myluafunc.
+---@param func function
+---@return string VimFunctionString
+_G.myluafunc = setmetatable({}, {
+  __call = function(self, num)
+    return self[num]()
+  end,
+})
+
+local func2str = function(func)
+  local idx = #_G.myluafunc + 1
+  _G.myluafunc[idx] = func
+  return ("lua myluafunc(%s)"):format(idx)
+end
+
+M.t = function(str)
+  return vim.api.nvim_replace_termcodes(str, true, true, true)
+end
+
+---API for key mapping.
+---
+---@param lhs string
+---@param modes string|table
+---@param rhs string|function
+---@param opts string|table
+--- opts.buffer: current buffer only
+--- opts.cmd: command (format to <cmd>%s<cr>)
+M.remap = function(modes, lhs, rhs, opts)
+  modes = type(modes) == "string" and { modes } or modes
+  opts = opts or {}
+  opts = type(opts) == "string" and { opts } or opts
+
+  local fallback = function()
+    return vim.api.nvim_feedkeys(M.t(lhs), "n", true)
+  end
+
+  local _rhs = (function()
+    if type(rhs) == "function" then
+      opts.noremap = true
+      opts.cmd = true
+      return func2str(function()
+        rhs(fallback)
+      end)
+    else
+      return rhs
+    end
+  end)()
+
+  for key, opt in ipairs(opts) do
+    opts[opt] = true
+    opts[key] = nil
+  end
+
+  local buffer = (function()
+    if opts.buffer then
+      opts.buffer = nil
+      return true
+    end
+  end)()
+
+  _rhs = (function()
+    if opts.cmd then
+      opts.cmd = nil
+      return ("<cmd>%s<cr>"):format(_rhs)
+    else
+      return _rhs
+    end
+  end)()
+
+  for _, mode in ipairs(modes) do
+    if buffer then
+      vim.api.nvim_buf_set_keymap(0, mode, lhs, _rhs, opts)
+    else
+      vim.api.nvim_set_keymap(mode, lhs, _rhs, opts)
+    end
+  end
+end
+
+---API for command mappings
+-- Supports lua function args
+---@param args string|table
+M.command = function(args)
+  if type(args) == "table" then
+    for i=2,#args do
+      if type(args[i]) == "function" then
+        args[i] = func2str(args[i])
+      end
+    end
+    args = table.concat(args, " ")
+  end
+  vim.cmd("command! " .. args)
 end
 
 return M

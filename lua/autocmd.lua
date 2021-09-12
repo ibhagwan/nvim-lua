@@ -40,20 +40,12 @@ local autocmds = {
   lua_highlight = {
     { "TextYankPost", "*", "silent! lua vim.highlight.on_yank{higroup='IncSearch', timeout=2000}" };
   };
-  packer_init = {
-    { "VimEnter", "*", "lua require('plugins').sync_if_not_compiled()" };
-  };
   packer_compile = {
-    { "BufWritePost", "plugins.lua", "lua require('plugins').compile()" };
+    { "BufWritePost", "packer_init.lua", "lua require('plugins').compile()" };
   };
   solidity = {
     { "BufRead,BufNewFile", "*.sol", "set filetype=solidity" };
   };
-  -- wasn't the consistent heavior I wanted
-  -- disable for now
-  --[[ lua = {
-    { "BufRead,BufNewFile", "*.lua", "setlocal indentkeys-=0=end,0=until" };
-  }; ]]
 }
 
 nvim_create_augroups(autocmds)

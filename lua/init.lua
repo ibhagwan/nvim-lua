@@ -70,11 +70,11 @@ vim.o.completeopt       = 'noinsert,menuone,noselect'
 vim.o.wildmenu          = true
 vim.o.wildmode          = 'longest:full,full'
 vim.o.wildoptions       = 'pum'     -- Show completion items using the pop-up-menu (pum)
-vim.o.pumblend          = 0         -- completion menu transparency
+vim.o.pumblend          = 15        -- completion menu transparency
 
 vim.o.joinspaces        = true      -- insert spaces after '.?!' when joining lines
 vim.o.autoindent        = true      -- copy indent from current line on newline
-vim.o.smartindent       = true          -- add <tab> depending on syntax (C/C++)
+vim.o.smartindent       = true      -- add <tab> depending on syntax (C/C++)
 vim.o.startofline       = false     -- keep cursor column on navigation
 
 vim.o.tabstop           = 4         -- Tab indentation levels every two columns
@@ -183,7 +183,7 @@ end
 
 -- use ':grep' to send resulsts to quickfix
 -- use ':lgrep' to send resulsts to loclist
-if require'utils'.shell_type('rg') then
+if vim.fn.executable('rg') == 1 then
     vim.o.grepprg = 'rg --vimgrep --no-heading --smart-case --hidden'
     vim.o.grepformat = '%f:%l:%c:%m'
 end

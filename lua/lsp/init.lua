@@ -178,7 +178,7 @@ local function setup_servers()
   -- get all installed servers
   local servers = require'lspinstall'.installed_servers()
   -- ... and add manually installed servers
-  if require'utils'.shell_type('ccls') then
+  if vim.fn.executable('ccls') == 1 then
     table.insert(servers, "ccls")
   end
 
