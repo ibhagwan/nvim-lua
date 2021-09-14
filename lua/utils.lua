@@ -85,11 +85,18 @@ function M.is_git_repo(cwd, noerr)
   return not not M.git_root(cwd, noerr)
 end
 
-function M.set_cwd()
-  local parent = vim.fn.expand("%:h")
-  local pwd = M.git_root(parent, true) or parent
-  vim.cmd("cd " .. pwd)
-  M.info(("pwd set to %s"):format(vim.fn.shellescape(pwd)))
+function M.set_cwd(pwd)
+  if not pwd then
+    local parent = vim.fn.expand("%:h")
+    pwd = M.git_root(parent, true) or parent
+  end
+  if vim.loop.fs_stat(pwd) then
+    vim.cmd("cd " .. pwd)
+    M.info(("pwd set to %s"):format(vim.fn.shellescape(pwd)))
+  else
+    M.warn(("Unable to set pwd to %s, directory is not accessible")
+      :format(vim.fn.shellescape(pwd)))
+  end
 end
 
 -- Can also use #T ?

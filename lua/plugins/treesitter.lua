@@ -31,10 +31,9 @@ require'nvim-treesitter.configs'.setup {
     select = {
       enable  = true,
       keymaps = {
-        ["ac"] = "@comment.outer"      ,
+        ["aC"] = "@comment.outer"    ,
+        ["ac"] = "@class.outer"      ,
         ["ic"] = "@class.inner"      ,
-        ["ab"] = "@block.outer"      ,
-        ["ib"] = "@block.inner"      ,
         ["af"] = "@function.outer"   ,
         ["if"] = "@function.inner"   ,
         -- Leader mappings, dups for whichkey

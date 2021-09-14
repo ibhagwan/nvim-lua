@@ -31,6 +31,7 @@ hl.c = {
 
 hl.common = {
   Normal =            { fg = hl.c.fg, bg = hl.c.bg },
+  NormalFloat =       { fg = hl.c.fg, bg = hl.c.bg },
   Conceal =           { },
   Cursor =            { fg = hl.c.special_grey, bg = hl.c.blue },
   CursorIM =          { },

@@ -181,6 +181,101 @@ function M.installed_plugins(opts)
   require'fzf-lua'.files(opts)
 end
 
+function M.git_history(opts)
+  local path = require'fzf-lua.path'
+  local core = require'fzf-lua.core'
+  local config = require'fzf-lua.config'
+  local actions = require 'fzf-lua.actions'
+  opts = config.normalize_opts(opts, config.globals.git)
+  opts.prompt = opts.prompt or "Git History> "
+  opts.input_prompt = opts.input_prompt or "Search For> "
+
+  opts.cwd = path.git_root(opts.cwd)
+  local cmd = path.git_cwd("git log --pretty --oneline --color", opts.cwd)
+  opts.preview = vim.fn.shellescape(path.git_cwd(
+    "git show --pretty='%Cred%H%n%Cblue%an%n%Cgreen%s' --color {1}",
+    opts.cwd))
+
+  if not opts.query then
+    opts.query = vim.fn.input(opts.input_prompt) or ""
+  end
+
+  -- this gets called every keystroke, setup for this
+  -- is done inside 'set_fzf_interactive_cmd(opts)'
+  opts._reload_command = function(query)
+    return ("%s %s"):format(cmd, #query>0 and "-S "..vim.fn.shellescape(query) or "")
+  end
+
+  -- without this queries won't execute until you start typing
+  -- change to false to ignore empty string queries
+  opts.exec_empty_query = true
+  opts = core.set_fzf_interactive_cmd(opts)
+
+  coroutine.wrap(function ()
+    local selected = core.fzf(opts)
+    if not selected then return end
+    actions.act(opts.actions, selected, opts)
+  end)()
+end
+
+local previous_cwd = nil
+
+function M.workdirs(opts)
+  if not opts then opts = {} end
+
+  -- workdirs.lua returns a table of workdirs
+  local ok, dirs = pcall(require, 'workdirs')
+  if not ok then return end
+
+  local iconify = function(path, is_pcwd)
+    local ansi_codes = require'fzf-lua.utils'.ansi_codes
+    local is_cwd = (path == vim.loop.cwd())
+    local icon = is_cwd and ansi_codes.magenta('')
+      or is_pcwd and ansi_codes.yellow('')
+      or ansi_codes.blue('')
+    path = require'fzf-lua.path'.relative(vim.fn.expand(path), vim.fn.expand('$HOME'))
+    return ("%s  %s"):format(icon, path), path
+  end
+
+  coroutine.wrap(function ()
+    local dedup = {}
+    local entries = {}
+    if previous_cwd then
+        local item, key = iconify(previous_cwd, true)
+        entries[1] = item
+        dedup[key] = item
+    end
+    for _, path in ipairs(dirs) do
+      -- prevent duplicates
+      local item, key = iconify(path)
+      if dedup[key] == nil then
+        dedup[key] = item
+        entries[#entries+1] = item
+      end
+    end
+
+    local fzf_fn = function(cb)
+      for _, entry in ipairs(entries) do
+        cb(entry, function(err)
+          if err then return end
+          cb(nil, function() end)
+        end)
+      end
+    end
+
+    opts.prompt = 'Workdirs❯ '
+    opts.nomulti = true
+    opts.preview_window = 'hidden:right:0'
+    local selected = require'fzf-lua.core'.fzf(opts, fzf_fn)
+    if not selected then return end
+    previous_cwd = vim.loop.cwd()
+    local pwd = require'fzf-lua.path'.join({
+      vim.fn.expand('$HOME'), selected[1]:match("[^ ]*$")
+    })
+    require'utils'.set_cwd(pwd)
+  end)()
+end
+
 return setmetatable({}, {
   __index = function(_, k)
 

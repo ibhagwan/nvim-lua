@@ -202,5 +202,10 @@ return packer.startup({
         config = "require('plugins.feline')",
         after = 'nvim-web-devicons',
         event = 'VimEnter' }
+
+    -- auto-generate vimdoc from GitHub README
+    use { 'mjlbach/babelfish.nvim',
+        setup = "require'plugins.babelfish'",
+        opt = true }
   end
 })
