@@ -20,6 +20,14 @@ require'fzf-lua'.setup {
     -- end,
   },
   fzf_bin             = 'sk',
+  fzf_opts = {
+      -- set to `false` to remove a flag
+      ['--ansi']      = '',
+      ['--prompt']    = ' >',
+      ['--info']      = 'inline',
+      ['--height']    = '100%',
+      ['--layout']    = 'reverse',
+  },
   fzf_binds           = {
       ["f4"]          = "abort",
       ["f2"]          = "toggle-preview",
@@ -263,9 +271,12 @@ function M.workdirs(opts)
       end
     end
 
-    opts.prompt = 'Workdirs❯ '
-    opts.nomulti = true
-    opts.preview_window = 'hidden:right:0'
+    opts.fzf_opts = {
+      ['--no-multi']        = '',
+      ['--prompt']          = 'Workdirs❯ ',
+      ['--preview-window']  = 'hidden:right:0',
+    }
+
     local selected = require'fzf-lua.core'.fzf(opts, fzf_fn)
     if not selected then return end
     previous_cwd = vim.loop.cwd()

@@ -144,13 +144,16 @@ function M.toggle_colorcolumn()
   local wininfo = vim.fn.getwininfo()
   for _, win in pairs(wininfo) do
     local ft = vim.api.nvim_buf_get_option(win['bufnr'], 'filetype')
-    -- print(win['winnr'], win['width'], ft)
-    if ft == nil or ft == '' or ft == 'TelescopePrompt' then return end
-    if win['width'] < vim.g.colorcolumn then
-      vim.api.nvim_win_set_option(win['winid'], 'colorcolumn', '')
-    else
-      vim.api.nvim_win_set_option(win['winid'], 'colorcolumn', string.format(vim.g.colorcolumn))
+    if ft == nil or ft == 'TelescopePrompt' then return end
+    local colorcolumn = ''
+    if win['width'] >= vim.g.colorcolumn then
+      colorcolumn = tostring(vim.g.colorcolumn)
     end
+    -- TOOD: messes up tab highlighting, why?
+    -- vim.api.nvim_win_set_option(win['winid'], 'colorcolumn', colorcolumn)
+    vim.api.nvim_win_call(win['winid'], function()
+      vim.wo.colorcolumn = colorcolumn
+    end)
   end
 end
 

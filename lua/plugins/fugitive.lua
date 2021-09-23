@@ -22,7 +22,3 @@ remap('', '<leader>gl', '<Esc>:Git log --stat %<CR>',               { noremap = 
 remap('', '<leader>gL', '<Esc>:Git log --stat -n 100<CR>',          { noremap = true })
 remap('', '<leader>ge', '<Esc>:vsp<CR>:Gedit HEAD~:%<left><left>',  { noremap = true })
 remap('', '<leader>gE', '<Esc>:sp<CR>:Gedit HEAD~:%<left><left>',   { noremap = true })
-
--- 'sindrets/diffview.nvim'
-remap('', '<leader>gv', '<Esc>:DiffviewOpen<CR>',   { noremap = true })
-remap('', '<leader>gV', '<Esc>:DiffviewClose<CR>',  { noremap = true })

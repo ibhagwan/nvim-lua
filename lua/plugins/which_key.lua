@@ -160,8 +160,6 @@ local keymaps = {
         L = 'git log (global)',
         e = 'Gedit HEAD~n (vertical)',
         E = 'Gedit HEAD~n (horizontal)',
-        v = 'DiffviewOpen',
-        V = 'DiffviewClose',
     },
     h = {
         name = '+gitsigns',

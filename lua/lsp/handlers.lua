@@ -27,7 +27,7 @@ function M.preview_location(location, context, before_context)
   local filetype = vim.api.nvim_buf_get_option(bufnr, "filetype")
   local _, winnr = vim.lsp.util.open_floating_preview(contents, filetype)
   vim.api.nvim_win_set_config(winnr, _winopts)
-  vim.api.nvim_win_set_option(win, 'winhighlight', 'Normal:Normal,FloatBorder:FloatBorder')
+  vim.api.nvim_win_set_option(winnr, 'winhighlight', 'Normal:Normal,FloatBorder:FloatBorder')
   vim.api.nvim_win_set_option(winnr, 'cursorline', true)
   vim.api.nvim_win_set_cursor(winnr, {6,1})
   return _, winnr

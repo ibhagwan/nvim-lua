@@ -2,8 +2,6 @@ if not pcall(require, "feline") then
   return
 end
 
--- require'feline'.setup({})
-
 local colors = {
     bg = '#282c34',
     fg = '#abb2bf',
@@ -242,6 +240,7 @@ local components = {
 
 table.insert(components.active, {})
 table.insert(components.active, {})
+table.insert(components.active, {})
 table.insert(components.inactive, {})
 table.insert(components.inactive, {})
 
@@ -253,19 +252,35 @@ table.insert(components.active[1], comps.git.change)
 table.insert(components.active[1], comps.git.remove)
 table.insert(components.inactive[1], comps.vi_mode.left)
 table.insert(components.inactive[1], comps.file.info)
-table.insert(components.active[2], comps.diagnos.err)
-table.insert(components.active[2], comps.diagnos.warn)
-table.insert(components.active[2], comps.diagnos.hint)
-table.insert(components.active[2], comps.diagnos.info)
-table.insert(components.active[2], comps.lsp.name)
-table.insert(components.active[2], comps.file.os)
-table.insert(components.active[2], comps.file.position)
-table.insert(components.active[2], comps.line_percentage)
-table.insert(components.active[2], comps.scroll_bar)
-table.insert(components.active[2], comps.vi_mode.right)
+table.insert(components.active[3], comps.diagnos.err)
+table.insert(components.active[3], comps.diagnos.warn)
+table.insert(components.active[3], comps.diagnos.hint)
+table.insert(components.active[3], comps.diagnos.info)
+table.insert(components.active[3], comps.lsp.name)
+table.insert(components.active[3], comps.file.os)
+table.insert(components.active[3], comps.file.position)
+table.insert(components.active[3], comps.line_percentage)
+table.insert(components.active[3], comps.scroll_bar)
+table.insert(components.active[3], comps.vi_mode.right)
 
--- LuaFormatter on
 
+-- TreeSitter
+-- local ts_utils = require("nvim-treesitter.ts_utils")
+-- local ts_parsers = require("nvim-treesitter.parsers")
+-- local ts_queries = require("nvim-treesitter.query")
+--[[ table.insert(components.active[2], {
+  provider = function()
+    local node = require("nvim-treesitter.ts_utils").get_node_at_cursor()
+    return ("%d:%s [%d, %d] - [%d, %d]")
+      :format(node:symbol(), node:type(), node:range())
+  end,
+  enabled = function()
+    local ok, ts_parsers = pcall(require, "nvim-treesitter.parsers")
+    return ok and ts_parsers.has_parser()
+  end
+}) ]]
+
+-- require'feline'.setup {}
 require'feline'.setup {
     colors = { bg = colors.bg, fg = colors.fg },
     components = components,

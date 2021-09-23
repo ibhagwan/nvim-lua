@@ -13,11 +13,15 @@ require'utils'.command({ "-nargs=*", "DocgenREADME",
     local project_name = 'fzf-lua'
     if vim.loop.fs_stat(input_file) then
       local metadata = {
-        project_name  = project_name,
-        input_file    = input_file,
-        output_file   = ("%s/doc/%s.txt"):format(cwd, project_name),
-        }
+        project_name      = project_name,
+        input_file        = input_file,
+        output_file       = ("%s/doc/%s.txt"):format(cwd, project_name),
+        methods           = { ["html_block"] = false },
+        -- header_count_lvl  = 1,
+      }
       docgen.generate_readme(metadata)
+      require'utils'.info(("Successfully generated %s")
+        :format(vim.fn.shellescape(metadata.output_file)))
     else
       require'utils'.warn(("%s is inaccessible")
         :format(vim.fn.shellescape(input_file)))

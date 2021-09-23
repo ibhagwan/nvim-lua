@@ -34,10 +34,6 @@ return packer.startup({
         config = "require('plugins.fugitive')",}
         -- event = "VimEnter" }
 
-    -- :DiffViewOpen :DiffViewClose
-    use { 'sindrets/diffview.nvim', opt = true,
-        cmd = { 'DiffviewOpen', 'DiffviewClose' }}
-
     -- plenary is required by gitsigns and telescope
     -- lazy load so gitsigns doesn't abuse our startup time
     use { "nvim-lua/plenary.nvim", event = "BufRead" }
@@ -162,13 +158,6 @@ return packer.startup({
         after  = { 'nvim-lspconfig' },
       }
 
-    --[[ use { 'glepnir/lspsaga.nvim',
-        config = function()
-          require'lspsaga'.init_lsp_saga({
-            rename_prompt_prefix = 'New name ➤',
-          })
-        end } ]]
-
     -- ethereum solidity '.sol'
     use { 'tomlion/vim-solidity' }
 
@@ -197,14 +186,16 @@ return packer.startup({
         opt = true }
 
     -- fancy statusline
-    use { 'ibhagwan/feline.nvim',
+    use { 'famiu/feline.nvim',
         requires = { 'kyazdani42/nvim-web-devicons' },
         config = "require('plugins.feline')",
         after = 'nvim-web-devicons',
         event = 'VimEnter' }
 
     -- auto-generate vimdoc from GitHub README
-    use { 'mjlbach/babelfish.nvim',
+    -- use { 'mjlbach/babelfish.nvim',
+    -- use { '~/Sources/nvim/babelfish.nvim',
+    use { 'ibhagwan/babelfish.nvim',
         setup = "require'plugins.babelfish'",
         opt = true }
   end

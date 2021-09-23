@@ -60,11 +60,11 @@ cmp.setup {
   },
 
   -- disabled while bugged (popup doesn't close on '<C-c>'
-  -- documentation = false,
-  documentation = {
+  documentation = false,
+  --[[ documentation = {
     border       = { '╭', '─', '╮', '│', '╯', '─', '╰', '│' },
     winhighlight = 'Normal:Normal,FloatBorder:FloatBorder',
-  },
+  }, ]]
 
   formatting = {
     deprecated = false,
