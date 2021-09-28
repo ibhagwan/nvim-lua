@@ -144,7 +144,15 @@ local lua_settings = {
     },
     diagnostics = {
       -- Get the language server to recognize the `vim` global
-      globals = {'vim'},
+      globals = {
+        'vim',
+        'root',         -- awesomeWM
+        'awesome',      -- awesomeWM
+        'screen',       -- awesomeWM
+        'client',       -- awesomeWM
+        'clientkeys',   -- awesomeWM
+        'clientbuttons',-- awesomeWM
+      },
     },
     workspace = {
       -- Make the server aware of Neovim runtime files
@@ -180,6 +188,9 @@ local function setup_servers()
   -- ... and add manually installed servers
   if vim.fn.executable('ccls') == 1 then
     table.insert(servers, "ccls")
+  end
+  if vim.fn.executable('rust-analyzer') == 1 then
+    table.insert(servers, "rust_analyzer")
   end
 
   for _, server in pairs(servers) do
