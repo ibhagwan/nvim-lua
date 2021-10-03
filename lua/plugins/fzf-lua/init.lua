@@ -15,9 +15,34 @@ require'fzf-lua'.setup {
     -- win_border       = { '╭', '─', '╮', '│', '╯', '─', '╰', {'│', 'NormalFloat' } },
     hl_normal        = 'Normal',        -- window normal color
     hl_border        = 'FloatBorder',   -- window border color
-    -- window_on_create = function()
+    fullscreen       = false,           -- start fullscreen?
+    window_on_create = function()
       -- vim.cmd("set winhl=Normal:NormalFloat,FloatBorder:Normal")
-    -- end,
+    end,
+  },
+  keymap = {
+    builtin = {
+      ["<F2>"]      = "toggle-fullscreen",
+      -- Only valid with the 'builtin' previewer
+      ["<F3>"]      = "toggle-preview-wrap",
+      ["<F4>"]      = "toggle-preview",
+      ["<S-down>"]  = "preview-page-down",
+      ["<S-up>"]    = "preview-page-up",
+      ["<S-left>"]  = "preview-page-reset",
+    },
+    fzf = {
+      ["ctrl-u"]        = "unix-line-discard",
+      ["ctrl-f"]        = "half-page-down",
+      ["ctrl-b"]        = "half-page-up",
+      ["ctrl-a"]        = "beginning-of-line",
+      ["ctrl-e"]        = "end-of-line",
+      ["alt-a"]         = "toggle-all",
+      -- Only valid with fzf previewers (bat/cat/git/etc)
+      ["f3"]            = "toggle-preview-wrap",
+      ["f4"]            = "toggle-preview",
+      ["shift-down"]    = "preview-page-down",
+      ["shift-up"]      = "preview-page-up",
+    },
   },
   fzf_bin             = 'sk',
   fzf_opts = {
@@ -27,19 +52,6 @@ require'fzf-lua'.setup {
       ['--info']      = 'inline',
       ['--height']    = '100%',
       ['--layout']    = 'reverse',
-  },
-  fzf_binds           = {
-      ["f4"]          = "abort",
-      ["f2"]          = "toggle-preview",
-      ["f3"]          = "toggle-preview-wrap",
-      ["shift-down"]  = "preview-page-down",
-      ["shift-up"]    = "preview-page-up",
-      ["ctrl-u"]      = "unix-line-discard",
-      ["ctrl-f"]      = "half-page-down",
-      ["ctrl-b"]      = "half-page-up",
-      ["ctrl-a"]      = "beginning-of-line",
-      ["ctrl-e"]      = "end-of-line",
-      ["alt-a"]       = "toggle-all",
   },
   fzf_colors = {
       ["fg"] = { "fg", "CursorLine" },
@@ -73,23 +85,11 @@ require'fzf-lua'.setup {
       title           = true,           -- preview title?
       scrollbar       = true,           -- scrollbar?
       scrollchar      = '█',            -- scrollbar character
-      wrap            = false,          -- wrap lines?
       syntax          = true,           -- preview syntax highlight?
       syntax_limit_b  = 1024*1024,      -- syntax limit (bytes), 0=nolimit
       syntax_limit_l  = 0,              -- syntax limit (lines), 0=nolimit
-      expand          = false,          -- preview max size?
-      hidden          = false,          -- start hidden?
       hl_cursor       = 'Cursor',       -- cursor highlight
       hl_cursorline   = 'CursorLine',   -- cursor line highlight
-      hl_range        = 'IncSearch',    -- ranger highlight (not yet in use)
-      keymap = {
-        toggle_full   = '<F2>',         -- toggle full screen
-        toggle_wrap   = '<F3>',         -- toggle line wrap
-        toggle_hide   = '<F4>',         -- toggle on/off (not yet in use)
-        page_up       = '<S-up>',       -- preview scroll up
-        page_down     = '<S-down>',     -- preview scroll down
-        page_reset    = '<S-left>',     -- reset scroll to orig pos
-      },
     },
   },
   lsp                 = { prompt = '❯ ', },
