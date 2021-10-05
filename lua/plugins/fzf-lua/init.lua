@@ -102,7 +102,15 @@ require'fzf-lua'.setup {
   files = {
     prompt            = 'Files❯ ',
     actions = {
+      ["ctrl-l"]      = require'fzf-lua.actions'.arg_add,
       ["ctrl-y"]      = function(selected) print(selected[1]) end,
+    },
+  },
+  args = {
+    prompt            = 'Args❯ ',
+    files_only        = true,
+    actions = {
+      ["ctrl-x"]      = require'fzf-lua.actions'.arg_del,
     },
   },
   git = {
@@ -229,40 +237,37 @@ function M.git_history(opts)
   end)()
 end
 
-local previous_cwd = nil
+local _previous_cwd = nil
 
 function M.workdirs(opts)
   if not opts then opts = {} end
 
   -- workdirs.lua returns a table of workdirs
   local ok, dirs = pcall(require, 'workdirs')
-  if not ok then return end
+  if not ok then dirs = {} end
 
-  local iconify = function(path, is_pcwd)
+  local iconify = function(path, color, icon)
     local ansi_codes = require'fzf-lua.utils'.ansi_codes
-    local is_cwd = (path == vim.loop.cwd())
-    local icon = is_cwd and ansi_codes.magenta('')
-      or is_pcwd and ansi_codes.yellow('')
-      or ansi_codes.blue('')
-    path = require'fzf-lua.path'.relative(vim.fn.expand(path), vim.fn.expand('$HOME'))
-    return ("%s  %s"):format(icon, path), path
+    local icon = ansi_codes[color](icon)
+    path = require'fzf-lua.path'.relative(path, vim.fn.expand('$HOME'))
+    return ("%s  %s"):format(icon, path)
+  end
+
+  local dedup = {}
+  local entries = {}
+  local add_entry = function(path, color, icon)
+    if not path then return end
+    path = vim.fn.expand(path)
+    if dedup[path] ~= nil then return end
+    entries[#entries+1] = iconify(path, color or "blue", icon or '')
+    dedup[path] = true
   end
 
   coroutine.wrap(function ()
-    local dedup = {}
-    local entries = {}
-    if previous_cwd then
-        local item, key = iconify(previous_cwd, true)
-        entries[1] = item
-        dedup[key] = item
-    end
+    add_entry(vim.loop.cwd(), "magenta", '')
+    add_entry(_previous_cwd, "yellow")
     for _, path in ipairs(dirs) do
-      -- prevent duplicates
-      local item, key = iconify(path)
-      if dedup[key] == nil then
-        dedup[key] = item
-        entries[#entries+1] = item
-      end
+      add_entry(path)
     end
 
     local fzf_fn = function(cb)
@@ -278,15 +283,16 @@ function M.workdirs(opts)
       ['--no-multi']        = '',
       ['--prompt']          = 'Workdirs❯ ',
       ['--preview-window']  = 'hidden:right:0',
+      ['--header-lines']    = '1',
     }
 
     local selected = require'fzf-lua.core'.fzf(opts, fzf_fn)
     if not selected then return end
-    previous_cwd = vim.loop.cwd()
-    local pwd = require'fzf-lua.path'.join({
-      vim.fn.expand('$HOME'), selected[1]:match("[^ ]*$")
-    })
-    require'utils'.set_cwd(pwd)
+    _previous_cwd = vim.loop.cwd()
+    local newcwd = selected[1]:match("[^ ]*$")
+    newcwd = require'fzf-lua.path'.starts_with_separator(newcwd) and newcwd
+      or require'fzf-lua.path'.join({ vim.fn.expand('$HOME'), newcwd })
+    require'utils'.set_cwd(newcwd)
   end)()
 end
 
