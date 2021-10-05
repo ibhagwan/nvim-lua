@@ -26,6 +26,9 @@ require'fzf-lua'.setup {
       -- Only valid with the 'builtin' previewer
       ["<F3>"]      = "toggle-preview-wrap",
       ["<F4>"]      = "toggle-preview",
+      -- Rotate preview clockwise/counter-clockwise
+      ["<F5>"]      = "toggle-preview-ccw",
+      ["<F6>"]      = "toggle-preview-cw",
       ["<S-down>"]  = "preview-page-down",
       ["<S-up>"]    = "preview-page-up",
       ["<S-left>"]  = "preview-page-reset",
@@ -99,7 +102,7 @@ require'fzf-lua'.setup {
   files = {
     prompt            = 'Files❯ ',
     actions = {
-      ["ctrl-y"]      = function(selected) print(selected[2]) end,
+      ["ctrl-y"]      = function(selected) print(selected[1]) end,
     },
   },
   git = {
@@ -127,7 +130,7 @@ require'fzf-lua'.setup {
     prompt            = 'Colorschemes❯ ',
     live_preview      = true,
     actions = {
-      ["ctrl-y"]      = function(selected) print(selected[2]) end,
+      ["ctrl-y"]      = function(selected) print(selected[1]) end,
     },
     winopts = {
       win_height        = 0.55,
