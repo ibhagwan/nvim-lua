@@ -128,7 +128,10 @@ require'fzf-lua'.setup {
   grep = {
     prompt            = 'Rg❯ ',
     input_prompt      = 'Grep For❯ ',
-    actions           = { ["ctrl-q"] = false }
+    actions           = { ["ctrl-q"] = false },
+    -- 'true' enables file and git icons in 'live_grep'
+    -- degrades performance in large datasets, YMMV
+    experimental      = true,
   },
   oldfiles = {
     prompt            = 'History❯ ',
