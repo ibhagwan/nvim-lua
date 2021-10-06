@@ -131,12 +131,12 @@ require("telescope").setup {
 
     vimgrep_arguments = {
         "rg",
-        "--hidden",
-        "--no-heading",
-        "--with-filename",
-        "--line-number",
         "--column",
-        "--smart-case"
+        "--line-number",
+        "--with-filename",
+        "--no-heading",
+        "--smart-case",
+        -- "--hidden",
     },
   },
 
