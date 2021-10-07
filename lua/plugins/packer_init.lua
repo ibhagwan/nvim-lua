@@ -22,11 +22,11 @@ return packer.startup({
     use { 'tpope/vim-repeat' }
 
     -- "gc" to comment visual regions/lines
-    use { 'b3nj5m1n/kommentary',
-        config = "require('plugins.kommentary')",
+    use { 'numToStr/Comment.nvim',
+        config = "require('plugins.comment')",
         -- uncomment for lazy loading
-        -- causes delay with visual mapping
-        -- keys = {'gcc', 'gc'}
+        -- slight delay if loading in visual mode
+        keys = {'gcc', 'gc'}
     }
 
     -- needs no introduction

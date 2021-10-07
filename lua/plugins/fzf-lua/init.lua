@@ -34,6 +34,7 @@ require'fzf-lua'.setup {
       ["<S-left>"]  = "preview-page-reset",
     },
     fzf = {
+      ["ctrl-z"]        = "abort",
       ["ctrl-u"]        = "unix-line-discard",
       ["ctrl-f"]        = "half-page-down",
       ["ctrl-b"]        = "half-page-up",
@@ -172,6 +173,7 @@ require'fzf-lua'.setup {
   -- uncomment to use `man` command as native fzf previewer
   -- manpages = { previewer = { _ctor = require'fzf-lua.previewer'.fzf.man_pages } },
 }
+
 
 local M = {}
 

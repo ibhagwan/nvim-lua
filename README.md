@@ -48,7 +48,7 @@ release](https://github.com/neovim/neovim/releases/tag/v0.5.0)**
 
 ### Coding, completion & LSP
 
-- [commented.nvim](https://github.com/winston0410/commented.nvim): use `gc` and
+- [Comment.nvim](https://github.com/numToStr/Comment.nvim): use `gc` and
   `gcc` to comment visual-blocks and lines
 
 - [indent-blankline](https://github.com/lukas-reineke/indent-blankline.nvim):
