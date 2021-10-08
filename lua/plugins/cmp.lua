@@ -1,4 +1,9 @@
-local remap = vim.api.nvim_set_keymap
+local res, cmp = pcall(require, "cmp")
+if not res then
+  return
+end
+
+local lspkind = require('lsp.icons').map
 
 local t = function(str)
   return vim.api.nvim_replace_termcodes(str, true, true, true)
@@ -8,9 +13,6 @@ local check_back_space = function()
   local col = vim.fn.col('.') - 1
   return col == 0 or vim.fn.getline('.'):sub(col, col):match('%s')
 end
-
-local cmp = require('cmp')
-local lspkind = require('lsp.icons').map
 
 cmp.setup {
   -- must define this if we aren't using a snippet engine
@@ -34,8 +36,10 @@ cmp.setup {
     ['<Tab>'] = function(fallback)
       if vim.fn.pumvisible() == 1 then
         vim.fn.feedkeys(t('<C-n>'), 'n')
+      elseif cmp.visible() then
+        cmp.select_next_item()
       elseif check_back_space() then
-        vim.fn.feedkeys(t('<Tab>'), 'n')
+        cmp.complete()
       else
         fallback()
       end
@@ -43,14 +47,16 @@ cmp.setup {
     ['<S-Tab>'] = function(fallback)
       if vim.fn.pumvisible() == 1 then
         vim.fn.feedkeys(t('<C-p>'), 'n')
+      elseif cmp.visible() then
+        cmp.select_prev_item()
       else
         fallback()
       end
     end,
     ['<C-p>'] = cmp.mapping.select_prev_item(),
     ['<C-n>'] = cmp.mapping.select_next_item(),
-    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<S-up>'] = cmp.mapping.scroll_docs(-4),
+    ['<S-down>'] = cmp.mapping.scroll_docs(4),
     ['<C-Space>'] = cmp.mapping.complete(),
     ['<C-e>'] = cmp.mapping.close(),
     ['<CR>'] = cmp.mapping.confirm({
@@ -59,12 +65,10 @@ cmp.setup {
     }),
   },
 
-  -- disabled while bugged (popup doesn't close on '<C-c>'
-  documentation = false,
-  --[[ documentation = {
+  documentation = {
     border       = { '╭', '─', '╮', '│', '╯', '─', '╰', '│' },
     winhighlight = 'Normal:Normal,FloatBorder:FloatBorder',
-  }, ]]
+  },
 
   formatting = {
     deprecated = false,
@@ -85,16 +89,65 @@ cmp.setup {
         return vim_item
     end,
   },
+
+  -- DO NOT ENABLE
+  -- just for testing with nvim native completion menu
+  experimental = { native_menu = false },
 }
 
--- <cr>:     select item and close the popup menu
+local remap = require'utils'.remap
+
 -- <esc>:    revert selection (stay in insert mode)
 -- <ctrl-c>: revert selection (switch to normal mode)
---remap('i', '<CR>',  '(pumvisible() ? "\\<c-y>" : "\\<CR>")',         { noremap = true, expr = true })
-remap('i', '<Esc>', '(pumvisible() ? "\\<c-e>" : "\\<Esc>")',        { noremap = false, expr = true })
-remap('i', '<c-c>', '(pumvisible() ? "\\<c-e>\\<Esc>" : "\\<c-c>")', { noremap = true,  expr = true })
+-- localecategory
+local function abort_logic(key)
+  if vim.fn.pumvisible() == 1 then
+    -- using nvim's native completion menu
+    vim.fn.feedkeys(t('<C-e>'), 'n')
+  elseif cmp.visible() then
+    -- using nvim-cmp's floating win based menu
+    if cmp.core.view:get_selected_entry() then
+      -- entry selected, revert to original text
+      cmp.abort()
+    else
+      -- no entry, just close the popup
+      -- if we call 'abort' here we lose all text
+      -- entered since popup became visible
+      cmp.close()
+    end
+  else
+    vim.fn.feedkeys(t(key), 'n')
+  end
+end
 
--- Make up/down arrows behave in completion popups
--- without this they move up/down but v:completed_item remains empty
-remap('i', '<down>', '(pumvisible() ? "\\<C-n>" : "\\<down>")', { noremap = true, expr = true })
-remap('i', '<up>',   '(pumvisible() ? "\\<C-p>" : "\\<up>")',   { noremap = true, expr = true })
+remap({ "i", "s" }, "<Esc>", function()
+  abort_logic('<Esc>')
+end)
+
+remap({ "i", "s" }, "<C-c>", function()
+  -- NOTE: <C-c> clears 'cmp.core.view:get_selected_entry()'
+  -- so never actually call 'cmp.abort()'
+  abort_logic('<C-c>')
+  vim.cmd("stopinsert")
+end)
+
+-- DOES NOT WORK, why is the below
+-- not getting called in insert mode?
+--[[ for k, v in pairs({
+    ['<Down>']  = '<C-n>',
+    ['<Up>']    = '<C-p>',
+}) do
+  remap({ "i", "s" }, k, function()
+    if vim.fn.pumvisible() == 1 then
+      vim.fn.feedkeys(t(v), 'n')
+    elseif cmp.visible() then
+      if k == '<Down>' then
+        cmp.mapping.select_next_item()
+      else
+        cmp.mapping.select_prev_item()
+      end
+    else
+      vim.fn.feedkeys(t(k), 'n')
+    end
+  end)
+end --]]

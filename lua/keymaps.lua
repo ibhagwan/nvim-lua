@@ -1,4 +1,4 @@
-local remap = vim.api.nvim_set_keymap
+local remap = require'utils'.remap
 local command = require'utils'.command
 
 -- Shortcuts for editing the keymap file and reloading the config
@@ -53,9 +53,7 @@ vim.cmd([[
 ]])
 
 -- <ctrl-s> to Save
-remap('n', '<C-S>', '<esc>:update<cr>', { silent = true })
-remap('v', '<C-S>', '<esc>:update<cr>', { silent = true })
-remap('i', '<C-S>', '<esc>:update<cr>', { silent = true })
+remap({ 'n', 'v', 'i'}, '<C-S>', '<C-c>:update<cr>', { silent = true })
 
 -- w!! to save with sudo
 remap('c', 'w!!', "<esc>:lua require'utils'.sudo_write()<CR>", { silent = true })
@@ -63,6 +61,10 @@ remap('c', 'w!!', "<esc>:lua require'utils'.sudo_write()<CR>", { silent = true }
 -- Beginning and end of line in `:` command mode
 remap('c', '<C-a>', '<home>', {})
 remap('c', '<C-e>', '<end>' , {})
+
+-- Arrows in command line mode (':') menus
+remap('c', '<down>', '(pumvisible() ? "\\<C-n>" : "\\<down>")', { noremap = true, expr = true })
+remap('c', '<up>',   '(pumvisible() ? "\\<C-p>" : "\\<up>")',   { noremap = true, expr = true })
 
 -- Terminal mappings
 remap('t', '<M-[>', [[<C-\><C-n>]],      { noremap = true })
@@ -158,9 +160,10 @@ remap('n', 'N', 'Nzzzv', { noremap = true })
 
 -- Break undo chain on punctuation so we can
 -- use 'u' to undo sections of an edit
-for _, c in ipairs({',', '.', '!', '?', ';'}) do
+-- DISABLED, ALL KINDS OF ODDITIES
+--[[ for _, c in ipairs({',', '.', '!', '?', ';'}) do
    remap('i', c, c .. "<C-g>u", { noremap = true })
-end
+end --]]
 
 -- any jump over 5 modifies the jumplist
 -- so we can use <C-o> <C-i> to jump back and forth
@@ -191,7 +194,7 @@ remap('n', '<leader>\'', '<Esc>:set list!<CR>',   { noremap = true, silent = tru
 
 -- Toggle colored column at 81
 remap('n', '<leader>|',
-    ':execute "set colorcolumn=" . (&colorcolumn == "" ? "81" : "")<CR>', 
+    ':execute "set colorcolumn=" . (&colorcolumn == "" ? "81" : "")<CR>',
     { noremap = true, silent = true })
 
 -- Change current working dir (:pwd) to curent file's folder
