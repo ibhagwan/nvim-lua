@@ -44,6 +44,9 @@ if res and packer then
   })
   -- not sure why this doesn't get updated by 'packer.init()'
   packer.config.compile_path = compile_path
+
+  -- hook to avoid the 'packer.compile: Complete' notify
+  packer.on_compile_done = function() end
 end
 
 return res

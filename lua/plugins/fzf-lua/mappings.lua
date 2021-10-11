@@ -27,9 +27,9 @@ map_fzf('n', '<F1>', "help_tags")
 map_fzf('n', '<c-P>', "files", {})
 map_fzf('n', '<c-K>', "workdirs", {
   winopts = {
-    win_height       = 0.40,
-    win_width        = 0.60,
-    win_row          = 0.40,
+    height       = 0.40,
+    width        = 0.60,
+    row          = 0.40,
   }})
 map_fzf('n', '<leader>;', "buffers")
 map_fzf('n', '<leader>fr', "grep", {})

@@ -4,22 +4,48 @@ end
 
 require'fzf-lua'.setup {
   -- lua_io             = true,            -- perf improvement, experimental
+  -- fzf_bin           = 'sk',
   winopts = {
     -- split            = "belowright new",
-    win_height       = 0.85,            -- window height
-    win_width        = 0.80,            -- window width
-    win_row          = 0.30,            -- window row position (0=top, 1=bottom)
-    win_col          = 0.50,            -- window col position (0=left, 1=right)
-    -- win_border    = false,           -- window border? or borderchars?
-    -- win_border       = { '╭', '─', '╮', '│', '╯', '─', '╰', '│' },
-    -- win_border       = { '╭', '─', '╮', '│', '╯', '─', '╰', {'│', 'NormalFloat' } },
-    hl_normal        = 'Normal',        -- window normal color
-    hl_border        = 'FloatBorder',   -- window border color
+    -- split            = "aboveleft vnew",
+    height           = 0.85,            -- window height
+    width            = 0.80,            -- window width
+    row              = 0.35,            -- window row position (0=top, 1=bottom)
+    col              = 0.55,            -- window col position (0=left, 1=right)
+    -- border = 'double',
+    -- border           = { '╭', '─', '╮', '│', '╯', '─', '╰', '│' },
+    -- border = { {'╭', 'IncSearch'}, {'─', 'IncSearch'}, {'╮', 'IncSearch'}, '│', '╯', '─', '╰', '│' },
     fullscreen       = false,           -- start fullscreen?
-    window_on_create = function()
+    hl = {
+      normal            = 'Normal',
+      border            = 'FloatBorder',
+      -- builtin preview
+      cursor            = 'Cursor',
+      cursorline        = 'CursorLine',
+      title             = 'ModeMsg',
+      scrollbar_e       = 'Visual',
+      scrollbar_f       = 'WildMenu',
+    },
+    preview = {
+      -- default             = 'bat',
+      border              = 'border',
+      wrap                = 'wrap',
+      hidden              = 'nohidden',
+      vertical            = 'down:45%',
+      horizontal          = 'right:60%',
+      layout              = 'flex',
+      flip_columns        = 120,
+      title               = true,
+      scrollbar           = 'float',
+      -- scrolloff           = '-1',
+      -- scrollchars         = {'█', '░' },
+    },
+    on_create        = function()
+      -- print("on_create")
       -- vim.cmd("set winhl=Normal:NormalFloat,FloatBorder:Normal")
     end,
   },
+  -- winopts_fn = function() return { row = 1, height=0.5, width=0.5, border = "double" } end,
   keymap = {
     builtin = {
       ["<F2>"]      = "toggle-fullscreen",
@@ -48,7 +74,6 @@ require'fzf-lua'.setup {
       ["shift-up"]      = "preview-page-up",
     },
   },
-  fzf_bin             = 'sk',
   fzf_opts = {
       -- set to `false` to remove a flag
       ['--ansi']      = '',
@@ -72,28 +97,14 @@ require'fzf-lua'.setup {
       ["header"] = { "fg", "Comment" },
       ["gutter"] = { "bg", "Normal" },
   },
-  preview_border      = 'border',       -- border|noborder
-  preview_wrap        = 'nowrap',       -- wrap|nowrap
-  preview_opts        = 'nohidden',     -- hidden|nohidden
-  preview_vertical    = 'down:45%',     -- up|down:size
-  preview_horizontal  = 'right:60%',    -- right|left:size
-  preview_layout      = 'flex',         -- horizontal|vertical|flex
-  flip_columns        = 120,            -- #cols to switch to horizontal on flex
-  -- default_previewer   = "bat",       -- override the default previewer?
-                                        -- by default uses the builtin previewer
   previewers = {
     bat = {
       theme           = 'Coldark-Dark', -- bat preview theme (bat --list-themes)
     },
     builtin = {
-      title           = true,           -- preview title?
-      scrollbar       = true,           -- scrollbar?
-      scrollchar      = '█',            -- scrollbar character
       syntax          = true,           -- preview syntax highlight?
       syntax_limit_b  = 1024*1024,      -- syntax limit (bytes), 0=nolimit
       syntax_limit_l  = 0,              -- syntax limit (lines), 0=nolimit
-      hl_cursor       = 'Cursor',       -- cursor highlight
-      hl_cursorline   = 'CursorLine',   -- cursor line highlight
     },
   },
   lsp                 = { prompt = '❯ ', },

@@ -38,7 +38,7 @@ cmp.setup {
         vim.fn.feedkeys(t('<C-n>'), 'n')
       elseif cmp.visible() then
         cmp.select_next_item()
-      elseif check_back_space() then
+      elseif not check_back_space() then
         cmp.complete()
       else
         fallback()
@@ -59,10 +59,18 @@ cmp.setup {
     ['<S-down>'] = cmp.mapping.scroll_docs(4),
     ['<C-Space>'] = cmp.mapping.complete(),
     ['<C-e>'] = cmp.mapping.close(),
-    ['<CR>'] = cmp.mapping.confirm({
-      behavior = cmp.ConfirmBehavior.Replace,
-      select = true,
-    }),
+    ['<CR>'] = function(fallback)
+      if (vim.fn.pumvisible() == 1 and not
+          vim.tbl_isempty(vim.v.completed_item)) or
+         (cmp.visible() and cmp.core.view:get_selected_entry()) then
+        cmp.confirm({
+              behavior = cmp.ConfirmBehavior.Replace,
+              select = true,
+            })
+      else
+        fallback()
+      end
+    end,
   },
 
   documentation = {
