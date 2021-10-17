@@ -40,13 +40,16 @@ end
 if res and packer then
   packer.init({
     -- we don't want the compilation file in '~/.config/nvim'
-    compile_path = compile_path
+    compile_path = compile_path,
   })
   -- not sure why this doesn't get updated by 'packer.init()'
   packer.config.compile_path = compile_path
 
   -- hook to avoid the 'packer.compile: Complete' notify
   packer.on_compile_done = function() end
+
+  -- never fail if plugin author rebased
+  packer.config.git.subcommands.update = 'pull --ff-only --progress --rebase=true'
 end
 
 return res

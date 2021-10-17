@@ -54,3 +54,37 @@ end)
 au.group('Solidity', {
   { 'BufRead,BufNewFile', '*.sol', 'set filetype=solidity' }
 })
+
+-- Display help|man in vertical splits
+au.group('Help', function(g)
+  g.FileType = { 'help,man',
+    function()
+      -- do nothing for floating windows
+      local cfg = vim.api.nvim_win_get_config(0)
+      if cfg and (cfg.external or cfg.relative and #cfg.relative>0) then
+        return
+      end
+      -- local var = vim.bo.filetype .. "_init"
+      -- local ok, is_init = pcall(vim.api.nvim_buf_get_var, 0, var)
+      -- if ok and is_init == true then return end
+      -- vim.api.nvim_buf_set_var(0, var, true)
+      local width = math.floor(vim.o.columns*0.75)
+      vim.cmd("wincmd L")
+      vim.cmd("vertical resize " .. width)
+    end
+  }
+  -- TODO:
+  -- Why does setting this event ft to 'man' not work?
+  -- but at the same time '*' works and shows 'man' for ft?
+  g.BufHidden = { '*',
+    function()
+      if vim.bo.filetype == 'man' then
+        local bufnr = vim.api.nvim_get_current_buf()
+        vim.defer_fn(function()
+          if vim.api.nvim_buf_is_valid(bufnr) then
+            vim.api.nvim_buf_delete(bufnr, {force=true})
+          end
+        end, 0)
+      end
+    end }
+end)

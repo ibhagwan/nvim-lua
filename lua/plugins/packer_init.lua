@@ -2,6 +2,14 @@ if not require("plugins.bootstrap") then
   return
 end
 
+local config = {
+  display = {
+    open_fn = function()
+      return require('packer.util').float({ border = 'rounded' })
+    end
+  }
+}
+
 local packer = require'packer'
 return packer.startup({
   function(use)
@@ -59,9 +67,9 @@ return packer.startup({
     }
 
     -- Neoterm (REPLs)
-    use { 'kassio/neoterm',
+    use { 'akinsho/toggleterm.nvim',
         config = "require('plugins.neoterm')",
-        keys = {'gxx', 'gx'},
+        keys = {'gxx', 'gx', '<C-\\>'},
         cmd = { 'T' },
     }
 
@@ -149,11 +157,11 @@ return packer.startup({
 
     -- LSP
     use { 'neovim/nvim-lspconfig',    event = 'BufRead' }
-    use { 'kabouzeid/nvim-lspinstall',
+    use { 'williamboman/nvim-lsp-installer',
         config = function()
           require('lsp')
           -- ':command LspStart'
-          require'lspconfig'._root.commands.LspStart[1]()
+          -- require'lspconfig'._root.commands.LspStart[1]()
         end,
         after  = { 'nvim-lspconfig' },
       }
@@ -198,5 +206,6 @@ return packer.startup({
     use { 'ibhagwan/babelfish.nvim',
         setup = "require'plugins.babelfish'",
         opt = true }
-  end
+  end,
+  config = config
 })

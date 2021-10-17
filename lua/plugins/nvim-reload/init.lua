@@ -10,6 +10,7 @@ local plugin_dirs_lazyload = {
   vim.fn.stdpath('data') .. '/site/pack/*/opt/telescope.nvim',
   vim.fn.stdpath('data') .. '/site/pack/*/opt/which-key.nvim',
   vim.fn.stdpath('data') .. '/site/pack/*/opt/babelfish.nvim',
+  vim.fn.stdpath('data') .. '/site/pack/*/opt/toggleterm.nvim',
 }
 
 reload.vim_reload_dirs = {
@@ -44,6 +45,19 @@ reload.post_reload_hook = function()
   end
   if reload.lsp_was_loaded and vim.fn.exists(':PackerLoad') ~= 0 then
     vim.cmd("PackerLoad nvim-lspconfig")
-    vim.cmd("PackerLoad nvim-lspinstall")
+    vim.cmd("PackerLoad nvim-lsp-installer")
   end
+  -- re-source all language specific settings, scans all runtime files under
+  -- '/usr/share/nvim/runtime/(indent|syntax)' and 'after/ftplugin'
+  local ft = vim.bo.filetype
+  vim.tbl_filter(function(s)
+    for _, e in ipairs({ "vim", "lua" }) do
+      if ft and #ft>0 and s:match(("/%s.%s"):format(ft, e)) then
+        local file = vim.fn.expand(s:match("[^: ]*$"))
+        vim.cmd("source " .. file)
+        return s
+      end
+    end
+    return nil
+  end, vim.fn.split(vim.fn.execute("scriptnames"), "\n"))
 end

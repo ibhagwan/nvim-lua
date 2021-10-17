@@ -336,15 +336,20 @@ end
 ---@param func function
 ---@return string VimFunctionString
 _G.myluafunc = setmetatable({}, {
-  __call = function(self, num)
-    return self[num]()
+  __call = function(self, idx, args, count)
+    return self[idx](args, count)
   end,
 })
 
-local func2str = function(func)
+local func2str = function(func, args)
   local idx = #_G.myluafunc + 1
   _G.myluafunc[idx] = func
-  return ("lua myluafunc(%s)"):format(idx)
+  if not args then
+    return ("lua myluafunc(%s)"):format(idx)
+  else
+    -- return ("lua myluafunc(%s, <q-args>)"):format(idx)
+    return ("lua myluafunc(%s, <q-args>, <count>)"):format(idx)
+  end
 end
 
 M.t = function(str)
@@ -416,8 +421,11 @@ end
 M.command = function(args)
   if type(args) == "table" then
     for i=2,#args do
+      if vim.fn.exists(':' .. args[2]) == 2 then
+        vim.cmd("delcommand " .. args[2])
+      end
       if type(args[i]) == "function" then
-        args[i] = func2str(args[i])
+        args[i] = func2str(args[i], true)
       end
     end
     args = table.concat(args, " ")

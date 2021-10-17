@@ -2,9 +2,33 @@ if not pcall(require, "fzf-lua") then
   return
 end
 
+local fzf_bin = 'sk'
+
+local function fzf_colors()
+  local colors = {
+    ["fg"] = { "fg", "CursorLine" },
+    ["bg"] = { "bg", "Normal" },
+    ["hl"] = { "fg", "Comment" },
+    ["fg+"] = { "fg", "ModeMsg" },
+    ["bg+"] = { "bg", "CursorLine" },
+    ["hl+"] = { "fg", "Statement" },
+    ["info"] = { "fg", "PreProc" },
+    ["prompt"] = { "fg", "Conditional" },
+    ["pointer"] = { "fg", "Exception" },
+    ["marker"] = { "fg", "Keyword" },
+    ["spinner"] = { "fg", "Label" },
+    ["header"] = { "fg", "Comment" },
+    ["gutter"] = { "bg", "Normal" },
+  }
+  if fzf_bin == 'sk' and vim.fn.executable(fzf_bin) == 1 then
+    colors["matched_bg"] = { "bg", "Normal" }
+    colors["current_match_bg"] = { "bg", "CursorLine" }
+  end
+  return colors
+end
+
 require'fzf-lua'.setup {
   -- lua_io             = true,            -- perf improvement, experimental
-  -- fzf_bin           = 'sk',
   winopts = {
     -- split            = "belowright new",
     -- split            = "aboveleft vnew",
@@ -82,24 +106,17 @@ require'fzf-lua'.setup {
       ['--height']    = '100%',
       ['--layout']    = 'reverse',
   },
-  fzf_colors = {
-      ["fg"] = { "fg", "CursorLine" },
-      ["bg"] = { "bg", "Normal" },
-      ["hl"] = { "fg", "Comment" },
-      ["fg+"] = { "fg", "Normal" },
-      ["bg+"] = { "bg", "CursorLine" },
-      ["hl+"] = { "fg", "Statement" },
-      ["info"] = { "fg", "PreProc" },
-      ["prompt"] = { "fg", "Conditional" },
-      ["pointer"] = { "fg", "Exception" },
-      ["marker"] = { "fg", "Keyword" },
-      ["spinner"] = { "fg", "Label" },
-      ["header"] = { "fg", "Comment" },
-      ["gutter"] = { "bg", "Normal" },
-  },
+  fzf_bin             = fzf_bin,
+  fzf_colors          = fzf_colors(),
   previewers = {
     bat = {
       theme           = 'Coldark-Dark', -- bat preview theme (bat --list-themes)
+    },
+    man = {
+      cmd             = "man -c %s | col -bx",
+    },
+    git_diff = {
+      pager           = "delta",
     },
     builtin = {
       syntax          = true,           -- preview syntax highlight?
@@ -180,7 +197,6 @@ require'fzf-lua'.setup {
   -- "topleft"  : up
   -- "botright" : down
   -- helptags = { previewer = { split = "topleft" } },
-  -- manpages = { previewer = { split = "topleft" } },
   -- uncomment to use `man` command as native fzf previewer
   -- manpages = { previewer = { _ctor = require'fzf-lua.previewer'.fzf.man_pages } },
 }
@@ -214,43 +230,6 @@ function M.installed_plugins(opts)
   opts.prompt = 'Plugins❯ '
   opts.cwd = vim.fn.stdpath "data" .. "/site/pack/packer/"
   require'fzf-lua'.files(opts)
-end
-
-function M.git_history(opts)
-  local path = require'fzf-lua.path'
-  local core = require'fzf-lua.core'
-  local config = require'fzf-lua.config'
-  local actions = require 'fzf-lua.actions'
-  opts = config.normalize_opts(opts, config.globals.git)
-  opts.prompt = opts.prompt or "Git History> "
-  opts.input_prompt = opts.input_prompt or "Search For> "
-
-  opts.cwd = path.git_root(opts.cwd)
-  local cmd = path.git_cwd("git log --pretty --oneline --color", opts.cwd)
-  opts.preview = vim.fn.shellescape(path.git_cwd(
-    "git show --pretty='%Cred%H%n%Cblue%an%n%Cgreen%s' --color {1}",
-    opts.cwd))
-
-  if not opts.query then
-    opts.query = vim.fn.input(opts.input_prompt) or ""
-  end
-
-  -- this gets called every keystroke, setup for this
-  -- is done inside 'set_fzf_interactive_cmd(opts)'
-  opts._reload_command = function(query)
-    return ("%s %s"):format(cmd, #query>0 and "-S "..vim.fn.shellescape(query) or "")
-  end
-
-  -- without this queries won't execute until you start typing
-  -- change to false to ignore empty string queries
-  opts.exec_empty_query = true
-  opts = core.set_fzf_interactive_cmd(opts)
-
-  coroutine.wrap(function ()
-    local selected = core.fzf(opts)
-    if not selected then return end
-    actions.act(opts.actions, selected, opts)
-  end)()
 end
 
 local _previous_cwd = nil

@@ -40,9 +40,6 @@ release](https://github.com/neovim/neovim/releases/tag/v0.5.0)**
   plumbing in one by tpope, the Swiss army knife of git, no other git plugin comes
   close
 
-- [diffview](https://github.com/sindrets/diffview.nvim): review all project
-  changes before a commit or review changes from a previous commit
-
 - [gitsigns](https://github.com/lewis6991/gitsigns.nvim): git gutter indicators
   and hunk management
 
@@ -54,8 +51,7 @@ release](https://github.com/neovim/neovim/releases/tag/v0.5.0)**
 - [indent-blankline](https://github.com/lukas-reineke/indent-blankline.nvim):
   add indentation markers based on `tabstop | shiftwidth`
 
-- [nvim-cmp](https://github.com/hrsh7th/nvim-cmp): autocompletion
-  framework
+- [nvim-cmp](https://github.com/hrsh7th/nvim-cmp): autocompletion framework
 
 - [treesitter](https://github.com/nvim-treesitter/nvim-treesitter): text
   parsing library, provides better syntax highlighting and text-objects for
@@ -66,11 +62,8 @@ release](https://github.com/neovim/neovim/releases/tag/v0.5.0)**
 - [lspconfig](https://github.com/neovim/nvim-lspconfig): configuration
   quickstart for nvim's built in LSP
 
-- [lsp_signature](https://github.com/ray-x/lsp_signature.nvim): show function
-  signature help as you type
-
-- [nvim-lspinstall](https://github.com/kabouzeid/nvim-lspinstall): automatic
-  installation of LSP servers using the `:LspInstall` command
+- [nvim-lsp-installer](https://github.com/williamboman/nvim-lsp-installer):
+  automatic installation of LSP servers using the `:LspInstall` command
 
 ### Fuzzy search & file exploration
 
@@ -94,14 +87,11 @@ release](https://github.com/neovim/neovim/releases/tag/v0.5.0)**
   which-key will generate a help window with your keybinds and also let you
   continue the sequence at your own pace
 
-- [neoterm](https://github.com/kassio/neoterm): better term and REPLs (use
-  `gx` and `gxx` to send REPLs to an interpreter)
+- [toggleterm.nvim](https://github.com/akinsho/toggleterm.nvim): better term and
+  REPLs (use `gx` and `gxx` to send REPLs to an interpreter)
 
 - [oscyank](https://github.com/ojroques/vim-oscyank): copy text over ssh
   terminals using `OSC52`
-
-- [suda](https://github.com/lambdalisue/suda.vim): elevate permissions on save
-  when needed
 
 - [nvim-reload](https://github.com/famiu/nvim-reload): properly reload your
   nvim configuration and lua modules with `<space>R`

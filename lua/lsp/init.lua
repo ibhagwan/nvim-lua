@@ -1,23 +1,9 @@
-if not pcall(require, "lspconfig") or not pcall(require, "lspinstall") then
+if not pcall(require, "lspconfig") or not pcall(require, "nvim-lsp-installer") then
   return
 end
 
--- 'lspinstall' loads 'lspconfig'
--- local nvim_lsp   = require('lspconfig')
--- requires: 'https://github.com/ray-x/lsp_signature.nvim'
--- local signature  = require('lsp_signature')
-
 local on_attach = function(client, bufnr)
-  --[[ if signature then
-    signature.on_attach({
-      bind         = true,
-      hint_enable  = true,
-      hint_prefix  = " ",
-      hint_scheme  = "String",
-      handler_opts = { border = "single" },
-      decorator    = {"`", "`"}
-    })
-  end ]]
+
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
   if client.config.flags then
@@ -40,14 +26,6 @@ local on_attach = function(client, bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>K',  '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>k', '<cmd>lua require("lsp.handlers").peek_definition()<CR>', opts)
 
-  -- https://github.com/glepnir/lspsaga.nvim
-  if pcall(require, 'lspsaga') then
-      vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K',  "<cmd>lua require('lspsaga.hover').render_hover_doc()<CR>", opts)
-      vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>K',  "<cmd>lua require('lspsaga.signaturehelp').signature_help()<CR>", opts)
-      vim.api.nvim_buf_set_keymap(bufnr, 'n', 'ga',  "<cmd>lua require('lspsaga.codeaction').code_action()<CR>", opts)
-      vim.api.nvim_buf_set_keymap(bufnr, 'v', 'ga',  ":<C-U>lua require('lspsaga.codeaction').range_code_action()<CR>", opts)
-      vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gR',  "<cmd>lua require('lspsaga.rename').rename()<CR>", opts)
-  end
   -- already defined in our telescope mappings
   --vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ls', '<cmd>lua vim.lsp.buf.document_symbol()<CR>', opts)
   --vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lS', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>', opts)
@@ -85,56 +63,9 @@ local on_attach = function(client, bufnr)
   require('lsp.handlers').virtual_text_set()
   require('lsp.handlers').virtual_text_redraw()
 
-  --[[
-  if client.name == 'tsserver' then
-    null_ls.setup {}
-    ts_utils.setup {
-      debug                          = false,
-      disable_commands               = false,
-      enable_import_on_completion    = false,
-      import_on_completion_timeout   = 5000,
-
-      eslint_enable_code_actions     = true,
-      eslint_bin                     = "eslint",
-      eslint_args                    = {"-f", "json", "--stdin", "--stdin-filename", "$FILENAME"},
-      eslint_enable_disable_comments = true,
-      eslint_enable_diagnostics      = true,
-      eslint_diagnostics_debounce    = 250,
-
-      enable_formatting              = true,
-      formatter                      = "prettier",
-      formatter_args                 = {"--stdin-filepath", "$FILENAME"},
-      format_on_save                 = false,
-      no_save_after_format           = false,
-
-      complete_parens                = true,
-      signature_help_in_parens       = false,
-
-      update_imports_on_move         = false,
-      require_confirmation_on_move   = false,
-    }
-
-    ts_utils.setup_client(client)
-
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lo', ':TSLspOrganize<CR>',   { silent = true })
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>gf', ':TSLspFixCurrent<CR>', { silent = true })
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lI', ':TSLspImportAll<CR>',  { silent = true })
-  end
-  ]]
 end
 
-
---[[ 'lspinstall' takes care of our nvim_lsp[].setup {}
-local servers = { 'clangd', 'rust_analyzer', 'pyls', 'pyright', 'tsserver' }
-for _, lsp in ipairs(servers) do
-  nvim_lsp[lsp].setup {
-    on_attach = on_attach,
-    capabilities = set_snippet_capabilities(),
-  }
-end
-]]
-
--- Configure lua language server for neovim development
+-- Lua settings
 local lua_settings = {
   Lua = {
     runtime = {
@@ -164,7 +95,7 @@ local lua_settings = {
   }
 }
 
--- config that activates keymaps and enables snippet support
+-- enables snippet support
 local function make_config()
   local capabilities = vim.lsp.protocol.make_client_capabilities()
   capabilities.textDocument.completion.completionItem.snippetSupport = true
@@ -172,52 +103,41 @@ local function make_config()
     capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
   end
   return {
-    -- enable snippet support
-    capabilities = capabilities,
-    -- map buffer local keybindings when the language server attaches
     on_attach = on_attach,
+    capabilities = capabilities,
   }
 end
 
--- lsp-install
-local function setup_servers()
-  require'lspinstall'.setup()
-
-  -- get all installed servers
-  local servers = require'lspinstall'.installed_servers()
-  -- ... and add manually installed servers
-  if vim.fn.executable('ccls') == 1 then
-    table.insert(servers, "ccls")
-  end
-  if vim.fn.executable('rust-analyzer') == 1 then
-    table.insert(servers, "rust_analyzer")
-  end
-
-  for _, server in pairs(servers) do
-    local config = make_config()
-
-    -- language specific config
-    if server == "lua" then
-      config.settings = lua_settings
-    end
-    if server == "sourcekit" then
-      config.filetypes = {"swift", "objective-c", "objective-cpp"}; -- we don't want c and cpp!
-    end
-    if server == "clangd" or server == "ccls" then
-      config.filetypes = {"c", "cpp"}; -- we don't want objective-c and objective-cpp!
-    end
-
-    require'lspconfig'[server].setup(config)
-  end
+-- manually installed LSP servers
+local servers = { 'ccls', 'rust_analyzer' }
+for _, lsp in ipairs(servers) do
+  require("lspconfig")[lsp].setup(make_config())
 end
 
-setup_servers()
+local lsp_installer = require("nvim-lsp-installer")
 
--- Automatically reload after `:LspInstall <server>` so we don't have to restart neovim
-require'lspinstall'.post_install_hook = function ()
-  setup_servers() -- reload installed servers
-  vim.cmd("bufdo e") -- this triggers the FileType autocmd that starts the server
-end
+lsp_installer.settings {
+  ui = {
+    icons = {
+      server_installed = "✓",
+      server_pending = "➜",
+      server_uninstalled = "✗"
+    }
+  }
+}
+
+lsp_installer.on_server_ready(function(server)
+    local opts = make_config()
+
+    if server.name == "sumneko_lua" then
+      opts.settings = lua_settings
+    end
+
+    -- This setup() function is exactly the same as
+    -- lspconfig's setup function (:help lspconfig-quickstart)
+    server:setup(opts)
+    vim.cmd [[ do User LspAttachBuffers ]]
+end)
 
 -- Setup icons & handler helper functions
 require('lsp.icons')
