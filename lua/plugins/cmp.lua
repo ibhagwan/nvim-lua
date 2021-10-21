@@ -81,7 +81,7 @@ cmp.setup {
 
   documentation = {
     border       = { '╭', '─', '╮', '│', '╯', '─', '╰', '│' },
-    winhighlight = 'Normal:Normal,FloatBorder:FloatBorder',
+    winhighlight = 'Normal:CursorLine,FloatBorder:CursorLine',
   },
 
   formatting = {
@@ -142,11 +142,11 @@ remap({ "i", "s" }, "<Esc>", function()
   abort_logic('<Esc>')
 end)
 
-remap({ "i", "s" }, "<C-c>", function()
+--[[ remap({ "i", "s" }, "<C-c>", function()
   -- NOTE: <C-c> clears 'cmp.core.view:get_selected_entry()'
   -- so never actually call 'cmp.abort()'
   abort_logic('<C-c>',
     function()
       vim.cmd("stopinsert")
     end)
-end)
+end) --]]

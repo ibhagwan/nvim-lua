@@ -267,11 +267,9 @@ function M.workdirs(opts)
 
     local fzf_fn = function(cb)
       for _, entry in ipairs(entries) do
-        cb(entry, function(err)
-          if err then return end
-          cb(nil, function() end)
-        end)
+        cb(entry)
       end
+      cb(nil)
     end
 
     opts.fzf_opts = {
