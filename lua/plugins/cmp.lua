@@ -30,6 +30,8 @@ cmp.setup {
 
   sources = {
     { name = 'nvim_lsp' },
+    { name = 'nvim_lua' },
+    { name = 'luasnip' },
     { name = 'path' },
     { name = 'buffer' },
   },
@@ -95,10 +97,9 @@ cmp.setup {
         vim_item.menu = ({
           path = "[Path]",
           buffer = "[Buffer]",
-          nvim_lsp = "[LSP]",
           luasnip = "[LuaSnip]",
           nvim_lua = "[Lua]",
-          latex_symbols = "[Latex]",
+          nvim_lsp = "[LSP]",
         })[entry.source.name]
         return vim_item
     end,
@@ -106,7 +107,10 @@ cmp.setup {
 
   -- DO NOT ENABLE
   -- just for testing with nvim native completion menu
-  experimental = { native_menu = false },
+  experimental = {
+    native_menu = false,
+    ghost_text = true,
+  },
 }
 
 local remap = require'utils'.remap
