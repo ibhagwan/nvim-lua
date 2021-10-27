@@ -1,77 +1,41 @@
-local M = {}
-
---[[
--- Autocompletion symbols
--- https://github.com/onsails/lspkind-nvim/blob/master/lua/lspkind/init.lua
-vim.lsp.protocol.CompletionItemKind = {
-  -- ' (text)';         -- text
-  ' (text)';         -- text
-  ' (method)';       -- method
-  ' (func)';         -- function
-  -- ' (func)';         -- function
-  -- '全(ctor)';         -- ctor
-  -- '(ctor)';       -- ctor
-  ' (ctor)';         -- ctor
-  ' (field)';        -- field
-  ' (var)';          -- variable
-  -- ' (class)';        -- class
-  ' (class)';        -- class
-  -- ' (interface)   -- interface
-  'ﰮ (interface)';    -- interface
-  -- ' (module)';       -- module
-  ' (module)';       -- module
-  ' (property)';     -- property
-  -- ' (unit)';         -- unit
-  -- ' (unit)';         -- unit
-  -- ' (unit)';         -- unit
-  -- ' (unit)';         -- unit
-  'ﰩ (unit)';         -- unit
-  ' (value)';        -- value
-  '螺(enum)';         -- enum
-  -- ' (keyword)';   -- keyword
-  ' (keyword)';      -- keyword
-  -- ' (snippet)';   -- snippet
-  '﬌ (snippet)';      -- snippet
-  -- ' (color)';     -- color
-  ' (color)';        -- color
-  ' (file)';         -- file
-  -- ' (ref)';       -- reference
-  ' (ref)';          -- reference
-  -- ' (folder)';    -- folder
-  ' (folder)';       -- folder
-  ' (enum member)';  -- enum member
-  -- ' (const)';     -- constant
-  -- ' (const)';     -- constant
-  -- ' (const)';     -- constant
-  '洞(const)';        -- constant
-  ' (struct)';       -- struct
-  -- ' (event)';     -- event
-  ' (event)';        -- event
-  '璉(operator)';     -- operator
-  ' (type param)';   -- type parameter
-}]]
-
-M.map = {
+-- LSP icons
+local icons = {
+  -- Text           = ' (text)',
   Text           = ' (text)',
   Method         = ' (method)',
   Function       = ' (func)',
-  Ctor           = ' (ctor)',
+  -- Constructor   = ' (ctor)',
+  Constructor    = ' (ctor)',
   Field          = ' (field)',
   Variable       = ' (var)',
+  -- Class          = ' (class)',
+  -- Class          = ' (class)',
   Class          = ' (class)',
+  -- Interface      = ' (interface)',
   Interface      = 'ﰮ (interface)',
   Module         = ' (module)',
   Property       = ' (property)',
+  -- Unit           = ' (unit)',
+  -- Unit           = ' (unit)',
+  -- Unit           = ' (unit)',
   Unit           = 'ﰩ (unit)',
   Value          = ' (value)',
   Enum           = '練(enum)',
+  EnumMember     = ' (enum member)',
+  -- Keyword        = ' (keyword)',
   Keyword        = ' (keyword)',
+  -- Snippet        = ' (snippet)',
   Snippet        = '﬌ (snippet)',
+  -- Color          = ' (color)',
   Color          = ' (color)',
   File           = ' (file)',
-  Reference      = ' (ref)',
   Folder         = ' (folder)',
-  EnumMember     = ' (enum member)',
+  -- Reference      = ' (ref)',
+  Reference      = ' (ref)',
+  -- Constant       = ' (const)',
+  -- Constant       = ' (const)',
+  -- Constant       = '(const)',
+  -- Constant       = '洞(const)',
   Constant       = 'ﱃ (const)',
   Struct         = ' (struct)',
   Event          = ' (event)',
@@ -79,48 +43,11 @@ M.map = {
   TypeParameter  = ' (type param)',
 }
 
-for kind, symbol in pairs(M.map) do
+for kind, symbol in pairs(icons) do
   local kinds = vim.lsp.protocol.CompletionItemKind
   local index = kinds[kind]
 
   if index ~= nil then
-      kinds[index] = symbol
+    kinds[index] = symbol
   end
 end
-
-vim.fn.sign_define("LspDiagnosticsSignError", {
-  -- text = "",
-  text = "",
-  texthl = "LspDiagnosticsSignError",
-  linehl = "",
-  numhl = "",
-})
-
-vim.fn.sign_define("LspDiagnosticsSignWarning", {
-  -- text = "",
-  text = "",
-  texthl = "LspDiagnosticsSignWarning",
-  linehl = "",
-  numhl = "",
-})
-
-vim.fn.sign_define("LspDiagnosticsSignInformation", {
-  -- text = "",
-  -- text = "",
-  text = "",
-  texthl = "LspDiagnosticsSignInformation",
-  linehl = "",
-  numhl = "",
-})
-
-vim.fn.sign_define("LspDiagnosticsSignHint", {
-  -- text = "",
-  -- text = "",
-  -- text  = "",
-  text  = "",
-  texthl = "LspDiagnosticsSignHint",
-  linehl = "",
-  numhl = "",
-})
-
-return M

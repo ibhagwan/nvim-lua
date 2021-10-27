@@ -1,16 +1,11 @@
-FzfMapArgs = FzfMapArgs or {}
-
 local map_fzf = function(mode, key, f, options, buffer)
-  local map_key = vim.api.nvim_replace_termcodes(key .. f, true, true, true)
-
-  FzfMapArgs[map_key] = options or {}
 
   local rhs = function()
     if not pcall(require, 'fzf-lua') then
       require('packer').loader('nvim-fzf')
       require('packer').loader('fzf-lua')
     end
-    require('plugins.fzf-lua')[f](FzfMapArgs[map_key])
+    require('plugins.fzf-lua')[f](options or {})
   end
 
   local map_options = {

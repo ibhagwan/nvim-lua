@@ -4,7 +4,6 @@ if not res then
 end
 
 local luasnip = require("luasnip")
-local _, lspkind = pcall(require, "lsp.icons")
 
 local t = function(str)
   return vim.api.nvim_replace_termcodes(str, true, true, true)
@@ -90,8 +89,10 @@ cmp.setup {
     deprecated = false,
     format = function(entry, vim_item)
         -- fancy icons and a name of kind
-        local kind = lspkind and lspkind.map[vim_item.kind] or nil
-        if kind then vim_item.kind = kind end
+        local idx = vim.lsp.protocol.CompletionItemKind[vim_item.kind] or nil
+        if tonumber(idx)>0 then
+          vim_item.kind = vim.lsp.protocol.CompletionItemKind[idx]
+        end
 
         -- set a name for each source
         vim_item.menu = ({

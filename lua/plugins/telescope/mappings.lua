@@ -1,9 +1,4 @@
-TelescopeMapArgs = TelescopeMapArgs or {}
-
 local map_tele = function(mode, key, f, options, buffer)
-  local map_key = vim.api.nvim_replace_termcodes(key .. f, true, true, true)
-
-  TelescopeMapArgs[map_key] = options or {}
 
   local rhs = function()
     if not pcall(require, 'telescope.nvim') then
@@ -12,7 +7,7 @@ local map_tele = function(mode, key, f, options, buffer)
       require('packer').loader('telescope-fzy-native.nvim')
       require('packer').loader('telescope.nvim')
     end
-    require('plugins.telescope')[f](TelescopeMapArgs[map_key])
+    require('plugins.telescope')[f](options or {})
   end
 
   local map_options = {

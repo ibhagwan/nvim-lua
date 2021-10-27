@@ -357,6 +357,8 @@ local keymaps = {
         B = 'buffer first',
         q = 'quickfix prev',
         Q = 'quickfix first',
+        [']'] = 'Previous class/object start',
+        ['['] = 'Previous class/object end',
   },
   [']'] = {
         -- ['%'] = 'matching group next',
@@ -373,6 +375,8 @@ local keymaps = {
         B = 'buffer last',
         q = 'quickfix next',
         Q = 'quickfix last',
+        [']'] = 'Next class/object start',
+        ['['] = 'Next class/object end',
   },
 }
 

@@ -31,9 +31,9 @@ require'nvim-treesitter.configs'.setup {
     select = {
       enable  = true,
       keymaps = {
-        ["aC"] = "@comment.outer"    ,
-        ["ac"] = "@class.outer"      ,
-        ["ic"] = "@class.inner"      ,
+        ["ac"] = "@comment.outer"    ,
+        ["ao"] = "@class.outer"      ,
+        ["io"] = "@class.inner"      ,
         ["af"] = "@function.outer"   ,
         ["if"] = "@function.inner"   ,
         -- Leader mappings, dups for whichkey
@@ -53,6 +53,26 @@ require'nvim-treesitter.configs'.setup {
         ["<Leader><Leader>ip"] = "@parameter.inner"  ,
         ["<Leader><Leader>is"] = "@scopename.inner"  ,
         ["<Leader><Leader>as"] = "@statement.outer"  ,
+      },
+    },
+    move = {
+      enable = true,
+      set_jumps = true, -- whether to set jumps in the jumplist
+      goto_next_start = {
+        ["]m"] = "@function.outer",
+        ["]]"] = "@class.outer",
+      },
+      goto_next_end = {
+        ["]M"] = "@function.outer",
+        ["]["] = "@class.outer",
+      },
+      goto_previous_start = {
+        ["[m"] = "@function.outer",
+        ["[["] = "@class.outer",
+      },
+      goto_previous_end = {
+        ["[M"] = "@function.outer",
+        ["[]"] = "@class.outer",
       },
     },
   },
