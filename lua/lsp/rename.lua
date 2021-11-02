@@ -58,7 +58,7 @@ local function handler(...)
   local utils = require'utils'
   if result and result.changes then
     for f, c in pairs(result.changes) do
-      utils.info(('"%s", %d changes'):format(f, utils.tablelength(c)))
+      utils.info(('"%s", %d change(s)'):format(f, utils.tablelength(c)))
     end
   end
   vim.lsp.handlers[method](...)

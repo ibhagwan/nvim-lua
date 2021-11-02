@@ -1,20 +1,10 @@
-if not require("plugins.bootstrap") then
-  return
-end
+local packer_startup = function(use)
 
-local config = {
-  display = {
-    open_fn = function()
-      return require('packer.util').float({ border = 'rounded' })
+    local function prefer_local(url, path)
+      return vim.loop.fs_stat(vim.fn.expand(path)) ~= nil and path or url
     end
-  }
-}
 
-local packer = require'packer'
-return packer.startup({
-  function(use)
-
-    -- TODO: causes issies with lspconfig
+    -- TODO: causes issues with lspconfig
     -- speed up 'require', must be the first plugin
     -- use { "lewis6991/impatient.nvim",
       -- config = 'pcall(require, "impatient")' }
@@ -139,11 +129,10 @@ return packer.startup({
 
     -- only required if you do not have fzf binary
     -- use = { 'junegunn/fzf', run = './install --bin', }
-    -- use { '~/Sources/nvim/fzf-lua',
-    use { 'ibhagwan/fzf-lua',
+    use {
+        prefer_local('ibhagwan/fzf-lua', '~/Sources/nvim/fzf-lua'),
         requires = {
-          -- { '~/Sources/nvim/nvim-fzf' },
-          { 'vijaymarupudi/nvim-fzf' },
+          { prefer_local('vijaymarupudi/nvim-fzf', '~/Sources/nvim/nvim-fzf') },
           { 'kyazdani42/nvim-web-devicons' },
         },
         setup = "require('plugins.fzf-lua.mappings')",
@@ -202,11 +191,11 @@ return packer.startup({
         event = 'VimEnter' }
 
     -- auto-generate vimdoc from GitHub README
-    -- use { 'mjlbach/babelfish.nvim',
-    -- use { '~/Sources/nvim/babelfish.nvim',
-    use { 'ibhagwan/babelfish.nvim',
+    use {
+        prefer_local('ibhagwan/babelfish.nvim', '~/Sources/nvim/babelfish.nvim'),
         setup = "require'plugins.babelfish'",
         opt = true }
-  end,
-  config = config
-})
+
+end
+
+return packer_startup

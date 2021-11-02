@@ -55,7 +55,7 @@ fzf_lua.setup {
     preview = {
       -- default             = 'bat',
       border              = 'border',
-      wrap                = 'wrap',
+      wrap                = 'nowrap',
       hidden              = 'nohidden',
       vertical            = 'down:45%',
       horizontal          = 'right:60%',
@@ -103,7 +103,7 @@ fzf_lua.setup {
   fzf_opts = {
       -- set to `false` to remove a flag
       ['--ansi']      = '',
-      ['--prompt']    = ' >',
+      ['--prompt']    = '> ',
       ['--info']      = 'inline',
       ['--height']    = '100%',
       ['--layout']    = 'reverse',
@@ -126,7 +126,14 @@ fzf_lua.setup {
       syntax_limit_l  = 0,              -- syntax limit (lines), 0=nolimit
     },
   },
-  lsp                 = { prompt = '❯ ', },
+  lsp = {
+    actions = {
+      -- ["default"] = function(...)
+      --   print(vim.inspect(select(1, ...)))
+      --   require'fzf-lua'.actions.file_edit_or_qf(...)
+      -- end
+    }
+  },
   lines               = { prompt = 'Lines❯ ', },
   blines              = { prompt = 'BLines❯ ', },
   buffers             = { prompt = 'Buffers❯ ', },
