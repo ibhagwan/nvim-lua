@@ -5,6 +5,7 @@ local _winnr
 local _prompt_str = "New Name❯ "
 
 local function rename()
+  local currName = vim.fn.expand('<cword>')
   local map_opts = { noremap = true, silent = true }
   local opts = {
     style = 'minimal',
@@ -25,10 +26,16 @@ local function rename()
   api.nvim_buf_set_option(bufnr, 'buftype', 'prompt')
 
   vim.fn.prompt_setprompt(bufnr, _prompt_str)
-
   vim.fn.matchaddpos('Conditional', {{1, 1, #_prompt_str}})
 
-  vim.api.nvim_command('startinsert!')
+  -- DOES NOT WORK IN 'prompt' BUFFER
+  -- api.nvim_buf_set_text(bufnr, 0, 0, 0, 0, {currName})
+  -- api.nvim_buf_set_lines(bufnr, -1, -1, 1, {currName})
+  -- vim.fn.append(1, currName)
+
+  api.nvim_command('startinsert!')
+  api.nvim_feedkeys(currName, 'n', true)
+
   api.nvim_buf_set_keymap(bufnr, 'i', '<esc>', '<CMD>stopinsert <BAR> q!<CR>', map_opts)
   api.nvim_buf_set_keymap(bufnr, 'i', '<C-c>', '<CMD>stopinsert <BAR> q!<CR>', map_opts)
   api.nvim_buf_set_keymap( bufnr, 'i', '<CR>',
