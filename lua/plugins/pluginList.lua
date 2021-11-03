@@ -105,7 +105,10 @@ local packer_startup = function(use)
     end
 
     -- optional for fzf-lua, telescope, nvim-tree, feline
-    use { 'kyazdani42/nvim-web-devicons', event = 'VimEnter' }
+    use { 'kyazdani42/nvim-web-devicons',
+      config = "require('plugins.devicons')",
+      event = 'VimEnter'
+    }
 
     -- nvim-tree
     use { 'kyazdani42/nvim-tree.lua',

@@ -88,8 +88,21 @@ local comps = {
     },
     file = {
         info = {
-            provider = 'file_info',
-            file_modified_icon = '',
+            provider = {
+              name = 'file_info',
+              opts = {
+                file_readonly_icon = '  ',
+                -- file_readonly_icon = '  ',
+                -- file_readonly_icon = '  ',
+                -- file_readonly_icon = '  ',
+                -- file_modified_icon = '',
+                file_modified_icon = '',
+                -- file_modified_icon = 'ﱐ',
+                -- file_modified_icon = '',
+                -- file_modified_icon = '',
+                -- file_modified_icon = '',
+              }
+            },
             hl = {
                 fg = colors.blue,
                 style = 'bold'
@@ -196,7 +209,8 @@ local comps = {
             provider = 'lsp_client_names',
             -- left_sep = ' ',
             right_sep = ' ',
-            icon = '  ',
+            -- icon = '  ',
+            icon = '慎',
             hl = {
                 fg = colors.yellow
             }
@@ -206,6 +220,7 @@ local comps = {
         branch = {
             provider = 'git_branch',
             icon = ' ',
+            -- icon = ' ',
             left_sep = ' ',
             hl = {
                 fg = colors.violet,
