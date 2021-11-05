@@ -2,11 +2,11 @@ local M = {}
 
 local signs = {
   ["Hint"]          = '',
-  ["Information"]   = '',
+  ["Information"]   = '',
   ["Warning"]       = '',
   ["Error"]         = '',
   -- ["Hint"]          = '',
-  -- ["Information"]   = '',
+  -- ["Information"]   = '',
   -- ["Information"]   = '',
   -- ["Warning"]       = '',
   -- ["Error"]         = '',
