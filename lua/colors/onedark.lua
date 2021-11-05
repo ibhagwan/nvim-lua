@@ -64,13 +64,13 @@ hl.common = {
   -- if vim.fn.has("gui_running") then
     SpellBad =        { fg = hl.c.dark_red,   gui = 'underline', cterm = 'underline' },
     SpellCap =        { fg = hl.c.green,      gui = 'underline', cterm = 'underline' },
-    SpellLocal =      { fg = hl.c.green, gui = 'underline', cterm = 'underline' },
+    SpellLocal =      { fg = hl.c.green,      gui = 'underline', cterm = 'underline' },
     SpellRare =       { fg = hl.c.red,        gui = 'underline', cterm = 'underline' },
   -- end
-  StatusLine =        { fg = hl.c.fg, bg = hl.c.cursor_grey },
-  StatusLineNC =      { fg = hl.c.comment_grey },
-  StatusLineTerm =    { fg = hl.c.fg, bg = hl.c.cursor_grey },
-  StatusLineTermNC =  { fg = hl.c.comment_grey },
+  StatusLine =        { fg = hl.c.fg,     bg = hl.c.visual_grey },
+  StatusLineNC =      { fg = hl.c.black,  bg = hl.c.visual_grey },
+  StatusLineTerm =    { fg = hl.c.fg,     bg = hl.c.visual_grey },
+  StatusLineTermNC =  { fg = hl.c.black,  bg = hl.c.visual_grey },
   TabLine =           { fg = hl.c.comment_grey, bg = hl.c.black },
   TabLineFill =       { },
   TabLineSel =        { fg = hl.c.black, bg = hl.c.blue, gui = 'bold', cterm = 'bold' },

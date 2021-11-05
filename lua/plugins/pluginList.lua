@@ -187,9 +187,9 @@ local packer_startup = function(use)
         opt = true }
 
     -- fancy statusline
-    use { 'famiu/feline.nvim',
+    use { 'nvim-lualine/lualine.nvim',
         requires = { 'kyazdani42/nvim-web-devicons' },
-        config = "require('plugins.feline')",
+        config = "require('plugins.statusline')",
         after = 'nvim-web-devicons',
         event = 'VimEnter' }
 

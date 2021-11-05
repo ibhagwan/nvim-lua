@@ -91,6 +91,7 @@ local comps = {
             provider = {
               name = 'file_info',
               opts = {
+                type = 'relative-short',
                 file_readonly_icon = '  ',
                 -- file_readonly_icon = '  ',
                 -- file_readonly_icon = '  ',
@@ -256,6 +257,7 @@ local components = {
 table.insert(components.active, {})
 table.insert(components.active, {})
 table.insert(components.active, {})
+table.insert(components.inactive, {})
 table.insert(components.inactive, {})
 table.insert(components.inactive, {})
 
