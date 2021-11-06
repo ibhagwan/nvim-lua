@@ -1,28 +1,48 @@
 local M = {}
 
+-- The old LSP diagnostics priot to:
+-- https://github.com/neovim/neovim/commit/064411ea7ff825aed3d4e01207914ed61d7ee79d
+-- local _is_legacy = not vim.tbl_isempty(vim.fn.sign_getdefined('LspDiagnosticsSignInformation'))
+
 local signs = {
-  ["Hint"]          = '',
-  ["Information"]   = '',
-  ["Warning"]       = '',
-  ["Error"]         = '',
-  -- ["Hint"]          = '',
-  -- ["Information"]   = '',
-  -- ["Information"]   = '',
-  -- ["Warning"]       = '',
-  -- ["Error"]         = '',
+  ["Hint"]   = { icon = '', hl = 'Identifier' },
+  ["Info"]   = { icon = '', hl = 'Special' },
+  ["Warn"]   = { icon = '', hl = 'DiffChange' },
+  ["Error"]  = { icon = '', hl = 'ErrorMsg' },
+  -- ["Hint"]   = '',
+  -- ["Info"]   = '',
+  -- ["Info"]   = '',
+  -- ["Warn"]   = '',
+  -- ["Error"]  = '',
 }
 
--- set icons for both new (vim.diagnostic) and legacy (vim.lsp.diagnostic)
-for _, k in ipairs({'DiagnosticSign', 'LspDiagnosticsSign'}) do
-
-  -- can check with 'vim.tbl_isempty'
-  -- local s = vim.fn.sign_getdefined(k..'Error')
-  for severity, icon in pairs(signs) do
-    local hl = k .. severity
-    vim.fn.sign_define(hl, { text = icon, texthl = hl, linehl = '', numhl = '' })
+local sign_prefix = 'DiagnosticSign'
+if not vim.diagnostic then
+  sign_prefix = 'LspDiagnosticsSign'
+  -- legacy signs:
+  -- LspDiagnosticsSign does not have "Info", "Warn"
+  -- instead has "Information", "Warning"
+  local function tbl_swap(t, old, new)
+    t[new] = t[old]
+    t[old] = nil
+  end
+  tbl_swap(signs, "Warn", "Warning")
+  tbl_swap(signs, "Info", "Information")
+else
+  -- virtual text highlights only relevant in non-legacy
+  for severity, t in pairs(signs) do
+    local hl = 'DiagnosticVirtualText' .. severity
+    vim.cmd(('hi link %s %s'):format(hl, t.hl))
   end
 end
 
+-- Define the diag signs
+for severity, t in pairs(signs) do
+  local hl = sign_prefix .. severity
+  vim.fn.sign_define(hl, { text = t.icon, texthl = t.hl, linehl = '', numhl = '' })
+end
+
+-- Diag config
 if vim.diagnostic then
   vim.diagnostic.config({
     underline = true,
@@ -33,12 +53,12 @@ if vim.diagnostic then
       severity = {
         min = vim.diagnostic.severity.HINT,
       },
-      --[[ format = function(diagnostic)
-        if diagnostic.severity == vim.diagnostic.severity.ERROR then
-          return string.format('E: %s', diagnostic.message)
-        end
-        return ("%s"):format(diagnostic.message)
-      end, --]]
+      -- format = function(diagnostic)
+        -- if diagnostic.severity == vim.diagnostic.severity.ERROR then
+        --   return string.format('E: %s', diagnostic.message)
+        -- end
+        -- return ("%s"):format(diagnostic.message)
+      -- end,
     },
     signs = true,
     severity_sort = true,

@@ -4,23 +4,33 @@ if not res then
 end
 
 local col_from_hl = require("lualine.utils.utils").extract_color_from_hllist
-local colors = {
-    bg          = col_from_hl('bg', { 'StatusLine',  }, '#000000'),
-    fg          = col_from_hl('fg', { 'Normal', 'StatusLine' }, '#000000'),
-    String      = col_from_hl('fg', { 'String', 'Constant' }, '#000000'),
-    Special     = col_from_hl('fg', { 'Special', 'Delimiter' }, '#000000'),
-    Type        = col_from_hl('fg', { 'Type', 'Structure' }, '#000000'),
-    Label       = col_from_hl('fg', { 'Label', 'Exception' }, '#000000'),
-    PreProc     = col_from_hl('fg', { 'PreProc', 'Include' }, '#000000'),
-    Search      = col_from_hl('fg', { 'Search', 'DiffText' }, '#000000'),
-    Identifier  = col_from_hl('fg', { 'Identifier', 'Directory' }, '#000000'),
-    Keyword     = col_from_hl('fg', { 'Keyword', 'Statement' }, '#000000'),
-    DiffAdd     = col_from_hl('bg', { 'DiffAdd', }, '#000000'),
-    DiffDelete  = col_from_hl('bg', { 'DiffDelete', }, '#000000'),
-    DiffChange  = col_from_hl('fg', { 'DiffChange', }, '#000000'),
-    DiffText    = col_from_hl('bg', { 'DiffText', }, '#000000'),
-    IncSearch   = col_from_hl('fg', { 'IncSearch', }, '#000000'),
+
+local import_hls = {
+    ['String']      = 'fg',
+    ['Special']     = 'fg',
+    ['Type']        = 'fg',
+    ['Label']       = 'fg',
+    ['PreProc']     = 'fg',
+    ['Search']      = 'fg',
+    ['Identifier']  = 'fg',
+    ['Keyword']     = 'fg',
+    ['DiffAdd']     = 'bg',
+    ['DiffDelete']  = 'bg',
+    ['DiffChange']  = 'fg',
+    ['DiffText']    = 'bg',
+    ['IncSearch']   = 'fg',
+    ['ErrorMsg']    = 'fg',
+    ['WildMenu']    = 'bg',
 }
+
+local colors = {
+    bg = col_from_hl('bg', { 'StatusLine',  }, '#000000'),
+    fg = col_from_hl('fg', { 'Normal', 'StatusLine' }, '#000000'),
+}
+
+for hl, col in pairs(import_hls) do
+  colors[hl] = col_from_hl(col, { hl,  }, '#000000')
+end
 
 local filename = {
   {
@@ -95,6 +105,12 @@ statusline.setup({
       'diagnostics',
       sources = { 'nvim_lsp' },
       symbols = { error = ' ', warn = ' ', info = ' ', hint = ' ' },
+      diagnostics_color = {
+        error = { fg = colors.ErrorMsg },
+        warn  = { fg = colors.DiffChange },
+        info  = { fg = colors.WildMenu },
+        hint  = { fg = colors.Identifier },
+      },
       -- color = { bg = colors.String },
     }, lsp_tbl},
     lualine_y = {{'fileformat'},{'encoding'},
