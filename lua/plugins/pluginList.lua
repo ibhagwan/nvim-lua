@@ -24,7 +24,7 @@ local packer_startup = function(use)
         config = "require('plugins.comment')",
         -- uncomment for lazy loading
         -- slight delay if loading in visual mode
-        keys = {'gcc', 'gc'}
+        keys = {'gcc', 'gc', 'gl'}
     }
 
     -- needs no introduction
@@ -41,6 +41,22 @@ local packer_startup = function(use)
         requires = { 'nvim-lua/plenary.nvim' },
         config = "require('plugins.gitsigns')",
         after = "plenary.nvim" }
+
+    use { 'sindrets/diffview.nvim',
+        requires = { 'nvim-lua/plenary.nvim' },
+        setup = function()
+          require'utils'.command({
+            "-nargs=*", "DiffviewOpen", function(args)
+              if not pcall(require, 'diffview') then
+                require('packer').loader('plenary.nvim')
+                require('packer').loader('diffview.nvim')
+              end
+              require'diffview'.open(#args>0 and args)
+            end})
+        end,
+        config = "require('plugins.diffview')",
+        -- cmd = {'DiffviewOpen'},
+        opt = true }
 
     -- Add indentation guides even on blank lines
     use { 'lukas-reineke/indent-blankline.nvim', --branch="lua",

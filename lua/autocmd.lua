@@ -64,6 +64,11 @@ au.group('Help', function(g)
       if cfg and (cfg.external or cfg.relative and #cfg.relative>0) then
         return
       end
+      -- do not run if Diffview is open
+      if vim.g.diffview_nvim_loaded and
+        require'diffview.lib'.get_current_view() then
+        return
+      end
       -- local var = vim.bo.filetype .. "_init"
       -- local ok, is_init = pcall(vim.api.nvim_buf_get_var, 0, var)
       -- if ok and is_init == true then return end

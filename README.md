@@ -43,6 +43,9 @@ release](https://github.com/neovim/neovim/releases/tag/v0.5.0)**
 - [gitsigns](https://github.com/lewis6991/gitsigns.nvim): git gutter indicators
   and hunk management
 
+- [diffview](https://github.com/sindrets/diffview.nvim): review all project
+  changes before a commit or diff between revisions
+
 ### Coding, completion & LSP
 
 - [Comment.nvim](https://github.com/numToStr/Comment.nvim): use `gc` and

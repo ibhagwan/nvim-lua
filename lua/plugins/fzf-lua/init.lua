@@ -54,6 +54,7 @@ fzf_lua.setup {
     },
     preview = {
       -- default             = 'bat',
+      -- default             = 'bat_native',
       border              = 'border',
       wrap                = 'nowrap',
       hidden              = 'nohidden',
@@ -210,7 +211,6 @@ fzf_lua.setup {
   -- manpages = { previewer = { _ctor = require'fzf-lua.previewer'.fzf.man_pages } },
 }
 
-
 local M = {}
 
 function M.edit_neovim(opts)
@@ -246,7 +246,7 @@ function M.buffers(opts)
   opts.fzf_bin = 'fzf'
   opts.fzf_bin = opts.fzf_bin or fzf_bin
   opts.fzf_colors = fzf_colors(opts.fzf_bin)
-  local action = require("fzf.actions").action(function(selected)
+  local action = require("fzf-lua.shell").action(function(selected)
     fzf_lua.actions.buf_del(selected)
     fzf_lua.win.set_autoclose(false)
     M.buffers(opts)
@@ -260,16 +260,6 @@ function M.buffers(opts)
   opts.actions = { ["ctrl-x"] = false }
   opts.fzf_cli_args  = ("--bind=ctrl-x:execute-silent:%s"):format(action)
   fzf_lua.buffers(opts)
-end
-
-function M.test()
-  local action = require("fzf.actions").action(function(selected)
-    _G.dump(selected)
-  end, "{+}")
-  local fzf_cli_args  = ("--multi --bind=ctrl-x:execute-silent:%s"):format(action)
-  coroutine.wrap(function()
-    fzf_lua.raw_fzf("seq 10", fzf_cli_args, { fzf_binary = 'sk' })
-  end)()
 end
 
 local _previous_cwd = nil
