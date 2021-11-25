@@ -27,6 +27,15 @@ require'nvim-treesitter.configs'.setup {
     -- slow on big files
     -- disable = { "c", "cpp", }
   },
+  incremental_selection = {
+    enable = true,
+    keymaps = {
+      init_selection = '<Tab>',
+      scope_incremental = '<CR>',
+      node_incremental = '<Tab>',
+      node_decremental = '<S-Tab>',
+    },
+  },
   textobjects = {
     select = {
       enable  = true,
