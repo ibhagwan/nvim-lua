@@ -1,6 +1,8 @@
 local M = {}
 
--- The old LSP diagnostics priot to:
+-- https://github.com/neovim/nvim-lspconfig/wiki/UI-Customization
+
+-- The old LSP diagnostics prior to:
 -- https://github.com/neovim/neovim/commit/064411ea7ff825aed3d4e01207914ed61d7ee79d
 -- local _is_legacy = not vim.tbl_isempty(vim.fn.sign_getdefined('LspDiagnosticsSignInformation'))
 
@@ -137,7 +139,6 @@ function M.virtual_text_disable()
   vim.b.lsp_virtual_text_enabled = false
   M.virtual_text_none()
   M.virtual_text_clear()
-  return
 end
 
 function M.virtual_text_enable()
@@ -145,7 +146,6 @@ function M.virtual_text_enable()
   vim.b.lsp_virtual_text_enabled = true
   M.virtual_text_set()
   M.virtual_text_redraw()
-  return
 end
 
 function M.virtual_text_only_text()
@@ -153,7 +153,6 @@ function M.virtual_text_only_text()
   vim.b.lsp_virtual_text_enabled = true
   M.virtual_text_set()
   M.virtual_text_redraw()
-  return
 end
 
 function M.virtual_text_only_signs()
@@ -161,7 +160,6 @@ function M.virtual_text_only_signs()
   vim.b.lsp_virtual_text_enabled = true
   M.virtual_text_set()
   M.virtual_text_redraw()
-  return
 end
 
 function M.virtual_text_toggle()

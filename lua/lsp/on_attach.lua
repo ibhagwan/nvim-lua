@@ -31,23 +31,27 @@ local on_attach = function(client, bufnr)
   --map(bufnr, 'n', '<leader>ls', '<cmd>lua vim.lsp.buf.document_symbol()<CR>', opts)
   --map(bufnr, 'n', '<leader>lS', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>', opts)
 
-  map(bufnr, 'n', '<leader>lQ', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
   map(bufnr, 'n', '<leader>lt', "<cmd>lua require'lsp.diag'.virtual_text_toggle()<CR>", opts)
 
   -- neovim PR #16057
   -- https://github.com/neovim/neovim/pull/16057
-  local winopts
   if not vim.diagnostic then
-    winopts = "{ popup_opts =  { border = 'rounded' } }"
+    local winopts = "{ popup_opts =  { border = 'rounded' } }"
+    map(bufnr, 'n', '[d', ('<cmd>lua vim.lsp.diagnostic.goto_prev(%s)<CR>'):format(winopts), opts)
+    map(bufnr, 'n', ']d', ('<cmd>lua vim.lsp.diagnostic.goto_next(%s)<CR>'):format(winopts), opts)
     map(bufnr, 'n', '<leader>lc', '<cmd>lua vim.lsp.diagnostic.clear(0)<CR>', opts)
     map(bufnr, 'n', '<leader>ll', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+    map(bufnr, 'n', '<leader>lq', '<cmd>lua vim.lsp.diagnostic.set_qflist()<CR>', opts)
+    map(bufnr, 'n', '<leader>lQ', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
   else
-    winopts = "{ float =  { border = 'rounded' } }"
+    local winopts = "{ float =  { border = 'rounded' } }"
+    map(bufnr, 'n', '[d', ('<cmd>lua vim.diagnostic.goto_prev(%s)<CR>'):format(winopts), opts)
+    map(bufnr, 'n', ']d', ('<cmd>lua vim.diagnostic.goto_next(%s)<CR>'):format(winopts), opts)
     map(bufnr, 'n', '<leader>lc', '<cmd>lua vim.diagnostic.reset()<CR>', opts)
     map(bufnr, 'n', '<leader>ll', '<cmd>lua vim.diagnostic.open_float(0, { scope = "line", border = "rounded" })<CR>', opts)
+    map(bufnr, 'n', '<leader>lq', '<cmd>lua vim.diagnostic.setqflist()<CR>', opts)
+    map(bufnr, 'n', '<leader>lQ', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
   end
-  map(bufnr, 'n', '[d', ('<cmd>lua vim.lsp.diagnostic.goto_prev(%s)<CR>'):format(winopts), opts)
-  map(bufnr, 'n', ']d', ('<cmd>lua vim.lsp.diagnostic.goto_next(%s)<CR>'):format(winopts), opts)
 
   if client.resolved_capabilities.document_formatting then
     map(bufnr, 'n', 'gq', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
