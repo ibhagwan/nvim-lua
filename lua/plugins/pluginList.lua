@@ -128,7 +128,6 @@ local packer_startup = function(use)
 
     -- nvim-tree
     use { 'kyazdani42/nvim-tree.lua',
-        requires = { 'kyazdani42/nvim-web-devicons' },
         config = "require('plugins.nvim-tree')",
         cmd = { 'NvimTreeToggle', 'NvimTreeFindFile' },
         opt = true,
@@ -150,10 +149,6 @@ local packer_startup = function(use)
     -- use = { 'junegunn/fzf', run = './install --bin', }
     use {
         prefer_local('ibhagwan/fzf-lua', '~/Sources/nvim/fzf-lua'),
-        requires = {
-          { prefer_local('vijaymarupudi/nvim-fzf', '~/Sources/nvim/nvim-fzf') },
-          { 'kyazdani42/nvim-web-devicons' },
-        },
         setup = "require('plugins.fzf-lua.mappings')",
         config = "require('plugins.fzf-lua')",
         opt = true,
@@ -204,9 +199,8 @@ local packer_startup = function(use)
 
     -- fancy statusline
     use { 'nvim-lualine/lualine.nvim',
-        requires = { 'kyazdani42/nvim-web-devicons' },
         config = "require('plugins.statusline')",
-        after = 'nvim-web-devicons',
+        -- after = 'nvim-web-devicons',
         event = 'VimEnter' }
 
     -- auto-generate vimdoc from GitHub README

@@ -2,7 +2,6 @@ local map_fzf = function(mode, key, f, options, buffer)
 
   local rhs = function()
     if not pcall(require, 'fzf-lua') then
-      require('packer').loader('nvim-fzf')
       require('packer').loader('fzf-lua')
     end
     require('plugins.fzf-lua')[f](options or {})

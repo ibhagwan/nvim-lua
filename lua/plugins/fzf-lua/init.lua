@@ -127,14 +127,6 @@ fzf_lua.setup {
       syntax_limit_l  = 0,              -- syntax limit (lines), 0=nolimit
     },
   },
-  lsp = {
-    actions = {
-      -- ["default"] = function(...)
-      --   print(vim.inspect(select(1, ...)))
-      --   require'fzf-lua'.actions.file_edit_or_qf(...)
-      -- end
-    }
-  },
   lines               = { prompt = 'Lines❯ ', },
   blines              = { prompt = 'BLines❯ ', },
   buffers             = { prompt = 'Buffers❯ ', },
@@ -144,16 +136,26 @@ fzf_lua.setup {
       ["ctrl-l"]      = fzf_lua.actions.arg_add,
       ["ctrl-y"]      = function(selected) print(selected[1]) end,
     },
+    multiprocess      = true,
+    debug             = false,
   },
-  args = {
-    prompt            = 'Args❯ ',
-    files_only        = true,
-    actions = {
-      ["ctrl-x"]      = fzf_lua.actions.arg_del,
-    },
+  grep = {
+    prompt            = 'Rg❯ ',
+    input_prompt      = 'Grep For❯ ',
+    actions           = { ["ctrl-q"] = false },
+    rg_opts           = "--column --line-number --no-heading --color=always --smart-case",
+    -- 'true' enables file and git icons in 'live_grep'
+    -- degrades performance in large datasets, YMMV
+    experimental      = true,
+    multiprocess      = true,
+    debug             = false,
   },
   git = {
-    files             = { prompt = 'GitFiles❯ ', },
+    files             = {
+      prompt          = 'GitFiles❯ ',
+      multiprocess    = false,
+      debug           = false,
+    },
     status            = { prompt = 'GitStatus❯ ', },
     commits           = { prompt = 'Commits❯ ', },
     bcommits          = { prompt = 'BCommits❯ ', },
@@ -164,13 +166,12 @@ fzf_lua.setup {
         -- ["A"]    = { icon = "+", color = "green" },
     },
   },
-  grep = {
-    prompt            = 'Rg❯ ',
-    input_prompt      = 'Grep For❯ ',
-    actions           = { ["ctrl-q"] = false },
-    -- 'true' enables file and git icons in 'live_grep'
-    -- degrades performance in large datasets, YMMV
-    experimental      = true,
+  args = {
+    prompt            = 'Args❯ ',
+    files_only        = true,
+    actions = {
+      ["ctrl-x"]      = fzf_lua.actions.arg_del,
+    },
   },
   oldfiles = {
     prompt            = 'History❯ ',
@@ -196,6 +197,7 @@ fzf_lua.setup {
   -- available colors (terminal):
   --    clear, bold, black, red, green, yellow
   --    blue, magenta, cyan, grey, dark_grey, white
+  file_icon_padding = '',
   file_icon_colors = {
     ["sh"]    = "green",
   },
