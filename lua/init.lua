@@ -208,6 +208,7 @@ local disabled_built_ins = {
   'logipat',
   'rrhelper',
   'spellfile_plugin',
+  'fzf',
   -- 'matchit',
    --'matchparen',
 }
