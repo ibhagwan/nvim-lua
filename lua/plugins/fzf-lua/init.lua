@@ -243,6 +243,21 @@ function M.installed_plugins(opts)
   fzf_lua.files(opts)
 end
 
+function M.git_status_tmuxZ(opts)
+  local function tmuxZ(_, selected)
+    local is_resume = selected and (selected[1] == 'left' or selected[1] == 'right')
+    if not is_resume then
+      vim.cmd("!tmux resize-pane -Z")
+    end
+  end
+  tmuxZ()
+  opts = opts or {}
+  opts.fn_post_fzf = tmuxZ
+  vim.defer_fn(function()
+    require'fzf-lua'.git_status(opts)
+  end, 20)
+end
+
 local _previous_cwd = nil
 
 function M.workdirs(opts)

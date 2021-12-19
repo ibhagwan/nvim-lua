@@ -75,6 +75,16 @@ map_fzf('n', '<leader>fs', "git_status", {
   preview_vertical = "down:70%",
   preview_horizontal = "right:70%",
 })
+-- Full screen git status
+map_fzf('n', '<leader>fS', "git_status_tmuxZ", {
+  winopts = {
+    fullscreen = true,
+    preview = {
+      vertical = "down:70%",
+      horizontal = "right:70%",
+    }
+  }
+})
 map_fzf('n', '<leader>fc', "git_bcommits")
 map_fzf('n', '<leader>fC', "git_commits")
 map_fzf('n', '<leader>gc', "git_bcommits")

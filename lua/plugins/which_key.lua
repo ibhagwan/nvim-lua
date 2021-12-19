@@ -190,6 +190,7 @@ local keymaps = {
         p = 'files',
         g = 'git files',
         s = 'git status',
+        S = 'git status (fullscreen)',
         C = 'git commits (project)',
         c = 'git commits (buffer)',
         h = 'file history (all)',
