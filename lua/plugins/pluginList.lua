@@ -1,6 +1,10 @@
 local packer_startup = function(use)
 
     local function prefer_local(url, path)
+      if not path then
+        local name = url:match("[^/]*$")
+        path = "~/Sources/nvim/" .. name
+      end
       return vim.loop.fs_stat(vim.fn.expand(path)) ~= nil and path or url
     end
 
@@ -107,7 +111,7 @@ local packer_startup = function(use)
     -- nvim-treesitter
     -- verify a compiler exists before installing
     if require'utils'.have_compiler() then
-        use { 'nvim-treesitter/nvim-treesitter',
+        use { prefer_local('nvim-treesitter/nvim-treesitter'),
             config = "require('plugins.treesitter')",
             run = ':TSUpdate',
             event = 'BufRead' }
@@ -148,7 +152,7 @@ local packer_startup = function(use)
     -- only required if you do not have fzf binary
     -- use = { 'junegunn/fzf', run = './install --bin', }
     use {
-        prefer_local('ibhagwan/fzf-lua', '~/Sources/nvim/fzf-lua'),
+        prefer_local('ibhagwan/fzf-lua'),
         setup = "require('plugins.fzf-lua.mappings')",
         config = "require('plugins.fzf-lua')",
         opt = true,
@@ -205,7 +209,7 @@ local packer_startup = function(use)
 
     -- auto-generate vimdoc from GitHub README
     use {
-        prefer_local('ibhagwan/babelfish.nvim', '~/Sources/nvim/babelfish.nvim'),
+        prefer_local('ibhagwan/babelfish.nvim'),
         setup = "require'plugins.babelfish'",
         opt = true }
 

@@ -138,6 +138,10 @@ if pcall(require, "nvim-treesitter.parsers") then
     install_info = {
       url = "https://github.com/ikatyang/tree-sitter-markdown",
       files = { "src/parser.c", "src/scanner.cc" },
+      -- makes treesitter ignore the 'lockfile.json' revision
+      -- won't compile without this like as it tries the default
+      -- markdown revision from 'MDeiml/tree-sitter-markdown'
+      revision = "master",
     }
   }
 end

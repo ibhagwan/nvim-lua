@@ -3,7 +3,7 @@ if not res then
   return
 end
 
-local fzf_bin = 'sk'
+-- local fzf_bin = 'sk'
 
 local function fzf_colors(binary)
   binary = binary or fzf_bin
@@ -243,27 +243,6 @@ function M.installed_plugins(opts)
   fzf_lua.files(opts)
 end
 
-function M.buffers(opts)
-  if not opts then opts = {} end
-  opts.fzf_bin = 'fzf'
-  opts.fzf_bin = opts.fzf_bin or fzf_bin
-  opts.fzf_colors = fzf_colors(opts.fzf_bin)
-  local action = require("fzf-lua.shell").action(function(selected)
-    fzf_lua.actions.buf_del(selected)
-    fzf_lua.win.set_autoclose(false)
-    M.buffers(opts)
-    fzf_lua.win.set_autoclose(true)
-    -- execute with '--multi' and '{+}' is bugged with skim
-  end, opts.fzf_bin == 'sk' and "{}" or "{+}")
-  if not opts.curbuf then
-    -- make sure we keep current buffer at the header
-    opts.curbuf = vim.api.nvim_get_current_buf()
-  end
-  opts.actions = { ["ctrl-x"] = false }
-  opts.fzf_cli_args  = ("--bind=ctrl-x:execute-silent:%s"):format(action)
-  fzf_lua.buffers(opts)
-end
-
 local _previous_cwd = nil
 
 function M.workdirs(opts)
@@ -289,28 +268,27 @@ function M.workdirs(opts)
     dedup[path] = true
   end
 
-  coroutine.wrap(function ()
-    add_entry(vim.loop.cwd(), "magenta", '')
-    add_entry(_previous_cwd, "yellow")
-    for _, path in ipairs(dirs) do
-      add_entry(path)
+  add_entry(vim.loop.cwd(), "magenta", '')
+  add_entry(_previous_cwd, "yellow")
+  for _, path in ipairs(dirs) do
+    add_entry(path)
+  end
+
+  local fzf_fn = function(cb)
+    for _, entry in ipairs(entries) do
+      cb(entry)
     end
+    cb(nil)
+  end
 
-    local fzf_fn = function(cb)
-      for _, entry in ipairs(entries) do
-        cb(entry)
-      end
-      cb(nil)
-    end
+  opts.fzf_opts = {
+    ['--no-multi']        = '',
+    ['--prompt']          = 'Workdirs❯ ',
+    ['--preview-window']  = 'hidden:right:0',
+    ['--header-lines']    = '1',
+  }
 
-    opts.fzf_opts = {
-      ['--no-multi']        = '',
-      ['--prompt']          = 'Workdirs❯ ',
-      ['--preview-window']  = 'hidden:right:0',
-      ['--header-lines']    = '1',
-    }
-
-    local selected = fzf_lua.fzf(opts, fzf_fn)
+  fzf_lua.fzf_wrap(opts, fzf_fn, function(selected)
     if not selected then return end
     _previous_cwd = vim.loop.cwd()
     local newcwd = selected[1]:match("[^ ]*$")
