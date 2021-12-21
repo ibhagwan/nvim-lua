@@ -87,8 +87,6 @@ map_fzf('n', '<leader>fS', "git_status_tmuxZ", {
 })
 map_fzf('n', '<leader>fc', "git_bcommits")
 map_fzf('n', '<leader>fC', "git_commits")
-map_fzf('n', '<leader>gc', "git_bcommits")
-map_fzf('n', '<leader>gC', "git_commits")
 
 -- Fzf-lua methods
 map_fzf('n', "<leader>f?", "builtin")

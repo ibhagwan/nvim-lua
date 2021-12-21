@@ -31,6 +31,8 @@ end
 
 fzf_lua.setup {
   -- lua_io             = true,            -- perf improvement, experimental
+  global_resume         = true,
+  global_resume_query   = true,
   winopts = {
     -- split            = "belowright new",
     -- split            = "aboveleft vnew",
@@ -244,18 +246,29 @@ function M.installed_plugins(opts)
 end
 
 function M.git_status_tmuxZ(opts)
-  local function tmuxZ(_, selected)
-    local is_resume = selected and (selected[1] == 'left' or selected[1] == 'right')
-    if not is_resume then
-      vim.cmd("!tmux resize-pane -Z")
+  local function tmuxZ()
+    vim.cmd("!tmux resize-pane -Z")
+  end
+  opts = opts or {}
+  opts.fn_pre_win = function(_)
+    if not opts.__want_resume then
+      -- new fzf window, set tmux Z
+      -- add small delay or fzf
+      -- win gets wrong dimensions
+      tmuxZ()
+      vim.cmd("sleep! 20m")
+    end
+    opts.__want_resume = nil
+  end
+  opts.fn_post_fzf = function(_, s)
+    opts.__want_resume = s and (s[1] == 'left' or s[1] == 'right')
+    if not opts.__want_resume then
+      -- resume asked do not resize
+      -- signals fn_pre to do the same
+      tmuxZ()
     end
   end
-  tmuxZ()
-  opts = opts or {}
-  opts.fn_post_fzf = tmuxZ
-  vim.defer_fn(function()
-    require'fzf-lua'.git_status(opts)
-  end, 20)
+  fzf_lua.git_status(opts)
 end
 
 local _previous_cwd = nil
