@@ -3,7 +3,7 @@ if not res then
   return
 end
 
--- local fzf_bin = 'sk'
+local fzf_bin = 'sk'
 
 local function fzf_colors(binary)
   binary = binary or fzf_bin
