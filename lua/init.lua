@@ -19,10 +19,11 @@ o.matchpairs        = { '(:)', '{:}', '[:]', '<:>' }
 -- recursive :find in current dir
 vim.cmd[[set path=.,,,$PWD/**]]
 
+-- DO NOT NEED ANY OF THIS, CRUTCH THAT POULLUTES REGISTERS
 -- vim clipboard copies to system clipboard
--- unnamed     = use the " register (cmd-s paste in our term)
+-- unnamed     = use the * register (cmd-s paste in our term)
 -- unnamedplus = use the + register (cmd-v paste in our term)
-o.clipboard         = 'unnamedplus'
+-- o.clipboard         = 'unnamedplus'
 
 o.showmode          = true      -- show current mode (insert, etc) under the cmdline
 o.showcmd           = true      -- show current command under the cmd line
