@@ -192,7 +192,7 @@ fzf_lua.setup {
     post_reset_cb     = function()
       -- reset statusline highlights after
       -- a live_preview of the colorscheme
-      require('feline').reset_highlights()
+      -- require('feline').reset_highlights()
     end,
   },
   -- optional override of file extension icon colors

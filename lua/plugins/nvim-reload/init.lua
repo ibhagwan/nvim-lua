@@ -41,9 +41,6 @@ reload.post_reload_hook = function()
   -- recompile packer
   vim.cmd[[packadd packer.nvim]]
   require('plugins').compile()
-  if pcall(require, 'feline') then
-    require('feline').reset_highlights()
-  end
   if reload.lsp_was_loaded and vim.fn.exists(':PackerLoad') ~= 0 then
     vim.cmd("PackerLoad nvim-lspconfig")
     vim.cmd("PackerLoad nvim-lsp-installer")
