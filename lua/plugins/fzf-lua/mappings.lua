@@ -39,8 +39,14 @@ map_fzf('n', '<leader>fb', "blines")
 map_fzf('n', '<leader>fB', "lgrep_curbuf", { prompt = 'Buffer❯ ' })
 map_fzf('n', '<leader>fp', "files", {})
 map_fzf('n', '<leader>fg', "git_files", {})
-map_fzf('n', '<leader>fh', "oldfiles", { cwd = vim.loop.cwd() })
-map_fzf('n', '<leader>fH', "oldfiles", { cwd_only = true })
+map_fzf('n', '<leader>fh', "oldfiles", { cwd = "~" })
+map_fzf('n', '<leader>fH', "oldfiles", function()
+  return {
+    cwd = vim.loop.cwd(),
+    show_cwd_header = true,
+    cwd_only = true,
+  }
+end)
 map_fzf('n', '<leader>fq', "quickfix")
 map_fzf('n', '<leader>fQ', "loclist")
 map_fzf('n', '<leader>fo', "colorschemes")

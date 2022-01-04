@@ -234,6 +234,19 @@ end
 --
 -- tmux like <C-b>z: focus on one buffer in extra tab
 -- put current window in new tab with cursor restored
+local _tabZ = nil
+
+M.tabZ = function()
+  if _tabZ then
+    if _tabZ == vim.api.nvim_get_current_tabpage() then
+      M.tabclose()
+    end
+    _tabZ = nil
+  else
+    _tabZ = M.tabedit()
+  end
+end
+
 M.tabedit = function()
   -- skip if there is only one window open
   if vim.tbl_count(vim.api.nvim_tabpage_list_wins(0)) == 1 then
@@ -251,6 +264,7 @@ M.tabedit = function()
   vim.api.nvim_buf_delete(tabedit_buf, {force = true})
   -- restore original view
   vim.fn.winrestview(view)
+  return vim.api.nvim_get_current_tabpage()
 end
 
 -- restore old view with cursor retained

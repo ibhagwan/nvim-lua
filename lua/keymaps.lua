@@ -80,17 +80,17 @@ remap('n', '<leader><Right>', "<cmd>lua require'utils'.resize(true,   5)<CR>", {
 remap('n', '<leader>=',       '<C-w>=',               { noremap = true, silent = true })
 
 -- Tab navigation
-remap('n', '<Leader>tp', ':tabprevious<CR>', { noremap = true })
-remap('n', '<Leader>tn', ':tabnext<CR>',     { noremap = true })
-remap('n', '<Leader>tf', ':tabfirst<CR>',    { noremap = true })
-remap('n', '<Leader>tl', ':tablast<CR>',     { noremap = true })
-remap('n', '<Leader>tN', ':tabnew<CR>',      { noremap = true })
+remap('n', '[t',         ':tabprevious<CR>', { noremap = true })
+remap('n', ']t',         ':tabnext<CR>',     { noremap = true })
+remap('n', '[T',         ':tabfirst<CR>',    { noremap = true })
+remap('n', ']T',         ':tablast<CR>',     { noremap = true })
+remap('n', '<Leader>tn', ':tabnew<CR>',      { noremap = true })
 remap('n', '<Leader>tc', ':tabclose<CR>',    { noremap = true })
+remap('n', '<Leader>to', ':tabonly<CR>',    { noremap = true })
 -- Jump to first tab & close all other tabs. Helpful after running Git difftool.
-remap('n', '<Leader>to',  ':tabfirst<CR>:tabonly<CR>', { noremap = true })
+remap('n', '<Leader>tO', ':tabfirst<CR>:tabonly<CR>', { noremap = true })
 -- tmux <c-meta>z like
-remap('n', '<Leader>tz',  "<cmd>lua require'utils'.tabedit()<CR>", { noremap = true })
-remap('n', '<Leader>tZ',  "<cmd>lua require'utils'.tabclose()<CR>", { noremap = true })
+remap('n', '<Leader>tz',  "<cmd>lua require'utils'.tabZ()<CR>", { noremap = true })
 
 -- Navigate buffers
 remap('n', '[b', ':bprevious<CR>',      { noremap = true })
@@ -109,14 +109,6 @@ remap('n', '[l', ':lprevious<CR>',      { noremap = true })
 remap('n', ']l', ':lnext<CR>',          { noremap = true })
 remap('n', '[L', ':lfirst<CR>',         { noremap = true })
 remap('n', ']L', ':llast<CR>',          { noremap = true })
--- Tags / Preview tags
-remap('n', '[t', ':tprevious<CR>',      { noremap = true })
-remap('n', ']t', ':tNext<CR>',          { noremap = true })
-remap('n', '[T', ':tfirst<CR>',         { noremap = true })
-remap('n', ']T', ':tlast<CR>',          { noremap = true })
-remap('n', '[p', ':ptprevious<CR>',     { noremap = true })
-remap('n', ']p', ':ptnext<CR>',         { noremap = true })
---remap('n', '<Leader>ts', ':<C-u>tselect <C-r><C-w><CR>', { noremap = true })
 
 -- <leader>v|<leader>s act as <cmd-v>|<cmd-s>
 -- <leader>p|P paste from yank register (0)
