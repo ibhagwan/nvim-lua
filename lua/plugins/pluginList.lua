@@ -33,8 +33,8 @@ local packer_startup = function(use)
 
     -- needs no introduction
     use { 'tpope/vim-fugitive',
-        config = "require('plugins.fugitive')",}
-        -- event = "VimEnter" }
+        config = "require('plugins.fugitive')",
+        event = "VimEnter" }
 
     -- plenary is required by gitsigns and telescope
     -- lazy load so gitsigns doesn't abuse our startup time
@@ -63,7 +63,7 @@ local packer_startup = function(use)
         opt = true }
 
     -- Add indentation guides even on blank lines
-    use { 'lukas-reineke/indent-blankline.nvim', --branch="lua",
+    use { 'lukas-reineke/indent-blankline.nvim',
         config = "require('plugins.indent-blankline')",
         opt = true, cmd = { 'IndentBlanklineToggle' } }
 
@@ -164,7 +164,7 @@ local packer_startup = function(use)
         ft = { 'qf' } }
 
     -- LSP
-    use { 'neovim/nvim-lspconfig',    event = 'BufRead' }
+    use { 'neovim/nvim-lspconfig', event = 'BufRead' }
     use { 'williamboman/nvim-lsp-installer',
         config = function()
           require('lsp')
