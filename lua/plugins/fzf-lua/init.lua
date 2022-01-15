@@ -77,6 +77,7 @@ fzf_lua.setup {
   -- winopts_fn = function() return { row = 1, height=0.5, width=0.5, border = "double" } end,
   keymap = {
     builtin = {
+      ["<F1>"]      = "toggle-help",
       ["<F2>"]      = "toggle-fullscreen",
       -- Only valid with the 'builtin' previewer
       ["<F3>"]      = "toggle-preview-wrap",
