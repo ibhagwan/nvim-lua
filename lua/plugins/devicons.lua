@@ -7,7 +7,7 @@ end
 devicons.setup({
   override = {
     sol = {
-      icon = "ﲹ",
+      icon = "♦",
       color = "#a074c4",
       name = "Sol"
     }
