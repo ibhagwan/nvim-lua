@@ -29,6 +29,9 @@ local function fzf_colors(binary)
   return colors
 end
 
+-- custom devicons setup file to be loaded when `multiprocess = true`
+fzf_lua.config._devicons_setup = "~/.config/nvim/lua/plugins/devicons.lua"
+
 fzf_lua.setup {
   -- lua_io             = true,            -- perf improvement, experimental
   global_resume         = true,
