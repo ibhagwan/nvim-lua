@@ -139,6 +139,7 @@ fzf_lua.setup {
   files = {
     prompt            = 'Files❯ ',
     actions = {
+      ["default"]     = fzf_lua.actions.file_edit_or_qf,
       ["ctrl-l"]      = fzf_lua.actions.arg_add,
       ["ctrl-y"]      = function(selected) print(selected[1]) end,
     },

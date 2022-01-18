@@ -44,6 +44,16 @@ local lua_settings = {
   }
 }
 
+local ccls_settings = {
+  init_options = {
+    codeLens = {
+      enabled = false,
+      renderInline = false,
+      localVariables = false,
+    }
+  }
+}
+
 -- enables snippet support
 local function make_config()
   local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -58,9 +68,14 @@ local function make_config()
 end
 
 -- manually installed LSP servers
-local servers = { 'ccls', 'rust_analyzer' }
-for _, lsp in ipairs(servers) do
-  require("lspconfig")[lsp].setup(make_config())
+-- local servers = { 'ccls', 'rust_analyzer' }
+local servers = { 'clangd', 'rust_analyzer' }
+for _, srv in ipairs(servers) do
+  local cfg = make_config()
+  if srv == 'ccls' then
+    cfg = vim.tbl_deep_extend("force", ccls_settings, cfg)
+  end
+  require("lspconfig")[srv].setup(cfg)
 end
 
 local lsp_installer = require("nvim-lsp-installer")
