@@ -160,7 +160,7 @@ fzf_lua.setup {
   git = {
     files             = {
       prompt          = 'GitFiles❯ ',
-      multiprocess    = false,
+      multiprocess    = true,
       debug           = false,
     },
     status            = { prompt = 'GitStatus❯ ', },

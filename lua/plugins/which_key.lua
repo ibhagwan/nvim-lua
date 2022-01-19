@@ -314,7 +314,7 @@ local keymaps = {
   },
   ['g'] = {
         ['<C-V>'] = 'visually select last yanked/pasted text',
-        a = 'code action (LSP)',
+        A = 'code action (LSP)',
         c = 'comment (motion)',
         cc = 'comment (line)',
         d = 'goto definition (LSP)',
