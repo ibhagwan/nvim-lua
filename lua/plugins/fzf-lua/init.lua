@@ -107,6 +107,22 @@ fzf_lua.setup {
       ["shift-up"]      = "preview-page-up",
     },
   },
+  actions = {
+    files = {
+      -- ["default"]       = fzf_lua.actions.file_edit,
+      ["default"]       = fzf_lua.actions.file_edit_or_qf,
+      ["ctrl-s"]        = fzf_lua.actions.file_split,
+      ["ctrl-v"]        = fzf_lua.actions.file_vsplit,
+      ["ctrl-t"]        = fzf_lua.actions.file_tabedit,
+      ["alt-q"]         = fzf_lua.actions.file_sel_to_qf,
+    },
+    buffers = {
+      ["default"]       = fzf_lua.actions.buf_edit,
+      ["ctrl-s"]        = fzf_lua.actions.buf_split,
+      ["ctrl-v"]        = fzf_lua.actions.buf_vsplit,
+      ["ctrl-t"]        = fzf_lua.actions.buf_tabedit,
+    }
+  },
   fzf_opts = {
       -- set to `false` to remove a flag
       ['--ansi']      = '',
@@ -139,7 +155,6 @@ fzf_lua.setup {
   files = {
     prompt            = 'Files❯ ',
     actions = {
-      ["default"]     = fzf_lua.actions.file_edit_or_qf,
       ["ctrl-l"]      = fzf_lua.actions.arg_add,
       ["ctrl-y"]      = function(selected) print(selected[1]) end,
     },
@@ -149,7 +164,6 @@ fzf_lua.setup {
   grep = {
     prompt            = 'Rg❯ ',
     input_prompt      = 'Grep For❯ ',
-    actions           = { ["ctrl-q"] = false },
     rg_opts           = "--column --line-number --no-heading --color=always --smart-case",
     -- 'true' enables file and git icons in 'live_grep'
     -- degrades performance in large datasets, YMMV
@@ -176,9 +190,6 @@ fzf_lua.setup {
   args = {
     prompt            = 'Args❯ ',
     files_only        = true,
-    actions = {
-      ["ctrl-x"]      = fzf_lua.actions.arg_del,
-    },
   },
   oldfiles = {
     prompt            = 'History❯ ',
@@ -187,9 +198,6 @@ fzf_lua.setup {
   colorschemes = {
     prompt            = 'Colorschemes❯ ',
     live_preview      = true,
-    actions = {
-      ["ctrl-y"]      = function(selected) print(selected[1]) end,
-    },
     winopts = {
       win_height        = 0.55,
       win_width         = 0.30,
