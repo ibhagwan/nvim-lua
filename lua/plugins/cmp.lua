@@ -143,9 +143,9 @@ local function abort_logic(key, fn)
   end
 end
 
-remap({ "i", "s" }, "<Esc>", function()
+--[[ remap({ "i", "s" }, "<Esc>", function()
   abort_logic('<Esc>')
-end)
+end) ]]
 
 --[[ remap({ "i", "s" }, "<C-c>", function()
   -- NOTE: <C-c> clears 'cmp.core.view:get_selected_entry()'
