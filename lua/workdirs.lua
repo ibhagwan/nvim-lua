@@ -1,5 +1,7 @@
 return {
   vim.loop.cwd(),
+  -- runtime path
+  vim.opt.runtimepath._info.default:match("/[^,]+runtime"),
   '~/dots',
   '~/.config/nvim',
   '~/.config/zsh',

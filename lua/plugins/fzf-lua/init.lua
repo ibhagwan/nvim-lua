@@ -304,6 +304,7 @@ function M.workdirs(opts)
   local add_entry = function(path, color, icon)
     if not path then return end
     path = vim.fn.expand(path)
+    if not vim.loop.fs_stat(path) then return end
     if dedup[path] ~= nil then return end
     entries[#entries+1] = iconify(path, color or "blue", icon or '')
     dedup[path] = true
