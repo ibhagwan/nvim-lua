@@ -170,6 +170,8 @@ fzf_lua.setup {
     experimental      = true,
     multiprocess      = true,
     debug             = false,
+    debug_cmd         = false,
+    -- fzf_cli_args      = '--keep-right',
   },
   git = {
     files             = {
@@ -217,8 +219,11 @@ fzf_lua.setup {
     ["sh"]    = "green",
   },
   -- uncomment to disable the previewer
+  -- nvim = { marks = { previewer = false } },
   -- nvim = { marks = { previewer = { _ctor = false } } },
+  -- helptags = { previewer = false },
   -- helptags = { previewer = { _ctor = false } },
+  -- manpages = { previewer = false },
   -- manpages = { previewer = { _ctor = false } },
   -- uncomment to set dummy win split (top bar)
   -- "topleft"  : up
@@ -226,6 +231,9 @@ fzf_lua.setup {
   -- helptags = { previewer = { split = "topleft" } },
   -- uncomment to use `man` command as native fzf previewer
   -- manpages = { previewer = { _ctor = require'fzf-lua.previewer'.fzf.man_pages } },
+  -- tags = { previewer = 'bat_native' }
+  -- tags = { previewer = false },
+  -- tags = { previewer = { _ctor = false } },
 }
 
 local M = {}

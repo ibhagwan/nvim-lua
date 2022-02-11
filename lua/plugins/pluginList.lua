@@ -48,7 +48,13 @@ local packer_startup = function(use)
 
     use { 'sindrets/diffview.nvim',
         requires = { 'nvim-lua/plenary.nvim' },
-        setup = function()
+        -- was causing issues when switching between neovim versions
+        -- From packer.nvim README:
+        -- NOTE: If you use a function value for config or setup keys in any
+        -- plugin specifications, it must not have any upvalues (i.e. captures).
+        -- We currently use Lua's string.dump to compile config/setup functions
+        -- to bytecode, which has this limitation.
+        --[[ setup = function()
           require'utils'.command({
             "-nargs=*", "DiffviewOpen", function(args)
               if not pcall(require, 'diffview') then
@@ -57,9 +63,9 @@ local packer_startup = function(use)
               end
               require'diffview'.open(#args>0 and args)
             end})
-        end,
+        end, ]]
         config = "require('plugins.diffview')",
-        -- cmd = {'DiffviewOpen'},
+        cmd = {'DiffviewOpen'},
         opt = true }
 
     -- Add indentation guides even on blank lines
@@ -85,9 +91,7 @@ local packer_startup = function(use)
 
     -- yank over ssh with ':OCSYank' or ':OSCYankReg +'
     use { 'ojroques/vim-oscyank',
-        config = function()
-            vim.g.oscyank_term = 'tmux'
-        end,
+        config = [[vim.g.oscyank_term = 'tmux']],
         cmd = { 'OSCYank', 'OSCYankReg' },
     }
 
@@ -166,11 +170,7 @@ local packer_startup = function(use)
     -- LSP
     use { 'neovim/nvim-lspconfig', event = 'BufRead' }
     use { 'williamboman/nvim-lsp-installer',
-        config = function()
-          require('lsp')
-          -- ':command LspStart'
-          -- require'lspconfig'._root.commands.LspStart[1]()
-        end,
+        config = "require('lsp')",
         after  = { 'nvim-lspconfig' },
       }
 
@@ -180,10 +180,10 @@ local packer_startup = function(use)
     -- markdown preview using `glow`
     -- use { 'npxbr/glow.nvim', run = ':GlowInstall'}
     use { 'previm/previm',
-        config = function()
-            vim.g.previm_open_cmd = 'firefox'
+        config = [[
+            vim.g.previm_open_cmd = 'firefox';
             vim.g.previm_enable_realtime = 0
-        end,
+        ]],
         opt = true, cmd = { 'PrevimOpen' } }
 
     -- key bindings cheatsheet
@@ -197,7 +197,7 @@ local packer_startup = function(use)
 
     -- Colorizer
     use { 'norcalli/nvim-colorizer.lua',
-        config = function() require'colorizer'.setup() end,
+        config = "require'colorizer'.setup()",
         cmd = {'ColorizerAttachToBuffer', 'ColorizerDetachFromBuffer' },
         opt = true }
 
