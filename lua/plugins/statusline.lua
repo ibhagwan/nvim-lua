@@ -74,6 +74,22 @@ local lsp_tbl = {
   color = { fg = colors.bg, bg = colors.IncSearch },
 }
 
+local lsp_diag = (function()
+  return {
+    'diagnostics',
+    -- 'nvim_lsp' for neovim<=0.5.1
+    sources = { vim.diagnostic and 'nvim_diagnostic' or 'nvim_lsp' },
+    symbols = { error = ' ', warn = ' ', info = ' ', hint = ' ' },
+    diagnostics_color = {
+      error = { fg = colors.ErrorMsg },
+      warn  = { fg = colors.DiffChange },
+      info  = { fg = colors.WildMenu },
+      hint  = { fg = colors.Identifier },
+    },
+    -- color = { bg = colors.String },
+  }
+end)()
+
 -- TreeSitter
 -- local ts_utils = require("nvim-treesitter.ts_utils")
 -- local ts_parsers = require("nvim-treesitter.parsers")
@@ -122,17 +138,7 @@ statusline.setup({
     lualine_x = {
       -- uncomment to see TS info
       -- treesitter,
-      { 'diagnostics',
-        sources = { 'nvim_diagnostic' },
-        symbols = { error = ' ', warn = ' ', info = ' ', hint = ' ' },
-        diagnostics_color = {
-          error = { fg = colors.ErrorMsg },
-          warn  = { fg = colors.DiffChange },
-          info  = { fg = colors.WildMenu },
-          hint  = { fg = colors.Identifier },
-        },
-        -- color = { bg = colors.String },
-      },
+      lsp_diag,
       lsp_tbl
     },
     lualine_y = {{'fileformat'},{'encoding'},
