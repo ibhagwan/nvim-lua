@@ -95,6 +95,10 @@ lsp_installer.on_server_ready(function(server)
 
     if server.name == "sumneko_lua" then
       opts.settings = lua_settings
+      opts.root_dir = function(path)
+        return require'lspconfig.util'.root_pattern({".git", ".sumneko_lua"})(path)
+          or vim.fn.expand('%:h')
+      end
     end
 
     -- This setup() function is exactly the same as
