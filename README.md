@@ -68,6 +68,9 @@ release](https://github.com/neovim/neovim/releases/tag/v0.5.0)**
 - [nvim-lsp-installer](https://github.com/williamboman/nvim-lsp-installer):
   automatic installation of LSP servers using the `:LspInstall` command
 
+- [nvim-dap](https://github.com/mfussenegger/nvim-dap):
+  set breakpoints and debug applications using Debug Adapter Protocol (DAP)
+
 ### Fuzzy search & file exploration
 
 - [nvim-tree](https://github.com/kyazdani42/nvim-tree.lua): file-explorer tree

@@ -76,6 +76,14 @@ local opts = {
 
 local keymaps = {
   ["<F1>"]      = 'Fuzzy find help tags',
+  ["<F5>"]      = 'DAP launch or continue',
+  ["<F9>"]      = 'DAP toggle breakpoint',
+  ["<F10>"]     = 'DAP step over',
+  ["<F11>"]     = 'DAP step into',
+  ["<F12>"]     = 'DAP step out',
+  ["<C-\\>"]    = 'Launch scratch terminal',
+  ["<C-L>"]     = 'Clear and redraw screen',
+  ["<C-K>"]     = 'Fuzzy find project dirs',
   ["<C-P>"]     = 'Fuzzy find project files',
   ["<C-S>"]     = 'Save',
   ["<C-R>"]     = 'Redo',
@@ -112,7 +120,7 @@ local keymaps = {
     C = 'blackhole \'C\'',
     c = 'blackhole \'c\'',
     D = 'blackhole \'D\'',
-    d = 'blackhole \'d\'',
+    -- d = 'blackhole \'d\'',
     M = 'open markdown preview in firefox',
     O = 'newline above (no insert-mode)',
     o = 'newline below (no insert-mode)',
@@ -284,6 +292,17 @@ local keymaps = {
         t = 'toggle diagnostics',
         L = 'code lense',
         Q = 'send diagnostics to loclist',
+    },
+    d = {
+        name = '+dap',
+        ['?'] = 'fuzzy nvim-dap builtin commands',
+        b     = 'fuzzy breakpoint list',
+        x     = 'fuzzy debugger configs',
+        f     = 'fuzzy frames',
+        v     = 'fuzzy variables',
+        c     = 'set breakpoint with condition',
+        p     = 'set breakpoint with log point message',
+        r     = 'toggle debugger REPL',
     },
     -- nvim-treesitter-textobjects
     [' '] = {

@@ -124,12 +124,12 @@ remap({'n', 'v'}, '<leader>Y', ':OSCYank<CR>', { noremap = true })
 
 -- Overloads for 'd|c' that don't pollute the unnamed registers
 -- In visual-select mode 'd=delete, x=cut (unchanged)'
-remap('n', '<leader>d',  '"_d',     { noremap = true })
+-- remap('v', 'd',          '"_d',     { noremap = true })
+-- remap('n', '<leader>d',  '"_d',     { noremap = true })
 remap('n', '<leader>D',  '"_D',     { noremap = true })
 remap('n', '<leader>c',  '"_c',     { noremap = true })
 remap('n', '<leader>C',  '"_C',     { noremap = true })
 remap('v', '<leader>c',  '"_c',     { noremap = true })
-remap('v', 'd',          '"_d',     { noremap = true })
 
 -- Map `Y` to copy to end of line
 -- conistent with the behaviour of `C` and `D`

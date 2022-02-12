@@ -174,6 +174,16 @@ local packer_startup = function(use)
         after  = { 'nvim-lspconfig' },
       }
 
+    -- DAP
+    use { 'mfussenegger/nvim-dap',
+        config = "require('plugins.nvim-dap')",
+        keys = {'<F5>', '<F9>' }
+    }
+    use { 'leoluz/nvim-dap-go',
+        config = "require('dap-go').setup()",
+        after = { 'nvim-dap' }
+    }
+
     -- ethereum solidity '.sol'
     use { 'tomlion/vim-solidity' }
 

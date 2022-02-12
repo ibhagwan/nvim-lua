@@ -117,7 +117,7 @@ fzf_lua.setup {
       ["alt-q"]         = fzf_lua.actions.file_sel_to_qf,
     },
     buffers = {
-      ["default"]       = fzf_lua.actions.buf_edit,
+      ["default"]       = fzf_lua.actions.buf_switch_or_edit,
       ["ctrl-s"]        = fzf_lua.actions.buf_split,
       ["ctrl-v"]        = fzf_lua.actions.buf_vsplit,
       ["ctrl-t"]        = fzf_lua.actions.buf_tabedit,
@@ -196,6 +196,8 @@ fzf_lua.setup {
   oldfiles = {
     prompt            = 'History❯ ',
     cwd_only          = false,
+    stat_file         = true,
+    include_current_session = false,
   },
   colorschemes = {
     prompt            = 'Colorschemes❯ ',
