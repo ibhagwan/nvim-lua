@@ -17,7 +17,8 @@ local packer_startup = function(use)
     use { 'wbthomason/packer.nvim', opt = true }
 
     -- Analyze startuptime
-    use { 'tweekmonster/startuptime.vim', cmd = 'StartupTime' }
+    -- use { 'tweekmonster/startuptime.vim', cmd = 'StartupTime' }
+    use { 'dstein64/vim-startuptime', cmd = 'StartupTime' }
 
     -- tpope's plugins that should be part of vim
     use { 'tpope/vim-surround' }
