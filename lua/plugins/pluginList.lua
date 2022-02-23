@@ -69,10 +69,12 @@ local packer_startup = function(use)
         cmd = {'DiffviewOpen'},
         opt = true }
 
-    -- Add indentation guides even on blank lines
+    -- Add indentation guides
     use { 'lukas-reineke/indent-blankline.nvim',
         config = "require('plugins.indent-blankline')",
-        opt = true, cmd = { 'IndentBlanklineToggle' } }
+        event = 'BufRead',
+        opt = true,
+    }
 
     -- 'famiu/nvim-reload' has been archived and no longer maintained
     use { vim.fn.stdpath("config") .. "/lua/plugins/nvim-reload",

@@ -96,16 +96,7 @@ local keymaps = {
   ["K"]         = 'LSP hover info under cursor',
   ["<leader>"]  = {
     ['?']       = 'Which key help',
-    ['"']       = {
-      function()
-        if not pcall(require, 'indent-blankline.nvim') then
-          require('packer').loader('indent-blankline.nvim')
-          require('indent_blankline.commands').toggle('<bang>' == '!')
-        end
-        require('indent_blankline.commands').toggle('<bang>' == '!')
-      end,
-      'toggle IndentBlankline on/off'
-    },
+    ['"']       = 'toggle IndentBlankline on/off',
     ['<F1>']    = 'Fuzzy find help tags',
     ['<Up>']    = 'horizontal split increase',
     ['<Down>']  = 'horizontal split decrease',

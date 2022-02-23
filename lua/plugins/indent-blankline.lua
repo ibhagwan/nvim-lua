@@ -3,8 +3,8 @@ if not res then
   return
 end
 
-indent.setup({
-  enabled = false,
+local opts = {
+  enabled = true,
   -- char = "│",
   -- char_list = { '│', '┆', '|', '┊' },
   space_char_blankline = ' ',
@@ -17,7 +17,17 @@ indent.setup({
   strict_tabs = true,
   show_current_context = true,
   show_current_context_start = true,
-})
+}
+
+if not pcall(require, "nvim-treesitter") then
+  -- will prevent plugin from working when
+  -- treesitter is not available (no C compiler)
+  opts.use_treesitter = false
+  opts.show_current_context = false
+  opts.show_current_context_start = false
+end
+
+indent.setup(opts)
 
 -- vim.api.nvim_set_keymap('', '<leader>"', '<Esc>:IndentBlanklineToggle<CR>',
 vim.api.nvim_set_keymap('', '<leader>"',
