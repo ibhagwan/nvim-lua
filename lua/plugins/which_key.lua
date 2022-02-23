@@ -100,6 +100,7 @@ local keymaps = {
       function()
         if not pcall(require, 'indent-blankline.nvim') then
           require('packer').loader('indent-blankline.nvim')
+          require('indent_blankline.commands').toggle('<bang>' == '!')
         end
         require('indent_blankline.commands').toggle('<bang>' == '!')
       end,

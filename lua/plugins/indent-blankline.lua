@@ -1,28 +1,23 @@
-vim.g.indent_blankline_enabled = false
--- vim.g.indent_blankline_char = "┊"
-vim.g.indent_blankline_char = "│"
-vim.g.indent_blankline_space_char = ' '
-vim.g.indent_blankline_filetype_exclude = { 'help', 'packer' }
-vim.g.indent_blankline_buftype_exclude = { 'terminal', 'nofile'}
-vim.g.indent_blankline_char_highlight = 'LineNr'
-vim.g.indent_blankline_strict_tabs = true
-vim.g.indent_blankline_show_current_context = true
-vim.g.indent_blankline_context_patterns = {
-    "class",
-    "function",
-    "method",
-    "^if",
-    "while",
-    "for",
-    "with",
-    "func_literal",
-    "block",
-    "try",
-    "except",
-    "argument_list",
-    "object",
-    "dictionary"
-}
+local res, indent = pcall(require, "indent_blankline")
+if not res then
+  return
+end
+
+indent.setup({
+  enabled = false,
+  -- char = "│",
+  -- char_list = { '│', '┆', '|', '┊' },
+  space_char_blankline = ' ',
+  use_treesitter = true,
+  show_end_of_line = true,
+  show_first_indent_level = true,
+  disable_with_nolist = false,
+  filetype_exclude = { 'help' },
+  buftype_exclude = { 'terminal', 'nofile'},
+  strict_tabs = true,
+  show_current_context = true,
+  show_current_context_start = true,
+})
 
 -- vim.api.nvim_set_keymap('', '<leader>"', '<Esc>:IndentBlanklineToggle<CR>',
 vim.api.nvim_set_keymap('', '<leader>"',
