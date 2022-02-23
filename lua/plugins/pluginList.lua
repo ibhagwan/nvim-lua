@@ -8,10 +8,10 @@ local packer_startup = function(use)
       return vim.loop.fs_stat(vim.fn.expand(path)) ~= nil and path or url
     end
 
-    -- TODO: causes issues with lspconfig
     -- speed up 'require', must be the first plugin
-    -- use { "lewis6991/impatient.nvim",
-      -- config = 'pcall(require, "impatient")' }
+    use { "lewis6991/impatient.nvim",
+      config = "if vim.fn.has('nvim-0.6')==1 then require('impatient') end"
+    }
 
     -- Packer can manage itself as an optional plugin
     use { 'wbthomason/packer.nvim', opt = true }
