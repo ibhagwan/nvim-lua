@@ -6,6 +6,7 @@ return {
   '~/.config/nvim',
   '~/.config/zsh',
   '~/.config/awesome',
+  '~/Sources/nvim/neovim',
   '~/Sources/nvim/fzf-lua',
   '~/Sources/nvim/fzf-lua.wiki',
   '~/Sources/nvim/nvim-lua',

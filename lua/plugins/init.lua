@@ -13,6 +13,7 @@ local compile_path = vim.fn.stdpath("data") .. compile_suffix
 local ok, packer = pcall(require('plugins.bootstrap'), install_path, compile_path)
 if not ok or not packer then return end -- user cancelled installation?
 
+
 -- Packer commands
 vim.cmd [[command! PackerInstall packadd packer.nvim | lua require('plugins').install()]]
 vim.cmd [[command! PackerUpdate packadd packer.nvim | lua require('plugins').update()]]
@@ -22,6 +23,13 @@ vim.cmd [[command! PackerCompile packadd packer.nvim | lua require('plugins').co
 vim.cmd [[command! PC PackerCompile]]
 vim.cmd [[command! PS PackerStatus]]
 vim.cmd [[command! PU PackerSync]]
+
+-- delete leftover 'packer_compiled.lua'
+if packer.config.compile_path ~= compile_path and
+  vim.loop.fs_stat(packer.config.compile_path) then
+  vim.fn.delete(packer.config.compile_path, "rf")
+  vim.fn.delete(vim.fn.fnamemodify(packer.config.compile_path, ":p:h"), "d")
+end
 
 -- Packer config
 local config = {

@@ -49,13 +49,17 @@ o.linebreak         = true      -- do not break words on line wrap
 -- `xfd -fa "InputMonoNerdFont:style:Regular"` or
 -- `xfd -fn "-misc-fixed-medium-r-semicondensed-*-13-*-*-*-*-*-iso10646-1"`
 -- input special chars with the sequence <C-v-u> followed by the hex code
+o.list      = false
 o.listchars = {
   tab       = '→ '  ,
   eol       = '↲'   ,
   nbsp      = '␣'   ,
-  lead      = '␣'   ,
-  space     = '␣'   ,
-  trail     = '•'   ,
+  lead      = ' '   ,
+  space     = ' '   ,
+  trail     = '␣'   ,
+  -- lead      = '␣'   ,
+  -- space     = '␣'   ,
+  -- trail     = '•'   ,
   extends   = '⟩'   ,
   precedes  = '⟨'   ,
 }
