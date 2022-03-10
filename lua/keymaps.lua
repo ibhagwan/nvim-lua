@@ -11,8 +11,8 @@ command({
     if not pcall(require, 'nvim-reload') then
       require('packer').loader('nvim-reload')
     end
-    require('nvim-reload').Restart()
     require('plugins.nvim-reload')
+    require('nvim-reload').Restart()
   end})
 
 -- Use ':Grep' or ':LGrep' to grep into quickfix|loclist

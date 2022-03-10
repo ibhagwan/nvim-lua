@@ -179,7 +179,12 @@ fzf_lua.setup {
       multiprocess    = true,
       debug           = false,
     },
-    status            = { prompt = 'GitStatus❯ ', },
+    status            = {
+      prompt          = 'GitStatus❯ ',
+      winopts         = {
+        preview       = { vertical = "down:70%", horizontal = "right:70%" }
+      }
+    },
     commits           = { prompt = 'Commits❯ ', },
     bcommits          = { prompt = 'BCommits❯ ', },
     branches          = { prompt = 'Branches❯ ', },
