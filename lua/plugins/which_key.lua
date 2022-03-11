@@ -223,7 +223,6 @@ local keymaps = {
         [':'] = 'fzy commands history',
         ['"'] = 'fzy registers',
         b = 'fzy current buffer',
-        d = 'fzy fd',
         B = 'git branches',
         s = 'git status',
         C = 'git commits (project)',

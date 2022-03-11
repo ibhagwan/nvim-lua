@@ -78,6 +78,12 @@ fzf_lua.setup {
     end,
   },
   -- winopts_fn = function() return { row = 1, height=0.5, width=0.5, border = "double" } end,
+  -- winopts_fn = function() return {
+  --   preview = {
+  --     -- conditionally override the layout paramter thus overriding the 'flex' layout
+  --     layout = vim.api.nvim_win_get_width(0)<100 and 'vertical' or 'horizontal'
+  --   }
+  -- } end,
   keymap = {
     builtin = {
       ["<F1>"]      = "toggle-help",
