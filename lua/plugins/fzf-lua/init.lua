@@ -191,9 +191,23 @@ fzf_lua.setup {
         preview       = { vertical = "down:70%", horizontal = "right:70%" }
       }
     },
-    commits           = { prompt = 'Commits❯ ', },
-    bcommits          = { prompt = 'BCommits❯ ', },
-    branches          = { prompt = 'Branches❯ ', },
+    commits           = {
+      prompt          = 'Commits❯ ',
+      winopts         = { preview = { vertical = "down:60%", }}
+    },
+    bcommits          = {
+      prompt          = 'BCommits❯ ',
+      winopts         = { preview = { vertical = "down:60%", }}
+    },
+    branches          = {
+      prompt          = 'Branches❯ ',
+      winopts         = {
+        preview       = {
+          vertical    = "down:75%",
+          horizontal  = "right:75%",
+        }
+      }
+    },
     icons = {
         -- ["M"]    = { icon = "★", color = "red" },
         -- ["D"]    = { icon = "✗", color = "red" },

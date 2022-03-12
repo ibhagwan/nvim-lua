@@ -76,7 +76,6 @@ map_fzf('n', '<leader>lg', "lsp_document_diagnostics", { file_icons = false })
 map_fzf('n', '<leader>lG', "lsp_workspace_diagnostics", { file_icons = false })
 
 -- Git
-map_fzf('n', '<leader>gB', "git_branches")
 map_fzf('n', '<leader>fs', "git_status")
 -- Full screen git status
 map_fzf('n', '<leader>fS', "git_status_tmuxZ", {
@@ -88,8 +87,9 @@ map_fzf('n', '<leader>fS', "git_status_tmuxZ", {
     }
   }
 })
-map_fzf('n', '<leader>fc', "git_bcommits")
 map_fzf('n', '<leader>fC', "git_commits")
+map_fzf('n', '<leader>fc', "git_bcommits")
+map_fzf('n', '<leader>gB', "git_branches")
 
 -- Fzf-lua methods
 map_fzf('n', "<leader>f?", "builtin")
