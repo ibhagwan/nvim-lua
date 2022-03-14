@@ -4,6 +4,9 @@ if not res then
 end
 
 -- local fzf_bin = 'sk'
+local img_prev_bin = vim.fn.executable("ueberzug") == 1
+  and { "ueberzug" }
+  or  { "viu", "-b" }
 
 local function fzf_colors(binary)
   binary = binary or fzf_bin
@@ -153,6 +156,13 @@ fzf_lua.setup {
       syntax          = true,           -- preview syntax highlight?
       syntax_limit_b  = 1024*1024,      -- syntax limit (bytes), 0=nolimit
       syntax_limit_l  = 0,              -- syntax limit (lines), 0=nolimit
+      ueberzug_scaler = "cover",
+      extensions      = {
+        ["gif"]       = img_prev_bin,
+        ["png"]       = img_prev_bin,
+        ["jpg"]       = img_prev_bin,
+        ["jpeg"]      = img_prev_bin,
+      }
     },
   },
   lines               = { prompt = 'Lines❯ ', },
@@ -171,13 +181,10 @@ fzf_lua.setup {
     prompt            = 'Rg❯ ',
     input_prompt      = 'Grep For❯ ',
     rg_opts           = "--column --line-number --no-heading --color=always --smart-case",
-    -- 'true' enables file and git icons in 'live_grep'
-    -- degrades performance in large datasets, YMMV
-    experimental      = true,
+    rg_glob           = true,
     multiprocess      = true,
     debug             = false,
     debug_cmd         = false,
-    -- fzf_cli_args      = '--keep-right',
   },
   git = {
     files             = {
