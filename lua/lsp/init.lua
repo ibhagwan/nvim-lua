@@ -17,6 +17,7 @@ vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.s
 -- Lua settings
 local lua_settings = {
   Lua = {
+    telemetry = { enable = false },
     runtime = {
       -- LuaJIT in the case of Neovim
       version = 'LuaJIT',
@@ -33,6 +34,8 @@ local lua_settings = {
         'clientkeys',   -- awesomeWM
         'clientbuttons',-- awesomeWM
       },
+      -- enables formatter warnings
+      -- neededFileStatus = { ['codestyle-check'] = "any" }
     },
     workspace = {
       -- Make the server aware of Neovim runtime files
@@ -95,6 +98,10 @@ lsp_installer.on_server_ready(function(server)
 
     if server.name == "sumneko_lua" then
       opts.settings = lua_settings
+      -- Enables formatting, see:
+      -- https://github.com/sumneko/lua-language-server/issues/960
+      -- https://github.com/sumneko/lua-language-server/wiki/Code-Formatter
+      opts.cmd = { 'lua-language-server', '--preview' }
       opts.root_dir = function(path)
         return require'lspconfig.util'.root_pattern({".git", ".sumneko_lua"})(path)
           or vim.fn.expand('%:h')

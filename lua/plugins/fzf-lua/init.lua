@@ -186,6 +186,8 @@ fzf_lua.setup {
     debug             = false,
     debug_cmd         = false,
   },
+  tags                = { debug = true, debug_cmd = false },
+  btags               = { debug = true, debug_cmd = false },
   git = {
     files             = {
       prompt          = 'GitFiles❯ ',
@@ -265,9 +267,6 @@ fzf_lua.setup {
   -- helptags = { previewer = { split = "topleft" } },
   -- uncomment to use `man` command as native fzf previewer
   -- manpages = { previewer = { _ctor = require'fzf-lua.previewer'.fzf.man_pages } },
-  -- tags = { previewer = 'bat_native' }
-  -- tags = { previewer = false },
-  -- tags = { previewer = { _ctor = false } },
 }
 
 local M = {}
