@@ -3,34 +3,43 @@ if not res then
   return
 end
 
-local col_from_hl = require("lualine.utils.utils").extract_color_from_hllist
+-- local function get_hl_color(hl, what)
+--   local id = vim.fn.hlID(hl)
+--   if id > 0 then
+--     return vim.fn.synIDattr(id, what)
+--   end
+--   return #000000
+-- end
+--
+-- local function get_hl(hl_arr)
+--   for _, hl in ipairs(hl_arr) do
+--     if #vim.fn.synIDattr(vim.fn.hlID(hl), "fg") > 0 then
+--       return hl
+--     end
+--   end
+-- end
 
-local import_hls = {
-    ['String']      = 'fg',
-    ['Special']     = 'fg',
-    ['Type']        = 'fg',
-    ['Label']       = 'fg',
-    ['PreProc']     = 'fg',
-    ['Search']      = 'fg',
-    ['Identifier']  = 'fg',
-    ['Keyword']     = 'fg',
-    ['DiffAdd']     = 'bg',
-    ['DiffDelete']  = 'bg',
-    ['DiffChange']  = 'fg',
-    ['DiffText']    = 'bg',
-    ['IncSearch']   = 'fg',
-    ['ErrorMsg']    = 'fg',
-    ['WildMenu']    = 'bg',
+local theme = {
+  -- lsp         = function() return get_hl({ 'QuickFixLine', 'Search', }) end,
+  lsp         = 'QuickFixLine',
+  diag        = {
+    error     = 'ErrorMsg',
+    warn      = 'WarningMsg',
+    info      = 'WildMenu',
+    hint      = 'Identifier',
+    -- hint      = function() return {
+    --   bg = get_hl_color('QuickFixLine', 'bg'),
+    --   fg = get_hl_color('Identifier', 'fg'),
+    -- } end,
+  },
+  diff        = {
+    added     = 'diffAdded',
+    modified  = 'WarningMsg',
+    removed   = 'diffRemoved',
+  },
+  -- treesitter  = 'PMenuSel',
+  treesitter  = 'lCursor',
 }
-
-local colors = {
-    bg = col_from_hl('bg', { 'StatusLine',  }, '#000000'),
-    fg = col_from_hl('fg', { 'Normal', 'StatusLine' }, '#000000'),
-}
-
-for hl, col in pairs(import_hls) do
-  colors[hl] = col_from_hl(col, { hl,  }, '#000000')
-end
 
 local filename = {
   {
@@ -71,7 +80,7 @@ local lsp_tbl = {
   end,
   -- icon = ' ',
   icon = '慎',
-  color = { fg = colors.bg, bg = colors.IncSearch },
+  color = theme.lsp
 }
 
 local lsp_diag = (function()
@@ -81,12 +90,11 @@ local lsp_diag = (function()
     sources = { vim.diagnostic and 'nvim_diagnostic' or 'nvim_lsp' },
     symbols = { error = ' ', warn = ' ', info = ' ', hint = ' ' },
     diagnostics_color = {
-      error = { fg = colors.ErrorMsg },
-      warn  = { fg = colors.DiffChange },
-      info  = { fg = colors.WildMenu },
-      hint  = { fg = colors.Identifier },
+      error = theme.diag.error,
+      warn  = theme.diag.warn,
+      info  = theme.diag.info,
+      hint  = theme.diag.hint,
     },
-    -- color = { bg = colors.String },
   }
 end)()
 
@@ -104,7 +112,7 @@ local treesitter = {
     local ok, ts_parsers = pcall(require, "nvim-treesitter.parsers")
     return ok and ts_parsers.has_parser()
   end,
-  color = { fg = colors.bg, bg = colors.Special },
+  color = theme.treesitter,
 }
 
 
@@ -120,17 +128,15 @@ statusline.setup({
     }
   },
   sections = {
-    -- lualine_a = {{'mode'}},
     lualine_a = {{'mode', fmt = function(str) return ' ' .. str end}},
     lualine_b = {
-      -- {'branch', icon = '', color = { fg = colors.Label, gui = 'bold' }},
       {'branch', icon = ''},
       {'diff',
         symbols = { added = ' ', modified = '柳', removed = ' ' },
         diff_color = {
-          added = { fg = colors.DiffAdd },
-          modified = { fg = colors.DiffChange },
-          removed = { fg = colors.DiffDelete },
+          added = theme.diff.added,
+          modified = theme.diff.modified,
+          removed = theme.diff.removed,
         },
       }
     },
