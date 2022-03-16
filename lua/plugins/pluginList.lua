@@ -107,6 +107,7 @@ local packer_startup = function(use)
         requires = {
           { 'hrsh7th/cmp-path', after = 'nvim-cmp' },
           { 'hrsh7th/cmp-buffer', after = 'nvim-cmp' },
+          { 'hrsh7th/cmp-cmdline', after = 'nvim-cmp' },
           { 'hrsh7th/cmp-nvim-lsp', after = 'nvim-cmp' },
           { 'hrsh7th/cmp-nvim-lua', after = 'nvim-cmp' },
           { 'saadparwaiz1/cmp_luasnip', after = 'nvim-cmp' },
@@ -213,6 +214,16 @@ local packer_startup = function(use)
         config = "require'colorizer'.setup()",
         cmd = {'ColorizerAttachToBuffer', 'ColorizerDetachFromBuffer' },
         opt = true }
+
+    use { 'rebelot/kanagawa.nvim',
+        config = [[
+          require('kanagawa').setup({
+            transparent = false,
+            dimInactive = true,
+            --  colors = { sumiInk1 = "#0D1014", },
+          })
+        ]],
+        event = "ColorSchemePre" }
 
     -- fancy statusline
     use { 'nvim-lualine/lualine.nvim',

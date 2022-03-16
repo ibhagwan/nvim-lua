@@ -57,8 +57,8 @@ fzf_lua.setup {
       cursor            = 'Cursor',
       cursorline        = 'CursorLine',
       title             = 'ModeMsg',
-      scrollbar_e       = 'Visual',
-      scrollbar_f       = 'WildMenu',
+      scrollbar_e       = 'PMenuSbar',
+      scrollbar_f       = 'PMenuSel',
     },
     preview = {
       -- default             = 'bat',
@@ -80,13 +80,24 @@ fzf_lua.setup {
       -- vim.cmd("set winhl=Normal:NormalFloat,FloatBorder:Normal")
     end,
   },
-  -- winopts_fn = function() return { row = 1, height=0.5, width=0.5, border = "double" } end,
-  -- winopts_fn = function() return {
-  --   preview = {
-  --     -- conditionally override the layout paramter thus overriding the 'flex' layout
-  --     layout = vim.api.nvim_win_get_width(0)<100 and 'vertical' or 'horizontal'
-  --   }
-  -- } end,
+  winopts_fn = function()
+    -- Use custom borders hls if they exist in the colorscheme
+    local border = 'Normal'
+    local hls = { 'TelescopeBorder', 'FloatermBorder', 'FloatBorder' }
+    for _, hl in ipairs(hls) do
+      if #vim.fn.synIDattr(vim.fn.hlID(hl), "fg") > 0 then
+        border = hl
+        break
+      end
+    end
+    return {
+      hl = { border = border },
+      -- preview = {
+      --   -- conditionally override the layout paramter thus overriding the 'flex' layout
+      --   layout = vim.api.nvim_win_get_width(0)<100 and 'vertical' or 'horizontal'
+      -- }
+    }
+  end,
   keymap = {
     builtin = {
       ["<F1>"]      = "toggle-help",
