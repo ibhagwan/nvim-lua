@@ -95,7 +95,7 @@ local function setup()
             -- icon_err = ' ', icon_warn = ' ', icon_info = '', icon_hint = ''
           }
         },
-        { c.git_changes {
+        { c.git_changes_buf {
             fmt = "[%s]",
             icon_insert = '+',
             icon_change = '~',

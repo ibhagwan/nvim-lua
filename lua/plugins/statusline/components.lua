@@ -44,7 +44,7 @@ function M.extract_hl(spec)
       local res = vim.fn.synIDattr(newID, what, expected.mode)
       if newID > 0 and res ~= expected.val then
         -- need to regen the highlight
-        print("color mismatch", hl_name, what, "e", expected.val, "c", res)
+        -- print("color mismatch", hl_name, what, "e", expected.val, "c", res)
         newID = 0
       end
     end
@@ -125,8 +125,10 @@ M.git_branch = function(opts)
   return el_sub.buf_autocmd("el_git_branch", "BufEnter",
     wrap_fnc(opts, function(_, buffer)
       local branch = nil
-      if vim.g.loaded_fugitive == 1 then
-         branch = vim.fn.FugitiveHead()
+      if vim.b[buffer.bufnr].gitsigns_head then
+        branch =vim.b[buffer.bufnr].gitsigns_head
+      elseif vim.g.loaded_fugitive == 1 then
+        branch = vim.fn.FugitiveHead()
       else
         local j = Job:new {
           command = "git",
@@ -170,17 +172,48 @@ local git_changes_formatter = function(opts)
   }
   return function(_, _, s)
     local result = {}
-    for _, v in pairs(specs) do
-      local match = tonumber(string.match(s, v.regex))
-      if match and match > 0 then
-        table.insert(result, set_hl(v.hl, ("%s%d"):format(v.icon, match)))
+    for k, v in pairs(specs) do
+      local count = nil
+      if type(s) == 'string' then
+        -- 'git diff --shortstat' output
+        -- from 'git_changes_all'
+        count = tonumber(string.match(s, v.regex))
+      else
+        -- map from 'git_changes_buf'
+        count = s[k]
+      end
+      if count and count > 0 then
+        table.insert(result, set_hl(v.hl, ("%s%d"):format(v.icon, count)))
       end
     end
     return table.concat(result, ", ")
   end
 end
 
-M.git_changes = function(opts)
+-- requires gitsigns
+M.git_changes_buf = function(opts)
+  opts = opts or {}
+  local formatter = opts.formatter or git_changes_formatter(opts)
+  return wrap_fnc(opts, function(window, buffer)
+      local stats = vim.b[buffer.bufnr].gitsigns_status_dict
+      local counts = {
+        insert = stats.added > 0 and stats.added or nil,
+        change = stats.changed > 0 and stats.changed or nil,
+        delete = stats.removed > 0 and stats.removed or nil,
+      }
+      if not vim.tbl_isempty(counts) then
+        local fmt = opts.fmt or "%s"
+        local out = formatter(window, buffer, counts)
+        return out and fmt:format(out) or nil
+      else
+        -- el functions that return a
+        -- string must not return nil
+        return ""
+      end
+  end)
+end
+
+M.git_changes_all = function(opts)
   opts = opts or {}
   local formatter = opts.formatter or git_changes_formatter(opts)
   return el_sub.buf_autocmd("el_git_changes", "BufWritePost",
