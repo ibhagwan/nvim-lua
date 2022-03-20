@@ -2,10 +2,8 @@ if not pcall(require, "el") then
   return
 end
 
-local el_ext = require "el.extensions"
-local el_sub = require "el.subscribe"
 local Job = require "plenary.job"
--- local utils = require "utils"
+local el_sub = require "el.subscribe"
 
 local M = {}
 
@@ -125,11 +123,28 @@ end
 M.git_branch = function(opts)
   opts = opts or {}
   return el_sub.buf_autocmd("el_git_branch", "BufEnter",
-    wrap_fnc(opts, function(window, buffer)
-      local icon = opts.icon or el_ext.git_branch(window, buffer)
-      local fmt = opts.fmt or "%s %s"
-      local branch = el_ext.git_branch(window, buffer)
-      if branch then
+    wrap_fnc(opts, function(_, buffer)
+      local branch = nil
+      if vim.g.loaded_fugitive == 1 then
+         branch = vim.fn.FugitiveHead()
+      else
+        local j = Job:new {
+          command = "git",
+          args = { "branch", "--show-current" },
+          cwd = vim.fn.fnamemodify(buffer.name, ":h"),
+        }
+
+        local ok, result = pcall(function()
+          return vim.trim(j:sync()[1])
+        end)
+        if ok then
+          branch = result
+        end
+      end
+
+      if branch and #branch>0 then
+        local fmt = opts.fmt or "%s %s"
+        local icon = opts.icon or ''
         return set_hl(opts.hl, (fmt):format(icon, branch))
       end
     end))
@@ -176,16 +191,12 @@ M.git_changes = function(opts)
         return
       end
 
-      -- local git_root = utils.git_root(vim.fn.fnamemodify(buffer.name, ":p:h"), true)
-      -- if not git_root then return end
-
       local j = Job:new {
         command = "git",
         args = { "diff", "--shortstat" },
         -- makes no sense to run for one file as
         -- 'file(s) changed' will always be 1
         -- args = { "diff", "--shortstat", buffer.name },
-        -- cwd = git_root,
         cwd = vim.fn.fnamemodify(buffer.name, ":h"),
       }
 
@@ -193,10 +204,10 @@ M.git_changes = function(opts)
         return formatter(window, buffer, vim.trim(j:sync()[1]))
       end)
 
-      if not ok then return end
-
-      local fmt = opts.fmt or "%s"
-      return git_changes and fmt:format(git_changes) or nil
+      if ok then
+        local fmt = opts.fmt or "%s"
+        return git_changes and fmt:format(git_changes) or nil
+      end
     end))
 end
 
