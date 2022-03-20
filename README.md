@@ -107,7 +107,9 @@ release](https://github.com/neovim/neovim/releases/tag/v0.5.0)**
 
 ### Appearence
 
-- [lualine](https://github.com/nvim-lualine/lualine.nvim): a fancy statusline
+- [express\_line](https://github.com/tjdevries/express_line.nvim):
+  [TJ's](https://github.com/tjdevries) status line plugin, customized and
+  highlighted by me and, LSP/diag patched to work on any neovim >= 0.5
 
 - [nvcode-color-schemes](https://github.com/christianchiarulli/nvcode-color-schemes.vim):
   a collection of treesitter compatible color schemes

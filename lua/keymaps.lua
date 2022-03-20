@@ -119,7 +119,7 @@ remap({'n', 'v'}, '<leader>s', '"*p',   { noremap = true })
 remap({'n', 'v'}, '<leader>S', '"*P',   { noremap = true })
 remap({'n', 'v'}, '<leader>p', '"0p',   { noremap = true })
 remap({'n', 'v'}, '<leader>P', '"0P',   { noremap = true })
-remap({'n', 'v'}, '<leader>y', '"+y',   { noremap = true })
+remap({'n', 'v'}, '<leader>y', '<cmd>let @+=@0<CR>', { noremap = true })
 remap({'n', 'v'}, '<leader>Y', ':OSCYank<CR>', { noremap = true })
 
 -- Overloads for 'd|c' that don't pollute the unnamed registers

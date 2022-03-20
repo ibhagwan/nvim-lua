@@ -27,10 +27,12 @@ hl.c = {
   menu_grey      = o.menu_grey      or { gui = '#56687E', cterm = '237',  cterm16 = '8'  },
   special_grey   = o.special_grey   or { gui = '#656A7c', cterm = '238',  cterm16 = '15' },
   vertsplit      = o.vertsplit      or { gui = '#181A1F', cterm = '59',   cterm16 = '15' },
+  statusline     = o.statusline     or { gui = '#7E9CD8', cterm = '236',  cterm16 = '8' },
 }
 
 hl.common = {
   Normal =            { fg = hl.c.fg, bg = hl.c.bg },
+  -- NormalNC =          { fg = hl.c.fg, bg = hl.c.black },
   NormalFloat =       { fg = hl.c.fg, bg = hl.c.bg },
   Conceal =           { },
   Cursor =            { fg = hl.c.special_grey, bg = hl.c.blue },
@@ -46,6 +48,7 @@ hl.common = {
   EndOfBuffer =       { fg = hl.c.gutter_fg_grey },
   ErrorMsg =          { fg = hl.c.dark_red },
   VertSplit =         { fg = hl.c.vertsplit },
+  WinSeparator =      { fg = hl.c.statusline },
   Folded =            { fg = hl.c.comment_grey },
   FoldColumn =        { },
   SignColumn =        { },
@@ -70,7 +73,9 @@ hl.common = {
     SpellLocal =      { fg = hl.c.dark_green, gui = 'underline', cterm = 'underline' },
     SpellRare =       { fg = hl.c.red,        gui = 'underline', cterm = 'underline' },
   -- end
-  StatusLine =        { fg = hl.c.fg,           bg = hl.c.cursor_grey },
+  -- StatusLine =        { fg = hl.c.fg,           bg = hl.c.cursor_grey },
+  -- StatusLineNC =      { fg = hl.c.visual_grey,  bg = hl.c.cursor_grey },
+  StatusLine =        { fg = hl.c.black,        bg = hl.c.statusline },
   StatusLineNC =      { fg = hl.c.visual_grey,  bg = hl.c.cursor_grey },
   StatusLineTerm =    { fg = hl.c.fg,           bg = hl.c.cursor_grey },
   StatusLineTermNC =  { fg = hl.c.visual_grey,  bg = hl.c.cursor_grey },

@@ -39,7 +39,7 @@ local packer_startup = function(use)
 
     -- plenary is required by gitsigns and telescope
     -- lazy load so gitsigns doesn't abuse our startup time
-    use { "nvim-lua/plenary.nvim", event = "BufRead" }
+    use { "nvim-lua/plenary.nvim", event = "VimEnter" }
 
     -- Add git related info in the signs columns and popups
     use { 'lewis6991/gitsigns.nvim',
@@ -215,21 +215,14 @@ local packer_startup = function(use)
         cmd = {'ColorizerAttachToBuffer', 'ColorizerDetachFromBuffer' },
         opt = true }
 
-    use { 'rebelot/kanagawa.nvim',
-        config = [[
-          require('kanagawa').setup({
-            transparent = false,
-            dimInactive = true,
-            --  colors = { sumiInk1 = "#0D1014", },
-          })
-        ]],
-        event = "ColorSchemePre" }
-
-    -- fancy statusline
-    use { 'nvim-lualine/lualine.nvim',
+    -- statusline
+    use { 'tjdevries/express_line.nvim',
         config = "require('plugins.statusline')",
-        -- after = 'nvim-web-devicons',
-        event = 'VimEnter' }
+        requires = { 'nvim-lua/plenary.nvim' },
+        after = 'plenary.nvim',
+        -- after = { 'plenary.nvim', 'nvim-web-devicons' },
+        -- event = 'VimEnter',
+      }
 
     -- auto-generate vimdoc from GitHub README
     use {

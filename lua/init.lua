@@ -29,6 +29,7 @@ o.showmode          = true      -- show current mode (insert, etc) under the cmd
 o.showcmd           = true      -- show current command under the cmd line
 o.cmdheight         = 2         -- cmdline height
 o.cmdwinheight      = math.floor(vim.o.lines/2) -- 'q:' window height
+-- o.laststatus        = vim.fn.has('nvim-0.7')==1 and 3 or 2  -- global statusline
 o.laststatus        = 2         -- 2 = always show status line (filename, etc)
 o.scrolloff         = 3         -- min number of lines to keep between cursor and screen edge
 o.sidescrolloff     = 5         -- min number of cols to keep between cursor and screen edge
