@@ -202,13 +202,18 @@ hl.lsp = {
   LspDiagnosticsSignWarning           = { fg = hl.c.yellow },
   LspDiagnosticsSignInformation       = { fg = hl.c.blue },
   LspDiagnosticsSignHint              = { fg = hl.c.purple },
-  LspDiagnosticsUnderlineError        = { fg = hl.c.red,     gui = 'underline', cterm = 'underline' },
-  LspDiagnosticsUnderlineWarning      = { fg = hl.c.yellow,  gui = 'underline', cterm = 'underline' },
-  LspDiagnosticsUnderlineInformation  = { fg = hl.c.blue,    gui = 'underline', cterm = 'underline' },
-  LspDiagnosticsUnderlineHint         = { fg = hl.c.purple,  gui = 'underline', cterm = 'underline' },
+  LspDiagnosticsFloatingError         = { fg = hl.c.red },
+  LspDiagnosticsFloatingWarning       = { fg = hl.c.yellow },
+  LspDiagnosticsFloatingInformation   = { fg = hl.c.blue },
+  LspDiagnosticsFloatingHint          = { fg = hl.c.purple },
+  LspDiagnosticsUnderlineError        = { fg = hl.c.red, gui = 'underline', cterm = 'underline' },
   LspReferenceText                    = { fg = hl.c.fg, gui = 'underline', cterm = 'underline' },
   LspReferenceWrite                   = { fg = hl.c.fg, gui = 'underline', cterm = 'underline' },
   LspReferenceRead                    = { fg = hl.c.fg, gui = 'underline', cterm = 'underline' },
+  DiagnosticUnderlineError            = { fg = hl.c.red, gui = 'underline', cterm = 'underline' },
+  DiagnosticUnderlineWarn             = { fg = hl.c.yellow, gui = 'underline', cterm = 'underline' },
+  DiagnosticUnderlineInfo             = { fg = hl.c.blue, gui = 'underline', cterm = 'underline' },
+  DiagnosticUnderlineHint             = { fg = hl.c.purple, gui = 'underline', cterm = 'underline' },
 }
 
 return hl

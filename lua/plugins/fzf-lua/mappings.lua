@@ -50,6 +50,7 @@ end)
 map_fzf('n', '<leader>fq', "quickfix")
 map_fzf('n', '<leader>fQ', "loclist")
 map_fzf('n', '<leader>fo', "colorschemes")
+map_fzf('n', '<leader>fO', "highlights")
 map_fzf('n', '<leader>fM', "man_pages")
 
 -- Nvim & Dots

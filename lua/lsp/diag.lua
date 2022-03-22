@@ -6,43 +6,40 @@ local M = {}
 -- https://github.com/neovim/neovim/commit/064411ea7ff825aed3d4e01207914ed61d7ee79d
 -- local _is_legacy = not vim.tbl_isempty(vim.fn.sign_getdefined('LspDiagnosticsSignInformation'))
 
+local prefix = vim.diagnostic and "DiagnosticSign" or "LspDiagnosticsSign"
 local signs = {
-  ["Hint"]   = { icon = '', hl = 'Identifier' },
-  ["Info"]   = { icon = '', hl = 'Special' },
-  ["Warn"]   = { icon = '', hl = 'DiffChange' },
-  ["Error"]  = { icon = '', hl = 'ErrorMsg' },
-  -- ["Hint"]   = '',
-  -- ["Info"]   = '',
-  -- ["Info"]   = '',
-  -- ["Warn"]   = '',
-  -- ["Error"]  = '',
+  {
+    name = ("%sHint"):format(prefix),
+    text = ''
+  },
+  {
+    -- LspDiagnosticsSign has "Information", not "Info"
+    name = ("%s%s"):format(prefix, vim.diagnostic and "Info" or "Information"),
+    text = ''
+    -- text = '',
+    -- text = '',
+  },
+  {
+    -- LspDiagnosticsSign has "Warning", not "Warn"
+    name = ("%s%s"):format(prefix, vim.diagnostic and "Warn" or "Warning"),
+    text = '',
+    -- text = ''
+  },
+  {
+    name = ("%sError"):format(prefix),
+    text = ''
+    -- text = ''
+  },
 }
 
-local sign_prefix = 'DiagnosticSign'
-if not vim.diagnostic then
-  sign_prefix = 'LspDiagnosticsSign'
-  -- legacy signs:
-  -- LspDiagnosticsSign does not have "Info", "Warn"
-  -- instead has "Information", "Warning"
-  local function tbl_swap(t, old, new)
-    t[new] = t[old]
-    t[old] = nil
-  end
-  tbl_swap(signs, "Warn", "Warning")
-  tbl_swap(signs, "Info", "Information")
-else
-  -- virtual text highlights only relevant in non-legacy
-  for severity, t in pairs(signs) do
-    local hl = 'DiagnosticVirtualText' .. severity
-    vim.cmd(('hi link %s %s'):format(hl, t.hl))
-  end
+-- set sign highlights to same name as sign
+-- i.e. 'DiagnosticWarn' gets highlighted with hl-DiagnosticWarn
+for i=1,#signs do
+  signs[i].texthl = signs[i].name
 end
 
--- Define the diag signs
-for severity, t in pairs(signs) do
-  local hl = sign_prefix .. severity
-  vim.fn.sign_define(hl, { text = t.icon, texthl = t.hl, linehl = '', numhl = '' })
-end
+-- define all signs at once
+vim.fn.sign_define(signs)
 
 -- Diag config
 if vim.diagnostic then

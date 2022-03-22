@@ -17,6 +17,7 @@ local function setup()
 
       if not is_inactive then
         for _, ft in ipairs({
+          'fzf',
           'packer',
           'NvimTree',
           'fugitive',

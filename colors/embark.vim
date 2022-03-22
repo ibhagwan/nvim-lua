@@ -23,31 +23,24 @@ if !exists("g:embark_terminalcolors")
   let g:embark_termcolors = 256
 endif
 
+if !exists("g:embark_transparent")
+  let g:embark_transparent = 0
+endif
+
 " == COLOR PALETTE == 
 "
 " TODO: Cterm values here are OG from Challenger Deep
 
 " Space
 let s:space0 = { "gui": "#100E23", "cterm": "232", "cterm16": "0"}
-" background color
-" let s:space1 = { "gui": "#1e1c31", "cterm": "233", "cterm16": "NONE"}
-let s:space1 = { "gui": "#323F4E", "cterm": "233", "cterm16": "NONE"}
-" pmenu, pwhich-key bg among others
-" let s:space2 = { "gui": "#2D2B40", "cterm": "233", "cterm16": "NONE" }
-let s:space2 = { "gui": "#56687E", "cterm": "233", "cterm16": "NONE" }
-" visual-select bg color
-" let s:space3 = { "gui": "#3E3859", "cterm": "236", "cterm16": "8"}
-let s:space3 = { "gui": "#56687E", "cterm": "236", "cterm16": "8"}
-" ruler line no. color
-" let s:space4 = { "gui": "#585273", "cterm": "236", "cterm16": "8"}
-let s:space4 = { "gui": "#656A7c", "cterm": "236", "cterm16": "8"}
+let s:space1 = { "gui": "#1e1c31", "cterm": "233", "cterm16": "NONE"}
+let s:space2 = { "gui": "#2D2B40", "cterm": "233", "cterm16": "NONE" }
+let s:space3 = { "gui": "#3E3859", "cterm": "236", "cterm16": "8"}
+let s:space4 = { "gui": "#585273", "cterm": "236", "cterm16": "8"}
 
 " Astral
-" comment color
 let s:astral0 = {"gui": "#8A889D", "cterm": "252", "cterm16": "15"}
 let s:astral1 = { "gui": "#cbe3e7", "cterm": "253", "cterm16": "7"}
-
-let s:white = {"gui": "#E4E4E4", "cterm": "252", "cterm16": "15"}
 
 " Nebula
 let s:red = { "gui": "#F48FB1", "cterm": "204", "cterm16": "1"}
@@ -69,9 +62,8 @@ let s:cyan = { "gui": "#87DFEB", "cterm": "122", "cterm16": "6"}
 let s:dark_cyan = { "gui": "#63f2f1", "cterm": "121", "cterm16": "14"}
 
 let s:bg              = s:space1
-let s:bg_lsp          = s:space1
-let s:bg_dark         = s:space0
-let s:bg_bright       = s:space4
+let s:bg_dark       = s:space0
+let s:bg_bright         = s:space4
 let s:norm            = s:astral1
 let s:norm_subtle     = s:astral0
 let s:visual          = s:space3
@@ -126,7 +118,11 @@ endfunction
 " == COMMON GROUPS ==
 "
 " (see `:h w18`)
-call s:h("Normal",        {"bg": s:bg, "fg": s:norm})
+if g:embark_transparent == 1
+  call s:h("Normal",      {"fg": s:norm})
+else
+  call s:h("Normal",      {"bg": s:bg, "fg": s:norm})
+endif
 call s:h("Cursor",        {"bg": s:blue, "fg": s:bg_bright})
 call s:h("Comment",       {"fg": s:norm_subtle, "gui": s:maybe_italic(""), "cterm": s:maybe_italic("")})
 
@@ -194,12 +190,12 @@ hi LineNr guibg=NONE ctermbg=NONE
 
 call s:h("CursorLineNr",  {"bg": s:bg_dark, "fg": s:blue, "gui": "bold"})
 call s:h("Question",      {"fg": s:red})
-call s:h("StatusLine",    {"bg": s:bg_dark, "fg": s:norm})
+call s:h("StatusLine",    {"bg": s:bg, "fg": s:norm})
 call s:h("Conceal",       {"fg": s:norm})
-call s:h("StatusLineNC",  {"bg": s:space3})
+call s:h("StatusLineNC",  {"bg": s:bg_dark, "fg": s:norm_subtle})
 call s:h("VertSplit",     {"fg": s:bg_dark})
 call s:h("WinSeparator",  {"fg": s:bg_dark})
-call s:h("FloatBorder",   {"fg": s:bg_bright})
+call s:h("FloatBorder",   {"fg": s:bg_dark})
 call s:h("Title",         {"fg": s:dark_blue})
 call s:h("Visual",        {"bg": s:visual})
 call s:h("WarningMsg",    {"fg": s:yellow})
@@ -370,36 +366,50 @@ call s:h("CtrlpMatch", {"fg": s:yellow})
 call s:h("NERDTreeDir", {"fg": s:blue})
 call s:h("NERDTreeFlags", {"fg": s:green})
 
-" nvim LSP (legacy, kept here for retro-compatibility)
-call s:h ("LspDiagnosticsError", {"fg": s:red, "bg": s:bg_lsp})
-call s:h ("LspDiagnosticsWarning", {"fg": s:yellow, "bg": s:bg_lsp})
-call s:h ("LspDiagnosticsInformation", {"fg": s:blue, "bg": s:bg_lsp})
-call s:h ("LspDiagnosticsHint", {"fg": s:purple, "bg": s:bg_lsp})
-call s:h ("LspDiagnosticsErrorSign", {"bg": s:bg})
-call s:h ("LspDiagnosticsWarningSign", {"bg": s:bg})
-call s:h ("LspDiagnosticsInformationSign", {"bg": s:bg})
-call s:h ("LspDiagnosticsHintSign", {"bg": s:bg})
-
 " nvim LSP (updated version for neovim master 35325ddac)
-call s:h ("LspDiagnosticsDefaultError", {"fg": s:red, "bg": s:bg_lsp})
-call s:h ("LspDiagnosticsDefaultWarning", {"fg": s:yellow, "bg": s:bg_lsp})
-call s:h ("LspDiagnosticsDefaultInformation", {"fg": s:blue, "bg": s:bg_lsp})
-call s:h ("LspDiagnosticsDefaultHint", {"fg": s:purple, "bg": s:bg_lsp})
-call s:h ("LspDiagnosticsSignError", {"bg": s:bg})
-call s:h ("LspDiagnosticsSignWarning", {"bg": s:bg})
-call s:h ("LspDiagnosticsSignInformation", {"bg": s:bg})
-call s:h ("LspDiagnosticsSignHint", {"bg": s:bg})
-call s:h ("LspDiagnosticsUnderlineError", {"cterm": "undercurl", "gui": "undercurl"})
+call s:h ("LspDiagnosticsDefaultError", {"fg": s:red, "bg": s:bg_dark})
+call s:h ("LspDiagnosticsDefaultWarning", {"fg": s:yellow, "bg": s:bg_dark})
+call s:h ("LspDiagnosticsDefaultInformation", {"fg": s:blue, "bg": s:bg_dark})
+call s:h ("LspDiagnosticsDefaultHint", {"fg": s:purple, "bg": s:bg_dark})
+call s:h ("LspDiagnosticsSignError", {"fg": s:red, "bg": s:bg})
+call s:h ("LspDiagnosticsSignWarning", {"fg": s:yellow, "bg": s:bg})
+call s:h ("LspDiagnosticsSignInformation", {"fg": s:blue, "bg": s:bg})
+call s:h ("LspDiagnosticsSignHint", {"fg": s:purple, "bg": s:bg})
+call s:h ("LspDiagnosticsUnderlineError", {"fg": s:red, "cterm": "undercurl", "gui": "undercurl"})
 call s:h ("LspDiagnosticsFloatingError", {"bg": s:space2, "fg": s:red})
 call s:h ("LspDiagnosticsFloatingWarning", {"bg": s:space2, "fg": s:yellow})
 call s:h ("LspDiagnosticsFloatingInformation", {"bg": s:space2, "fg": s:blue})
 call s:h ("LspDiagnosticsFloatingHint", {"bg": s:space2, "fg": s:purple})
 
+" nvim 0.6.0 (Moved LSP Highlights to Diagnostic Highlights)
+" SEVERITY - Info, Warn, Error, Hint
+" TYPE - Sign, Underline, Float, Virtual Text
+"
+" Highlights
+" Diagnostic[SEVERITY]
+" Diagnostic[TYPE][SEVERITY]
+hi! link DiagnosticError                LspDiagnosticsDefaultError 
+hi! link DiagnosticWarn                 LspDiagnosticsDefaultWarning
+hi! link DiagnosticInfo                 LspDiagnosticsDefaultInformation
+hi! link DiagnosticHint                 LspDiagnosticsDefaultHint
+hi! link DiagnosticSignError            LspDiagnosticsSignError
+hi! link DiagnosticSignWarn             LspDiagnosticsSignWarning
+hi! link DiagnosticSignInfo             LspDiagnosticsSignInformation
+hi! link DiagnosticSignHint             LspDiagnosticsSignHint
+hi! link DiagnosticFloatingError        LspDiagnosticsFloatingError
+hi! link DiagnosticFloatingWarn         LspDiagnosticsFloatingWarning
+hi! link DiagnosticFloatingInfo         LspDiagnosticsFloatingInformation
+hi! link DiagnosticFloatingHint         LspDiagnosticsFloatingHint
+hi! link DiagnosticVirtualTextError     LspDiagnosticsDefaultError
+hi! link DiagnosticVirtualTextWarn      LspDiagnosticsDefaultWarning
+hi! link DiagnosticVirtualTextInfo      LspDiagnosticsDefaultInformation
+hi! link DiagnosticVirtualTextHint      LspDiagnosticsDefaultHint
+
 " Telescope support
-call s:h("telescopeSelection", {"fg": s:white, "bg": s:space3, "gui": "bold"})
+call s:h("telescopeSelection", {"fg": s:astral1, "bg": s:space3})
 call s:h("TelescopeBorder", {"fg": s:astral0})
 call s:h("TelescopeMatching", {"fg": s:yellow})
-call s:h("TelescopeNormal", {"fg": s:astral1})
+call s:h("TelescopeNormal", {"fg": s:astral0})
 
 " Nvim-tree support
 call s:h("NvimTreeFolderIcon", {"fg": s:purple})
@@ -414,7 +424,7 @@ let g:terminal_color_3 = s:yellow.gui
 let g:terminal_color_4 = s:blue.gui
 let g:terminal_color_5 = s:purple.gui
 let g:terminal_color_6 = s:cyan.gui
-let g:terminal_color_7 = s:norm.gui
+let g:terminal_color_7 = s:bg.gui
 let g:terminal_color_8 = s:bg_bright.gui
 let g:terminal_color_9 = s:dark_red.gui
 let g:terminal_color_10 = s:dark_green.gui
@@ -424,3 +434,9 @@ let g:terminal_color_13 = s:dark_purple.gui
 let g:terminal_color_14 = s:dark_cyan.gui
 let g:terminal_color_15 = s:norm_subtle.gui
 
+" 256-color terminal colors
+let g:terminal_ansi_colors = [
+    \ s:bg_bright.gui, s:red.gui,         s:green.gui,      s:yellow.gui,
+    \ s:blue.gui,      s:purple.gui,      s:cyan.gui,       s:bg.gui,
+    \ s:bg_bright.gui, s:dark_red.gui,    s:dark_green.gui, s:dark_yellow.gui,
+    \ s:dark_blue.gui, s:dark_purple.gui, s:dark_cyan.gui,  s:norm_subtle.gui]

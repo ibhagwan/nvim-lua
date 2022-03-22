@@ -253,5 +253,6 @@ require 'keymaps'
 
 -- set colorscheme to modified embark
 -- https://github.com/embark-theme/vim
-vim.g.colorscheme_terminal_italics = true
+vim.g.embark_transparent = true
+-- vim.g.embark_terminal_italics = true
 pcall(vim.cmd, [[colorscheme lua-embark]])

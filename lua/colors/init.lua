@@ -116,6 +116,25 @@ M.set_colorscheme = function(hl, theme)
     for k, v in pairs(t) do h(k, v) end
   end
 
+  -- Link Diag to the old LSP highlights
+vim.cmd('hi link DiagnosticError              LspDiagnosticsDefaultError')
+vim.cmd('hi link DiagnosticWarn               LspDiagnosticsDefaultWarning')
+vim.cmd('hi link DiagnosticInfo               LspDiagnosticsDefaultInformation')
+vim.cmd('hi link DiagnosticHint               LspDiagnosticsDefaultHint')
+vim.cmd('hi link DiagnosticSignError          LspDiagnosticsSignError')
+vim.cmd('hi link DiagnosticSignWarn           LspDiagnosticsSignWarning')
+vim.cmd('hi link DiagnosticSignInfo           LspDiagnosticsSignInformation')
+vim.cmd('hi link DiagnosticSignHint           LspDiagnosticsSignHint')
+vim.cmd('hi link DiagnosticUnderlineError     LspDiagnosticsUnderlineError')
+vim.cmd('hi link DiagnosticFloatingError      LspDiagnosticsFloatingError')
+vim.cmd('hi link DiagnosticFloatingWarn       LspDiagnosticsFloatingWarning')
+vim.cmd('hi link DiagnosticFloatingInfo       LspDiagnosticsFloatingInformation')
+vim.cmd('hi link DiagnosticFloatingHint       LspDiagnosticsFloatingHint')
+vim.cmd('hi link DiagnosticVirtualTextError   LspDiagnosticsDefaultError')
+vim.cmd('hi link DiagnosticVirtualTextWarn    LspDiagnosticsDefaultWarning')
+vim.cmd('hi link DiagnosticVirtualTextInfo    LspDiagnosticsDefaultInformation')
+vim.cmd('hi link DiagnosticVirtualTextHint    LspDiagnosticsDefaultHint')
+
 
   -- CSS
   h('cssAttrComma',         { fg = purple })

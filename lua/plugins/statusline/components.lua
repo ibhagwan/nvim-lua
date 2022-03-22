@@ -9,7 +9,7 @@ local M = {}
 
 function M.extract_hl(spec)
   if not spec or vim.tbl_isempty(spec) then return end
-  local hl_name, hl_cmd, hl_props = {}, {}, {}
+  local hl_name, hl_cmd, hl_props = { "El" }, {}, {}
   for attr, val in pairs(spec) do
     if type(val) == 'table' then
       table.insert(hl_name, attr)
@@ -124,12 +124,13 @@ M.git_branch = function(opts)
   opts = opts or {}
   return el_sub.buf_autocmd("el_git_branch", "BufEnter",
     wrap_fnc(opts, function(_, buffer)
-      local branch = nil
-      if vim.b[buffer.bufnr].gitsigns_head then
-        branch =vim.b[buffer.bufnr].gitsigns_head
-      elseif vim.g.loaded_fugitive == 1 then
+      -- buffer can be null and code will crash with:
+      -- E5108: Error executing lua ... 'attempt to index a nil value'
+      local branch = buffer and buffer.bufnr>0 and
+        vim.b[buffer.bufnr].gitsigns_head or nil
+      if not branch and vim.g.loaded_fugitive == 1 then
         branch = vim.fn.FugitiveHead()
-      else
+      elseif not branch and buffer and buffer.bufnr>0 then
         local j = Job:new {
           command = "git",
           args = { "branch", "--show-current" },
@@ -195,7 +196,8 @@ M.git_changes_buf = function(opts)
   opts = opts or {}
   local formatter = opts.formatter or git_changes_formatter(opts)
   return wrap_fnc(opts, function(window, buffer)
-      local stats = vim.b[buffer.bufnr].gitsigns_status_dict
+      local stats = buffer and buffer.bufnr>0 and
+        vim.b[buffer.bufnr].gitsigns_status_dict or {}
       local counts = {
         insert = stats.added > 0 and stats.added or nil,
         change = stats.changed > 0 and stats.changed or nil,
