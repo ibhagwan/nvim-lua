@@ -110,6 +110,10 @@ remap('n', ']l', ':lnext<CR>',          { noremap = true })
 remap('n', '[L', ':lfirst<CR>',         { noremap = true })
 remap('n', ']L', ':llast<CR>',          { noremap = true })
 
+-- shortcut to view :messages
+remap({'n', 'v'}, '<leader>m', '<cmd>messages<CR>',  { noremap = true })
+remap({'n', 'v'}, '<leader>M', '<cmd>mes clear|echo "cleared :messages"<CR>', { noremap = true })
+
 -- <leader>v|<leader>s act as <cmd-v>|<cmd-s>
 -- <leader>p|P paste from yank register (0)
 -- <leader>y|Y yank into clipboard/OSCyank

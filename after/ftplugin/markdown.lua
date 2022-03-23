@@ -3,9 +3,9 @@ vim.wo.spell        = true
 vim.wo.foldexpr     = ""
 
 -- Previm plugin
--- vim.api.nvim_set_keymap('', '<leader>M', "<Esc>:PrevimOpen<CR>",
+-- vim.api.nvim_set_keymap('', '<leader>r', "<Esc>:PrevimOpen<CR>",
 -- lazy load doesn't load plugin commands, workaround
-vim.api.nvim_set_keymap('', '<leader>M', "<cmd>call previm#open(previm#make_preview_file_path('index.html'))<CR>", { silent = true })
+vim.api.nvim_set_keymap('', '<leader>r', "<cmd>call previm#open(previm#make_preview_file_path('index.html'))<CR>", { silent = true })
 
 -- conditionally load previm (packer.opt = true)
 if pcall(require, 'packer') then

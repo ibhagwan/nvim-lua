@@ -7,6 +7,12 @@ dapui.setup({
   sidebar = {
     size = 40,
     position = "right",
+    elements = {
+      { id = "scopes", size = 0.46, },
+      { id = "stacks", size = 0.36 },
+      { id = "breakpoints", size = 0.18 },
+      -- { id = "watches", size = 00.25 },
+    }
   }
 })
 
