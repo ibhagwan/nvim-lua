@@ -128,13 +128,22 @@ M.git_branch = function(opts)
   opts = opts or {}
   return el_sub.buf_autocmd("el_git_branch", "BufEnter",
     wrap_fnc(opts, function(_, buffer)
+      -- Try fugitive first as it's most reliable
+      local branch = vim.g.loaded_fugitive == 1 and
+        vim.fn.FugitiveHead() or nil
       -- buffer can be null and code will crash with:
       -- E5108: Error executing lua ... 'attempt to index a nil value'
-      local branch = buffer and buffer.bufnr>0 and
-        vim.b[buffer.bufnr].gitsigns_head or nil
-      if not branch and vim.g.loaded_fugitive == 1 then
-        branch = vim.fn.FugitiveHead()
-      elseif not branch and buffer and buffer.bufnr>0 then
+      if not buffer or not (buffer.bufnr > 0) then
+        return
+      end
+      -- fugitive is empty or not loaded, try gitsigns
+      if not branch then
+        local ok, res = pcall(vim.api.nvim_buf_get_var,
+          buffer.bufnr, 'gitsigns_head')
+        if ok then branch = res end
+      end
+      -- last resort run git command
+      if not branch then
         local j = Job:new {
           command = "git",
           args = { "branch", "--show-current" },
@@ -200,22 +209,26 @@ M.git_changes_buf = function(opts)
   opts = opts or {}
   local formatter = opts.formatter or git_changes_formatter(opts)
   return wrap_fnc(opts, function(window, buffer)
-      local stats = buffer and buffer.bufnr>0 and
-        vim.b[buffer.bufnr].gitsigns_status_dict or {}
-      local counts = {
-        insert = stats.added > 0 and stats.added or nil,
-        change = stats.changed > 0 and stats.changed or nil,
-        delete = stats.removed > 0 and stats.removed or nil,
-      }
-      if not vim.tbl_isempty(counts) then
-        local fmt = opts.fmt or "%s"
-        local out = formatter(window, buffer, counts)
-        return out and fmt:format(out) or nil
-      else
-        -- el functions that return a
-        -- string must not return nil
-        return ""
-      end
+    local stats = {}
+    if buffer and buffer.bufnr > 0 then
+      local ok, res = pcall(vim.api.nvim_buf_get_var,
+        buffer.bufnr, 'gitsigns_status_dict')
+      if ok then stats = res end
+    end
+    local counts = {
+      insert = stats.added > 0 and stats.added or nil,
+      change = stats.changed > 0 and stats.changed or nil,
+      delete = stats.removed > 0 and stats.removed or nil,
+    }
+    if not vim.tbl_isempty(counts) then
+      local fmt = opts.fmt or "%s"
+      local out = formatter(window, buffer, counts)
+      return out and fmt:format(out) or nil
+    else
+      -- el functions that return a
+      -- string must not return nil
+      return ""
+    end
   end)
 end
 
@@ -224,7 +237,9 @@ M.git_changes_all = function(opts)
   local formatter = opts.formatter or git_changes_formatter(opts)
   return el_sub.buf_autocmd("el_git_changes", "BufWritePost",
     wrap_fnc(opts, function(window, buffer)
-      if vim.bo[buffer.bufnr].bufhidden ~= "" or
+      if not buffer or
+        not (buffer.bufnr>0) or
+        vim.bo[buffer.bufnr].bufhidden ~= "" or
         vim.bo[buffer.bufnr].buftype  == "nofile" or
         vim.fn.filereadable(buffer.name) ~= 1 then
         return

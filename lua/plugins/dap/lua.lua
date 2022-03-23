@@ -79,6 +79,11 @@ dap.configurations.lua = {
         -- clear the lisener or we get called in any dap-config run
         dap.listeners.after['setBreakpoints']['osv'] = nil
       end
+      -- for k, v in pairs(dap.listeners.after) do
+      --   v["test"] = function()
+      --     print(k, "called")
+      --   end
+      -- end
     end
   },
   {
