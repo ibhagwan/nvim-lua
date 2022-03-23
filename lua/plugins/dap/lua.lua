@@ -76,6 +76,8 @@ dap.configurations.lua = {
       dap.listeners.after['setBreakpoints']['osv'] = function(session, body)
         assert(nvim_chanID, "Fatal: neovim RPC channel is nil!")
         vim.fn.rpcnotify(nvim_chanID, "nvim_command", "luafile " .. vim.fn.expand("%:p"))
+        -- clear the lisener or we get called in any dap-config run
+        dap.listeners.after['setBreakpoints']['osv'] = nil
       end
     end
   },
