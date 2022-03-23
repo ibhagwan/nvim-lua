@@ -280,6 +280,15 @@ fzf_lua.setup {
   -- manpages = { previewer = { _ctor = require'fzf-lua.previewer'.fzf.man_pages } },
 }
 
+-- register fzf-lua as vim.ui.select interface
+fzf_lua.register_ui_select({
+  winopts = {
+    win_height       = 0.30,
+    win_width        = 0.70,
+    win_row          = 0.40,
+  }
+})
+
 local M = {}
 
 function M.edit_neovim(opts)

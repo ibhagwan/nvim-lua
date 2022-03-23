@@ -210,10 +210,10 @@ hl.lsp = {
   LspReferenceText                    = { fg = hl.c.fg, gui = 'underline', cterm = 'underline' },
   LspReferenceWrite                   = { fg = hl.c.fg, gui = 'underline', cterm = 'underline' },
   LspReferenceRead                    = { fg = hl.c.fg, gui = 'underline', cterm = 'underline' },
-  DiagnosticUnderlineError            = { fg = hl.c.red, gui = 'underline', cterm = 'underline' },
-  DiagnosticUnderlineWarn             = { fg = hl.c.yellow, gui = 'underline', cterm = 'underline' },
-  DiagnosticUnderlineInfo             = { fg = hl.c.blue, gui = 'underline', cterm = 'underline' },
-  DiagnosticUnderlineHint             = { fg = hl.c.purple, gui = 'underline', cterm = 'underline' },
+  DiagnosticUnderlineError            = { fg = hl.c.black, bg = hl.c.red, gui = 'underline', cterm = 'underline' },
+  DiagnosticUnderlineWarn             = { fg = hl.c.black, bg = hl.c.yellow, gui = 'underline', cterm = 'underline' },
+  DiagnosticUnderlineInfo             = { gui = 'underline', cterm = 'underline' },
+  DiagnosticUnderlineHint             = { gui = 'underline', cterm = 'underline' },
 }
 
 return hl

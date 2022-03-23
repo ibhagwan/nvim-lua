@@ -13,6 +13,7 @@ local plugin_dirs_lazyload = {
   vim.fn.stdpath('data') .. '/site/pack/*/opt/babelfish.nvim',
   vim.fn.stdpath('data') .. '/site/pack/*/opt/toggleterm.nvim',
   vim.fn.stdpath('data') .. '/site/pack/*/opt/indent-blankline.nvim',
+  vim.fn.stdpath('data') .. '/site/pack/*/opt/nvim-dap',
 }
 
 reload.vim_reload_dirs = {

@@ -179,12 +179,15 @@ local packer_startup = function(use)
       }
 
     -- DAP
-    use { 'mfussenegger/nvim-dap',
-        config = "require('plugins.nvim-dap')",
-        keys = {'<F5>', '<F9>' }
+    use { prefer_local('mfussenegger/nvim-dap'),
+        config = "require('plugins.dap')",
+        keys = {'<F5>', '<F8>', '<F9>' }
     }
-    use { 'leoluz/nvim-dap-go',
-        config = "require('dap-go').setup()",
+    use { 'rcarriga/nvim-dap-ui',
+        config = "require('plugins.dap.ui')",
+        after = { 'nvim-dap' }
+    }
+    use { 'jbyuki/one-small-step-for-vimkind',
         after = { 'nvim-dap' }
     }
 

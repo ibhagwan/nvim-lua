@@ -112,7 +112,11 @@ M.file_icon = function(opts)
       -- local icon = extensions.file_icon(_, bufnr)
       if icon then
         if opts.hl_icon then
-          icon = set_hl(hl, icon)
+          local hlgroup = M.extract_hl({
+            bg = { StatusLine   = 'bg' },
+            fg = { [hl]         = 'fg' },
+          })
+          icon = set_hl(hlgroup, icon)
         end
         return (fmt):format(icon)
       end
