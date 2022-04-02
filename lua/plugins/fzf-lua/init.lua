@@ -213,6 +213,7 @@ fzf_lua.setup {
     },
     commits           = {
       prompt          = 'Commits❯ ',
+      cmd             = "git log --color --pretty=format:'%C(yellow)%h%Creset %Cgreen(%><(12)%cr%><|(12))%Creset %s %C(blue)<%an>%Creset'",
       winopts         = { preview = { vertical = "down:60%", }}
     },
     bcommits          = {
