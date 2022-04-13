@@ -23,6 +23,11 @@ cmp.setup {
     end,
   },
 
+  window = {
+    -- completion = cmp.config.window.bordered(),
+    -- documentation = cmp.config.window.bordered(),
+  },
+
   completion = {
     keyword_length = 2,
   },
@@ -78,11 +83,6 @@ cmp.setup {
         fallback()
       end
     end,
-  },
-
-  documentation = {
-    border       = { '╭', '─', '╮', '│', '╯', '─', '╰', '│' },
-    winhighlight = 'Normal:CursorLine,FloatBorder:CursorLine',
   },
 
   formatting = {
