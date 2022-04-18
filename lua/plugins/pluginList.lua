@@ -26,6 +26,12 @@ local packer_startup = function(use)
 
     -- "gc" to comment visual regions/lines
     use { 'numToStr/Comment.nvim',
+        -- Workaround for Comment.nvim dropping support for version < 0.7
+        setup = [[
+          if not vim.keymap then
+            vim.keymap = { set = function(...) end }
+          end
+        ]],
         config = "require('plugins.comment')",
         -- uncomment for lazy loading
         -- slight delay if loading in visual mode

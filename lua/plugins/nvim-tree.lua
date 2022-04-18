@@ -46,7 +46,6 @@ vim.g.nvim_tree_icons = {
 }
 
 require'nvim-tree'.setup {
-  auto_close          = true,
   open_on_setup       = false,
   open_on_tab         = false,
   disable_netrw       = true,

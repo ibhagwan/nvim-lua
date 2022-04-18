@@ -153,6 +153,7 @@ local keymaps = {
         b = 'git blame',
         B = 'git branches',
         c = 'git commit',
+        C = 'git commits',
         d = 'git diff (buffer)',
         D = 'git diff (project)',
         S = 'git stash (current file)',
