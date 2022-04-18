@@ -282,13 +282,15 @@ fzf_lua.setup {
 }
 
 -- register fzf-lua as vim.ui.select interface
-fzf_lua.register_ui_select({
-  winopts = {
-    win_height       = 0.30,
-    win_width        = 0.70,
-    win_row          = 0.40,
-  }
-})
+if vim.ui then
+  fzf_lua.register_ui_select({
+    winopts = {
+      win_height       = 0.30,
+      win_width        = 0.70,
+      win_row          = 0.40,
+    }
+  })
+end
 
 local M = {}
 
