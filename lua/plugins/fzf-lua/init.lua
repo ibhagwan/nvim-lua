@@ -294,34 +294,6 @@ end
 
 local M = {}
 
-function M.edit_neovim(opts)
-  if not opts then opts = {} end
-  opts.prompt = "< VimRC > "
-  opts.cwd = "$HOME/.config/nvim"
-  fzf_lua.files(opts)
-end
-
-function M.edit_dotfiles(opts)
-  if not opts then opts = {} end
-  opts.prompt = "~ dotfiles ~ "
-  opts.cwd = "~/dots"
-  fzf_lua.files(opts)
-end
-
-function M.edit_zsh(opts)
-  if not opts then opts = {} end
-  opts.prompt = "~ zsh ~ "
-  opts.cwd = "$HOME/.config/zsh"
-  fzf_lua.files(opts)
-end
-
-function M.installed_plugins(opts)
-  if not opts then opts = {} end
-  opts.prompt = 'Plugins❯ '
-  opts.cwd = vim.fn.stdpath "data" .. "/site/pack/packer/"
-  fzf_lua.files(opts)
-end
-
 function M.git_status_tmuxZ(opts)
   local function tmuxZ()
     vim.cmd("!tmux resize-pane -Z")

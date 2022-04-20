@@ -53,12 +53,6 @@ map_fzf('n', '<leader>fo', "colorschemes")
 map_fzf('n', '<leader>fO', "highlights")
 map_fzf('n', '<leader>fM', "man_pages")
 
--- Nvim & Dots
-map_fzf('n', '<leader>en', "edit_neovim")
-map_fzf('n', '<leader>ed', "edit_dotfiles")
-map_fzf('n', '<leader>ez', "edit_zsh")
-map_fzf('n', '<leader>ep', "installed_plugins")
-
 -- LSP
 map_fzf('n', '<leader>lr', "lsp_references")
 map_fzf('n', '<leader>ld', "lsp_definitions", { jump_to_single_result = false })
@@ -92,6 +86,39 @@ map_fzf('n', '<leader>gB', "git_branches")
 map_fzf('n', '<leader>gC', "git_commits")
 map_fzf('n', '<leader>fC', "git_commits")
 map_fzf('n', '<leader>fc', "git_bcommits")
+
+-- yadm repo
+local yadm_opts = {
+  show_cwd_header = false,
+  git_dir = "$HOME/dots/yadm-repo",
+}
+map_fzf('n', '<leader>ed', "git_files", vim.tbl_extend("force", yadm_opts,
+  { prompt = "~ dotfiles ~ "}))
+map_fzf('n', '<leader>eb', "git_branches", yadm_opts )
+map_fzf('n', '<leader>eC', "git_commits",  yadm_opts )
+map_fzf('n', '<leader>ec', "git_bcommits", yadm_opts )
+map_fzf('n', '<leader>es', "git_status", yadm_opts )
+map_fzf('n', '<leader>eS', "git_status_tmuxZ", vim.tbl_extend("force",
+  yadm_opts, {
+    winopts = {
+      fullscreen = true,
+      preview = {
+        vertical = "down:70%",
+        horizontal = "right:70%",
+      }
+    }
+  }))
+
+-- Nvim & Dots
+map_fzf('n', '<leader>ez', "files", {
+  prompt = "~ zsh ~ ", cwd = "$HOME/.config/zsh"
+})
+map_fzf('n', '<leader>en', "files", {
+  prompt = "< VimRC > ", cwd = "$HOME/.config/nvim"
+})
+map_fzf('n', '<leader>ep', "files", {
+  prompt = "Plugins❯ ", cwd = vim.fn.stdpath "data" .. "/site/pack/packer/"
+})
 
 -- Fzf-lua methods
 map_fzf('n', "<leader>f?", "builtin")
