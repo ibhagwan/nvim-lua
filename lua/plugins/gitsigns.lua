@@ -41,4 +41,5 @@ gitsigns.setup {
   current_line_blame_opts = { delay = 1000, virt_text_pos = 'eol' },
   preview_config = { border = 'rounded' },
   diff_opts = { internal = true, },
+  yadm = { enable = true, },
 }
