@@ -5,31 +5,22 @@ end
 
 local luasnip = require("luasnip")
 
-local t = function(str)
-  return vim.api.nvim_replace_termcodes(str, true, true, true)
-end
-
--- do not complete at start of line, after spaces and punctuation chars
-local should_complete = function()
-  local col = vim.fn.col('.') - 1
-  return col > 0 and not vim.fn.getline('.'):sub(col, col):match('[%s%p]')
-end
-
 cmp.setup {
-  -- must define this if we aren't using a snippet engine
   snippet = {
+    -- must use a snippet engine
     expand = function(args)
       luasnip.lsp_expand(args.body)
     end,
   },
 
   window = {
-    -- completion = cmp.config.window.bordered(),
-    -- documentation = cmp.config.window.bordered(),
+    -- completion = { border = 'single' },
+    -- documentation = { border = 'single' },
   },
 
   completion = {
-    keyword_length = 2,
+    -- start completion immediately
+    keyword_length = 1,
   },
 
   sources = {
@@ -41,48 +32,21 @@ cmp.setup {
   },
 
   mapping = {
-    ['<Tab>'] = function(fallback)
-      if vim.fn.pumvisible() == 1 then
-        vim.fn.feedkeys(t('<C-n>'), 'n')
-      elseif cmp.visible() then
-        cmp.select_next_item()
-      elseif luasnip.expand_or_jumpable() then
-        luasnip.expand_or_jump()
-      else
-        fallback()
-      end
-    end,
-    ['<S-Tab>'] = function(fallback)
-      if vim.fn.pumvisible() == 1 then
-        vim.fn.feedkeys(t('<C-p>'), 'n')
-      elseif cmp.visible() then
-        cmp.select_prev_item()
-      elseif luasnip.jumpable(-1) then
-        luasnip.jump(-1)
-      elseif should_complete() then
-        cmp.complete()
-      else
-        fallback()
-      end
-    end,
-    ['<C-p>'] = cmp.mapping.select_prev_item(),
-    ['<C-n>'] = cmp.mapping.select_next_item(),
-    ['<S-up>'] = cmp.mapping.scroll_docs(-4),
-    ['<S-down>'] = cmp.mapping.scroll_docs(4),
-    ['<C-Space>'] = cmp.mapping.complete(),
-    ['<C-e>'] = cmp.mapping.close(),
-    ['<CR>'] = function(fallback)
-      if (vim.fn.pumvisible() == 1 and not
-          vim.tbl_isempty(vim.v.completed_item)) or
-         (cmp.visible() and cmp.core.view:get_selected_entry()) then
-        cmp.confirm({
-              behavior = cmp.ConfirmBehavior.Replace,
-              select = true,
-            })
-      else
-        fallback()
-      end
-    end,
+    ['<S-Tab>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 'c' }),
+    ['<Tab>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 'c' }),
+    ['<Up>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 'c' }),
+    ['<Down>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 'c' }),
+    ['<C-p>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 'c' }),
+    ['<C-n>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 'c' }),
+    ['<S-up>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
+    ['<S-down>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
+    ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i' }),
+    ['<C-e>'] = cmp.mapping({
+      i = cmp.mapping.abort(),
+      c = cmp.mapping.close(),
+    }),
+    ['<C-y>'] = cmp.mapping.confirm({ select = true, behavior = cmp.ConfirmBehavior.Replace }),
+    ['<CR>'] = cmp.mapping.confirm({ select = true, behavior = cmp.ConfirmBehavior.Insert })
   },
 
   formatting = {
@@ -129,45 +93,3 @@ cmp.setup.cmdline(':', {
     { name = 'cmdline' }
   })
 })
-
-local remap = require'utils'.remap
-
--- <esc>:    revert selection (stay in insert mode)
--- <ctrl-c>: revert selection (switch to normal mode)
--- localecategory
-local function abort_logic(key, fn)
-  if vim.fn.pumvisible() == 1 then
-    -- using nvim's native completion menu
-    vim.fn.feedkeys(t('<C-e>'), 'n')
-    if fn then fn() end
-  elseif cmp.visible() then
-    -- using nvim-cmp's floating win based menu
-    if cmp.core.view:get_selected_entry() then
-      -- entry selected, revert to original text
-      -- abort is bugged
-      cmp.abort()
-      -- cmp.close()
-    else
-      -- no entry, just close the popup
-      -- if we call 'abort' here we lose all text
-      -- entered since popup became visible
-      cmp.close()
-    end
-    if fn then fn() end
-  else
-    vim.fn.feedkeys(t(key), 'n')
-  end
-end
-
---[[ remap({ "i", "s" }, "<Esc>", function()
-  abort_logic('<Esc>')
-end) ]]
-
---[[ remap({ "i", "s" }, "<C-c>", function()
-  -- NOTE: <C-c> clears 'cmp.core.view:get_selected_entry()'
-  -- so never actually call 'cmp.abort()'
-  abort_logic('<C-c>',
-    function()
-      vim.cmd("stopinsert")
-    end)
-end) --]]

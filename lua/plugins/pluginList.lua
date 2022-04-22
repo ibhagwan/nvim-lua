@@ -215,8 +215,7 @@ local packer_startup = function(use)
         event = "VimEnter" }
 
     -- Color scheme, requires nvim-treesitter
-    vim.g.nvcode_termcolors = 256
-    use {"christianchiarulli/nvcode-color-schemes.vim", opt = true}
+    use { "bluz71/vim-nightfly-guicolors" }
 
     -- Colorizer
     use { 'norcalli/nvim-colorizer.lua',
