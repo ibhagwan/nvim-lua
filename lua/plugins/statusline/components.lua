@@ -137,7 +137,7 @@ M.git_branch = function(opts)
         return
       end
       -- fugitive is empty or not loaded, try gitsigns
-      if not branch then
+      if not branch or #branch==0 then
         local ok, res = pcall(vim.api.nvim_buf_get_var,
           buffer.bufnr, 'gitsigns_head')
         if ok then branch = res end

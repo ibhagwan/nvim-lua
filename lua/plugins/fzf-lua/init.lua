@@ -83,7 +83,7 @@ fzf_lua.setup {
   winopts_fn = function()
     -- Use custom borders hls if they exist in the colorscheme
     local border = 'Normal'
-    local hls = { 'TelescopeBorder', 'FloatermBorder', 'FloatBorder' }
+    local hls = { 'NightflySteelBlue', 'TelescopeBorder', 'FloatermBorder', 'FloatBorder' }
     for _, hl in ipairs(hls) do
       if #vim.fn.synIDattr(vim.fn.hlID(hl), "fg") > 0 then
         border = hl

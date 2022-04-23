@@ -29,25 +29,39 @@ local function setup()
         end
       end
 
+      local hl_red = 'ErrorMsg'
+      local hl_green = 'diffAdded'
+      local hl_yellow = 'WarningMsg'
+      local hl_magenta = 'WarningMsg'
+      local hl_statusline = 'StatusLine'
+      if vim.g.colors_name == "nightfly" then
+        hl_green = 'NightflyTurquoise'
+        hl_yellow = 'NightflyYellow'
+        hl_magenta = 'NightflyViolet'
+        -- hl_statusline = 'DiffText'
+        -- vim.cmd("hi clear StatusLine")
+        -- vim.cmd("hi! link StatusLine " .. hl_statusline)
+      end
+
       local highlights = {
         red_fg = c.extract_hl({
-          bg = { StatusLine   = 'bg' },
-          fg = { ErrorMsg     = 'fg' },
+          bg = { [hl_statusline]  = 'bg' },
+          fg = { [hl_red]         = 'fg' },
           gui = "bold",
         }),
         green_fg = c.extract_hl({
-          bg = { StatusLine   = 'bg' },
-          fg = { diffAdded    = 'fg' },
+          bg = { [hl_statusline]  = 'bg' },
+          fg = { [hl_green]       = 'fg' },
           gui = "bold",
         }),
         yellow_fg = c.extract_hl({
-          bg = { StatusLine   = 'bg' },
-          fg = { WarningMsg   = 'fg' },
+          bg = { [hl_statusline]  = 'bg' },
+          fg = { [hl_yellow]      = 'fg' },
           gui = "bold",
         }),
         magenta_fg = c.extract_hl({
-          bg = { StatusLine   = 'bg' },
-          fg = { Directory    = 'fg' },
+          bg = { [hl_statusline]   = 'bg' },
+          fg = { [hl_magenta]      = 'fg' },
           -- fg = { MatchParen   = 'fg' },
           gui = "bold",
         }),
