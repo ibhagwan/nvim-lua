@@ -447,4 +447,15 @@ M.command = function(args)
   vim.cmd("command! " .. args)
 end
 
+M.fugitive_exec = function(git_dir, git_cmd, ...)
+  local args = { ... }
+  local bufnr = vim.api.nvim_get_current_buf()
+  local buf_git_dir = vim.b.git_dir
+  vim.b.git_dir = vim.fn.expand(git_dir)
+  vim.cmd(git_cmd .. " " .. table.concat(args, " "))
+  -- after the fugitive window switch we must explicitly
+  -- use the buffer num to restore the original 'git_dir'
+  vim.b[bufnr].git_dir = buf_git_dir
+end
+
 return M

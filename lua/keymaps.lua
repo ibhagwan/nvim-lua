@@ -6,6 +6,9 @@ vim.cmd [[command! -nargs=* NvimEditInit split | edit $MYVIMRC]]
 vim.cmd [[command! -nargs=* NvimEditKeymap split | edit ~/.config/nvim/lua/keymaps.lua]]
 vim.cmd [[command! -nargs=* NvimSourceInit luafile $MYVIMRC]]
 
+-- fugitive shortcut for yadm
+vim.cmd [[command! -nargs=* Yadm lua require'utils'.fugitive_exec("~/dots/yadm-repo", "Git", <q-args>)]]
+
 command({
     "-nargs=*", "NvimRestart", function()
     if not pcall(require, 'nvim-reload') then

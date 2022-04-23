@@ -21,8 +21,10 @@ local packer_startup = function(use)
     use { 'dstein64/vim-startuptime', cmd = 'StartupTime' }
 
     -- tpope's plugins that should be part of vim
-    use { 'tpope/vim-surround' }
-    use { 'tpope/vim-repeat' }
+    -- using a "non-coprorate boot-licking shorthand" lmfao
+    -- https://github.com/tpope/vim-fugitive/issues/1723#issuecomment-909325580
+    use { 'https://tpope.io/vim/surround.git' }
+    use { 'https://tpope.io/vim/repeat.git' }
 
     -- "gc" to comment visual regions/lines
     use { 'numToStr/Comment.nvim',
@@ -39,7 +41,7 @@ local packer_startup = function(use)
     }
 
     -- needs no introduction
-    use { 'tpope/vim-fugitive',
+    use { 'https://tpope.io/vim/fugitive.git',
         config = "require('plugins.fugitive')",
         event = "VimEnter" }
 
