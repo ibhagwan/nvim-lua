@@ -51,6 +51,11 @@ au.group('PackerCompile', function(g)
   }
 end)
 
+-- auto-delete fugitive buffers
+au.group('Fugitive', {
+  { 'BufReadPost,', 'fugitive://*', 'set bufhidden=delete' }
+})
+
 au.group('Solidity', {
   { 'BufRead,BufNewFile', '*.sol', 'set filetype=solidity' }
 })
