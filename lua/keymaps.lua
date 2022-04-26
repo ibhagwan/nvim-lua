@@ -6,8 +6,29 @@ vim.cmd [[command! -nargs=* NvimEditInit split | edit $MYVIMRC]]
 vim.cmd [[command! -nargs=* NvimEditKeymap split | edit ~/.config/nvim/lua/keymaps.lua]]
 vim.cmd [[command! -nargs=* NvimSourceInit luafile $MYVIMRC]]
 
--- fugitive shortcut for yadm
-vim.cmd [[command! -nargs=* Yadm lua require'utils'.fugitive_exec("~/dots/yadm-repo", "Git", <q-args>)]]
+-- fugitive shortcuts for yadm
+local function fugitive_command(nargs, cmd_name, cmd_git, cmd_comp)
+  local yadm_repo = "$HOME/dots/yadm-repo"
+  local complete = cmd_comp and ("-complete=customlist,%s"):format(cmd_comp) or ""
+  vim.cmd (([[command! -nargs=%s %s %s ]] ..
+    [[lua require("utils").fugitive_exec("%s", "%s", <q-args>)]])
+      :format(nargs, complete, cmd_name, yadm_repo, cmd_git))
+end
+
+fugitive_command("?", "Yadm",        "Git",          "fugitive#Complete")
+fugitive_command("?", "Yit",         "Git",          "fugitive#Complete")
+fugitive_command("*", "Yread",       "Gread",        "fugitive#ReadComplete")
+fugitive_command("*", "Yedit",       "Gedit",        "fugitive#EditComplete")
+fugitive_command("*", "Ywrite",      "Gwrite",       "fugitive#EditComplete")
+fugitive_command("*", "Ydiffsplit",  "Gdiffsplit",   "fugitive#EditComplete")
+fugitive_command("*", "Yhdiffsplit", "Ghdiffsplit",  "fugitive#EditComplete")
+fugitive_command("*", "Yvdiffsplit", "Gvdiffsplit",  "fugitive#EditComplete")
+fugitive_command("1", "YMove",       "GMove",        "fugitive#CompleteObject")
+fugitive_command("1", "YRename",     "GRename",      "fugitive#RenameComplete")
+fugitive_command("0", "YRemove",     "GRemove")
+fugitive_command("0", "YUnlink",     "GUnlink")
+fugitive_command("0", "YDelete",     "GDelete")
+
 
 command({
     "-nargs=*", "NvimRestart", function()
