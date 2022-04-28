@@ -37,6 +37,15 @@ map_fzf('n', '<leader>fv', "grep_visual")
 map_fzf('v', '<leader>fv', "grep_visual")
 map_fzf('n', '<leader>fb', "blines")
 map_fzf('n', '<leader>fB', "lgrep_curbuf", { prompt = 'Buffer❯ ' })
+map_fzf('n', '<leader>f3', "blines", function()
+  return { fzf_opts = { ["--query"] = vim.fn.expand("<cword>") }}
+end)
+map_fzf('n', '<leader>f8', "grep_curbuf", function()
+  return { prompt = 'Buffer❯ ', search=vim.fn.expand("<cword>") }
+end)
+map_fzf('n', '<leader>f*', "grep_curbuf", function()
+  return { prompt = 'Buffer❯ ', search=vim.fn.expand("<cWORD>") }
+end)
 map_fzf('n', '<leader>fp', "files", {})
 map_fzf('n', '<leader>fg', "git_files", {})
 map_fzf('n', '<leader>fH', "oldfiles", { cwd = "~" })
