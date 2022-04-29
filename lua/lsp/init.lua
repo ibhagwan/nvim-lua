@@ -110,10 +110,25 @@ local servers = {
   -- 'ccls',
 }
 
+local function is_installed(cfg)
+  local cmd = cfg.document_config
+    and cfg.document_config.default_config
+    and cfg.document_config.default_config.cmd or nil
+  -- server globally installed?
+  if cmd and cmd[1] and vim.fn.executable(cmd[1]) == 1 then
+    return true
+  end
+  -- otherwise, check 'nvim-lsp-installer' path
+  local has_cfg, srv = require"nvim-lsp-installer".get_server(cfg.name)
+  return has_cfg and srv:is_installed()
+end
+
 for _, srv in ipairs(servers) do
   local cfg = make_config()
   if __settings[srv] then
     cfg = vim.tbl_deep_extend("force", __settings[srv], cfg)
   end
-  lspconfig[srv].setup(cfg)
+  if is_installed(lspconfig[srv]) then
+    lspconfig[srv].setup(cfg)
+  end
 end
