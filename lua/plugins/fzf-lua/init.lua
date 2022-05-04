@@ -207,9 +207,13 @@ fzf_lua.setup {
     },
     status            = {
       prompt          = 'GitStatus❯ ',
+      cmd             = "git status -su",
       winopts         = {
         preview       = { vertical = "down:70%", horizontal = "right:70%" }
-      }
+      },
+      actions         = {
+        ["ctrl-x"]    = { fzf_lua.actions.git_reset, fzf_lua.actions.resume },
+      },
     },
     commits           = {
       prompt          = 'Commits❯ ',

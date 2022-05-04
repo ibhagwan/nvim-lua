@@ -1,5 +1,21 @@
 local map = vim.api.nvim_buf_set_keymap
 
+-- backward compat
+local client_has_capability = function(client, capability)
+  local resolved_capabilities = {
+    codeLensProvider = 'code_len',
+    documentFormattingProvider = 'document_formatting',
+    documentRangeFormattingProvider = 'document_range_formatting',
+  }
+  if vim.fn.has("nvim-0.8") == 1 then
+    return client.server_capabilities[capability]
+  else
+    assert(resolved_capabilities[capability])
+    capability = resolved_capabilities[capability]
+    return client.resolved_capabilities[capability]
+  end
+end
+
 local on_attach = function(client, bufnr)
 
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
@@ -53,14 +69,14 @@ local on_attach = function(client, bufnr)
     map(bufnr, 'n', '<leader>lQ', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
   end
 
-  if client.resolved_capabilities.document_formatting then
+  if client_has_capability(client, 'documentFormattingProvider') then
     map(bufnr, 'n', 'gq', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
   end
-  if client.resolved_capabilities.document_range_formatting then
+  if client_has_capability(client, 'documentRangeFormattingProvider') then
     map(bufnr, 'v', 'gq', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
   end
 
-  if client.resolved_capabilities.code_lens then
+  if client_has_capability(client, 'codeLensProvider') then
     map(bufnr, "n", "<leader>lL", "<cmd>lua vim.lsp.codelens.run()<CR>", opts)
     vim.api.nvim_command [[autocmd CursorHold,CursorHoldI,InsertLeave <buffer> lua vim.lsp.codelens.refresh()]]
   end

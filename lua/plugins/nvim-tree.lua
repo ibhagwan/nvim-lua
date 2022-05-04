@@ -1,7 +1,7 @@
 local remap = vim.api.nvim_set_keymap
 
-remap('', '<leader>ee', "<Esc>:NvimTreeToggle<CR>",     { silent = true })
-remap('', '<leader>ef',  "<Esc>:NvimTreeFindFile<CR>",  { silent = true })
+remap('', '<leader>ee', "<Esc>:NvimTreeToggle<CR>",         { silent = true })
+remap('', '<leader>ef', "<Esc>:NvimTreeFindFileToggle<CR>", { silent = true })
 
 -- files that get highlighted with 'NvimTreeSpecialFile'
 vim.g.nvim_tree_special_files = {
@@ -70,7 +70,6 @@ require'nvim-tree'.setup {
   view = {
     width = 30,
     side = 'left',
-    auto_resize = false,
     mappings = {
       custom_only = false,
       list = {
@@ -87,8 +86,7 @@ require'nvim-tree'.setup {
   filters = {
     dotfiles = false,
     custom = {
-      ".git",
-      ".sumneko_lua",
+      "\\.git",
       ".cache",
       "node_modules",
       "__pycache__",

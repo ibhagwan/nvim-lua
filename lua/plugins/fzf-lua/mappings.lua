@@ -106,9 +106,11 @@ map_fzf('n', '<leader>ed', "git_files", vim.tbl_extend("force", yadm_opts,
 map_fzf('n', '<leader>eb', "git_branches", yadm_opts )
 map_fzf('n', '<leader>eC', "git_commits",  yadm_opts )
 map_fzf('n', '<leader>ec', "git_bcommits", yadm_opts )
-map_fzf('n', '<leader>es', "git_status", yadm_opts )
+map_fzf('n', '<leader>es', "git_status", vim.tbl_extend("force",
+  yadm_opts, { cmd = "git status -s" }))
 map_fzf('n', '<leader>eS', "git_status_tmuxZ", vim.tbl_extend("force",
   yadm_opts, {
+    cmd = "git status -s",
     winopts = {
       fullscreen = true,
       preview = {

@@ -212,6 +212,11 @@ M.git_changes_buf = function(opts)
     local stats = {}
     if buffer and buffer.bufnr > 0 then
       local ok, res = pcall(vim.api.nvim_buf_get_var,
+        buffer.bufnr, 'vgit_status')
+      if ok then stats = res end
+    end
+    if buffer and buffer.bufnr > 0 then
+      local ok, res = pcall(vim.api.nvim_buf_get_var,
         buffer.bufnr, 'gitsigns_status_dict')
       if ok then stats = res end
     end

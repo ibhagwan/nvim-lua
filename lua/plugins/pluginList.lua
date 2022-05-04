@@ -54,28 +54,10 @@ local packer_startup = function(use)
         requires = { 'nvim-lua/plenary.nvim' },
         config = "require('plugins.gitsigns')",
         after = "plenary.nvim" }
-
-    use { 'sindrets/diffview.nvim',
-        requires = { 'nvim-lua/plenary.nvim' },
-        -- was causing issues when switching between neovim versions
-        -- From packer.nvim README:
-        -- NOTE: If you use a function value for config or setup keys in any
-        -- plugin specifications, it must not have any upvalues (i.e. captures).
-        -- We currently use Lua's string.dump to compile config/setup functions
-        -- to bytecode, which has this limitation.
-        --[[ setup = function()
-          require'utils'.command({
-            "-nargs=*", "DiffviewOpen", function(args)
-              if not pcall(require, 'diffview') then
-                require('packer').loader('plenary.nvim')
-                require('packer').loader('diffview.nvim')
-              end
-              require'diffview'.open(#args>0 and args)
-            end})
-        end, ]]
-        config = "require('plugins.diffview')",
-        cmd = {'DiffviewOpen'},
-        opt = true }
+    -- use { prefer_local('tanvirtin/vgit.nvim'),
+    --     requires = { 'nvim-lua/plenary.nvim' },
+    --     config = "require('plugins.vgit')",
+    --     after = "plenary.nvim" }
 
     -- Add indentation guides
     use { 'lukas-reineke/indent-blankline.nvim',
@@ -149,7 +131,7 @@ local packer_startup = function(use)
     -- nvim-tree
     use { 'kyazdani42/nvim-tree.lua',
         config = "require('plugins.nvim-tree')",
-        cmd = { 'NvimTreeToggle', 'NvimTreeFindFile' },
+        cmd = { 'NvimTreeToggle', 'NvimTreeFindFileToggle' },
         opt = true,
     }
 
