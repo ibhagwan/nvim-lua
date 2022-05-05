@@ -20,19 +20,25 @@ gitsigns.setup {
   diff_opts = { internal = true, },
   yadm = { enable = true, },
   on_attach = function(bufnr)
-    local gs = package.loaded.gitsigns
     local map = require'utils'.remap
-    local opts = { noremap = true }
+    local opts = { noremap = true, buffer = bufnr }
+    local opts_expr = { noremap = true, buffer = bufnr, expr = true }
 
-    map('n', ']c', function()
-      if vim.wo.diff then vim.api.nvim_feedkeys(']c', 'n', true) end
-      vim.schedule(function() gs.next_hunk() end)
-    end, opts)
+    -- creates too many lua func references as
+    -- this is called for every bufer attach
+    -- local gs = package.loaded.gitsigns
+    -- map('n', ']c', function()
+    --   if vim.wo.diff then vim.api.nvim_feedkeys(']c', 'n', true) end
+    --   vim.schedule(function() gs.next_hunk() end)
+    -- end, opts)
+    --
+    -- map('n', '[c', function()
+    --   if vim.wo.diff then vim.api.nvim_feedkeys('[c', 'n', true) end
+    --   vim.schedule(function() gs.prev_hunk() end)
+    -- end, opts)
 
-    map('n', '[c', function()
-      if vim.wo.diff then vim.api.nvim_feedkeys('[c', 'n', true) end
-      vim.schedule(function() gs.prev_hunk() end)
-    end, opts)
+    map('n', '[c', "&diff ? '[c' : '<cmd>lua package.loaded.gitsigns.prev_hunk()<CR>'", opts_expr)
+    map('n', ']c', "&diff ? ']c' : '<cmd>lua package.loaded.gitsigns.next_hunk()<CR>'", opts_expr)
 
     -- Actions
     map({'n', 'v'}, '<leader>hs', '<cmd>lua require("gitsigns").stage_hunk()<CR>', opts)
