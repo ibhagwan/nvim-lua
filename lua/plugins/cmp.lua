@@ -51,21 +51,28 @@ cmp.setup {
 
   formatting = {
     deprecated = false,
+    fields = { "kind", "abbr", "menu" },
     format = function(entry, vim_item)
-        -- fancy icons and a name of kind
-        local idx = vim.lsp.protocol.CompletionItemKind[vim_item.kind] or nil
-        if tonumber(idx)>0 then
-          vim_item.kind = vim.lsp.protocol.CompletionItemKind[idx]
+
+        local source_names = {
+          path = "Path",
+          buffer = "Buffer",
+          cmdline = "Cmdline",
+          luasnip = "LuaSnip",
+          nvim_lua = "Lua",
+          nvim_lsp = "LSP",
+        }
+
+        vim_item.menu = ("%-10s [%s]"):format(
+          vim_item.kind,
+          source_names[entry.source.name] or entry.source.name)
+
+        -- get the item kind icon from our LSP settings
+        local kind_idx = vim.lsp.protocol.CompletionItemKind[vim_item.kind]
+        if tonumber(kind_idx) > 0 then
+          vim_item.kind = vim.lsp.protocol.CompletionItemKind[kind_idx]
         end
 
-        -- set a name for each source
-        vim_item.menu = ({
-          path = "[Path]",
-          buffer = "[Buffer]",
-          luasnip = "[LuaSnip]",
-          nvim_lua = "[Lua]",
-          nvim_lsp = "[LSP]",
-        })[entry.source.name]
         return vim_item
     end,
   },
