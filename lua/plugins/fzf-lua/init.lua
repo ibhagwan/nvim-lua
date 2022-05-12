@@ -69,7 +69,7 @@ fzf_lua.setup {
       vertical            = 'down:45%',
       horizontal          = 'right:60%',
       layout              = 'flex',
-      flip_columns        = 120,
+      flip_columns        = 130,
       title               = true,
       scrollbar           = 'float',
       -- scrolloff           = '-1',
