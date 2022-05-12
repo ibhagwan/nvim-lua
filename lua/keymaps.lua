@@ -43,10 +43,8 @@ command({
 -- without output or jumping to first match
 -- Use ':Grep <pattern> %' to search only current file
 -- Use ':Grep <pattern> %:h' to search the current file dir
-vim.cmd("command! -nargs=+ -complete=file Grep " ..
-    "lua vim.api.nvim_exec([[noautocmd grep! <args> | redraw! | copen]], true)")
-vim.cmd("command! -nargs=+ -complete=file LGrep " ..
-    "lua vim.api.nvim_exec([[noautocmd lgrep! <args> | redraw! | lopen]], true)")
+vim.cmd("command! -nargs=+ -complete=file Grep noautocmd grep! <args> | redraw! | copen")
+vim.cmd("command! -nargs=+ -complete=file LGrep noautocmd lgrep! <args> | redraw! | lopen")
 
 remap('', '<leader>ei', '<Esc>:NvimEditInit<CR>',   { silent = true })
 remap('', '<leader>ek', '<Esc>:NvimEditKeymap<CR>', { silent = true })
@@ -93,15 +91,14 @@ remap('c', '<up>',   '(pumvisible() ? "\\<C-p>" : "\\<up>")',   { noremap = true
 -- Terminal mappings
 remap('t', '<M-[>', [[<C-\><C-n>]],      { noremap = true })
 remap('t', '<C-w>', [[<C-\><C-n><C-w>]], { noremap = true })
-remap('t', '<M-r>', [['<C-\><C-N>"'.nr2char(getchar()).'pi']],
-    { noremap = true, expr = true })
+remap('t', '<M-r>', [['<C-\><C-N>"'.nr2char(getchar()).'pi']], { noremap = true, expr = true })
 
 -- tmux like directional window resizes
 remap('n', '<leader><Up>',    "<cmd>lua require'utils'.resize(false, -5)<CR>", { noremap = true, silent = true })
 remap('n', '<leader><Down>',  "<cmd>lua require'utils'.resize(false,  5)<CR>", { noremap = true, silent = true })
 remap('n', '<leader><Left>',  "<cmd>lua require'utils'.resize(true,  -5)<CR>", { noremap = true, silent = true })
 remap('n', '<leader><Right>', "<cmd>lua require'utils'.resize(true,   5)<CR>", { noremap = true, silent = true })
-remap('n', '<leader>=',       '<C-w>=',               { noremap = true, silent = true })
+remap('n', '<leader>=',       '<C-w>=', { noremap = true, silent = true })
 
 -- Tab navigation
 remap('n', '[t',         ':tabprevious<CR>', { noremap = true })
@@ -110,7 +107,7 @@ remap('n', '[T',         ':tabfirst<CR>',    { noremap = true })
 remap('n', ']T',         ':tablast<CR>',     { noremap = true })
 remap('n', '<Leader>tn', ':tabnew<CR>',      { noremap = true })
 remap('n', '<Leader>tc', ':tabclose<CR>',    { noremap = true })
-remap('n', '<Leader>to', ':tabonly<CR>',    { noremap = true })
+remap('n', '<Leader>to', ':tabonly<CR>',     { noremap = true })
 -- Jump to first tab & close all other tabs. Helpful after running Git difftool.
 remap('n', '<Leader>tO', ':tabfirst<CR>:tabonly<CR>', { noremap = true })
 -- tmux <c-meta>z like
@@ -147,17 +144,13 @@ remap({'n', 'v'}, '<leader>s', '"*p',   { noremap = true })
 remap({'n', 'v'}, '<leader>S', '"*P',   { noremap = true })
 remap({'n', 'v'}, '<leader>p', '"0p',   { noremap = true })
 remap({'n', 'v'}, '<leader>P', '"0P',   { noremap = true })
-remap({'n', 'v'}, '<leader>y', '<cmd>let @+=@0<CR>', { noremap = true })
-remap({'n', 'v'}, '<leader>Y', ':OSCYank<CR>', { noremap = true })
+remap({'n', 'v'}, '<leader>y', '<cmd>OSCYankReg 0<CR>', { noremap = true })
+-- remap({'n', 'v'}, '<leader>y', '<cmd>let @+=@0<CR>', { noremap = true })
 
 -- Overloads for 'd|c' that don't pollute the unnamed registers
--- In visual-select mode 'd=delete, x=cut (unchanged)'
--- remap('v', 'd',          '"_d',     { noremap = true })
--- remap('n', '<leader>d',  '"_d',     { noremap = true })
-remap('n', '<leader>D',  '"_D',     { noremap = true })
-remap('n', '<leader>c',  '"_c',     { noremap = true })
-remap('n', '<leader>C',  '"_C',     { noremap = true })
-remap('v', '<leader>c',  '"_c',     { noremap = true })
+remap('n', '<leader>D',  '"_D',         { noremap = true })
+remap('n', '<leader>C',  '"_C',         { noremap = true })
+remap({'n', 'v'}, '<leader>c',  '"_c',  { noremap = true })
 
 -- Map `Y` to copy to end of line
 -- conistent with the behaviour of `C` and `D`
@@ -219,7 +212,7 @@ remap('n', '<leader>|',
     { noremap = true, silent = true })
 
 -- Change current working dir (:pwd) to curent file's folder
-remap('n', '<leader>%', '<Esc>:lua require"utils".set_cwd()<CR>',   { noremap = true, silent = true })
+remap('n', '<leader>%', '<Esc>:lua require"utils".set_cwd()<CR>', { noremap = true, silent = true })
 
 -- Map <leader>o & <leader>O to newline without insert mode
 remap('n', '<leader>o',

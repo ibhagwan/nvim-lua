@@ -1,11 +1,10 @@
 local au = require('au')
 
 au.group('HighlightYankedText', function(g)
+  -- highlight yanked text and copy to system clipboard
   g.TextYankPost = {
     '*',
-    function()
-      vim.highlight.on_yank{higroup='IncSearch', timeout=2000}
-    end
+    "if has('clipboard') | let @+=@0 | endif | lua vim.highlight.on_yank{higroup='IncSearch', timeout=2000}"
   }
 end)
 
@@ -14,21 +13,17 @@ au.group('NewlineNoAutoComments', function(g)
 end)
 
 au.group('TermOptions', function(g)
-    -- conflicts with neoterm
-    -- g.TermOpen = { '*', 'startinsert' },
-    g.TermOpen = { '*', 'setlocal listchars= nonumber norelativenumber' }
+  g.TermOpen = { '*', 'setlocal listchars= nonumber norelativenumber' }
 end)
 
 au.group('ResizeWindows', function(g)
-    g.VimResized = { '*', 'tabdo wincmd =' }
+  g.VimResized = { '*', 'tabdo wincmd =' }
 end)
 
 au.group('ToggleColorcolumn', {
   {
     'VimResized,WinEnter,BufWinEnter', '*',
-    function()
-      require'utils'.toggle_colorcolumn()
-    end,
+    'lua require"utils".toggle_colorcolumn()',
   }
 })
 
@@ -45,9 +40,7 @@ au.group('ActiveWinCursorLine', {
 au.group('PackerCompile', function(g)
   g.BufWritePost = {
     'packer_init.lua',
-    function()
-      require('plugins').compile()
-    end
+    'require("plugins").compile()',
   }
 end)
 
