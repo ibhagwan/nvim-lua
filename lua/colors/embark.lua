@@ -112,7 +112,7 @@ hl.syntax = {
   Identifier =        { fg = hl.c.purple },
   Function =          { fg = hl.c.red },
   Keyword =           { fg = hl.c.red },
-  Statement =         { fg = hl.c.red },
+  Statement =         { fg = hl.c.purple },
   Conditional =       { fg = hl.c.red },
   Label =             { fg = hl.c.dark_blue },
   Operator =          { fg = hl.c.dark_cyan },
@@ -225,6 +225,14 @@ hl.lsp = {
   DiagnosticUnderlineWarn             = { sp = hl.c.yellow, gui = 'underline', cterm = 'underline' },
   DiagnosticUnderlineInfo             = { sp = hl.c.blue,   gui = 'underline', cterm = 'underline' },
   DiagnosticUnderlineHint             = { sp = hl.c.purple, gui = 'underline', cterm = 'underline' },
+}
+
+  -- XML
+hl.xml = {
+  xmlAttrib  =  { fg = hl.c.green },
+  xmlEndTag  =  { fg = hl.c.red },
+  xmlTag     =  { fg = hl.c.blue },
+  xmlTagName =  { fg = hl.c.red },
 }
 
 return hl

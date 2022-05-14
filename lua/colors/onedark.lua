@@ -216,4 +216,12 @@ hl.lsp = {
   DiagnosticUnderlineHint             = { sp = hl.c.purple, gui = 'underline', cterm = 'underline' },
 }
 
+  -- XML
+hl.xml = {
+  xmlAttrib  =  { fg = hl.c.dark_yellow },
+  xmlEndTag  =  { fg = hl.c.red },
+  xmlTag     =  { fg = hl.c.blue },
+  xmlTagName =  { fg = hl.c.red },
+}
+
 return hl

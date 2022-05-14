@@ -112,6 +112,7 @@ M.set_colorscheme = function(hl, theme)
     hl.syntax,
     hl.ts,
     hl.lsp,
+    hl.xml,
   }) do
     for k, v in pairs(t) do h(k, v) end
   end
@@ -389,12 +390,6 @@ vim.cmd('hi link DiagnosticVirtualTextHint    LspDiagnosticsDefaultHint')
   h('typescriptReserved',  { fg = purple })
   h('typescriptEndColons', { fg = white })
   h('typescriptBraces',    { fg = white })
-
-  -- XML
-  h('xmlAttrib',  { fg = dark_yellow })
-  h('xmlEndTag',  { fg = red })
-  h('xmlTag',     { fg = red })
-  h('xmlTagName', { fg = red })
 
   -- airblade/vim-gitgutter
   vim.cmd('hi link GitGutterAdd    SignifySignAdd')
