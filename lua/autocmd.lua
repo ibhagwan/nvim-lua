@@ -57,9 +57,11 @@ au.group('Solidity', {
 au.group('Help', function(g)
   g.FileType = { 'help,man',
     function()
-      -- do nothing for floating windows
+      -- do nothing for floating windows or if this is
+      -- the fzf-lua minimized help window (height=1)
       local cfg = vim.api.nvim_win_get_config(0)
-      if cfg and (cfg.external or cfg.relative and #cfg.relative>0) then
+      if cfg and (cfg.external or cfg.relative and #cfg.relative>0)
+        or vim.api.nvim_win_get_height(0) == 1 then
         return
       end
       -- do not run if Diffview is open
@@ -67,10 +69,6 @@ au.group('Help', function(g)
         require'diffview.lib'.get_current_view() then
         return
       end
-      -- local var = vim.bo.filetype .. "_init"
-      -- local ok, is_init = pcall(vim.api.nvim_buf_get_var, 0, var)
-      -- if ok and is_init == true then return end
-      -- vim.api.nvim_buf_set_var(0, var, true)
       local width = math.floor(vim.o.columns*0.75)
       vim.cmd("wincmd L")
       vim.cmd("vertical resize " .. width)
