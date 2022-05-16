@@ -135,7 +135,7 @@ hi! link Boolean          Constant
 hi! link Float            Constant
 
 call s:h("Identifier",    {"fg": s:purple})
-hi! link Function         Keyword
+call s:h("Function",      {"fg": s:red})
 
 call s:h("Label",        {"fg": s:dark_blue})
 hi! link Conditonal       Statement
@@ -150,7 +150,7 @@ hi! link Define           PreProc
 hi! link Macro            PreProc
 hi! link PreCondit        PreProc
 
-call s:h("Keyword",       {"fg": s:red})
+call s:h("Keyword",       {"fg": s:green})
 hi! link Statement        Keyword
 
 call s:h("Type",          {"fg": s:blue})
@@ -388,33 +388,46 @@ call s:h ("LspDiagnosticsFloatingHint", {"bg": s:space2, "fg": s:purple})
 " Highlights
 " Diagnostic[SEVERITY]
 " Diagnostic[TYPE][SEVERITY]
-hi! link DiagnosticError                LspDiagnosticsDefaultError 
-hi! link DiagnosticWarn                 LspDiagnosticsDefaultWarning
-hi! link DiagnosticInfo                 LspDiagnosticsDefaultInformation
-hi! link DiagnosticHint                 LspDiagnosticsDefaultHint
-hi! link DiagnosticSignError            LspDiagnosticsSignError
-hi! link DiagnosticSignWarn             LspDiagnosticsSignWarning
-hi! link DiagnosticSignInfo             LspDiagnosticsSignInformation
-hi! link DiagnosticSignHint             LspDiagnosticsSignHint
-hi! link DiagnosticFloatingError        LspDiagnosticsFloatingError
-hi! link DiagnosticFloatingWarn         LspDiagnosticsFloatingWarning
-hi! link DiagnosticFloatingInfo         LspDiagnosticsFloatingInformation
-hi! link DiagnosticFloatingHint         LspDiagnosticsFloatingHint
-hi! link DiagnosticVirtualTextError     LspDiagnosticsDefaultError
-hi! link DiagnosticVirtualTextWarn      LspDiagnosticsDefaultWarning
-hi! link DiagnosticVirtualTextInfo      LspDiagnosticsDefaultInformation
-hi! link DiagnosticVirtualTextHint      LspDiagnosticsDefaultHint
+"
+" Default Diagnostic highlights
+" Dark background for virtual text
+call s:h("DiagnosticHint", { "fg": s:purple, "bg": s:bg_dark })
+call s:h("DiagnosticInfo", { "fg": s:blue, "bg": s:bg_dark })
+call s:h("DiagnosticWarn", { "fg": s:yellow, "bg": s:bg_dark })
+call s:h("DiagnosticError", { "fg": s:red, "bg": s:bg_dark })
+" For signs and floating menus drop the dark background
+call s:h("DiagnosticSignHint", { "fg": s:purple })
+call s:h("DiagnosticSignWarn", { "fg": s:yellow })
+call s:h("DiagnosticSignInfo", { "fg": s:blue })
+call s:h("DiagnosticSignError", { "fg": s:red })
+hi link DiagnosticFloatingHint DiagnosticSignHint
+hi link DiagnosticFloatingInfo DiagnosticSignInfo
+hi link DiagnosticFloatingWarn DiagnosticSignWarn
+hi link DiagnosticFloatingError DiagnosticSignError
+call s:h("DiagnosticUnderlineHint", {"cterm": "undercurl", "gui": "undercurl", "fg": s:purple})
+call s:h("DiagnosticUnderlineInfo", {"cterm": "undercurl", "gui": "undercurl", "fg": s:blue})
+call s:h("DiagnosticUnderlineWarn", {"cterm": "undercurl", "gui": "undercurl", "fg": s:yellow})
+call s:h("DiagnosticUnderlineError", {"cterm": "undercurl", "gui": "undercurl", "fg": s:red})
 
 " Telescope support
 call s:h("telescopeSelection", {"fg": s:astral1, "bg": s:space3})
 call s:h("TelescopeBorder", {"fg": s:astral0})
 call s:h("TelescopeMatching", {"fg": s:yellow})
 call s:h("TelescopeNormal", {"fg": s:astral0})
+hi link TelescopeResultsDiffAdd GitGutterAdd
+hi link TelescopeResultsDiffChange GitGutterChange
+hi link TelescopeResultsDiffDelete GitGutterDelete
+hi link TelescopeResultsDiffUntracked Title
 
 " Nvim-tree support
 call s:h("NvimTreeFolderIcon", {"fg": s:purple})
 call s:h("NvimTreeFolderName", {"fg": s:blue})
 call s:h("NvimTreeRootFolder", {"fg": s:green})
+
+" nvim-cmp support
+hi link CmpItemMenu Comment
+hi link CmpItemKindDefault Identifier
+hi link CmpItemAbbrMatch Pmenu
 
 " nvim terminal colors
 let g:terminal_color_0 = s:bg_bright.gui
