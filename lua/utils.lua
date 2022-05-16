@@ -306,7 +306,9 @@ M.resize = function(vertical, margin)
 end
 
 M.sudo_exec = function(cmd, print_output)
+  vim.fn.inputsave()
   local password = vim.fn.inputsecret("Password: ")
+  vim.fn.inputrestore()
   if not password or #password == 0 then
       M.warn("Invalid password, sudo aborted")
       return false
