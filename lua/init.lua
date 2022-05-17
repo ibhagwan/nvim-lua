@@ -252,4 +252,8 @@ require 'keymaps'
 -- https://github.com/embark-theme/vim
 -- vim.g.embark_transparent = true
 -- vim.g.embark_terminal_italics = true
-pcall(vim.cmd, [[colorscheme nightfly]])
+if require'utils'.is_root() then
+  pcall(vim.cmd, [[colorscheme lua-embark]])
+else
+  pcall(vim.cmd, [[colorscheme nightfly]])
+end
