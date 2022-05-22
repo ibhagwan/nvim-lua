@@ -7,16 +7,26 @@ vim.cmd [[command! -nargs=* NvimEditKeymap split | edit ~/.config/nvim/lua/keyma
 vim.cmd [[command! -nargs=* NvimSourceInit luafile $MYVIMRC]]
 
 -- fugitive shortcuts for yadm
+local yadm_repo = "$HOME/dots/yadm-repo"
 local function fugitive_command(nargs, cmd_name, cmd_git, cmd_comp)
-  local yadm_repo = "$HOME/dots/yadm-repo"
   local complete = cmd_comp and ("-complete=customlist,%s"):format(cmd_comp) or ""
   vim.cmd (([[command! -nargs=%s %s %s ]] ..
     [[lua require("utils").fugitive_exec("%s", "%s", <q-args>)]])
       :format(nargs, complete, cmd_name, yadm_repo, cmd_git))
 end
 
-fugitive_command("?", "Yadm",        "Git",          "fugitive#Complete")
-fugitive_command("?", "Yit",         "Git",          "fugitive#Complete")
+-- auto-complete for our custom fugitive Yadm command
+-- https://github.com/tpope/vim-fugitive/issues/1981#issuecomment-1113825991
+vim.cmd(([[
+  function! YadmComplete(A, L, P) abort
+    return fugitive#Complete(a:A, a:L, a:P, {'git_dir': expand("%s")})
+  endfunction
+]]):format(yadm_repo))
+
+vim.cmd(([[command! -bang -nargs=? -range=-1 -complete=customlist,YadmComplete Yadm exe fugitive#Command(<line1>, <count>, +"<range>", <bang>0, "<mods>", <q-args>, { 'git_dir': expand("%s") })]]):format(yadm_repo))
+
+-- fugitive_command("?", "Yadm",        "Git",          "fugitive#Complete")
+fugitive_command("?", "Yit",         "Git",          "YadmComplete")
 fugitive_command("*", "Yread",       "Gread",        "fugitive#ReadComplete")
 fugitive_command("*", "Yedit",       "Gedit",        "fugitive#EditComplete")
 fugitive_command("*", "Ywrite",      "Gwrite",       "fugitive#EditComplete")

@@ -7,10 +7,10 @@ vim.api.nvim_set_keymap('n', '<Leader>?', "<Esc>:WhichKey '' n<CR>", { noremap =
 vim.api.nvim_set_keymap('v', '<Leader>?', "<Esc>:WhichKey '' v<CR>", { noremap = true, silent = true })
 
 -- https://github.com/folke/which-key.nvim#colors
-vim.cmd([[highlight default link WhichKey          htmlH1]])
+vim.cmd([[highlight default link WhichKey          Label]])
 vim.cmd([[highlight default link WhichKeySeperator String]])
-vim.cmd([[highlight default link WhichKeyGroup     Keyword]])
-vim.cmd([[highlight default link WhichKeyDesc      Include]])
+vim.cmd([[highlight default link WhichKeyGroup     Include]])
+vim.cmd([[highlight default link WhichKeyDesc      Function]])
 vim.cmd([[highlight default link WhichKeyFloat     CursorLine]])
 vim.cmd([[highlight default link WhichKeyValue     Comment]])
 

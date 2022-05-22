@@ -61,8 +61,8 @@ require("telescope").setup {
         ["<S-up>"] = actions.preview_scrolling_up,
         ["<S-down>"] = actions.preview_scrolling_down,
 
-        ["<C-b>"] = actions.results_scrolling_up,
-        ["<C-f>"] = actions.results_scrolling_down,
+        ["<C-b>"] = actions.results_scrolling_down,
+        ["<C-f>"] = actions.results_scrolling_up,
 
         ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
         ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
@@ -81,8 +81,8 @@ require("telescope").setup {
         ["<S-up>"] = actions.preview_scrolling_up,
         ["<S-down>"] = actions.preview_scrolling_down,
 
-        ["<C-b>"] = actions.results_scrolling_up,
-        ["<C-f>"] = actions.results_scrolling_down,
+        ["<C-b>"] = actions.results_scrolling_down,
+        ["<C-f>"] = actions.results_scrolling_up,
 
         ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
         ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
