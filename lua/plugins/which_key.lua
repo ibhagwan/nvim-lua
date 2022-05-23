@@ -308,32 +308,6 @@ local keymaps = {
         p     = 'set breakpoint with log point message',
         r     = 'toggle debugger REPL',
     },
-    -- nvim-treesitter-textobjects
-    [' '] = {
-        name = '+treesitter-textobjects',
-        a = {
-            name = '+outer',
-            o = 'object|class',
-            b = 'block',
-            f = 'function',
-            c = 'condition',
-            C = 'call',
-            l = 'loop',
-            p = 'parameter',
-            s = 'statement',
-        },
-        i = {
-            name = '+inner',
-            o = 'object|class',
-            b = 'block',
-            f = 'function',
-            c = 'condition',
-            C = 'call',
-            l = 'loop',
-            p = 'parameter',
-            s = 'scopename',
-        },
-    }
   },
   ['g'] = {
         ['<C-V>'] = 'visually select last yanked/pasted text',

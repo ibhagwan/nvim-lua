@@ -29,16 +29,16 @@ require'nvim-treesitter.configs'.setup {
     -- ugly for markdown
     disable = {
       -- "c", "cpp",
-      "md", "markdown",
+      -- "md", "markdown",
     }
   },
   incremental_selection = {
     enable = true,
     keymaps = {
       init_selection = '<CR>',
-      scope_incremental = '<CR>',
-      node_incremental = '<Tab>',
+      node_incremental = '<CR>',
       node_decremental = '<S-Tab>',
+      scope_incremental = '<Tab>',
     },
   },
   textobjects = {
@@ -46,27 +46,11 @@ require'nvim-treesitter.configs'.setup {
       enable  = true,
       keymaps = {
         ["ac"] = "@comment.outer"    ,
+        ["ic"] = "@comment.outer"    ,
         ["ao"] = "@class.outer"      ,
         ["io"] = "@class.inner"      ,
         ["af"] = "@function.outer"   ,
         ["if"] = "@function.inner"   ,
-        -- Leader mappings, dups for whichkey
-        ["<Leader><Leader>ab"] = "@block.outer"      ,
-        ["<Leader><Leader>ib"] = "@block.inner"      ,
-        ["<Leader><Leader>af"] = "@function.outer"   ,
-        ["<Leader><Leader>if"] = "@function.inner"   ,
-        ["<Leader><Leader>ao"] = "@class.outer"      ,
-        ["<Leader><Leader>io"] = "@class.inner"      ,
-        ["<Leader><Leader>aC"] = "@call.outer"       ,
-        ["<Leader><Leader>iC"] = "@call.inner"       ,
-        ["<Leader><Leader>ac"] = "@conditional.outer",
-        ["<Leader><Leader>ic"] = "@conditional.inner",
-        ["<Leader><Leader>al"] = "@loop.outer"       ,
-        ["<Leader><Leader>il"] = "@loop.inner"       ,
-        ["<Leader><Leader>ap"] = "@parameter.outer"  ,
-        ["<Leader><Leader>ip"] = "@parameter.inner"  ,
-        ["<Leader><Leader>is"] = "@scopename.inner"  ,
-        ["<Leader><Leader>as"] = "@statement.outer"  ,
       },
     },
     move = {
