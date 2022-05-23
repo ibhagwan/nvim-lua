@@ -25,10 +25,12 @@ vim.g.nvim_tree_icons = {
   git = {
     -- staged      = "✓",
     -- renamed     = "➜",
-    unstaged    = "★",
-    staged      = "+",
-    unmerged    = "",
-    renamed     = "→",
+    -- renamed     = "→",
+    -- unstaged    = "★",
+    unstaged    = "M",
+    staged      = "S",
+    unmerged    = "U",
+    renamed     = "R",
     untracked   = "?",
     deleted     = "✗",
     ignored     = "◌",
@@ -61,10 +63,10 @@ require'nvim-tree'.setup {
     enable = true,
     show_on_dirs = true,
     icons = {
-      hint = "H",
-      info = "I",
-      warning = "W",
-      error = "E",
+      hint = "",
+      info = "",
+      warning = "",
+      error = "",
     }
   },
   view = {
