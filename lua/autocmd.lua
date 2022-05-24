@@ -4,7 +4,7 @@ au.group('HighlightYankedText', function(g)
   -- highlight yanked text and copy to system clipboard
   g.TextYankPost = {
     '*',
-    "if has('clipboard') | let @+=@0 | endif | lua vim.highlight.on_yank{higroup='IncSearch', timeout=2000}"
+    "if has('clipboard') && len(@0)>0 | let @+=@0 | endif | lua vim.highlight.on_yank{higroup='IncSearch', timeout=2000}"
   }
 end)
 

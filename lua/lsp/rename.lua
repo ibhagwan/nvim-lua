@@ -66,7 +66,7 @@ local function handler(...)
   if result and (result.changes or result.documentChanges) then
     for f, c in pairs(result.changes or result.documentChanges) do
       utils.info(('"%s", %d change(s)')
-        :format(c.textDocument and c.textDocument.uri or f, utils.tablelength(c)))
+        :format(c.textDocument and c.textDocument.uri or f, #c))
     end
   end
   vim.lsp.handlers[method](...)

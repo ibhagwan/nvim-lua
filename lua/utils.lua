@@ -1,13 +1,9 @@
 -- help to inspect results, e.g.:
 -- ':lua _G.dump(vim.fn.getwininfo())'
+-- neovim 0.7 has 'vim.pretty_print())
 function _G.dump(...)
   local objects = vim.tbl_map(vim.inspect, { ... })
   print(unpack(objects))
-end
-
-function _G.reload(package)
-    package.loaded[package] = nil
-    return require(package)
 end
 
 local M = {}
@@ -45,8 +41,7 @@ function M.is_root()
 end
 
 function M.is_darwin()
-  local os_name = vim.loop.os_uname().sysname
-  return os_name == 'Darwin'
+  return vim.loop.os_uname().sysname == 'Darwin'
 end
 
 function M.shell_error()
@@ -63,26 +58,18 @@ function M.have_compiler()
   return false
 end
 
-function M.git_cwd(cmd, cwd)
-  if not cwd then return cmd end
-  cwd = vim.fn.expand(cwd)
-  local arg_cwd = ("-C %s "):format(vim.fn.shellescape(cwd))
-  cmd = cmd:gsub("^git ", "git " ..  arg_cwd)
-  return cmd
-end
-
 function M.git_root(cwd, noerr)
-  local cmd = M.git_cwd("git rev-parse --show-toplevel", cwd)
+  local cmd = { "git", "rev-parse", "--show-toplevel" }
+  if cwd then
+    table.insert(cmd, 2, "-C")
+    table.insert(cmd, 3, vim.fn.expand(cwd))
+  end
   local output = vim.fn.systemlist(cmd)
   if M.shell_error() then
     if not noerr then M.info(unpack(output)) end
     return nil
   end
   return output[1]
-end
-
-function M.is_git_repo(cwd, noerr)
-  return not not M.git_root(cwd, noerr)
 end
 
 function M.set_cwd(pwd)
@@ -97,13 +84,6 @@ function M.set_cwd(pwd)
     M.warn(("Unable to set pwd to %s, directory is not accessible")
       :format(vim.fn.shellescape(pwd)))
   end
-end
-
--- Can also use #T ?
-function M.tablelength(T)
-  local count = 0
-  for _ in pairs(T) do count = count + 1 end
-  return count
 end
 
 function M.get_visual_selection()
@@ -133,7 +113,7 @@ function M.get_visual_selection()
     if cecol < cscol then cscol, cecol = cecol, cscol end
     local lines = vim.fn.getline(csrow, cerow)
     -- local n = cerow-csrow+1
-    local n = M.tablelength(lines)
+    local n = #lines
     if n <= 0 then return '' end
     lines[n] = string.sub(lines[n], 1, cecol)
     lines[1] = string.sub(lines[1], cscol)
@@ -214,9 +194,9 @@ end
 -- type='l': loclist toggle (all windows)
 function M.toggle_qf(type)
   local windows = M.find_qf(type)
-  if M.tablelength(windows) > 0 then
+  if #windows > 0 then
     -- hide all visible windows
-    for _, win in pairs(windows) do
+    for _, win in ipairs(windows) do
       vim.api.nvim_win_hide(win.winid)
     end
   else
