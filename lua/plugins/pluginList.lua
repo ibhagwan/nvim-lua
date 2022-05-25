@@ -17,14 +17,13 @@ local packer_startup = function(use)
     use { 'wbthomason/packer.nvim', opt = true }
 
     -- Analyze startuptime
-    -- use { 'tweekmonster/startuptime.vim', cmd = 'StartupTime' }
     use { 'dstein64/vim-startuptime', cmd = 'StartupTime' }
 
-    -- tpope's plugins that should be part of vim
-    -- using a "non-coprorate boot-licking shorthand" lmfao
-    -- https://github.com/tpope/vim-fugitive/issues/1723#issuecomment-909325580
-    use { 'https://tpope.io/vim/surround.git' }
-    use { 'https://tpope.io/vim/repeat.git' }
+    -- vim-surround/sandwich, lua version
+    use { 'echasnovski/mini.nvim',
+      config = "require'plugins.surround'",
+      event = "VimEnter"
+    }
 
     -- "gc" to comment visual regions/lines
     use { 'numToStr/Comment.nvim',
@@ -37,7 +36,8 @@ local packer_startup = function(use)
         config = "require('plugins.comment')",
         -- uncomment for lazy loading
         -- slight delay if loading in visual mode
-        keys = {'gcc', 'gc', 'gl'}
+        -- keys = {'gcc', 'gc', 'gl'}
+        event = "VimEnter"
     }
 
     -- needs no introduction
@@ -75,7 +75,7 @@ local packer_startup = function(use)
         opt = true,
     }
 
-    -- Neoterm (REPLs)
+    -- Terminal and REPLs
     use { 'akinsho/toggleterm.nvim',
         config = "require('plugins.neoterm')",
         keys = {'gxx', 'gx', '<C-\\>'},

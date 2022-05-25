@@ -25,20 +25,16 @@ release](https://github.com/neovim/neovim/releases/tag/v0.5.0)**
 - [packer.nvim](https://github.com/wbthomason/packer.nvim): lua plugin
   manager to auto-install and update our plugins
 
-### Tpope goodness
+### Basics
 
-- [vim-surround](https://github.com/tpope/vim-surround): adds the missing
-  motions (`ds`, `cs`, `ys`) for dealing with pairs of "surroundings" (quotes,
-  tags, etc)
-
-- [vim-repeat](https://github.com/tpope/vim-repeat): make the surround motions
-  repeatable with `.`
+- [mini.surround](https://github.com/echasnovski/mini.nvim): adds the missing
+  operators (`ds`, `cs`, `ys`) for dealing with pairs of "surroundings"
+  (quotes, tags, etc)
 
 ### Git
 
 - [vim-fugitive](https://github.com/tpope/vim-fugitive): git porcelain and
-  plumbing in one by tpope, the Swiss army knife of git, no other git plugin comes
-  close
+  plumbing in one by tpope, the Swiss army knife of git
 
 - [gitsigns](https://github.com/lewis6991/gitsigns.nvim): git gutter indicators
   and hunk management
