@@ -44,7 +44,7 @@ release](https://github.com/neovim/neovim/releases/tag/v0.5.0)**
 - [Comment.nvim](https://github.com/numToStr/Comment.nvim): use `gc` and
   `gcc` to comment visual-blocks and lines
 
-- [indent-blankline](https://github.com/lukas-reineke/indent-blankline.nvim):
+- [mini.indentscope](https://github.com/echasnovski/mini.nvim):
   add indentation markers based on `tabstop | shiftwidth`
 
 - [nvim-cmp](https://github.com/hrsh7th/nvim-cmp): autocompletion framework

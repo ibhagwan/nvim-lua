@@ -20,8 +20,12 @@ local packer_startup = function(use)
     use { 'dstein64/vim-startuptime', cmd = 'StartupTime' }
 
     -- vim-surround/sandwich, lua version
+    -- mini also has an indent highlighter
     use { 'echasnovski/mini.nvim',
-      config = "require'plugins.surround'",
+      config = [[
+        require'plugins.surround'
+        require'plugins.indent'
+      ]],
       event = "VimEnter"
     }
 
@@ -58,13 +62,6 @@ local packer_startup = function(use)
     --     requires = { 'nvim-lua/plenary.nvim' },
     --     config = "require('plugins.vgit')",
     --     after = "plenary.nvim" }
-
-    -- Add indentation guides
-    use { 'lukas-reineke/indent-blankline.nvim',
-        config = "require('plugins.indent-blankline')",
-        event = 'BufRead',
-        opt = true,
-    }
 
     -- 'famiu/nvim-reload' has been archived and no longer maintained
     use { vim.fn.stdpath("config") .. "/lua/plugins/nvim-reload",
