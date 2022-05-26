@@ -29,7 +29,7 @@ require'nvim-treesitter.configs'.setup {
     -- ugly for markdown
     disable = {
       -- "c", "cpp",
-      -- "md", "markdown",
+      "md", "markdown",
     }
   },
   incremental_selection = {

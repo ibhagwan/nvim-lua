@@ -8,6 +8,13 @@ au.group('HighlightYankedText', function(g)
   }
 end)
 
+-- disable mini.indentscope for certain filetype|buftype
+au.group('MiniIndentscopeDisable', function(g)
+  g.BufEnter = { '*', "if index(['fzf'], &ft) >= 0 "
+    .. "|| index(['nofile', 'terminal'], &bt) >= 0 "
+    .. "| let b:miniindentscope_disable=v:true | endif" }
+end)
+
 au.group('NewlineNoAutoComments', function(g)
   g.BufEnter = { '*', "setlocal formatoptions-=o" }
 end)

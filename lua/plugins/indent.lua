@@ -46,6 +46,7 @@ indent.setup({
   },
 
   -- Which character to use for drawing scope indicator
+  -- alternative styles: ┆ ┊ ╎
   symbol = '╎',
 })
 
