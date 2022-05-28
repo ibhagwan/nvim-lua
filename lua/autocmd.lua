@@ -10,7 +10,7 @@ end)
 
 -- disable mini.indentscope for certain filetype|buftype
 au.group('MiniIndentscopeDisable', function(g)
-  g.BufEnter = { '*', "if index(['fzf'], &ft) >= 0 "
+  g.BufEnter = { '*', "if index(['fzf', 'help'], &ft) >= 0 "
     .. "|| index(['nofile', 'terminal'], &bt) >= 0 "
     .. "| let b:miniindentscope_disable=v:true | endif" }
 end)
