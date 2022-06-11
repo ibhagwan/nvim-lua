@@ -257,3 +257,8 @@ if require'utils'.is_root() then
 else
   pcall(vim.cmd, [[colorscheme nightfly]])
 end
+
+-- set 'listchars' highlight
+if vim.g.colors_name == 'nightfly' then
+  vim.cmd ("hi! link Whitespace NonText")
+end
