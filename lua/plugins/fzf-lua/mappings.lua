@@ -28,7 +28,7 @@ map_fzf('n', '<c-K>', "workdirs", {
 map_fzf('n', '<leader>;', "buffers")
 map_fzf('n', '<leader>fr', "grep", {})
 map_fzf('n', '<leader>fl', "live_grep", {})
-map_fzf('n', '<leader>fR', "live_grep", { repeat_last_search = true })
+map_fzf('n', '<leader>fR', "live_grep", { resume = true })
 map_fzf('n', '<leader>ff', "resume")
 -- map_fzf('n', '<leader>ff', "grep", { repeat_last_search = true} )
 map_fzf('n', '<leader>fw', "grep_cword")

@@ -4,16 +4,26 @@ if not res then
 end
 
 dapui.setup({
-  sidebar = {
-    size = 40,
-    position = "right",
-    elements = {
-      { id = "scopes", size = 0.46, },
-      { id = "stacks", size = 0.36 },
-      { id = "breakpoints", size = 0.18 },
-      -- { id = "watches", size = 00.25 },
-    }
-  }
+  layouts = {
+    {
+      position = "bottom",
+      size = 10,
+      elements = {
+        { id = "repl", size = 0.50, },
+        { id = "console", size = 0.50 },
+      },
+    },
+    {
+      position = "right",
+      size = 40,
+      elements = {
+        { id = "scopes", size = 0.46, },
+        { id = "stacks", size = 0.36 },
+        { id = "breakpoints", size = 0.18 },
+        -- { id = "watches", size = 00.25 },
+      },
+    },
+  },
 })
 
 local dap = require("dap")
