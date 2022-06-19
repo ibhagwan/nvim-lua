@@ -298,6 +298,22 @@ end
 
 local M = {}
 
+function M.git_bcommits(opts)
+  local function diffthis(action)
+    return function(...)
+      local curwin = vim.api.nvim_get_current_win()
+      action(...)
+      vim.cmd("windo diffthis")
+      vim.api.nvim_set_current_win(curwin)
+    end
+  end
+  opts.actions = {
+    ["ctrl-s"] = diffthis(fzf_lua.actions.git_buf_split),
+    ["ctrl-v"] = diffthis(fzf_lua.actions.git_buf_vsplit),
+  }
+  return fzf_lua.git_bcommits(opts)
+end
+
 function M.git_status_tmuxZ(opts)
   local function tmuxZ()
     vim.cmd("!tmux resize-pane -Z")
