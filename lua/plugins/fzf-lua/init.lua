@@ -262,27 +262,10 @@ fzf_lua.setup {
       -- require('feline').reset_highlights()
     end,
   },
-  -- optional override of file extension icon colors
-  -- available colors (terminal):
-  --    clear, bold, black, red, green, yellow
-  --    blue, magenta, cyan, grey, dark_grey, white
   file_icon_padding = '',
   file_icon_colors = {
     ["sh"]    = "green",
   },
-  -- uncomment to disable the previewer
-  -- nvim = { marks = { previewer = false } },
-  -- nvim = { marks = { previewer = { _ctor = false } } },
-  -- helptags = { previewer = false },
-  -- helptags = { previewer = { _ctor = false } },
-  -- manpages = { previewer = false },
-  -- manpages = { previewer = { _ctor = false } },
-  -- uncomment to set dummy win split (top bar)
-  -- "topleft"  : up
-  -- "botright" : down
-  -- helptags = { previewer = { split = "topleft" } },
-  -- uncomment to use `man` command as native fzf previewer
-  -- manpages = { previewer = { _ctor = require'fzf-lua.previewer'.fzf.man_pages } },
 }
 
 -- register fzf-lua as vim.ui.select interface
@@ -351,7 +334,7 @@ function M.workdirs(opts)
 
   local iconify = function(path, color, icon)
     icon = fzf_lua.utils.ansi_codes[color](icon)
-    path = fzf_lua.path.relative(path, vim.fn.expand('$HOME'))
+    path = fzf_lua.path.relative(path, vim.env.HOME)
     return ("%s  %s"):format(icon, path)
   end
 
@@ -386,14 +369,17 @@ function M.workdirs(opts)
     ['--header-lines']    = '1',
   }
 
-  fzf_lua.fzf_wrap(opts, fzf_fn, function(selected)
-    if not selected then return end
-    _previous_cwd = vim.loop.cwd()
-    local newcwd = selected[1]:match("[^ ]*$")
-    newcwd = fzf_lua.path.starts_with_separator(newcwd) and newcwd
-      or fzf_lua.path.join({ vim.fn.expand('$HOME'), newcwd })
-    require'utils'.set_cwd(newcwd)
-  end)()
+  opts.actions = {
+    ['default'] = function(selected)
+      _previous_cwd = vim.loop.cwd()
+      local newcwd = selected[1]:match("[^ ]*$")
+      newcwd = fzf_lua.path.starts_with_separator(newcwd) and newcwd
+      or fzf_lua.path.join({ vim.env.HOME, newcwd })
+      require'utils'.set_cwd(newcwd)
+    end
+  }
+
+  fzf_lua.fzf_exec(fzf_fn, opts)
 end
 
 return setmetatable({}, {
