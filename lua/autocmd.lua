@@ -2,9 +2,11 @@ local au = require('au')
 
 au.group('HighlightYankedText', function(g)
   -- highlight yanked text and copy to system clipboard
+  -- TextYankPost is also called on deletion, limit to
+  -- yanks via v:operator
   g.TextYankPost = {
     '*',
-    "if has('clipboard') && len(@0)>0 | let @+=@0 | endif | lua vim.highlight.on_yank{higroup='IncSearch', timeout=2000}"
+    "if has('clipboard') && v:operator=='y' && len(@0)>0 | let @+=@0 | endif | lua vim.highlight.on_yank{higroup='IncSearch', timeout=2000}"
   }
 end)
 

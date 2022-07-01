@@ -20,6 +20,7 @@ require'nvim-treesitter.configs'.setup {
       "css",
       "toml",
       "markdown",
+      "markdown_inline",
       -- for `nvim-treesitter/playground`
       "query",
   },

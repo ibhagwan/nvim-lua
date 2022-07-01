@@ -8,16 +8,17 @@ local img_prev_bin = vim.fn.executable("ueberzug") == 1
   and { "ueberzug" }
   or  { "viu", "-b" }
 
-local function fzf_colors(binary)
-  binary = binary or fzf_bin
+local fzf_colors = function(opts)
+  local binary = opts and opts.fzf_bin
   local colors = {
     ["fg"] = { "fg", "CursorLine" },
     ["bg"] = { "bg", "Normal" },
     ["hl"] = { "fg", "Comment" },
-    ["fg+"] = { "fg", "ModeMsg" },
-    ["bg+"] = { "bg", "CursorLine" },
+    ["fg+"] = { "fg", "Normal" },
+    ["bg+"] = { "bg", "Visual" },
     ["hl+"] = { "fg", "Statement" },
-    ["info"] = { "fg", "PreProc" },
+    -- ["info"] = { "fg", "diffAdded" },
+    ["info"] = { "fg", "CmpItemKindVariable" },
     ["prompt"] = { "fg", "Function" },
     ["pointer"] = { "fg", "Exception" },
     ["marker"] = { "fg", "Statement" },
@@ -27,7 +28,7 @@ local function fzf_colors(binary)
   }
   if binary == 'sk' and vim.fn.executable(binary) == 1 then
     colors["matched_bg"] = { "bg", "Normal" }
-    colors["current_match_bg"] = { "bg", "CursorLine" }
+    colors["current_match_bg"] = { "bg", "Visual" }
   end
   return colors
 end
@@ -55,7 +56,8 @@ fzf_lua.setup {
       border            = 'FloatBorder',
       -- builtin preview
       cursor            = 'Cursor',
-      cursorline        = 'CursorLine',
+      cursorline        = 'Visual',
+      cursorlinenr      = 'Visual',
       title             = 'ModeMsg',
       scrollbar_e       = 'PMenuSbar',
       scrollbar_f       = 'PMenuSel',
@@ -146,13 +148,12 @@ fzf_lua.setup {
   fzf_opts = {
       -- set to `false` to remove a flag
       ['--ansi']      = '',
-      ['--prompt']    = '> ',
       ['--info']      = 'inline',
       ['--height']    = '100%',
       ['--layout']    = 'reverse',
   },
   fzf_bin             = fzf_bin,
-  fzf_colors          = fzf_colors(),
+  fzf_colors          = fzf_colors,
   previewers = {
     bat = {
       theme           = 'Coldark-Dark', -- bat preview theme (bat --list-themes)
