@@ -1,6 +1,6 @@
 require'utils'.command({ "-nargs=*", "DocgenREADME",
   function()
-    local module = 'babelfish'
+    local module = 'ts-vimdoc'
     local res, docgen = pcall(require, module)
     if not res then
       require('packer').loader("nvim-treesitter")
@@ -16,10 +16,10 @@ require'utils'.command({ "-nargs=*", "DocgenREADME",
         project_name      = project_name,
         input_file        = input_file,
         output_file       = ("%s/doc/%s.txt"):format(cwd, project_name),
-        handlers          = { ["html_block"] = false },
+        -- handlers          = { ["html_block"] = false },
         -- header_count_lvl  = 1,
       }
-      docgen.generate_readme(metadata)
+      docgen.docgen(metadata)
       require'utils'.info(("Successfully generated %s")
         :format(vim.fn.shellescape(metadata.output_file)))
     else

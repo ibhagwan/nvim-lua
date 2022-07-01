@@ -192,7 +192,7 @@ fzf_lua.setup {
   grep = {
     prompt            = 'Rg❯ ',
     input_prompt      = 'Grep For❯ ',
-    rg_opts           = "--column --line-number --no-heading --color=always --smart-case",
+    rg_opts           = "--hidden --column --line-number --no-heading --color=always --smart-case",
     rg_glob           = true,
     multiprocess      = true,
     debug             = false,

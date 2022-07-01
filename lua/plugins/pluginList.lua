@@ -184,8 +184,10 @@ local packer_startup = function(use)
     -- markdown preview using `glow`
     -- use { 'npxbr/glow.nvim', run = ':GlowInstall'}
     use { 'previm/previm',
+        commit = "1978acc23c16cddcaf70c856a3b39d17943d7df0",
         config = [[
-            vim.g.previm_open_cmd = 'firefox';
+            -- vim.g.previm_open_cmd = 'firefox';
+            vim.g.previm_open_cmd = '/shared/$USER/Applications/chromium/chrome';
             vim.g.previm_enable_realtime = 0
         ]],
         opt = true, cmd = { 'PrevimOpen' } }
@@ -215,8 +217,8 @@ local packer_startup = function(use)
 
     -- auto-generate vimdoc from GitHub README
     use {
-        prefer_local('ibhagwan/babelfish.nvim'),
-        setup = "require'plugins.babelfish'",
+        prefer_local('ibhagwan/ts-vimdoc.nvim'),
+        setup = "require'plugins.ts-vimdoc'",
         opt = true }
 
 end

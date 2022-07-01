@@ -13,6 +13,6 @@ return {
   '~/Sources/nvim/nvim-fzf',
   '~/Sources/nvim/plenary.nvim',
   '~/Sources/nvim/telescope.nvim',
-  '~/Sources/nvim/babelfish.nvim',
+  '~/Sources/nvim/ts-vimdoc.nvim',
   vim.fn.stdpath("data") .. "/site/pack/packer",
 }
