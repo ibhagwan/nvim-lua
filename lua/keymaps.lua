@@ -1,53 +1,19 @@
-local remap = require'utils'.remap
+local remap = vim.keymap.set
 local command = require'utils'.command
 
--- Shortcuts for editing the keymap file and reloading the config
-vim.cmd [[command! -nargs=* NvimEditInit split | edit $MYVIMRC]]
-vim.cmd [[command! -nargs=* NvimEditKeymap split | edit ~/.config/nvim/lua/keymaps.lua]]
-vim.cmd [[command! -nargs=* NvimSourceInit luafile $MYVIMRC]]
-
--- fugitive shortcuts for yadm
-local yadm_repo = "$HOME/dots/yadm-repo"
-local function fugitive_command(nargs, cmd_name, cmd_git, cmd_comp)
-  local complete = cmd_comp and ("-complete=customlist,%s"):format(cmd_comp) or ""
-  vim.cmd (([[command! -nargs=%s %s %s ]] ..
-    [[lua require("utils").fugitive_exec("%s", "%s", <q-args>)]])
-      :format(nargs, complete, cmd_name, yadm_repo, cmd_git))
-end
-
--- auto-complete for our custom fugitive Yadm command
--- https://github.com/tpope/vim-fugitive/issues/1981#issuecomment-1113825991
-vim.cmd(([[
-  function! YadmComplete(A, L, P) abort
-    return fugitive#Complete(a:A, a:L, a:P, {'git_dir': expand("%s")})
-  endfunction
-]]):format(yadm_repo))
-
-vim.cmd(([[command! -bang -nargs=? -range=-1 -complete=customlist,YadmComplete Yadm exe fugitive#Command(<line1>, <count>, +"<range>", <bang>0, "<mods>", <q-args>, { 'git_dir': expand("%s") })]]):format(yadm_repo))
-
--- fugitive_command("?", "Yadm",        "Git",          "fugitive#Complete")
-fugitive_command("?", "Yit",         "Git",          "YadmComplete")
-fugitive_command("*", "Yread",       "Gread",        "fugitive#ReadComplete")
-fugitive_command("*", "Yedit",       "Gedit",        "fugitive#EditComplete")
-fugitive_command("*", "Ywrite",      "Gwrite",       "fugitive#EditComplete")
-fugitive_command("*", "Ydiffsplit",  "Gdiffsplit",   "fugitive#EditComplete")
-fugitive_command("*", "Yhdiffsplit", "Ghdiffsplit",  "fugitive#EditComplete")
-fugitive_command("*", "Yvdiffsplit", "Gvdiffsplit",  "fugitive#EditComplete")
-fugitive_command("1", "YMove",       "GMove",        "fugitive#CompleteObject")
-fugitive_command("1", "YRename",     "GRename",      "fugitive#RenameComplete")
-fugitive_command("0", "YRemove",     "GRemove")
-fugitive_command("0", "YUnlink",     "GUnlink")
-fugitive_command("0", "YDelete",     "GDelete")
-
-
-command({
-    "-nargs=*", "NvimRestart", function()
+-- Reload the config (including certain plugins)
+vim.api.nvim_create_user_command("NvimRestart",
+  function()
     if not pcall(require, 'nvim-reload') then
       require('packer').loader('nvim-reload')
     end
     require('plugins.nvim-reload')
     require('nvim-reload').Restart()
-  end})
+  end,
+  { nargs = "*" }
+)
+
+remap('', '<leader>R', "<Esc>:NvimRestart<CR>", { silent = true })
 
 -- Use ':Grep' or ':LGrep' to grep into quickfix|loclist
 -- without output or jumping to first match
@@ -55,10 +21,6 @@ command({
 -- Use ':Grep <pattern> %:h' to search the current file dir
 vim.cmd("command! -nargs=+ -complete=file Grep noautocmd grep! <args> | redraw! | copen")
 vim.cmd("command! -nargs=+ -complete=file LGrep noautocmd lgrep! <args> | redraw! | lopen")
-
-remap('', '<leader>ei', '<Esc>:NvimEditInit<CR>',   { silent = true })
-remap('', '<leader>ek', '<Esc>:NvimEditKeymap<CR>', { silent = true })
-remap('', '<leader>R',  "<Esc>:NvimRestart<CR>",    { silent = true })
 
 -- Fix common typos
 vim.cmd([[
@@ -232,12 +194,48 @@ remap('n', '<leader>O',
     ':<C-u>call append(line(".")-1, repeat([""], v:count1))<CR>',
     { noremap = true, silent = true })
 
--- Map `cp` to `xp` (transpose two adjacent chars)
--- as a **repeatable action** with `.`
--- (since the `@=` trick doesn't work
--- nmap cp @='xp'<CR>
--- http://vimcasts.org/transcripts/61/en/
-remap('n', '<Plug>TransposeCharacters',
-    [[xp:call repeat#set("\<Plug>TransposeCharacters")<CR>]],
-    { noremap = true, silent = true })
-remap('n', 'cp', '<Plug>TransposeCharacters', {})
+
+-- fugitive shortcuts for yadm
+local yadm_repo = "$HOME/dots/yadm-repo"
+
+-- auto-complete for our custom fugitive Yadm command
+-- https://github.com/tpope/vim-fugitive/issues/1981#issuecomment-1113825991
+vim.cmd(([[
+  function! YadmComplete(A, L, P) abort
+    return fugitive#Complete(a:A, a:L, a:P, {'git_dir': expand("%s")})
+  endfunction
+]]):format(yadm_repo))
+
+vim.cmd(([[command! -bang -nargs=? -range=-1 -complete=customlist,YadmComplete Yadm exe fugitive#Command(<line1>, <count>, +"<range>", <bang>0, "<mods>", <q-args>, { 'git_dir': expand("%s") })]]):format(yadm_repo))
+
+local function fugitive_command(nargs, cmd_name, cmd_fugitive, cmd_comp)
+  vim.api.nvim_create_user_command(cmd_name,
+    function(t)
+      local bufnr = vim.api.nvim_get_current_buf()
+      local buf_git_dir = vim.b.git_dir
+      vim.b.git_dir = vim.fn.expand(yadm_repo)
+      vim.cmd(cmd_fugitive .. " " .. t.args)
+      -- after the fugitive window switch we must explicitly
+      -- use the buffer num to restore the original 'git_dir'
+      vim.b[bufnr].git_dir = buf_git_dir
+    end,
+    {
+      nargs = nargs,
+      complete = cmd_comp and string.format("customlist,%s", cmd_comp) or nil,
+    }
+  )
+end
+
+-- fugitive_command("?", "Yadm",        "Git",          "fugitive#Complete")
+fugitive_command("?", "Yit",         "Git",          "YadmComplete")
+fugitive_command("*", "Yread",       "Gread",        "fugitive#ReadComplete")
+fugitive_command("*", "Yedit",       "Gedit",        "fugitive#EditComplete")
+fugitive_command("*", "Ywrite",      "Gwrite",       "fugitive#EditComplete")
+fugitive_command("*", "Ydiffsplit",  "Gdiffsplit",   "fugitive#EditComplete")
+fugitive_command("*", "Yhdiffsplit", "Ghdiffsplit",  "fugitive#EditComplete")
+fugitive_command("*", "Yvdiffsplit", "Gvdiffsplit",  "fugitive#EditComplete")
+fugitive_command(1,   "YMove",       "GMove",        "fugitive#CompleteObject")
+fugitive_command(1,   "YRename",     "GRename",      "fugitive#RenameComplete")
+fugitive_command(0,   "YRemove",     "GRemove")
+fugitive_command(0,   "YUnlink",     "GUnlink")
+fugitive_command(0,   "YDelete",     "GDelete")

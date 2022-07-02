@@ -136,8 +136,6 @@ local keymaps = {
         f = { ':NvimTreeFindFileToggle<CR>', 'nvim-tree current file' },
         n = 'fzf ~/.config/nvim',
         z = 'fzf ~/.config/zsh',
-        i = "edit 'nvim/init.lua'",
-        k = "edit 'nvim/keymaps.lua'",
         p = 'fzf nvim plugins',
         d = 'yadm ls-files',
         b = 'yadm branches',
@@ -145,6 +143,8 @@ local keymaps = {
         C = 'yadm commits (repo)',
         s = 'yadm status',
         S = 'yadm status (fullscreen)',
+        g = 'yadm grep',
+        l = 'yadm live grep',
     },
     g = {
         name = '+git',

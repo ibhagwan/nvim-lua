@@ -3,7 +3,7 @@ if not res then
   return
 end
 
-local remap = require'utils'.remap
+local remap = vim.keymap.set
 
 remap({ 'n', 'v' }, '<F5>', "<cmd>lua require'dap'.continue()<CR>", { silent = true })
 remap({ 'n', 'v' }, '<F8>', "<cmd>lua require'dapui'.toggle()<CR>", { silent = true })

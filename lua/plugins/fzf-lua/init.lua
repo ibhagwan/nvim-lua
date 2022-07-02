@@ -292,7 +292,6 @@ function M.git_bcommits(opts)
     end
   end
   opts.actions = {
-    ["ctrl-s"] = diffthis(fzf_lua.actions.git_buf_split),
     ["ctrl-v"] = diffthis(fzf_lua.actions.git_buf_vsplit),
   }
   return fzf_lua.git_bcommits(opts)

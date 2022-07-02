@@ -1,71 +1,121 @@
-local au = require('au')
+local aucmd = vim.api.nvim_create_autocmd
 
-au.group('HighlightYankedText', function(g)
+local function augroup(name, fnc)
+  fnc(vim.api.nvim_create_augroup(name, { clear = true }))
+end
+
+augroup('HighlightYankedText', function(g)
   -- highlight yanked text and copy to system clipboard
   -- TextYankPost is also called on deletion, limit to
   -- yanks via v:operator
-  g.TextYankPost = {
-    '*',
-    "if has('clipboard') && v:operator=='y' && len(@0)>0 | let @+=@0 | endif | lua vim.highlight.on_yank{higroup='IncSearch', timeout=2000}"
-  }
+  aucmd("TextYankPost", {
+    group = g,
+    pattern = '*',
+    command = "if has('clipboard') && v:operator=='y' && len(@0)>0 | "
+      .. "let @+=@0 | endif | "
+      .. "lua vim.highlight.on_yank{higroup='IncSearch', timeout=2000}"
+  })
 end)
 
 -- disable mini.indentscope for certain filetype|buftype
-au.group('MiniIndentscopeDisable', function(g)
-  g.BufEnter = { '*', "if index(['fzf', 'help'], &ft) >= 0 "
-    .. "|| index(['nofile', 'terminal'], &bt) >= 0 "
-    .. "| let b:miniindentscope_disable=v:true | endif" }
+augroup('MiniIndentscopeDisable', function(g)
+  aucmd("BufEnter", {
+    group = g,
+    pattern = '*',
+    command = "if index(['fzf', 'help'], &ft) >= 0 "
+      .. "|| index(['nofile', 'terminal'], &bt) >= 0 "
+      .. "| let b:miniindentscope_disable=v:true | endif"
+  })
 end)
 
-au.group('NewlineNoAutoComments', function(g)
-  g.BufEnter = { '*', "setlocal formatoptions-=o" }
+augroup('NewlineNoAutoComments', function(g)
+  aucmd("BufEnter", {
+    group = g,
+    pattern = '*',
+    command = "setlocal formatoptions-=o"
+  })
 end)
 
-au.group('TermOptions', function(g)
-  g.TermOpen = { '*', 'setlocal listchars= nonumber norelativenumber' }
-end)
-
-au.group('ResizeWindows', function(g)
-  g.VimResized = { '*', 'tabdo wincmd =' }
-end)
-
-au.group('ToggleColorcolumn', {
+augroup('TermOptions', function(g)
+  aucmd("TermOpen",
   {
-    'VimResized,WinEnter,BufWinEnter', '*',
-    'lua require"utils".toggle_colorcolumn()',
-  }
-})
-
-au.group('ToggleSearchHL', function(g)
-  g.InsertEnter = { '*', ':nohl | redraw' }
+    group = g,
+    pattern = '*',
+    command = 'setlocal listchars= nonumber norelativenumber'
+  })
 end)
 
-au.group('ActiveWinCursorLine', {
-  -- Highlight current line only on focused window
-  {'WinEnter,BufEnter,InsertLeave', '*', 'if ! &cursorline && ! &pvw | setlocal cursorline | endif'};
-  {'WinLeave,BufLeave,InsertEnter', '*', 'if &cursorline && ! &pvw | setlocal nocursorline | endif'};
-})
+augroup('ResizeWindows', function(g)
+  aucmd("VimResized",
+  {
+    group = g,
+    pattern = '*',
+    command = 'tabdo wincmd ='
+  })
+end)
 
-au.group('PackerCompile', function(g)
-  g.BufWritePost = {
-    'packer_init.lua',
-    'require("plugins").compile()',
-  }
+augroup('ToggleColorcolumn', function(g)
+  aucmd("VimResized,WinEnter,BufWinEnter", {
+    group = g,
+    pattern = '*',
+    command = 'lua require"utils".toggle_colorcolumn()',
+  })
+end)
+
+augroup('ToggleSearchHL', function(g)
+  aucmd("InsertEnter",
+  {
+    group = g,
+    pattern = '*',
+    command = ':nohl | redraw'
+  })
+end)
+
+augroup('ActiveWinCursorLine', function(g)
+  -- Highlight current line only on focused window
+  aucmd("WinEnter,BufEnter,InsertLeave", {
+    group = g,
+    pattern = '*',
+    command = 'if ! &cursorline && ! &pvw | setlocal cursorline | endif'
+  })
+  aucmd("WinLeave,BufLeave,InsertEnter", {
+    group = g,
+    pattern = '*',
+    command = 'if &cursorline && ! &pvw | setlocal nocursorline | endif'
+  })
+end)
+
+augroup('PackerCompile', function(g)
+  aucmd("BufWritePost", {
+    group = g,
+    pattern = 'packer_init.lua',
+    command = 'require("plugins").compile()',
+  })
 end)
 
 -- auto-delete fugitive buffers
-au.group('Fugitive', {
-  { 'BufReadPost,', 'fugitive://*', 'set bufhidden=delete' }
-})
+augroup('Fugitive', function(g)
+  aucmd("BufReadPost,", {
+    group = g,
+    pattern = 'fugitive://*',
+    command = 'set bufhidden=delete'
+  })
+end)
 
-au.group('Solidity', {
-  { 'BufRead,BufNewFile', '*.sol', 'set filetype=solidity' }
-})
+augroup('Solidity', function(g)
+  aucmd("BufRead,BufNewFile", {
+    group = g,
+    pattern = '*.sol',
+    command = 'set filetype=solidity'
+  })
+end)
 
 -- Display help|man in vertical splits
-au.group('Help', function(g)
-  g.FileType = { 'help,man',
-    function()
+augroup('Help', function(g)
+  aucmd("FileType", {
+    group = g,
+    pattern = 'help,man',
+    callback = function()
       -- do nothing for floating windows or if this is
       -- the fzf-lua minimized help window (height=1)
       local cfg = vim.api.nvim_win_get_config(0)
@@ -82,12 +132,11 @@ au.group('Help', function(g)
       vim.cmd("wincmd L")
       vim.cmd("vertical resize " .. width)
     end
-  }
-  -- TODO:
-  -- Why does setting this event ft to 'man' not work?
-  -- but at the same time '*' works and shows 'man' for ft?
-  g.BufHidden = { '*',
-    function()
+  })
+  aucmd("BufHidden", {
+    group = g,
+    pattern = 'man://*',
+    callback = function()
       if vim.bo.filetype == 'man' then
         local bufnr = vim.api.nvim_get_current_buf()
         vim.defer_fn(function()
@@ -96,5 +145,6 @@ au.group('Help', function(g)
           end
         end, 0)
       end
-    end }
+    end
+  })
 end)

@@ -34,7 +34,6 @@ terminal.setup({
   }
 })
 
-local remap = require'utils'.remap
 
 local function ft_repl_cmd(ft)
   local repl_map = {
@@ -99,11 +98,11 @@ local function term_exec(cmd, id)
   return terminal.exec(cmd, id)
 end
 
-remap({ "n" }, "gxx", function()
+vim.keymap.set({ "n" }, "gxx", function()
   return term_exec(vim.fn.getline('.'))
 end)
 
-remap({ "v" }, "gx", function()
+vim.keymap.set({ "v" }, "gx", function()
   local mode = vim.fn.mode()
   if mode == 'v' or mode == 'V' or mode == '' then
     local text = require'utils'.get_visual_selection()
@@ -111,9 +110,9 @@ remap({ "v" }, "gx", function()
   end
 end)
 
-require'utils'.command({
-  "-count -nargs=*", "T",
-  function(args, count)
-    term_exec(args, count)
-  end
-})
+vim.api.nvim_create_user_command("T",
+  function(t)
+    term_exec(t.args, t.count)
+  end,
+  { nargs = '*', count = true }
+)

@@ -13,7 +13,7 @@ local map_fzf = function(mode, key, f, options, buffer)
     buffer = buffer,
   }
 
-  require('utils').remap(mode, key, rhs, map_options)
+  vim.keymap.set(mode, key, rhs, map_options)
 end
 
 -- mappings
@@ -76,8 +76,8 @@ map_fzf('n', '<leader>la', "lsp_code_actions", {
     win_width        = 0.70,
     win_row          = 0.40,
   }})
-map_fzf('n', '<leader>lg', "lsp_document_diagnostics", { file_icons = false })
-map_fzf('n', '<leader>lG', "lsp_workspace_diagnostics", { file_icons = false })
+map_fzf('n', '<leader>lg', "lsp_document_diagnostics", { file_icons = false, path_shorten = 1 })
+map_fzf('n', '<leader>lG', "lsp_workspace_diagnostics", { file_icons = false, path_shorten = 1 })
 
 -- Git
 map_fzf('n', '<leader>fs', "git_status")
@@ -97,19 +97,29 @@ map_fzf('n', '<leader>fC', "git_commits")
 map_fzf('n', '<leader>fc', "git_bcommits")
 
 -- yadm repo
-local yadm_opts = {
+local yadm_git_dir =  "$HOME/dots/yadm-repo"
+local yadm_cmd = string.format("yadm -C $HOME --yadm-repo %s", yadm_git_dir)
+local yadm_git_opts = {
   show_cwd_header = false,
   git_dir = "$HOME/dots/yadm-repo",
 }
-map_fzf('n', '<leader>ed', "git_files", vim.tbl_extend("force", yadm_opts,
+local yadm_grep_opts = {
+  prompt = "YadmGrep❯ ",
+  cwd = "$HOME",
+  cmd = ("%s grep --line-number --column --color=always"):format(yadm_cmd),
+  rg_glob = false, -- this isn't `rg`
+}
+map_fzf('n', '<leader>eg', "grep_project", yadm_grep_opts)
+map_fzf('n', '<leader>el', "live_grep", yadm_grep_opts)
+map_fzf('n', '<leader>ed', "git_files", vim.tbl_extend("force", yadm_git_opts,
   { prompt = "~ dotfiles ~ "}))
-map_fzf('n', '<leader>eb', "git_branches", yadm_opts )
-map_fzf('n', '<leader>eC', "git_commits",  yadm_opts )
-map_fzf('n', '<leader>ec', "git_bcommits", yadm_opts )
+map_fzf('n', '<leader>eb', "git_branches", yadm_git_opts )
+map_fzf('n', '<leader>eC', "git_commits",  yadm_git_opts )
+map_fzf('n', '<leader>ec', "git_bcommits", yadm_git_opts )
 map_fzf('n', '<leader>es', "git_status", vim.tbl_extend("force",
-  yadm_opts, { cmd = "git status -s" }))
+  yadm_git_opts, { cmd = "git status -s" }))
 map_fzf('n', '<leader>eS', "git_status_tmuxZ", vim.tbl_extend("force",
-  yadm_opts, {
+  yadm_git_opts, {
     cmd = "git status -s",
     winopts = {
       fullscreen = true,

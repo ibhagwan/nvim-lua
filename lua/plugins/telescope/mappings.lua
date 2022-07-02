@@ -16,7 +16,7 @@ local map_tele = function(mode, key, f, options, buffer)
     buffer = buffer,
   }
 
-  require('utils').remap(mode, key, rhs, map_options)
+  vim.keymap.set(mode, key, rhs, map_options)
 end
 
 -- mappings

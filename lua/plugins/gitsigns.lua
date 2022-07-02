@@ -20,7 +20,7 @@ gitsigns.setup {
   diff_opts = { internal = true, },
   yadm = { enable = true, },
   on_attach = function(bufnr)
-    local map = require'utils'.remap
+    local map = vim.keymap.set
     local opts = { noremap = true, buffer = bufnr }
     local opts_expr = { noremap = true, buffer = bufnr, expr = true }
 

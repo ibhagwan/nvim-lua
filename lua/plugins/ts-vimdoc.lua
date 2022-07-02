@@ -1,4 +1,4 @@
-require'utils'.command({ "-nargs=*", "DocgenREADME",
+vim.api.nvim_create_user_command("DocgenREADME",
   function()
     local module = 'ts-vimdoc'
     local res, docgen = pcall(require, module)
@@ -26,4 +26,6 @@ require'utils'.command({ "-nargs=*", "DocgenREADME",
       require'utils'.warn(("%s is inaccessible")
         :format(vim.fn.shellescape(input_file)))
     end
-  end})
+  end,
+  { nargs = '*' }
+)

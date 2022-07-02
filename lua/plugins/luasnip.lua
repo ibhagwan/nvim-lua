@@ -3,7 +3,7 @@ if not res then
   return
 end
 
-local remap = require'utils'.remap
+local remap = vim.keymap.set
 
 remap({ "i", "s" }, "<C-j>", function(fallback)
   if luasnip.jumpable(-1) then
