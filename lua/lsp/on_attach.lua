@@ -80,11 +80,11 @@ local on_attach = function(client, bufnr)
     { desc = "send diagnostics to loclist [LSP]" })
 
   if client_has_capability(client, 'documentFormattingProvider') then
-    map('n', '<leader>lF', '<cmd>lua vim.lsp.buf.formatting()<CR>',
+    map('n', 'gq', '<cmd>lua vim.lsp.buf.formatting()<CR>',
       { desc = "format document [LSP]" })
   end
   if client_has_capability(client, 'documentRangeFormattingProvider') then
-    map('v', '<leader>lF', '<cmd>lua vim.lsp.buf.formatting()<CR>',
+    map('v', 'gq', '<cmd>lua vim.lsp.buf.range_formatting()<CR>',
       { desc = "format selection [LSP]" })
   end
 
