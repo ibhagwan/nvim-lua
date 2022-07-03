@@ -86,7 +86,7 @@ function M.set_cwd(pwd)
   end
 end
 
-function M.get_visual_selection()
+function M.get_visual_selection(nl_literal)
     -- this will exit visual mode
     -- use 'gv' to reselect the text
     local _, csrow, cscol, cerow, cecol
@@ -117,7 +117,7 @@ function M.get_visual_selection()
     if n <= 0 then return '' end
     lines[n] = string.sub(lines[n], 1, cecol)
     lines[1] = string.sub(lines[1], cscol)
-    return table.concat(lines, "\n")
+    return table.concat(lines, nl_literal and "\\n" or "\n")
 end
 
 function M.toggle_colorcolumn()

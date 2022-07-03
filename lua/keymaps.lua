@@ -162,9 +162,11 @@ for _, m in ipairs({'n', 'v'}) do
 end
 
 -- Search and Replace
--- 'c.' for word, '<leader>c.' for WORD
-remap('n', 'c.',         [[:%s/\<<C-r><C-w>\>//g<Left><Left>]], { noremap = true })
-remap('n', '<leader>c.', [[:%s/\<<C-r><C-a>\>//g<Left><Left>]], { noremap = true })
+-- 'c.' for word, 'c>' for WORD
+-- 'c.' in visual mode for selection
+remap('n', 'c.', [[:%s/\<<C-r><C-w>\>//g<Left><Left>]], { noremap = true })
+remap('n', 'c>', [[:%s/\V<C-r><C-a>//g<Left><Left>]], { noremap = true })
+remap('x', 'c.', [[:<C-u>%s/\V<C-r>=luaeval("require'utils'.get_visual_selection(true)")<CR>//g<Left><Left>]], { noremap = true })
 
 -- Turn off search matches with double-<Esc>
 remap('n', '<Esc><Esc>', '<Esc>:nohlsearch<CR>', { noremap = true, silent = true })
