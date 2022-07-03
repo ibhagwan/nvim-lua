@@ -52,7 +52,7 @@ gitsigns.setup {
     map('n', '<leader>hb', '<cmd>lua require("gitsigns").blame_line({full=true})<CR>', opts)
     map('n', '<leader>hB', '<cmd>lua require("gitsigns").toggle_current_line_blame()<CR>', opts)
     map('n', '<leader>hd', '<cmd>lua require("gitsigns").diffthis()<CR>', opts)
-    map('n', '<leader>hD', '<cmd>lua require("gitsigns").diffthis("~")<CR>', opts)
+    map('n', '<leader>hD', '<cmd>lua require("gitsigns").diffthis("~1")<CR>', opts)
     map('n', '<leader>hx', '<cmd>lua require("gitsigns").toggle_deleted()<CR>', opts)
 
     -- Text object

@@ -56,6 +56,9 @@
 - [nvim-dap](https://github.com/mfussenegger/nvim-dap):
   set breakpoints and debug applications using Debug Adapter Protocol (DAP)
 
+- [fidget.nvim](https://github.com/j-hui/fidget.nvim): Eye candy LSP progress
+  indicator above the status line (top right)
+
 ### Fuzzy search & file exploration
 
 - [fzf-lua](https://github.com/ibhagwan/fzf-lua): the original, tried and

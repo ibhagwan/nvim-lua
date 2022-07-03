@@ -1,5 +1,4 @@
 local remap = vim.keymap.set
-local command = require'utils'.command
 
 -- Reload the config (including certain plugins)
 vim.api.nvim_create_user_command("NvimRestart",
@@ -124,11 +123,6 @@ remap('n', '<leader>D',  '"_D',         { noremap = true })
 remap('n', '<leader>C',  '"_C',         { noremap = true })
 remap({'n', 'v'}, '<leader>c',  '"_c',  { noremap = true })
 
--- Map `Y` to copy to end of line
--- conistent with the behaviour of `C` and `D`
-remap('n', 'Y', 'y$',               { noremap = true })
-remap('v', 'Y', '<Esc>y$gv',        { noremap = true })
-
 -- keep visual selection when (de)indenting
 remap('v', '<', '<gv', { noremap = true })
 remap('v', '>', '>gv', { noremap = true })
@@ -194,6 +188,12 @@ remap('n', '<leader>O',
     ':<C-u>call append(line(".")-1, repeat([""], v:count1))<CR>',
     { noremap = true, silent = true })
 
+-- Use operator pending mode to visually select entire buffer, e.g.
+--    d<A-a> = delete entire buffer
+--    y<A-a> = yank entire buffer
+--    v<A-a> = visual select entire buffer
+remap('o', '<A-a>', ':<C-U>normal! mzggVG<CR>`z')
+remap('x', '<A-a>', ':<C-U>normal! ggVG<CR>')
 
 -- fugitive shortcuts for yadm
 local yadm_repo = "$HOME/dots/yadm-repo"

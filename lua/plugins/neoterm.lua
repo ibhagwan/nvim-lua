@@ -100,7 +100,7 @@ end
 
 vim.keymap.set({ "n" }, "gxx", function()
   return term_exec(vim.fn.getline('.'))
-end)
+end, { desc = "REPL send to terminal (line)" })
 
 vim.keymap.set({ "v" }, "gx", function()
   local mode = vim.fn.mode()
@@ -108,7 +108,7 @@ vim.keymap.set({ "v" }, "gx", function()
     local text = require'utils'.get_visual_selection()
     term_exec(text)
   end
-end)
+end, { desc = "REPL send to terminal (motion)" })
 
 vim.api.nvim_create_user_command("T",
   function(t)

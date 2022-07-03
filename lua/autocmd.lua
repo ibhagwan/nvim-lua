@@ -88,8 +88,8 @@ end)
 augroup('PackerCompile', function(g)
   aucmd("BufWritePost", {
     group = g,
-    pattern = 'packer_init.lua',
-    command = 'require("plugins").compile()',
+    pattern = 'pluginList.lua',
+    command = 'lua require("plugins").compile()',
   })
 end)
 
@@ -110,27 +110,40 @@ augroup('Solidity', function(g)
   })
 end)
 
--- Display help|man in vertical splits
+-- Display help|man in vertical splits and map 'q' to quit
 augroup('Help', function(g)
+  local function open_vert()
+    -- do nothing for floating windows or if this is
+    -- the fzf-lua minimized help window (height=1)
+    local cfg = vim.api.nvim_win_get_config(0)
+    if cfg and (cfg.external or cfg.relative and #cfg.relative>0)
+      or vim.api.nvim_win_get_height(0) == 1 then
+      return
+    end
+    -- do not run if Diffview is open
+    if vim.g.diffview_nvim_loaded and
+      require'diffview.lib'.get_current_view() then
+      return
+    end
+    local width = math.floor(vim.o.columns*0.75)
+    vim.cmd("wincmd L")
+    vim.cmd("vertical resize " .. width)
+    vim.api.nvim_buf_set_keymap(0, 'n', 'q', '<CMD>q<CR>', { noremap = true })
+  end
   aucmd("FileType", {
     group = g,
     pattern = 'help,man',
+    callback = open_vert,
+  })
+  -- we also need this auto command or help
+  -- still opens in a split on subsequent opens
+  aucmd("BufEnter", {
+    group = g,
+    pattern = '*.txt',
     callback = function()
-      -- do nothing for floating windows or if this is
-      -- the fzf-lua minimized help window (height=1)
-      local cfg = vim.api.nvim_win_get_config(0)
-      if cfg and (cfg.external or cfg.relative and #cfg.relative>0)
-        or vim.api.nvim_win_get_height(0) == 1 then
-        return
+      if vim.bo.buftype == 'help' then
+        open_vert()
       end
-      -- do not run if Diffview is open
-      if vim.g.diffview_nvim_loaded and
-        require'diffview.lib'.get_current_view() then
-        return
-      end
-      local width = math.floor(vim.o.columns*0.75)
-      vim.cmd("wincmd L")
-      vim.cmd("vertical resize " .. width)
     end
   })
   aucmd("BufHidden", {

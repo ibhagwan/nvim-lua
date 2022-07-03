@@ -3,7 +3,6 @@ local map_tele = function(mode, key, f, options, buffer)
   local rhs = function()
     if not pcall(require, 'telescope.nvim') then
       require('packer').loader('plenary.nvim')
-      require('packer').loader('popup.nvim')
       require('packer').loader('telescope-fzy-native.nvim')
       require('packer').loader('telescope.nvim')
     end
