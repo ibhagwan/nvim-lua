@@ -17,6 +17,15 @@ augroup('HighlightYankedText', function(g)
   })
 end)
 
+-- update statusline highlights
+augroup('StatusLineColorschemeUpdate', function(g)
+  aucmd("ColorScheme", {
+    group = g,
+    pattern = '*',
+    command = "lua require'plugins.statusline'.setup()",
+  })
+end)
+
 -- disable mini.indentscope for certain filetype|buftype
 augroup('MiniIndentscopeDisable', function(g)
   aucmd("BufEnter", {

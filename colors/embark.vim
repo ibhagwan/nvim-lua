@@ -1,7 +1,9 @@
 " Vim Color File
 " Name: embark.vim
 " Based On: Challenger Deep, Ayu Mirage, and Manta
-" https://github.com/embark-theme/vim
+"
+" source: https://github.com/embark-theme/vim
+" last updated: 2022-04-07, d231d6f6ddb9c405ccf9ec2331deaf1d0b2c8d2a
 "
 " == PRELUDE ==
 "
@@ -208,12 +210,6 @@ call s:h("DiffChange",    {"fg": s:bg, "bg": s:dark_yellow})
 call s:h("DiffText",      {"fg": s:bg, "bg": s:dark_yellow, "gui": "bold"})
 call s:h("SignColumn",    {"fg": s:green})
 
-" tpope/vim-fugitive
-call s:h("diffLine",       {"fg": s:purple})
-call s:h("diffAdded",      {"fg": s:green})
-call s:h("diffRemoved",    {"fg": s:red})
-call s:h("diffNoEOL",      {"fg": s:purple})
-
 if has("gui_running")
   call s:h("SpellBad",    {"gui": "underline", "sp": s:dark_red})
   call s:h("SpellCap",    {"gui": "underline", "sp": s:green})
@@ -366,22 +362,13 @@ call s:h("CtrlpMatch", {"fg": s:yellow})
 call s:h("NERDTreeDir", {"fg": s:blue})
 call s:h("NERDTreeFlags", {"fg": s:green})
 
-" nvim LSP (updated version for neovim master 35325ddac)
-call s:h ("LspDiagnosticsDefaultError", {"fg": s:red, "bg": s:bg_dark})
-call s:h ("LspDiagnosticsDefaultWarning", {"fg": s:yellow, "bg": s:bg_dark})
-call s:h ("LspDiagnosticsDefaultInformation", {"fg": s:blue, "bg": s:bg_dark})
-call s:h ("LspDiagnosticsDefaultHint", {"fg": s:purple, "bg": s:bg_dark})
-call s:h ("LspDiagnosticsSignError", {"fg": s:red, "bg": s:bg})
-call s:h ("LspDiagnosticsSignWarning", {"fg": s:yellow, "bg": s:bg})
-call s:h ("LspDiagnosticsSignInformation", {"fg": s:blue, "bg": s:bg})
-call s:h ("LspDiagnosticsSignHint", {"fg": s:purple, "bg": s:bg})
-call s:h ("LspDiagnosticsUnderlineError", {"fg": s:red, "cterm": "undercurl", "gui": "undercurl"})
-call s:h ("LspDiagnosticsFloatingError", {"bg": s:space2, "fg": s:red})
-call s:h ("LspDiagnosticsFloatingWarning", {"bg": s:space2, "fg": s:yellow})
-call s:h ("LspDiagnosticsFloatingInformation", {"bg": s:space2, "fg": s:blue})
-call s:h ("LspDiagnosticsFloatingHint", {"bg": s:space2, "fg": s:purple})
+" tpope/vim-fugitive
+call s:h("diffLine",       {"fg": s:purple})
+call s:h("diffAdded",      {"fg": s:green})
+call s:h("diffRemoved",    {"fg": s:red})
+call s:h("diffNoEOL",      {"fg": s:purple})
 
-" nvim 0.6.0 (Moved LSP Highlights to Diagnostic Highlights)
+" Neovim Diagnostics
 " SEVERITY - Info, Warn, Error, Hint
 " TYPE - Sign, Underline, Float, Virtual Text
 "

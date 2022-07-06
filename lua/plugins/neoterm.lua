@@ -15,7 +15,7 @@ terminal.setup({
   hide_numbers = true,
   shade_filetypes = {},
   shade_terminals = true,
-  shading_factor = '1',
+  shading_factor = -30,
   start_in_insert = true,
   insert_mappings = true,
   persist_size = true,
@@ -31,6 +31,10 @@ terminal.setup({
       border = "Normal",
       background = "Normal",
     }
+  },
+  highlights = {
+    StatusLine   = { link = "StatusLine" },
+    StatusLineNC = { link = "StatusLineNC" },
   }
 })
 

@@ -47,23 +47,23 @@ local function setup()
         red_fg = c.extract_hl({
           bg = { [hl_statusline]  = 'bg' },
           fg = { [hl_red]         = 'fg' },
-          gui = "bold",
+          bold = true,
         }),
         green_fg = c.extract_hl({
           bg = { [hl_statusline]  = 'bg' },
           fg = { [hl_green]       = 'fg' },
-          gui = "bold",
+          bold = true,
         }),
         yellow_fg = c.extract_hl({
           bg = { [hl_statusline]  = 'bg' },
           fg = { [hl_yellow]      = 'fg' },
-          gui = "bold",
+          bold = true,
         }),
         magenta_fg = c.extract_hl({
           bg = { [hl_statusline]   = 'bg' },
           fg = { [hl_magenta]      = 'fg' },
           -- fg = { MatchParen   = 'fg' },
-          gui = "bold",
+          bold = true,
         }),
       }
 
@@ -90,6 +90,7 @@ local function setup()
         rm     = {'More  ', 'M',   },
         ['r?'] = {'Cnfirm', 'Cn',  },
         ['!']  = {'Shell ', 'S',   { 'DiffAdd', 'diffAdded' } },
+        nt     = {'Term  ', 'T',   { 'Visual' } },
         t      = {'Term  ', 'T',   { 'DiffAdd', 'diffAdded' } },
       }
 

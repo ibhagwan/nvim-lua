@@ -9,48 +9,46 @@ local M = {}
 
 function M.extract_hl(spec)
   if not spec or vim.tbl_isempty(spec) then return end
-  local hl_name, hl_cmd, hl_props = { "El" }, {}, {}
+  local hl_name, hl_opts = { "El" }, {}
   for attr, val in pairs(spec) do
     if type(val) == 'table' then
       table.insert(hl_name, attr)
-      local mode = val.mode or "gui"
-      val.mode = nil
       assert(vim.tbl_count(val)==1)
       local hl, what = next(val)
       local hlID = vim.fn.hlID(hl)
       if hlID > 0  then
         table.insert(hl_name, hl)
-        local col = vim.fn.synIDattr(hlID, what, mode)
+        local col = vim.fn.synIDattr(hlID, what)
         if col and #col>0 then
           table.insert(hl_name, what)
-          table.insert(hl_cmd, ("%s%s=%s"):format(mode, attr, col))
-          hl_props[attr] = { mode = mode, val = col }
+          hl_opts[attr] = col
         end
       end
     else
-      -- this is where 'gui="bold"' can be set
-      -- synIDattr returns '1' for these
-      table.insert(hl_cmd, ("%s=%s"):format(attr, val))
-      hl_props[val] = { mode = attr, val = '1' }
+      -- bold, underline, etc
+      hl_opts[attr] = val
     end
   end
   hl_name = table.concat(hl_name, '_')
-  hl_cmd = ("highlight %s %s"):format(hl_name, table.concat(hl_cmd, ' '))
   -- if highlight exists, verify it has
   -- the correct colorscheme highlights
   local newID = vim.fn.hlID(hl_name)
   if newID > 0 then
-    for what, expected in pairs(hl_props) do
-      local res = vim.fn.synIDattr(newID, what, expected.mode)
-      if newID > 0 and res ~= expected.val then
+    for what, expected in pairs(hl_opts) do
+      local res = vim.fn.synIDattr(newID, what)
+      if type(expected) == 'boolean' then
+        -- synIDattr returns '1' for boolean
+        res = res and res == '1' and true
+      end
+      if res ~= expected then
         -- need to regen the highlight
-        -- print("color mismatch", hl_name, what, "e", expected.val, "c", res)
+        -- print("color mismatch", hl_name, what, "e:", expected, "c:", res)
         newID = 0
       end
     end
   end
   if newID == 0 then
-    vim.api.nvim_command(hl_cmd)
+    vim.api.nvim_set_hl(0, hl_name, hl_opts)
   end
   return hl_name
 end
