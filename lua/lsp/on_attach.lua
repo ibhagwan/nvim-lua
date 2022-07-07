@@ -60,7 +60,7 @@ local on_attach = function(client, bufnr)
   --map('n', '<leader>ls', '<cmd>lua vim.lsp.buf.document_symbol()<CR>')
   --map('n', '<leader>lS', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>')
 
-  map('n', '<leader>lt', "<cmd>lua require'lsp.diag'.virtual_text_toggle()<CR>",
+  map('n', '<leader>lt', "<cmd>lua require'lsp.diag'.toggle()<CR>",
     { desc = "toggle virtual text [LSP]" })
 
   -- neovim PR #16057
@@ -92,20 +92,6 @@ local on_attach = function(client, bufnr)
     map("n", "<leader>lL", "<cmd>lua vim.lsp.codelens.run()<CR>",
       { desc = "[LSP] code lens" })
     vim.api.nvim_command [[autocmd CursorHold,CursorHoldI,InsertLeave <buffer> lua vim.lsp.codelens.refresh()]]
-  end
-
-  -- Per buffer LSP indicators control
-  if vim.b.lsp_virtual_text_enabled == nil then
-    vim.b.lsp_virtual_text_enabled = true
-  end
-
-  if vim.b.lsp_virtual_text_mode == nil then
-    vim.b.lsp_virtual_text_mode = 'SignsVirtualText'
-  end
-
-  if not vim.diagnostic then
-    require('lsp.diag').virtual_text_set()
-    require('lsp.diag').virtual_text_redraw()
   end
 
 end
