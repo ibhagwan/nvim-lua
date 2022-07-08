@@ -58,7 +58,9 @@ map_fzf('n', '<leader>fh', "oldfiles", function()
 end)
 map_fzf('n', '<leader>fq', "quickfix")
 map_fzf('n', '<leader>fQ', "loclist")
-map_fzf('n', '<leader>fo', "colorschemes")
+map_fzf('n', '<leader>fo', "colorschemes", {
+  winopts = { height = 0.45, width = 0.30 },
+})
 map_fzf('n', '<leader>fO', "highlights")
 map_fzf('n', '<leader>fM', "man_pages")
 

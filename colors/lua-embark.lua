@@ -646,6 +646,12 @@ hl.telescope = {
   TelescopeResultsDiffUntracked   = { link = 'Title' },
 }
 
+-- fzf-lua
+hl.fzf_lua = {
+  FzfLuaTitle           = { fg = colors.white },
+  FzfLuaScrollFloatFull = { bg = colors.dark_blue },
+}
+
 -- nvim-cmp
 hl.nvim_cmp = {
   CmpItemMenu =              { link = 'Comment' },
