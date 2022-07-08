@@ -60,9 +60,17 @@ __settings['sumneko_lua'] = {
           'client',       -- awesomeWM
           'clientkeys',   -- awesomeWM
           'clientbuttons',-- awesomeWM
+          'describe',     -- busted
+          'it'            -- busted
         },
         -- enables formatter warnings
         -- neededFileStatus = { ['codestyle-check'] = "any" }
+        disable = {
+          -- Need check nil
+          "need-check-nil",
+          -- This function requires 2 argument(s) but instead it is receiving 1
+          "missing-parameter",
+        }
       },
       workspace = {
         -- Make the server aware of Neovim runtime files
@@ -72,6 +80,15 @@ __settings['sumneko_lua'] = {
         }
         -- This causes slow init of sumneko_lua
         -- library = vim.api.nvim_get_runtime_file("", true),
+      },
+      -- disable certain warnings that don't concern us
+      -- https://github.com/sumneko/lua-language-server/blob/master/doc/en-us/config.md
+      type = {
+        -- Cannot assign `string|nil` to parameter `string`.
+        weakNilCheck = true,
+        weakUnionCheck = true,
+        -- Cannot assign `number` to parameter `integer`.
+        castNumberToInteger = true,
       },
     }
   }
