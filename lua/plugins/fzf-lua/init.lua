@@ -79,7 +79,6 @@ fzf_lua.setup {
   end,
   previewers = {
     bat               = { theme = 'Coldark-Dark', },
-    git_diff          = { pager = "delta", },
     builtin = {
       ueberzug_scaler = "cover",
       extensions      = {
@@ -105,12 +104,16 @@ fzf_lua.setup {
       actions         = {
         ["ctrl-x"]    = { fzf_lua.actions.git_reset, fzf_lua.actions.resume },
       },
+      preview_pager   = vim.fn.executable("delta")==1 and "delta --width=$COLUMNS",
     },
     commits = {
-      cmd             = "git log --color --pretty=format:'%C(yellow)%h%Creset %Cgreen(%><(12)%cr%><|(12))%Creset %s %C(blue)<%an>%Creset'",
-      winopts         = { preview = { vertical = "down:60%", }}
+      winopts         = { preview = { vertical = "down:60%", }},
+      preview_pager   = vim.fn.executable("delta")==1 and "delta --width=$COLUMNS",
     },
-    bcommits          = { winopts = { preview = { vertical = "down:60%", }} },
+    bcommits          = {
+      winopts         = { preview = { vertical = "down:60%", }},
+      preview_pager   = vim.fn.executable("delta")==1 and "delta --width=$COLUMNS",
+    },
     branches          = { winopts = {
       preview         = { vertical = "down:75%", horizontal = "right:75%", }
     }},

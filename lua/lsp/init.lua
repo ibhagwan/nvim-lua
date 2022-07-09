@@ -70,6 +70,12 @@ __settings['sumneko_lua'] = {
           "need-check-nil",
           -- This function requires 2 argument(s) but instead it is receiving 1
           "missing-parameter",
+          -- Cannot assign `unknown` to `string`.
+          "assign-type-mismatch",
+          -- Cannot assign `unknown` to parameter `string`.
+          "param-type-mismatch",
+          -- This variable is defined as type `string`. Cannot convert its type to `unknown`.
+          "cast-local-type",
         }
       },
       workspace = {
