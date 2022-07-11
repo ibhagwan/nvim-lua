@@ -168,6 +168,19 @@ local packer_startup = function(use)
     }
   })
 
+use({
+    "jose-elias-alvarez/null-ls.nvim",
+    config = [[
+      require("null-ls").setup({
+        sources = {
+          require("null-ls").builtins.formatting.stylua,
+          require("null-ls").builtins.completion.spell,
+        },
+      })
+    ]],
+    after  = { 'nvim-lspconfig' },
+  })
+
   -- DAP
   use({
     { prefer_local('mfussenegger/nvim-dap'),

@@ -44,7 +44,7 @@
 - [treesitter](https://github.com/nvim-treesitter/nvim-treesitter): text
   parsing library, provides better syntax highlighting and text-objects for
   different coding languages (e.g. `yaf` yank-a-function), see
-  [treesitter.lua](https://github.com/ibhagwan/nvim-lua/blob/main/lua/plugin/treesitter.lua)
+  [treesitter.lua](https://github.com/ibhagwan/nvim-lua/blob/main/lua/plugins/treesitter.lua)
   for defined text objects
 
 - [lspconfig](https://github.com/neovim/nvim-lspconfig): configuration
@@ -52,6 +52,11 @@
 
 - [nvim-lsp-installer](https://github.com/williamboman/nvim-lsp-installer):
   automatic installation of LSP servers using the `:LspInstall` command
+
+- [null-ls.nvim](https://github.com/jose-elias-alvarez/null-ls.nvim): a lua
+  in-memory pseudo LSP server providing custom functionalities via the Neovim
+  LSP API, provides spelling word completion and lua code formatting using
+  [`stylua`](https://github.com/JohnnyMorganz/StyLua)
 
 - [nvim-dap](https://github.com/mfussenegger/nvim-dap):
   set breakpoints and debug applications using Debug Adapter Protocol (DAP)
@@ -62,11 +67,11 @@
 ### Fuzzy search & file exploration
 
 - [fzf-lua](https://github.com/ibhagwan/fzf-lua): the original, tried and
-  tested fuzzy finder, lua plugin written by yours truly
+  tested fuzzy finder, lua plugin that does pretty much everything, written by
+  yours truly
 
 - [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim): fuzzy
-  search framework for searching project files, buffers, live grep (`rg`), and
-  much more
+  search framework for searching project files, buffers, ripgrep and much more
 
 - [nvim-tree](https://github.com/kyazdani42/nvim-tree.lua): file-explorer tree
 
@@ -91,7 +96,7 @@
   nvim configuration and lua modules with `<space>R`
 
 - [previm](https://github.com/previm/previm): live preview markdown files in
-  the browser with `<space>M`
+  the browser with `<space>r`
 
 ### Appearence
 
