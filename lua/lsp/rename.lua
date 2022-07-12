@@ -6,7 +6,6 @@ local _prompt_str = "New Name❯ "
 
 local function rename()
   local currName = vim.fn.expand('<cword>')
-  local map_opts = { noremap = true, silent = true }
   local opts = {
     style = 'minimal',
     border = 'rounded',
@@ -36,9 +35,10 @@ local function rename()
   api.nvim_command('startinsert!')
   api.nvim_feedkeys(currName, 'n', true)
 
-  api.nvim_buf_set_keymap(bufnr, 'i', '<esc>', '<CMD>stopinsert <BAR> q!<CR>', map_opts)
-  api.nvim_buf_set_keymap(bufnr, 'i', '<C-c>', '<CMD>stopinsert <BAR> q!<CR>', map_opts)
-  api.nvim_buf_set_keymap( bufnr, 'i', '<CR>',
+  local map_opts = { silent = true, buffer = bufnr }
+  vim.keymap.set('i', '<esc>', '<CMD>stopinsert <BAR> q!<CR>', map_opts)
+  vim.keymap.set('i', '<C-c>', '<CMD>stopinsert <BAR> q!<CR>', map_opts)
+  vim.keymap.set('i', '<CR>',
     "<CMD>stopinsert <BAR> lua require('lsp.rename')._rename()<CR>", map_opts)
 end
 

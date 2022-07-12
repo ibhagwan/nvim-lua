@@ -16,7 +16,7 @@ end
 
 local map = function(mode, lhs, rhs, opts)
   opts = vim.tbl_extend("keep", opts,
-    { noremap=true, silent=true, buffer=true })
+    { silent = true, buffer = true })
   vim.keymap.set(mode, lhs, rhs, opts)
 end
 

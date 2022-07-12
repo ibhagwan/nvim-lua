@@ -1,7 +1,5 @@
-local remap = vim.api.nvim_set_keymap
-
-remap('', '<leader>ee', "<Esc>:NvimTreeToggle<CR>",         { silent = true })
-remap('', '<leader>ef', "<Esc>:NvimTreeFindFileToggle<CR>", { silent = true })
+vim.keymap.set('', '<leader>ee', "<Esc>:NvimTreeToggle<CR>",         { silent = true })
+vim.keymap.set('', '<leader>ef', "<Esc>:NvimTreeFindFileToggle<CR>", { silent = true })
 
 require'nvim-tree'.setup {
   disable_netrw = true,

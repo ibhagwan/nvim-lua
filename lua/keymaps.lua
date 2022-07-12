@@ -1,4 +1,4 @@
-local remap = vim.keymap.set
+local map = vim.keymap.set
 
 -- Reload the config (including certain plugins)
 vim.api.nvim_create_user_command("NvimRestart",
@@ -12,7 +12,7 @@ vim.api.nvim_create_user_command("NvimRestart",
   { nargs = "*" }
 )
 
-remap('', '<leader>R', "<Esc>:NvimRestart<CR>", { silent = true })
+map('', '<leader>R', "<Esc>:NvimRestart<CR>", { silent = true })
 
 -- Use ':Grep' or ':LGrep' to grep into quickfix|loclist
 -- without output or jumping to first match
@@ -46,156 +46,156 @@ vim.cmd([[
 ]])
 
 -- <ctrl-s> to Save
-remap({ 'n', 'v', 'i'}, '<C-S>', '<C-c>:update<cr>', { silent = true })
+map({ 'n', 'v', 'i'}, '<C-S>', '<C-c>:update<cr>', { silent = true })
 
 -- w!! to save with sudo
-remap('c', 'w!!', "<esc>:lua require'utils'.sudo_write()<CR>", { silent = true })
+map('c', 'w!!', "<esc>:lua require'utils'.sudo_write()<CR>", { silent = true })
 
 -- Beginning and end of line in `:` command mode
-remap('c', '<C-a>', '<home>', {})
-remap('c', '<C-e>', '<end>' , {})
+map('c', '<C-a>', '<home>', {})
+map('c', '<C-e>', '<end>' , {})
 
 -- Arrows in command line mode (':') menus
-remap('c', '<down>', '(pumvisible() ? "\\<C-n>" : "\\<down>")', { noremap = true, expr = true })
-remap('c', '<up>',   '(pumvisible() ? "\\<C-p>" : "\\<up>")',   { noremap = true, expr = true })
+map('c', '<down>', '(pumvisible() ? "\\<C-n>" : "\\<down>")', { expr = true })
+map('c', '<up>',   '(pumvisible() ? "\\<C-p>" : "\\<up>")',   { expr = true })
 
 -- Terminal mappings
-remap('t', '<M-[>', [[<C-\><C-n>]],      { noremap = true })
-remap('t', '<C-w>', [[<C-\><C-n><C-w>]], { noremap = true })
-remap('t', '<M-r>', [['<C-\><C-N>"'.nr2char(getchar()).'pi']], { noremap = true, expr = true })
+map('t', '<M-[>', [[<C-\><C-n>]],      {})
+map('t', '<C-w>', [[<C-\><C-n><C-w>]], {})
+map('t', '<M-r>', [['<C-\><C-N>"'.nr2char(getchar()).'pi']], { expr = true })
 
 -- tmux like directional window resizes
-remap('n', '<leader><Up>',    "<cmd>lua require'utils'.resize(false, -5)<CR>", { noremap = true, silent = true })
-remap('n', '<leader><Down>',  "<cmd>lua require'utils'.resize(false,  5)<CR>", { noremap = true, silent = true })
-remap('n', '<leader><Left>',  "<cmd>lua require'utils'.resize(true,  -5)<CR>", { noremap = true, silent = true })
-remap('n', '<leader><Right>', "<cmd>lua require'utils'.resize(true,   5)<CR>", { noremap = true, silent = true })
-remap('n', '<leader>=',       '<C-w>=', { noremap = true, silent = true })
+map('n', '<leader><Up>',    "<cmd>lua require'utils'.resize(false, -5)<CR>", { silent = true })
+map('n', '<leader><Down>',  "<cmd>lua require'utils'.resize(false,  5)<CR>", { silent = true })
+map('n', '<leader><Left>',  "<cmd>lua require'utils'.resize(true,  -5)<CR>", { silent = true })
+map('n', '<leader><Right>', "<cmd>lua require'utils'.resize(true,   5)<CR>", { silent = true })
+map('n', '<leader>=',       '<C-w>=', { silent = true })
 
 -- Tab navigation
-remap('n', '[t',         ':tabprevious<CR>', { noremap = true })
-remap('n', ']t',         ':tabnext<CR>',     { noremap = true })
-remap('n', '[T',         ':tabfirst<CR>',    { noremap = true })
-remap('n', ']T',         ':tablast<CR>',     { noremap = true })
-remap('n', '<Leader>tn', ':tabnew<CR>',      { noremap = true })
-remap('n', '<Leader>tc', ':tabclose<CR>',    { noremap = true })
-remap('n', '<Leader>to', ':tabonly<CR>',     { noremap = true })
+map('n', '[t',         ':tabprevious<CR>', {})
+map('n', ']t',         ':tabnext<CR>',     {})
+map('n', '[T',         ':tabfirst<CR>',    {})
+map('n', ']T',         ':tablast<CR>',     {})
+map('n', '<Leader>tn', ':tabnew<CR>',      {})
+map('n', '<Leader>tc', ':tabclose<CR>',    {})
+map('n', '<Leader>to', ':tabonly<CR>',     {})
 -- Jump to first tab & close all other tabs. Helpful after running Git difftool.
-remap('n', '<Leader>tO', ':tabfirst<CR>:tabonly<CR>', { noremap = true })
+map('n', '<Leader>tO', ':tabfirst<CR>:tabonly<CR>', {})
 -- tmux <c-meta>z like
-remap('n', '<Leader>tz',  "<cmd>lua require'utils'.tabZ()<CR>", { noremap = true })
+map('n', '<Leader>tz',  "<cmd>lua require'utils'.tabZ()<CR>", {})
 
 -- Navigate buffers
-remap('n', '[b', ':bprevious<CR>',      { noremap = true })
-remap('n', ']b', ':bnext<CR>',          { noremap = true })
-remap('n', '[B', ':bfirst<CR>',         { noremap = true })
-remap('n', ']B', ':blast<CR>',          { noremap = true })
+map('n', '[b', ':bprevious<CR>',      {})
+map('n', ']b', ':bnext<CR>',          {})
+map('n', '[B', ':bfirst<CR>',         {})
+map('n', ']B', ':blast<CR>',          {})
 -- Quickfix list mappings
-remap('n', '<leader>q', "<cmd>lua require'utils'.toggle_qf('q')<CR>", { noremap = true })
-remap('n', '[q', ':cprevious<CR>',      { noremap = true })
-remap('n', ']q', ':cnext<CR>',          { noremap = true })
-remap('n', '[Q', ':cfirst<CR>',         { noremap = true })
-remap('n', ']Q', ':clast<CR>',          { noremap = true })
+map('n', '<leader>q', "<cmd>lua require'utils'.toggle_qf('q')<CR>", {})
+map('n', '[q', ':cprevious<CR>',      {})
+map('n', ']q', ':cnext<CR>',          {})
+map('n', '[Q', ':cfirst<CR>',         {})
+map('n', ']Q', ':clast<CR>',          {})
 -- Location list mappings
-remap('n', '<leader>Q', "<cmd>lua require'utils'.toggle_qf('l')<CR>", { noremap = true })
-remap('n', '[l', ':lprevious<CR>',      { noremap = true })
-remap('n', ']l', ':lnext<CR>',          { noremap = true })
-remap('n', '[L', ':lfirst<CR>',         { noremap = true })
-remap('n', ']L', ':llast<CR>',          { noremap = true })
+map('n', '<leader>Q', "<cmd>lua require'utils'.toggle_qf('l')<CR>", {})
+map('n', '[l', ':lprevious<CR>',      {})
+map('n', ']l', ':lnext<CR>',          {})
+map('n', '[L', ':lfirst<CR>',         {})
+map('n', ']L', ':llast<CR>',          {})
 
 -- shortcut to view :messages
-remap({'n', 'v'}, '<leader>m', '<cmd>messages<CR>',  { noremap = true })
-remap({'n', 'v'}, '<leader>M', '<cmd>mes clear|echo "cleared :messages"<CR>', { noremap = true })
+map({'n', 'v'}, '<leader>m', '<cmd>messages<CR>',  {})
+map({'n', 'v'}, '<leader>M', '<cmd>mes clear|echo "cleared :messages"<CR>', {})
 
 -- <leader>v|<leader>s act as <cmd-v>|<cmd-s>
 -- <leader>p|P paste from yank register (0)
 -- <leader>y|Y yank into clipboard/OSCyank
-remap({'n', 'v'}, '<leader>v', '"+p',   { noremap = true })
-remap({'n', 'v'}, '<leader>V', '"+P',   { noremap = true })
-remap({'n', 'v'}, '<leader>s', '"*p',   { noremap = true })
-remap({'n', 'v'}, '<leader>S', '"*P',   { noremap = true })
-remap({'n', 'v'}, '<leader>p', '"0p',   { noremap = true })
-remap({'n', 'v'}, '<leader>P', '"0P',   { noremap = true })
-remap({'n', 'v'}, '<leader>y', '<cmd>OSCYankReg 0<CR>', { noremap = true })
--- remap({'n', 'v'}, '<leader>y', '<cmd>let @+=@0<CR>', { noremap = true })
+map({'n', 'v'}, '<leader>v', '"+p',   {})
+map({'n', 'v'}, '<leader>V', '"+P',   {})
+map({'n', 'v'}, '<leader>s', '"*p',   {})
+map({'n', 'v'}, '<leader>S', '"*P',   {})
+map({'n', 'v'}, '<leader>p', '"0p',   {})
+map({'n', 'v'}, '<leader>P', '"0P',   {})
+map({'n', 'v'}, '<leader>y', '<cmd>OSCYankReg 0<CR>', {})
+-- map({'n', 'v'}, '<leader>y', '<cmd>let @+=@0<CR>', {})
 
 -- Overloads for 'd|c' that don't pollute the unnamed registers
-remap('n', '<leader>D',  '"_D',         { noremap = true })
-remap('n', '<leader>C',  '"_C',         { noremap = true })
-remap({'n', 'v'}, '<leader>c',  '"_c',  { noremap = true })
+map('n', '<leader>D',  '"_D',         {})
+map('n', '<leader>C',  '"_C',         {})
+map({'n', 'v'}, '<leader>c',  '"_c',  {})
 
 -- keep visual selection when (de)indenting
-remap('v', '<', '<gv', { noremap = true })
-remap('v', '>', '>gv', { noremap = true })
+map('v', '<', '<gv', {})
+map('v', '>', '>gv', {})
 
 -- Move selected lines up/down in visual mode
-remap('x', 'K', ":move '<-2<CR>gv=gv", { noremap = true })
-remap('x', 'J', ":move '>+1<CR>gv=gv", { noremap = true })
+map('x', 'K', ":move '<-2<CR>gv=gv", {})
+map('x', 'J', ":move '>+1<CR>gv=gv", {})
 
 -- Select last pasted/yanked text
-remap('n', 'g<C-v>', '`[v`]', { noremap = true })
+map('n', 'g<C-v>', '`[v`]', {})
 
 -- Keep matches center screen when cycling with n|N
-remap('n', 'n', 'nzzzv', { noremap = true })
-remap('n', 'N', 'Nzzzv', { noremap = true })
+map('n', 'n', 'nzzzv', {})
+map('n', 'N', 'Nzzzv', {})
 
 -- Break undo chain on punctuation so we can
 -- use 'u' to undo sections of an edit
 -- DISABLED, ALL KINDS OF ODDITIES
 --[[ for _, c in ipairs({',', '.', '!', '?', ';'}) do
-   remap('i', c, c .. "<C-g>u", { noremap = true })
+   map('i', c, c .. "<C-g>u", {})
 end --]]
 
 -- any jump over 5 modifies the jumplist
 -- so we can use <C-o> <C-i> to jump back and forth
 for _, c in ipairs({'j', 'k'}) do
-  remap('n', c, ([[(v:count > 5 ? "m'" . v:count : "") . '%s']]):format(c),
-    { noremap=true, expr = true, silent = true})
+  map('n', c, ([[(v:count > 5 ? "m'" . v:count : "") . '%s']]):format(c),
+    { expr = true, silent = true})
 end
 
 -- move along visual lines, not numbered ones
 -- without interferring with {count}<down|up>
 for _, m in ipairs({'n', 'v'}) do
   for _, c in ipairs({'<up>', '<down>'}) do
-    remap(m, c, ([[v:count == 0 ? 'g%s' : '%s']]):format(c, c),
-        { noremap=true, expr = true, silent = true})
+    map(m, c, ([[v:count == 0 ? 'g%s' : '%s']]):format(c, c),
+        { expr = true, silent = true})
   end
 end
 
 -- Search and Replace
 -- 'c.' for word, 'c>' for WORD
 -- 'c.' in visual mode for selection
-remap('n', 'c.', [[:%s/\<<C-r><C-w>\>//g<Left><Left>]], { noremap = true })
-remap('n', 'c>', [[:%s/\V<C-r><C-a>//g<Left><Left>]], { noremap = true })
-remap('x', 'c.', [[:<C-u>%s/\V<C-r>=luaeval("require'utils'.get_visual_selection(true)")<CR>//g<Left><Left>]], { noremap = true })
+map('n', 'c.', [[:%s/\<<C-r><C-w>\>//g<Left><Left>]], {})
+map('n', 'c>', [[:%s/\V<C-r><C-a>//g<Left><Left>]], {})
+map('x', 'c.', [[:<C-u>%s/\V<C-r>=luaeval("require'utils'.get_visual_selection(true)")<CR>//g<Left><Left>]], {})
 
 -- Turn off search matches with double-<Esc>
-remap('n', '<Esc><Esc>', '<Esc>:nohlsearch<CR>', { noremap = true, silent = true })
+map('n', '<Esc><Esc>', '<Esc>:nohlsearch<CR>', { silent = true })
 
 -- Toggle display of `listchars`
-remap('n', '<leader>\'', '<Esc>:set list!<CR>',   { noremap = true, silent = true })
+map('n', '<leader>\'', '<Esc>:set list!<CR>',   { silent = true })
 
 -- Toggle colored column at 81
-remap('n', '<leader>|',
+map('n', '<leader>|',
     ':execute "set colorcolumn=" . (&colorcolumn == "" ? "81" : "")<CR>',
-    { noremap = true, silent = true })
+    { silent = true })
 
 -- Change current working dir (:pwd) to curent file's folder
-remap('n', '<leader>%', '<Esc>:lua require"utils".set_cwd()<CR>', { noremap = true, silent = true })
+map('n', '<leader>%', '<Esc>:lua require"utils".set_cwd()<CR>', { silent = true })
 
 -- Map <leader>o & <leader>O to newline without insert mode
-remap('n', '<leader>o',
+map('n', '<leader>o',
     ':<C-u>call append(line("."), repeat([""], v:count1))<CR>',
-    { noremap = true, silent = true })
-remap('n', '<leader>O',
+    { silent = true })
+map('n', '<leader>O',
     ':<C-u>call append(line(".")-1, repeat([""], v:count1))<CR>',
-    { noremap = true, silent = true })
+    { silent = true })
 
 -- Use operator pending mode to visually select entire buffer, e.g.
 --    d<A-a> = delete entire buffer
 --    y<A-a> = yank entire buffer
 --    v<A-a> = visual select entire buffer
-remap('o', '<A-a>', ':<C-U>normal! mzggVG<CR>`z')
-remap('x', '<A-a>', ':<C-U>normal! ggVG<CR>')
+map('o', '<A-a>', ':<C-U>normal! mzggVG<CR>`z')
+map('x', '<A-a>', ':<C-U>normal! ggVG<CR>')
 
 -- fugitive shortcuts for yadm
 local yadm_repo = "$HOME/dots/yadm-repo"

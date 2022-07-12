@@ -16,22 +16,22 @@ comment.setup({
     },
 })
 
-local map = vim.api.nvim_set_keymap
-local opt = { expr = true, noremap = true, silent = true }
+local map = vim.keymap.set
+local remap = { remap = true }
 
 -- NORMAL mode line-wise mappings
 map('n', 'gcc',
   [[v:count == 0 ? '<CMD>lua require("Comment.api").call("toggle_current_linewise_op")<CR>g@$' : '<CMD>lua require("Comment.api").call("toggle_linewise_count_op")<CR>g@$']],
-  opt)
+  { expr = true, silent = true })
 
 map('n', 'gbc',
   [[v:count == 0 ? '<CMD>lua require("Comment.api").call("toggle_current_blockwise_op")<CR>g@$' : '<CMD>lua require("Comment.api").call("toggle_blockwise_count_op")<CR>g@$']],
-  opt)
+  { expr = true, silent = true })
 
 -- Toggle in NORMAL Op-pending mode
-map('n', 'gc', '<CMD>lua require("Comment.api").call("toggle_linewise_op")<CR>g@', {})
-map('n', 'gb', '<CMD>lua require("Comment.api").call("toggle_blockwise_op")<CR>g@', {})
+map('n', 'gc', '<CMD>lua require("Comment.api").call("toggle_linewise_op")<CR>g@', remap)
+map('n', 'gb', '<CMD>lua require("Comment.api").call("toggle_blockwise_op")<CR>g@', remap)
 
 -- Toggle in VISUAL mode
-map('x', 'gl', '<ESC><CMD>lua require("Comment.api").locked.toggle_linewise_op(vim.fn.visualmode())<CR>', {})
-map('x', 'gc', '<ESC><CMD>lua require("Comment.api").locked.toggle_blockwise_op(vim.fn.visualmode())<CR>', {})
+map('x', 'gl', '<ESC><CMD>lua require("Comment.api").locked.toggle_linewise_op(vim.fn.visualmode())<CR>', remap)
+map('x', 'gc', '<ESC><CMD>lua require("Comment.api").locked.toggle_blockwise_op(vim.fn.visualmode())<CR>', remap)

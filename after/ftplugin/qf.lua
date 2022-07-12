@@ -14,9 +14,5 @@ vim.wo.cursorline       = true
 vim.wo.spell            = false
 vim.bo.buflisted        = false
 
-vim.api.nvim_buf_set_keymap(0, 'n', '[-', "<Esc>:colder<CR>", { noremap = true })
-vim.api.nvim_buf_set_keymap(0, 'n', ']+', "<Esc>:cnewer<CR>", { noremap = true })
-
---[[ if pcall(require, 'bqf') then
-  vim.api.nvim_buf_set_keymap(0, 'n', '<F2>', "<Esc>:BqfToggle<CR>", { noremap = true })
-end ]]
+vim.keymap.set('n', '[-', "<Esc>:colder<CR>", { buffer = true })
+vim.keymap.set('n', ']+', "<Esc>:cnewer<CR>", { buffer = true })

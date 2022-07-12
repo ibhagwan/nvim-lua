@@ -21,8 +21,8 @@ gitsigns.setup {
   yadm = { enable = true, },
   on_attach = function(bufnr)
     local map = vim.keymap.set
-    local opts = { noremap = true, buffer = bufnr }
-    local opts_expr = { noremap = true, buffer = bufnr, expr = true }
+    local opts = { buffer = bufnr }
+    local opts_expr = { buffer = bufnr, expr = true }
 
     -- creates too many lua func references as
     -- this is called for every bufer attach

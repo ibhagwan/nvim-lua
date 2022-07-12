@@ -3,8 +3,8 @@ if not pcall(require, "which-key") then
 end
 
 -- If we do not wish to wait for timeoutlen
-vim.api.nvim_set_keymap('n', '<Leader>?', "<Esc>:WhichKey '' n<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap('v', '<Leader>?', "<Esc>:WhichKey '' v<CR>", { noremap = true, silent = true })
+vim.keymap.set('n', '<Leader>?', "<Esc>:WhichKey '' n<CR>", { silent = true })
+vim.keymap.set('v', '<Leader>?', "<Esc>:WhichKey '' v<CR>", { silent = true })
 
 -- https://github.com/folke/which-key.nvim#colors
 vim.cmd([[highlight default link WhichKey          Label]])

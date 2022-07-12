@@ -8,7 +8,6 @@ local map_fzf = function(mode, key, f, options, buffer)
   end
 
   local map_options = {
-    noremap = true,
     silent = true,
     buffer = buffer,
   }

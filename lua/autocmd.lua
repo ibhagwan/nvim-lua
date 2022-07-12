@@ -137,7 +137,7 @@ augroup('Help', function(g)
     local width = math.floor(vim.o.columns*0.75)
     vim.cmd("wincmd L")
     vim.cmd("vertical resize " .. width)
-    vim.api.nvim_buf_set_keymap(0, 'n', 'q', '<CMD>q<CR>', { noremap = true })
+    vim.keymap.set('n', 'q', '<CMD>q<CR>', { buffer = true })
   end
   aucmd("FileType", {
     group = g,

@@ -64,9 +64,8 @@ local btoggle = function()
   toggle(vim.api.nvim_get_current_buf())
 end
 
-vim.api.nvim_set_keymap('', '<leader>"',
-  "<cmd>lua require'plugins.indent'.btoggle()<CR>",
-  { noremap = true, silent = true })
+vim.keymap.set('', '<leader>"',
+  "<cmd>lua require'plugins.indent'.btoggle()<CR>", { silent = true })
 
 return {
   toggle = toggle,
