@@ -204,11 +204,16 @@ use({
   use { 'previm/previm',
     commit = "1978acc23c16cddcaf70c856a3b39d17943d7df0",
     config = [[
-            -- vim.g.previm_open_cmd = 'firefox';
-            vim.g.previm_open_cmd = '/shared/$USER/Applications/chromium/chrome';
-            vim.g.previm_enable_realtime = 0
-        ]],
-    cmd = { 'PrevimOpen' }
+      -- vim.g.previm_open_cmd = 'firefox';
+      vim.g.previm_open_cmd = '/shared/$USER/Applications/chromium/chrome';
+      vim.g.previm_enable_realtime = 0
+      vim.g.previm_disable_default_css = 1
+      vim.g.previm_custom_css_path = vim.fn.stdpath("config").."/css/previm-gh-dark.css"
+      -- clear cache every time we open neovim
+      vim.fn['previm#wipe_cache']()
+    ]],
+    ft = { 'markdown' },
+    opt = true,
   }
 
   -- key bindings cheatsheet

@@ -89,7 +89,10 @@ fzf_lua.setup {
       }
     },
   },
-  files               = { actions = { ["ctrl-l"] = fzf_lua.actions.arg_add } },
+  files               = {
+    fd_opts           = "--no-ignore --color=never --type f --hidden --follow --exclude .git",
+    action            = { ["ctrl-l"] = fzf_lua.actions.arg_add }
+  },
   grep = {
     rg_glob           = true,
     rg_opts           = "--hidden --column --line-number --no-heading"
