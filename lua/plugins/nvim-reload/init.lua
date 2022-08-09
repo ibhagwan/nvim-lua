@@ -10,7 +10,7 @@ local plugin_dirs_lazyload = {
   vim.fn.stdpath('data') .. '/site/pack/*/opt/lualine.nvim',
   vim.fn.stdpath('data') .. '/site/pack/*/opt/telescope.nvim',
   vim.fn.stdpath('data') .. '/site/pack/*/opt/which-key.nvim',
-  vim.fn.stdpath('data') .. '/site/pack/*/opt/babelfish.nvim',
+  vim.fn.stdpath('data') .. '/site/pack/*/opt/ts-vimdoc.nvim',
   vim.fn.stdpath('data') .. '/site/pack/*/opt/toggleterm.nvim',
   vim.fn.stdpath('data') .. '/site/pack/*/opt/indent-blankline.nvim',
   vim.fn.stdpath('data') .. '/site/pack/*/opt/nvim-dap',

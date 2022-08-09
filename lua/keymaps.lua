@@ -155,8 +155,8 @@ end
 -- move along visual lines, not numbered ones
 -- without interferring with {count}<down|up>
 for _, m in ipairs({'n', 'v'}) do
-  for _, c in ipairs({'<up>', '<down>'}) do
-    map(m, c, ([[v:count == 0 ? 'g%s' : '%s']]):format(c, c),
+  for _, c in ipairs({ {'<up>','k'}, {'<down>','j'} }) do
+    map(m, c[1], ([[v:count == 0 ? 'g%s' : '%s']]):format(c[2], c[2]),
         { expr = true, silent = true})
   end
 end
