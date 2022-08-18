@@ -9,25 +9,22 @@ surround.setup({
   -- 'ysiw('    foo -> ( foo )
   -- 'ysiw)'    foo ->  (foo)
   custom_surroundings = {
-    -- ['('] = { output = { left = '( ', right = ' )' } },
-    -- ['['] = { output = { left = '[ ', right = ' ]' } },
-    -- ['{'] = { output = { left = '{ ', right = ' }' } },
-    -- ['<'] = { output = { left = '< ', right = ' >' } },
+    -- https://github.com/echasnovski/mini.nvim/issues/84
     ['('] = {
-      input = { find = '%(%s-.-%s-%)', extract = '^(.%s*).-(%s*.)$' },
-      output = { left = '( ', right = ' )' },
+      input = {find = '%b()', extract = '^(.%s*).-(%s*.)$'},
+      output = {left = '( ', right = ' )'},
     },
     ['['] = {
-      input = { find = '%[%s-.-%s-%]', extract = '^(.%s*).-(%s*.)$' },
-      output = { left = '[ ', right = ' ]' },
+      input = {find = '%b[]', extract = '^(.%s*).-(%s*.)$'},
+      output = {left = '[ ', right = ' ]'},
     },
     ['{'] = {
-      input = { find = '{%s-.-%s-}', extract = '^(.%s*).-(%s*.)$' },
-      output = { left = '{ ', right = ' }' },
+      input = {find = '%b{}', extract = '^(.%s*).-(%s*.)$'},
+      output = {left = '{ ', right = ' }'},
     },
     ['<'] = {
-      input = { find = '<%s-.-%s->', extract = '^(.%s*).-(%s*.)$' },
-      output = { left = '< ', right = ' >' },
+      input = {find = '%b<>', extract = '^(.%s*).-(%s*.)$'},
+      output = {left = '< ', right = ' >'},
     },
     S = {
       -- lua bracketed string mapping
