@@ -59,7 +59,7 @@ augroup('ResizeWindows', function(g)
   {
     group = g,
     pattern = '*',
-    command = 'tabdo wincmd ='
+    command = 'tabdo wincmd = | lua require("fzf-lua").redraw()'
   })
 end)
 

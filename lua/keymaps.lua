@@ -56,8 +56,15 @@ map('c', '<C-a>', '<home>', {})
 map('c', '<C-e>', '<end>' , {})
 
 -- Arrows in command line mode (':') menus
-map('c', '<down>', '(pumvisible() ? "\\<C-n>" : "\\<down>")', { expr = true })
-map('c', '<up>',   '(pumvisible() ? "\\<C-p>" : "\\<up>")',   { expr = true })
+-- TODO: why the below doesn't work with nightly 0.8?
+-- map('c', '<down>', '(pumvisible() ? "\\<C-n>" : "\\<down>")', { expr = true })
+-- map('c', '<up>',   '(pumvisible() ? "\\<C-p>" : "\\<up>")',   { expr = true })
+for k, v in pairs({ ['<down>'] = '<C-n>', ['<up>'] = '<C-p>' }) do
+  map('c', k, function()
+    return vim.fn.pumvisible() and v or k
+  end, {expr=true})
+end
+
 
 -- Terminal mappings
 map('t', '<M-[>', [[<C-\><C-n>]],      {})
