@@ -64,6 +64,8 @@ require("telescope").setup {
         ["<C-b>"] = actions.results_scrolling_down,
         ["<C-f>"] = actions.results_scrolling_up,
 
+        ["<C-g>"] = actions.to_fuzzy_refine,
+
         ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
         ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
         ["<M-a>"] = actions.toggle_all,
@@ -83,6 +85,8 @@ require("telescope").setup {
 
         ["<C-b>"] = actions.results_scrolling_down,
         ["<C-f>"] = actions.results_scrolling_up,
+
+        ["<C-g>"] = actions.to_fuzzy_refine,
 
         ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
         ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,

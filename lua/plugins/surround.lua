@@ -9,27 +9,13 @@ surround.setup({
   -- 'ysiw('    foo -> ( foo )
   -- 'ysiw)'    foo ->  (foo)
   custom_surroundings = {
+    -- since mini.nvim#84 we no longer need to customize
+    -- the left brackets, they are spaced by default
     -- https://github.com/echasnovski/mini.nvim/issues/84
-    ['('] = {
-      input = {find = '%b()', extract = '^(.%s*).-(%s*.)$'},
-      output = {left = '( ', right = ' )'},
-    },
-    ['['] = {
-      input = {find = '%b[]', extract = '^(.%s*).-(%s*.)$'},
-      output = {left = '[ ', right = ' ]'},
-    },
-    ['{'] = {
-      input = {find = '%b{}', extract = '^(.%s*).-(%s*.)$'},
-      output = {left = '{ ', right = ' }'},
-    },
-    ['<'] = {
-      input = {find = '%b<>', extract = '^(.%s*).-(%s*.)$'},
-      output = {left = '< ', right = ' >'},
-    },
     S = {
       -- lua bracketed string mapping
       -- 'ysiwS'  foo -> [[foo]]
-      input = { find = '%[%[.-%]%]', extract = '^(..).*(..)$' },
+      input = { '%[%[().-()%]%]' },
       output = { left = '[[', right = ']]' },
     },
   },
