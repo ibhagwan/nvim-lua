@@ -226,7 +226,7 @@ use({
   use { "bluz71/vim-nightfly-guicolors" }
 
   -- Colorizer
-  use { 'norcalli/nvim-colorizer.lua',
+  use { 'nvchad/nvim-colorizer.lua',
     config = "require'colorizer'.setup()",
     cmd = { 'ColorizerAttachToBuffer', 'ColorizerDetachFromBuffer' },
     opt = true
