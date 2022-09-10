@@ -61,8 +61,11 @@ map('c', '<C-e>', '<end>' , {})
 -- map('c', '<up>',   '(pumvisible() ? "\\<C-p>" : "\\<up>")',   { expr = true })
 for k, v in pairs({ ['<down>'] = '<C-n>', ['<up>'] = '<C-p>' }) do
   map('c', k, function()
-    return vim.fn.pumvisible() and v or k
-  end, {expr=true})
+    local key = vim.fn.pumvisible() ~= 0 and v or k
+    vim.api.nvim_feedkeys(
+      vim.api.nvim_replace_termcodes(key,
+        true, false, true), 'n', false)
+  end, { silent = false })
 end
 
 
