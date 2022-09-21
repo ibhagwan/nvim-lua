@@ -36,7 +36,7 @@ local config = {
   compile_path = compile_path,
   git = {
     -- never fail if plugin author rebased the git repo
-    subcommands = { update = 'pull --ff-only --progress --rebase=true' }
+    subcommands = { update = 'pull --progress --rebase=true' }
   },
   display = {
     open_fn = function()
@@ -45,19 +45,11 @@ local config = {
   }
 }
 
--- Need to set 'compile_path' before calling 'startup'
-packer.init(config)
-
--- We shouldn't technically do this but for some reason packer uses a local
--- table variable for config which doesn't get get updated properly after init
-packer.config.compile_path = config.compile_path
-packer.config.git.subcommands.update = config.git.subcommands.update
-
 -- hook to avoid the 'packer.compile: Complete' notify
 packer.on_compile_done = function() end
 
 -- Setup our plugins
-packer.startup(require("plugins.pluginList"), config)
+packer.startup({ require("plugins.pluginList"), config = config })
 
 if vim.loop.fs_stat(config.compile_path) then
   -- since we customized the compilation path for packer
