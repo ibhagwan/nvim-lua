@@ -152,12 +152,6 @@ o.shada             = [[!,'100,<0,s100,h]]
 o.sessionoptions    = 'blank,buffers,curdir,folds,help,tabpages,winsize'
 o.diffopt           = 'internal,filler,algorithm:histogram,indent-heuristic'
 
---[[
--- Install neovim-nightly on mac:
-❯ brew tap jason0x43/homebrew-neovim-nightly
-❯ brew install --cask neovim-nightly
-]]
-
 -- MacOS clipboard
 if require'utils'.is_darwin() then
   vim.g.clipboard = {

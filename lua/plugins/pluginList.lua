@@ -75,8 +75,10 @@ local packer_startup = function(use)
 
   -- yank over ssh with ':OCSYank' or ':OSCYankReg +'
   use { 'ojroques/vim-oscyank',
-    config = [[vim.g.oscyank_term = 'tmux']],
-    cmd = { 'OSCYank', 'OSCYankReg' },
+    config = [[vim.g.oscyank_term = 'default']],
+    -- load at statup since we use this often
+    -- over ssh via the 'TextYankPost' autocmd
+    -- cmd = { 'OSCYank', 'OSCYankReg' },
   }
 
   -- Autocompletion & snippets
