@@ -26,11 +26,14 @@ require'nvim-treesitter.configs'.setup {
   },
   highlight   = {
     enable = true,
-    -- slow on big files
-    -- ugly for markdown
     disable = {
+      -- Slow on big C|CPP files
       -- "c", "cpp",
+      -- Makes MD|inline highlights ugly
       "md", "markdown",
+      -- Messes up vimdoc alignments
+      -- https://github.com/nvim-treesitter/nvim-treesitter/pull/3555
+      "help",
     }
   },
   incremental_selection = {

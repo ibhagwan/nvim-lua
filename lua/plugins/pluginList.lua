@@ -237,6 +237,11 @@ use({
   -- statusline
   use { 'tjdevries/express_line.nvim',
     config = "require('plugins.statusline')",
+    -- statusline won't load at startup due to 'impatient.nvim' mod cache
+    -- to test, delete '~/.cache/nvim/luacache_modpaths' and restart nvim,
+    -- statusline won't show up until <Space-R> or ':lua require("el")'
+    -- workaround: manually load 'pleanry.nvim'
+    setup = 'pcall(require"packer".loader, "plenary.nvim")',
     requires = { 'nvim-lua/plenary.nvim' },
     after = 'plenary.nvim',
     -- after = { 'plenary.nvim', 'nvim-web-devicons' },
