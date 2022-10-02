@@ -65,7 +65,8 @@ local btoggle = function()
 end
 
 vim.keymap.set('', '<leader>"',
-  "<cmd>lua require'plugins.indent'.btoggle()<CR>", { silent = true })
+  "<cmd>lua require'plugins.indent'.btoggle()<CR>",
+  { silent = true, desc = "toggle 'mini.indentscope' on/off" })
 
 return {
   toggle = toggle,

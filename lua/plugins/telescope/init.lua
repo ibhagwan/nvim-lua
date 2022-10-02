@@ -150,6 +150,7 @@ function M.find_files(opts)
       "--type=f",
       "--hidden",
       "--follow",
+      "--no-ignore",
       "--exclude=.git",
       "--strip-cwd-prefix"
     },
@@ -159,55 +160,6 @@ function M.find_files(opts)
     },
   }, opts)
   require("telescope.builtin").fd(opts)
-end
-
-function M.edit_neovim()
-  M.find_files {
-    prompt_title = "< VimRC >",
-    path_display = { "absolute" },
-    -- path_display = { "shorten", "absolute" },
-    cwd = "~/.config/nvim",
-
-    --[[ layout_strategy = "vertical",
-    layout_config = {
-      width = 0.9,
-      height = 0.8,
-
-      horizontal = {
-        width = { padding = 0.15 },
-      },
-      vertical = {
-        preview_height = 0.45,
-      },
-    }, ]]
-  }
-end
-
-function M.edit_dotfiles()
-  M.find_files {
-    prompt_title = "~ dotfiles ~",
-    path_display = { "absolute" },
-    cwd = "~/dots",
-  }
-end
-
-function M.edit_zsh()
-  M.find_files {
-    path_display = { "absolute" },
-    cwd = "~/.config/zsh/",
-    prompt = "~ zsh ~",
-    hidden = true,
-
-    layout_strategy = "vertical",
-    layout_config = {
-      horizontal = {
-        width = { padding = 0.15 },
-      },
-      vertical = {
-        preview_height = 0.70,
-      },
-    },
-  }
 end
 
 function M.installed_plugins()
@@ -245,22 +197,6 @@ function M.grep_cWORD()
   }
 end
 
---[[ function M.git_status()
-  local opts = themes.get_dropdown {
-    winblend = 10,
-    border = true,
-    previewer = false,
-    path_display = { "absolute" },
-  }
-
-  -- Can change the git icons using this.
-  opts.git_icons = {
-    changed = "M"
-  }
-
-  require("telescope.builtin").git_status(opts)
-end ]]
-
 M.git_branches = function()
     require("telescope.builtin").git_branches({
         attach_mappings = function(_, map)
@@ -269,16 +205,6 @@ M.git_branches = function()
             return true
         end
     })
-end
-
-function M.lsp_code_actions()
-  local opts = themes.get_dropdown {
-    winblend = 10,
-    border = true,
-    previewer = false,
-    path_display = { "absolute" },
-  }
-  require("telescope.builtin").lsp_code_actions(opts)
 end
 
 return setmetatable({}, {

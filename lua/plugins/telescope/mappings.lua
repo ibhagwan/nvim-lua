@@ -1,5 +1,11 @@
 local map_tele = function(mode, key, f, options, buffer)
 
+  local desc = nil
+  if type(options) == 'table' then
+    desc = options.desc
+    options.desc = nil
+  end
+
   local rhs = function()
     if not pcall(require, 'telescope.nvim') then
       require('packer').loader('plenary.nvim')
@@ -12,6 +18,7 @@ local map_tele = function(mode, key, f, options, buffer)
   local map_options = {
     silent = true,
     buffer = buffer,
+    desc   = desc or string.format("Telescope %s", f),
   }
 
   vim.keymap.set(mode, key, rhs, map_options)
@@ -20,56 +27,51 @@ end
 -- mappings
 map_tele('n', '<leader><F1>', "help_tags")
 map_tele('n', '<leader>,', "buffers")
-map_tele('n', '<leader>zf', "find_files")
-map_tele('n', '<leader>zg', "git_files")
-map_tele('n', '<leader>zb', "current_buffer_fuzzy_find")
-map_tele('n', '<leader>zH', "oldfiles", { cwd = "~" })
-map_tele('n', '<leader>zh', "oldfiles", { cwd = vim.loop.cwd(), cwd_only=true })
-map_tele('n', '<leader>zx', "commands")
-map_tele('n', '<leader>z:', "command_history")
-map_tele('n', '<leader>z/', "search_history")
-map_tele('n', '<leader>zm', "marks")
-map_tele('n', '<leader>zM', "man_pages")
-map_tele('n', '<leader>zq', "quickfix")
-map_tele('n', '<leader>zQ', "loclist")
-map_tele('n', '<leader>z"', "registers")
-map_tele('n', '<leader>zo', "vim_options")
--- map_tele('n', '<leader>zo', "colorscheme")
-map_tele('n', '<leader>zO', "highlights")
-map_tele('n', '<leader>zk', "keymaps")
-map_tele('n', '<leader>zz', "resume")
-map_tele('n', '<leader>zt', "current_buffer_tags")
-map_tele('n', '<leader>zT', "tags")
-map_tele('n', '<leader>zR', "live_grep")
+map_tele('n', '<leader>tf', "find_files")
+map_tele('n', '<leader>tg', "git_files")
+map_tele('n', '<leader>tb', "current_buffer_fuzzy_find")
+map_tele('n', '<leader>tH', "oldfiles", { cwd = "~" })
+map_tele('n', '<leader>th', "oldfiles", { cwd = vim.loop.cwd(), cwd_only=true })
+map_tele('n', '<leader>tx', "commands")
+map_tele('n', '<leader>t:', "command_history")
+map_tele('n', '<leader>t/', "search_history")
+map_tele('n', '<leader>tm', "marks")
+map_tele('n', '<leader>tM', "man_pages")
+map_tele('n', '<leader>tq', "quickfix")
+map_tele('n', '<leader>tQ', "loclist")
+map_tele('n', '<leader>t"', "registers")
+map_tele('n', '<leader>to', "vim_options")
+-- map_tele('n', '<leader>to', "colorscheme")
+map_tele('n', '<leader>tO', "highlights")
+map_tele('n', '<leader>tk', "keymaps")
+map_tele('n', '<leader>tz', "resume")
+map_tele('n', '<leader>tt', "current_buffer_tags")
+map_tele('n', '<leader>tT', "tags")
+map_tele('n', '<leader>tR', "live_grep")
 
-map_tele('n', '<leader>zw', "grep_cword")
-map_tele('n', '<leader>zW', "grep_cWORD")
-map_tele('n', '<leader>zr', "grep_prompt")
-map_tele('n', '<leader>zv', "grep_visual")
-map_tele('v', '<leader>zv', "grep_visual")
+map_tele('n', '<leader>tw', "grep_cword")
+map_tele('n', '<leader>tW', "grep_cWORD")
+map_tele('n', '<leader>tr', "grep_prompt")
+map_tele('n', '<leader>tv', "grep_visual")
+map_tele('v', '<leader>tv', "grep_visual")
 
 -- Telescope Meta
-map_tele('n', "<leader>z?", "builtin")
+map_tele('n', "<leader>t?", "builtin")
 
 -- Git
-map_tele('n', '<leader>zB', "git_branches")
-map_tele('n', '<leader>zs', "git_status")
-map_tele('n', '<leader>zc', "git_bcommits")
-map_tele('n', '<leader>zC', "git_commits")
+map_tele('n', '<leader>tB', "git_branches")
+map_tele('n', '<leader>ts', "git_status")
+map_tele('n', '<leader>tc', "git_bcommits")
+map_tele('n', '<leader>tC', "git_commits")
 
 -- LSP
-map_tele('n', '<leader>zlr', "lsp_references")
-map_tele('n', '<leader>zla', "lsp_code_actions")
-map_tele('n', '<leader>zlA', "lsp_range_code_actions")
-map_tele('n', '<leader>zld', "lsp_definitions")
-map_tele('n', '<leader>zlm', "lsp_implementations")
-map_tele('n', '<leader>zlg', "diagnostics", { bufnr=0 })
-map_tele('n', '<leader>zlG', "diagnostics")
-map_tele('n', '<leader>zls', "lsp_document_symbols")
-map_tele('n', '<leader>zlS', "lsp_workspace_symbols")
+map_tele('n', '<leader>tlr', "lsp_references")
+map_tele('n', '<leader>tld', "lsp_definitions")
+map_tele('n', '<leader>tlm', "lsp_implementations")
+map_tele('n', '<leader>tlg', "diagnostics", { bufnr=0 })
+map_tele('n', '<leader>tlG', "diagnostics")
+map_tele('n', '<leader>tls', "lsp_document_symbols")
+map_tele('n', '<leader>tlS', "lsp_workspace_symbols")
 
--- Nvim & Dots
-map_tele('n', '<leader>zen', "edit_neovim")
-map_tele('n', '<leader>zed', "edit_dotfiles")
-map_tele('n', '<leader>zez', "edit_zsh")
-map_tele('n', '<leader>zep', "installed_plugins")
+-- Packer folder
+map_tele('n', '<leader>tp', "installed_plugins")

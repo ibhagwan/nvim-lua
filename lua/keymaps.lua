@@ -12,7 +12,8 @@ vim.api.nvim_create_user_command("NvimRestart",
   { nargs = "*" }
 )
 
-map('', '<leader>R', "<Esc>:NvimRestart<CR>", { silent = true })
+map('', '<leader>R', "<Esc>:NvimRestart<CR>",
+  { silent = true, desc = "reload nvim configuration" })
 
 -- Use ':Grep' or ':LGrep' to grep into quickfix|loclist
 -- without output or jumping to first match
@@ -46,7 +47,7 @@ vim.cmd([[
 ]])
 
 -- <ctrl-s> to Save
-map({ 'n', 'v', 'i'}, '<C-S>', '<C-c>:update<cr>', { silent = true })
+map({ 'n', 'v', 'i'}, '<C-S>', '<C-c>:update<cr>', { silent = true, desc = "Save" })
 
 -- w!! to save with sudo
 map('c', 'w!!', "<esc>:lua require'utils'.sudo_write()<CR>", { silent = true })
@@ -68,70 +69,72 @@ for k, v in pairs({ ['<down>'] = '<C-n>', ['<up>'] = '<C-p>' }) do
   end, { silent = false })
 end
 
-
 -- Terminal mappings
 map('t', '<M-[>', [[<C-\><C-n>]],      {})
 map('t', '<C-w>', [[<C-\><C-n><C-w>]], {})
 map('t', '<M-r>', [['<C-\><C-N>"'.nr2char(getchar()).'pi']], { expr = true })
 
 -- tmux like directional window resizes
-map('n', '<leader><Up>',    "<cmd>lua require'utils'.resize(false, -5)<CR>", { silent = true })
-map('n', '<leader><Down>',  "<cmd>lua require'utils'.resize(false,  5)<CR>", { silent = true })
-map('n', '<leader><Left>',  "<cmd>lua require'utils'.resize(true,  -5)<CR>", { silent = true })
-map('n', '<leader><Right>', "<cmd>lua require'utils'.resize(true,   5)<CR>", { silent = true })
-map('n', '<leader>=',       '<C-w>=', { silent = true })
+map('n', '<leader>=', '<C-w>=',
+  { silent = true, desc = "normalize split layout" })
+map('n', '<leader><Up>',    "<cmd>lua require'utils'.resize(false, -5)<CR>",
+  { silent = true, desc = "horizontal split increase" })
+map('n', '<leader><Down>',  "<cmd>lua require'utils'.resize(false,  5)<CR>",
+  { silent = true, desc = "horizontal split decrease" })
+map('n', '<leader><Left>',  "<cmd>lua require'utils'.resize(true,  -5)<CR>",
+  { silent = true, desc = "vertical split decrease" })
+map('n', '<leader><Right>', "<cmd>lua require'utils'.resize(true,   5)<CR>",
+  { silent = true, desc = "vertical split increase" })
 
--- Tab navigation
-map('n', '[t',         ':tabprevious<CR>', {})
-map('n', ']t',         ':tabnext<CR>',     {})
-map('n', '[T',         ':tabfirst<CR>',    {})
-map('n', ']T',         ':tablast<CR>',     {})
-map('n', '<Leader>tn', ':tabnew<CR>',      {})
-map('n', '<Leader>tc', ':tabclose<CR>',    {})
-map('n', '<Leader>to', ':tabonly<CR>',     {})
--- Jump to first tab & close all other tabs. Helpful after running Git difftool.
-map('n', '<Leader>tO', ':tabfirst<CR>:tabonly<CR>', {})
--- tmux <c-meta>z like
-map('n', '<Leader>tz',  "<cmd>lua require'utils'.tabZ()<CR>", {})
-
+-- Navigate tabs
+map('n', '[t', ':tabprevious<CR>', { desc = "Previous tab" })
+map('n', ']t', ':tabnext<CR>',     { desc = "Next tab" })
+map('n', '[T', ':tabfirst<CR>',    { desc = "First tab" })
+map('n', ']T', ':tablast<CR>',     { desc = "Last tab" })
 -- Navigate buffers
-map('n', '[b', ':bprevious<CR>',      {})
-map('n', ']b', ':bnext<CR>',          {})
-map('n', '[B', ':bfirst<CR>',         {})
-map('n', ']B', ':blast<CR>',          {})
+map('n', '[b', ':bprevious<CR>',   { desc = "Previous buffer" })
+map('n', ']b', ':bnext<CR>',       { desc = "Next buffer" })
+map('n', '[B', ':bfirst<CR>',      { desc = "First buffer" })
+map('n', ']B', ':blast<CR>',       { desc = "Last buffer" })
 -- Quickfix list mappings
-map('n', '<leader>q', "<cmd>lua require'utils'.toggle_qf('q')<CR>", {})
-map('n', '[q', ':cprevious<CR>',      {})
-map('n', ']q', ':cnext<CR>',          {})
-map('n', '[Q', ':cfirst<CR>',         {})
-map('n', ']Q', ':clast<CR>',          {})
+map('n', '<leader>q', "<cmd>lua require'utils'.toggle_qf('q')<CR>",
+  { desc = "toggle quickfix list" })
+map('n', '[q', ':cprevious<CR>',   { desc = "Next quickfix" })
+map('n', ']q', ':cnext<CR>',       { desc = "Previous quickfix" })
+map('n', '[Q', ':cfirst<CR>',      { desc = "First quickfix" })
+map('n', ']Q', ':clast<CR>',       { desc = "Last quickfix" })
 -- Location list mappings
-map('n', '<leader>Q', "<cmd>lua require'utils'.toggle_qf('l')<CR>", {})
-map('n', '[l', ':lprevious<CR>',      {})
-map('n', ']l', ':lnext<CR>',          {})
-map('n', '[L', ':lfirst<CR>',         {})
-map('n', ']L', ':llast<CR>',          {})
+map('n', '<leader>Q', "<cmd>lua require'utils'.toggle_qf('l')<CR>",
+  { desc = "toggle location list" })
+map('n', '[l', ':lprevious<CR>',   { desc = "Previous location" })
+map('n', ']l', ':lnext<CR>',       { desc = "Next location" })
+map('n', '[L', ':lfirst<CR>',      { desc = "First location" })
+map('n', ']L', ':llast<CR>',       { desc = "Last location" })
 
 -- shortcut to view :messages
-map({'n', 'v'}, '<leader>m', '<cmd>messages<CR>',  {})
-map({'n', 'v'}, '<leader>M', '<cmd>mes clear|echo "cleared :messages"<CR>', {})
+map({'n', 'v'}, '<leader>m', '<cmd>messages<CR>',
+  { desc = "open :messages" })
+map({'n', 'v'}, '<leader>M', '<cmd>mes clear|echo "cleared :messages"<CR>',
+  { desc = "clear :messages" })
 
 -- <leader>v|<leader>s act as <cmd-v>|<cmd-s>
 -- <leader>p|P paste from yank register (0)
 -- <leader>y|Y yank into clipboard/OSCyank
-map({'n', 'v'}, '<leader>v', '"+p',   {})
-map({'n', 'v'}, '<leader>V', '"+P',   {})
-map({'n', 'v'}, '<leader>s', '"*p',   {})
-map({'n', 'v'}, '<leader>S', '"*P',   {})
-map({'n', 'v'}, '<leader>p', '"0p',   {})
-map({'n', 'v'}, '<leader>P', '"0P',   {})
-map({'n', 'v'}, '<leader>y', '<cmd>OSCYankReg 0<CR>', {})
+map({'n', 'v'}, '<leader>v', '"+p',   { desc = "paste AFTER from clipboard" })
+map({'n', 'v'}, '<leader>V', '"+P',   { desc = "paste BEFORE from clipboard" })
+map({'n', 'v'}, '<leader>s', '"*p',   { desc = "paste AFTER from primary" })
+map({'n', 'v'}, '<leader>S', '"*P',   { desc = "paste BEFORE from primary" })
+map({'n', 'v'}, '<leader>p', '"0p',   { desc = "paste AFTER  from yank (reg:0)" })
+map({'n', 'v'}, '<leader>P', '"0P',   { desc = "paste BEFORE from yank (reg:0)" })
+-- NOT IN USE: instead, we use an autocmd that tests
+-- for $SSH_CONNECTION to trigger the OSC52 sequence
+-- map({'n', 'v'}, '<leader>y', '<cmd>OSCYankReg 0<CR>', {})
 -- map({'n', 'v'}, '<leader>y', '<cmd>let @+=@0<CR>', {})
 
 -- Overloads for 'd|c' that don't pollute the unnamed registers
-map('n', '<leader>D',  '"_D',         {})
-map('n', '<leader>C',  '"_C',         {})
-map({'n', 'v'}, '<leader>c',  '"_c',  {})
+map('n', '<leader>D',  '"_D',         { desc = "blackhole 'D'" })
+map('n', '<leader>C',  '"_C',         { desc = "blackhole 'C'" })
+map({'n', 'v'}, '<leader>c',  '"_c',  { desc = "blackhole 'c'" })
 
 -- keep visual selection when (de)indenting
 map('v', '<', '<gv', {})
@@ -142,11 +145,11 @@ map('x', 'K', ":move '<-2<CR>gv=gv", {})
 map('x', 'J', ":move '>+1<CR>gv=gv", {})
 
 -- Select last pasted/yanked text
-map('n', 'g<C-v>', '`[v`]', {})
+map('n', 'g<C-v>', '`[v`]', { desc = "visual select last yank/paste" })
 
 -- Keep matches center screen when cycling with n|N
-map('n', 'n', 'nzzzv', {})
-map('n', 'N', 'Nzzzv', {})
+map('n', 'n', 'nzzzv', { desc = "Fwd  search '/' or '?'" })
+map('n', 'N', 'Nzzzv', { desc = "Back search '/' or '?'" })
 
 -- Break undo chain on punctuation so we can
 -- use 'u' to undo sections of an edit
@@ -157,48 +160,58 @@ end --]]
 
 -- any jump over 5 modifies the jumplist
 -- so we can use <C-o> <C-i> to jump back and forth
-for _, c in ipairs({'j', 'k'}) do
-  map('n', c, ([[(v:count > 5 ? "m'" . v:count : "") . '%s']]):format(c),
-    { expr = true, silent = true})
+for _, c in ipairs({
+    { 'k', 'Line up' },
+    { 'j', 'Line down' },
+  }) do
+  map('n', c[1], ([[(v:count > 5 ? "m'" . v:count : "") . '%s']]):format(c[1]),
+    { expr = true, silent = true, desc = c[2] })
 end
 
 -- move along visual lines, not numbered ones
 -- without interferring with {count}<down|up>
 for _, m in ipairs({'n', 'v'}) do
-  for _, c in ipairs({ {'<up>','k'}, {'<down>','j'} }) do
+  for _, c in ipairs({
+      { '<up>',   'k', 'Visual line up'},
+      { '<down>', 'j', 'Visual line down'}
+    }) do
     map(m, c[1], ([[v:count == 0 ? 'g%s' : '%s']]):format(c[2], c[2]),
-        { expr = true, silent = true})
+        { expr = true, silent = true, desc = c[3] })
   end
 end
 
 -- Search and Replace
 -- 'c.' for word, 'c>' for WORD
 -- 'c.' in visual mode for selection
-map('n', 'c.', [[:%s/\<<C-r><C-w>\>//g<Left><Left>]], {})
-map('n', 'c>', [[:%s/\V<C-r><C-a>//g<Left><Left>]], {})
+map('n', 'c.', [[:%s/\<<C-r><C-w>\>//g<Left><Left>]],
+  { desc = "search and replace word under cursor" })
+map('n', 'c>', [[:%s/\V<C-r><C-a>//g<Left><Left>]],
+  { desc = "search and replace WORD under cursor" })
 map('x', 'c.', [[:<C-u>%s/\V<C-r>=luaeval("require'utils'.get_visual_selection(true)")<CR>//g<Left><Left>]], {})
 
 -- Turn off search matches with double-<Esc>
 map('n', '<Esc><Esc>', '<Esc>:nohlsearch<CR>', { silent = true })
 
 -- Toggle display of `listchars`
-map('n', '<leader>\'', '<Esc>:set list!<CR>',   { silent = true })
+map('n', "<leader>'",  '<Esc>:set list!<CR>',
+  { silent = true, desc = "toggle 'listchars' on/off" })
 
 -- Toggle colored column at 81
 map('n', '<leader>|',
     ':execute "set colorcolumn=" . (&colorcolumn == "" ? "81" : "")<CR>',
-    { silent = true })
+    { silent = true, desc = "toggle color column on/off" })
 
 -- Change current working dir (:pwd) to curent file's folder
-map('n', '<leader>%', '<Esc>:lua require"utils".set_cwd()<CR>', { silent = true })
+map('n', '<leader>%', '<Esc>:lua require"utils".set_cwd()<CR>',
+  { silent = true, desc = "smart set cwd (git|file parent)" })
 
 -- Map <leader>o & <leader>O to newline without insert mode
 map('n', '<leader>o',
     ':<C-u>call append(line("."), repeat([""], v:count1))<CR>',
-    { silent = true })
+    { silent = true, desc = "newline below (no insert-mode)" })
 map('n', '<leader>O',
     ':<C-u>call append(line(".")-1, repeat([""], v:count1))<CR>',
-    { silent = true })
+    { silent = true, desc = "newline above (no insert-mode)" })
 
 -- Use operator pending mode to visually select entire buffer, e.g.
 --    d<A-a> = delete entire buffer
