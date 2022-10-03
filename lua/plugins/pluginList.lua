@@ -198,9 +198,6 @@ use({
     }
   })
 
-  -- ethereum solidity '.sol'
-  use { 'tomlion/vim-solidity' }
-
   -- markdown preview using `glow`
   -- use { 'npxbr/glow.nvim', run = ':GlowInstall'}
   use { 'previm/previm',

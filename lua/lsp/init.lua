@@ -131,6 +131,7 @@ local servers = {
   'pylsp',
   'clangd',
   -- 'ccls',
+  'solc'
 }
 
 local function is_installed(cfg)

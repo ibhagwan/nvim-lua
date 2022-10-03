@@ -128,14 +128,6 @@ augroup('Fugitive', function(g)
   })
 end)
 
-augroup('Solidity', function(g)
-  aucmd("BufRead,BufNewFile", {
-    group = g,
-    pattern = '*.sol',
-    command = 'set filetype=solidity'
-  })
-end)
-
 -- Display help|man in vertical splits and map 'q' to quit
 augroup('Help', function(g)
   local function open_vert()
