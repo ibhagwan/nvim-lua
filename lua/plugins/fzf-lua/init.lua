@@ -121,9 +121,8 @@ fzf_lua.setup {
       preview         = { vertical = "down:75%", horizontal = "right:75%", }
     }},
   },
-  diagnostics         = { icon_padding = ' ' },
-  -- Not needed anymore, see 'plugins/devicons.lua'
-  -- file_icon_colors    = { ["sh"] = "green", },
+  lsp                 = { symbols = { path_shorten=1 } },
+  diagnostics         = { file_icons=false, icon_padding=' ', path_shorten=1 },
 }
 
 -- register fzf-lua as vim.ui.select interface

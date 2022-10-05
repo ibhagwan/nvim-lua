@@ -119,17 +119,12 @@ map({'n', 'v'}, '<leader>M', '<cmd>mes clear|echo "cleared :messages"<CR>',
 
 -- <leader>v|<leader>s act as <cmd-v>|<cmd-s>
 -- <leader>p|P paste from yank register (0)
--- <leader>y|Y yank into clipboard/OSCyank
 map({'n', 'v'}, '<leader>v', '"+p',   { desc = "paste AFTER from clipboard" })
 map({'n', 'v'}, '<leader>V', '"+P',   { desc = "paste BEFORE from clipboard" })
 map({'n', 'v'}, '<leader>s', '"*p',   { desc = "paste AFTER from primary" })
 map({'n', 'v'}, '<leader>S', '"*P',   { desc = "paste BEFORE from primary" })
 map({'n', 'v'}, '<leader>p', '"0p',   { desc = "paste AFTER  from yank (reg:0)" })
 map({'n', 'v'}, '<leader>P', '"0P',   { desc = "paste BEFORE from yank (reg:0)" })
--- NOT IN USE: instead, we use an autocmd that tests
--- for $SSH_CONNECTION to trigger the OSC52 sequence
--- map({'n', 'v'}, '<leader>y', '<cmd>OSCYankReg 0<CR>', {})
--- map({'n', 'v'}, '<leader>y', '<cmd>let @+=@0<CR>', {})
 
 -- Overloads for 'd|c' that don't pollute the unnamed registers
 map('n', '<leader>D',  '"_D',         { desc = "blackhole 'D'" })

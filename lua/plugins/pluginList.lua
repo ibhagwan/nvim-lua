@@ -73,14 +73,6 @@ local packer_startup = function(use)
     cmd = { 'T' },
   }
 
-  -- yank over ssh with ':OCSYank' or ':OSCYankReg +'
-  use { 'ojroques/vim-oscyank',
-    config = [[vim.g.oscyank_term = 'default']],
-    -- load at statup since we use this often
-    -- over ssh via the 'TextYankPost' autocmd
-    -- cmd = { 'OSCYank', 'OSCYankReg' },
-  }
-
   -- Autocompletion & snippets
   use { 'L3MON4D3/LuaSnip',
     config = 'require("plugins.luasnip")',

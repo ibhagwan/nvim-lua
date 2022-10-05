@@ -118,10 +118,8 @@ map_fzf('n', '<leader>ld', "lsp_definitions",
 map_fzf('n', '<leader>lD', "lsp_declarations", { desc = "declarations [LSP]" })
 map_fzf('n', '<leader>ly', "lsp_typedefs", { desc = "type definitions [LSP]" })
 map_fzf('n', '<leader>lm', "lsp_implementations", { desc = "implementations [LSP]" })
-map_fzf('n', '<leader>ls', "lsp_document_symbols",
-  { desc = "document symbols [LSP]", path_shorten=1 })
-map_fzf('n', '<leader>lS', "lsp_workspace_symbols",
-  { desc = "workspace symbols [LSP]", path_shorten=1 })
+map_fzf('n', '<leader>ls', "lsp_document_symbols", { desc = "document symbols [LSP]" })
+map_fzf('n', '<leader>lS', "lsp_workspace_symbols", { desc = "workspace symbols [LSP]" })
 map_fzf('n', '<leader>la', "lsp_code_actions", {
   desc = "code actions [LSP]",
   winopts = {
@@ -129,10 +127,8 @@ map_fzf('n', '<leader>la', "lsp_code_actions", {
     win_width        = 0.70,
     win_row          = 0.40,
   }})
-map_fzf('n', '<leader>lg', "lsp_document_diagnostics",
-  { desc = "document diagnostics [LSP]", path_shorten=1, file_icons=false })
-map_fzf('n', '<leader>lG', "lsp_workspace_diagnostics",
-  { desc = "workspace diagnostics [LSP]", path_shorten=1, file_icons=false })
+map_fzf('n', '<leader>lg', "lsp_document_diagnostics", { desc = "document diagnostics [LSP]" })
+map_fzf('n', '<leader>lG', "lsp_workspace_diagnostics", { desc = "workspace diagnostics [LSP]" })
 
 -- Git
 map_fzf('n', '<leader>gf', "git_files",    { desc = "git ls-files" })

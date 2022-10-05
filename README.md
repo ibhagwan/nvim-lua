@@ -89,11 +89,8 @@
 - [toggleterm.nvim](https://github.com/akinsho/toggleterm.nvim): better term and
   REPLs (use `gx` and `gxx` to send REPLs to an interpreter)
 
-- [oscyank](https://github.com/ojroques/vim-oscyank): copy text over ssh
-  terminals using `OSC52`
-
-- [nvim-reload](https://github.com/famiu/nvim-reload): properly reload your
-  nvim configuration and lua modules with `<space>R`
+- [nvim-reload](https://github.com/ibhagwan/nvim-lua/tree/main/lua/plugins/nvim-reload):
+  reload your nvim configuration and lua modules with `<space>R`
 
 - [previm](https://github.com/previm/previm): live preview markdown files in
   the browser with `<space>r`
@@ -107,6 +104,6 @@
 - [nvcode-color-schemes](https://github.com/christianchiarulli/nvcode-color-schemes.vim):
   a collection of treesitter compatible color schemes
 
-- [nvim-colorizer.lua](https://github.com/norcalli/nvim-colorizer.lua): color
+- [nvim-colorizer.lua](https://github.com/nvchad/nvim-colorizer.lua): color
   code highlighter, use `ColorizerAttachToBuffer` to provide a live preview of
   color codes in your buffer (e.g. `#d4bfff`)

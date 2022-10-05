@@ -23,7 +23,7 @@ augroup('HighlightYankedText', function(g)
         pcall(vim.fn.setreg, "+", yank_data)
       end
       if valid_yank and vim.env.SSH_CONNECTION then
-        vim.fn["OSCYankString"](yank_data)
+        require'utils'.osc52printf(yank_data)
       end
       if valid_yank and vim.env.TMUX then
         -- we use `-w` to also copy to client's clipboard
