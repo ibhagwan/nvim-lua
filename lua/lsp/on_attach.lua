@@ -79,13 +79,48 @@ local on_attach = function(client, bufnr)
   map('n', '<leader>lQ', '<cmd>lua vim.diagnostic.setloclist()<CR>',
     { desc = "send diagnostics to loclist [LSP]" })
 
+
   if client_has_capability(client, 'documentFormattingProvider') then
-    map('n', 'gq', '<cmd>lua vim.lsp.buf.formatting()<CR>',
-      { desc = "format document [LSP]" })
+    -- neovim >= 0.8
+    if vim.lsp.buf.format then
+      -- format lua specifically using 'sumneko_lua'
+      local fmt_opts = vim.bo[bufnr].ft=="lua"
+        and 'async=true,bufnr=0,name="sumneko_lua"'
+        or 'async=true,bufnr=0'
+      map('n', 'gq',
+        string.format('<cmd>lua vim.lsp.buf.format({%s})<CR>', fmt_opts),
+          { desc = "format document [LSP]" })
+    else
+      map('n', 'gq', '<cmd>lua vim.lsp.buf.formatting()<CR>',
+        { desc = "format document [LSP]" })
+    end
   end
   if client_has_capability(client, 'documentRangeFormattingProvider') then
-    map('v', 'gq', '<cmd>lua vim.lsp.buf.range_formatting()<CR>',
-      { desc = "format selection [LSP]" })
+    -- neovim >= 0.8
+    if vim.lsp.buf.format then
+      map('v', 'gq', function()
+        local _, csrow, cscol, cerow, cecol
+        local mode = vim.fn.mode()
+        assert(mode == 'v' or mode == 'V' or mode == '')
+        _, csrow, cscol, _ = unpack(vim.fn.getpos("."))
+        _, cerow, cecol, _ = unpack(vim.fn.getpos("v"))
+        if mode == 'V' then
+          -- visual line doesn't provide columns
+          cscol, cecol = 0, 999
+        end
+        local fmt_opts = {
+          async   = true,
+          bufnr   = 0,
+          name    = vim.bo[bufnr].ft=="lua" and "sumneko_lua" or nil,
+          start   = { csrow, cscol },
+          ['end'] = { cerow, cecol },
+        }
+        vim.lsp.buf.format(fmt_opts)
+      end, { desc = "format selection [LSP]" })
+    else
+      map('v', 'gq', '<cmd>lua vim.lsp.buf.range_formatting()<CR>',
+        { desc = "format selection [LSP]" })
+    end
   end
 
   if client_has_capability(client, 'codeLensProvider') then
