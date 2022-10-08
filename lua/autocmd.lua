@@ -4,7 +4,7 @@ local function augroup(name, fnc)
   fnc(vim.api.nvim_create_augroup(name, { clear = true }))
 end
 
-augroup('HighlightYankedText', function(g)
+augroup('SmartTextYankPost', function(g)
   -- highlight yanked text and copy to system clipboard
   -- TextYankPost is also called on deletion, limit to
   -- yanks via v:operator

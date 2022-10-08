@@ -18,6 +18,10 @@ local packer_startup = function(use)
   -- Analyze startuptime
   use { 'dstein64/vim-startuptime', cmd = 'StartupTime' }
 
+  -- SmartYank (by me), load at 'VimEnter' so
+  -- it's downloaded to 'site/pack/packer/opt'
+  use { prefer_local('ibhagwan/smartyank.nvim'), event = "VimEnter" }
+
   -- vim-surround/sandwich, lua version
   -- mini also has an indent highlighter
   use { 'echasnovski/mini.nvim',

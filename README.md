@@ -19,6 +19,9 @@
 
 ### Basics
 
+- [smartyank.nvim](https://github.com/ibhagwan/smartyank.nvim): Only pollute
+  the clipboard when you really mean it!
+
 - [mini.surround](https://github.com/echasnovski/mini.nvim): adds the missing
   operators (`ds`, `cs`, `ys`) for dealing with pairs of "surroundings"
   (quotes, tags, etc)
