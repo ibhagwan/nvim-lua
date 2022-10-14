@@ -1,10 +1,19 @@
 local packer_startup = function(use)
 
   local function prefer_local(url, path)
-    if not path then
-      path = "~/Sources/nvim/" .. url:match("[^/]*$")
+    local plug = url:match("[^/]*$")
+    local paths = {
+      "$HOME/Sources/nvim/" .. plug,
+      "/shared/$USER/Sources/nvim/" .. plug,
+    }
+    -- caller path argument takes precedence
+    if path then table.insert(paths, 1, path) end
+    for _, p in ipairs(paths) do
+      if vim.loop.fs_stat(vim.fn.expand(p)) then
+        return p
+      end
     end
-    return vim.loop.fs_stat(vim.fn.expand(path)) ~= nil and path or url
+    return url
   end
 
   -- speed up 'require', must be the first plugin

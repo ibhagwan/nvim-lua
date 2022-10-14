@@ -20,7 +20,7 @@ comment.setup({
     },
 
     opleader = {
-        line = 'gl',      -- Line-comment keymap
-        block = 'gc',     -- Block-comment keymap
+        line = 'gc',      -- Line-comment keymap
+        block = 'gb',     -- Block-comment keymap
     },
 })

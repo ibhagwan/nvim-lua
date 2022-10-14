@@ -128,6 +128,15 @@ augroup('Fugitive', function(g)
   })
 end)
 
+-- Solidity abi JSON
+augroup('SolidityABI', function(g)
+  aucmd("BufRead,BufNewFile", {
+    group = g,
+    pattern = '*.abi',
+    command = 'set filetype=jsonc'
+  })
+end)
+
 -- Display help|man in vertical splits and map 'q' to quit
 augroup('Help', function(g)
   local function open_vert()
