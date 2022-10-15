@@ -32,7 +32,7 @@ require'nvim-tree'.setup {
         file = true,
         folder = true,
         folder_arrow = true,
-        git = true,
+        git = false,
       },
       glyphs = {
         git = {
@@ -56,13 +56,15 @@ require'nvim-tree'.setup {
       "Makefile",
       "package.json",
       "package-lock.json",
+      "go.mod",
+      "go.sum",
     }
   },
   diagnostics = {
     enable = true,
-    show_on_dirs = false,
+    show_on_dirs = true,
     icons = {
-      hint = "", -- "",
+      hint = "",
       info = "",
       warning = "",
       error = "",
