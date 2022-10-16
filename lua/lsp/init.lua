@@ -115,8 +115,9 @@ local function make_config()
   -- enables snippet support
   capabilities.textDocument.completion.completionItem.snippetSupport = true
   -- enables LSP autocomplete
-  if pcall(require, 'cmp_nvim_lsp') then
-    capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+  local cmp_loaded, cmp_lsp = pcall(require, 'cmp_nvim_lsp')
+  if cmp_loaded then
+    capabilities = cmp_lsp.default_capabilities()
   end
   return {
     on_attach = require('lsp.on_attach').on_attach,
