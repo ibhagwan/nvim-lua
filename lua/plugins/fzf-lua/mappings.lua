@@ -133,7 +133,7 @@ map_fzf('n', '<leader>lG', "lsp_workspace_diagnostics", { desc = "workspace diag
 -- Git
 map_fzf('n', '<leader>gf', "git_files",    { desc = "git ls-files" })
 map_fzf('n', '<leader>gs', "git_status",   { desc = "git status" })
-map_fzf('n', '<leader>gb', "git_branches", { desc = "git branches" })
+map_fzf('n', '<leader>gB', "git_branches", { desc = "git branches" })
 map_fzf('n', '<leader>gc', "git_bcommits", { desc = "git commits (buffer)" })
 map_fzf('n', '<leader>gC', "git_commits",  { desc = "git commits (project)" })
 -- Full screen git status

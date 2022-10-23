@@ -5,7 +5,7 @@ local map = vim.keymap.set
 map('n', '<leader>gg', '<Esc>:Git<CR>', { silent = true, desc = "Git" })
 map('n', '<leader>gr', '<Esc>:Gread<CR>', { silent = true, desc = "Gread (reset)" })
 map('n', '<leader>gw', '<Esc>:Gwrite<CR>', { silent = true, desc = "Gwrite (stage)" })
-map('n', '<leader>gB', '<Esc>:Git blame<CR>', { silent = true, desc = "git blame" })
+map('n', '<leader>gb', '<Esc>:Git blame<CR>', { silent = true, desc = "git blame" })
 -- map('n', '<leader>gc', '<Esc>:Git commit<CR>', { silent = true })
 map('n', '<leader>gd', '<Esc>:Gvdiffsplit!<CR>', { silent = true, desc = "Git diff (buffer)" })
 map('n', '<leader>gD', '<Esc>:Git diff<CR>', { silent = true, desc = "Git diff (project)" })
