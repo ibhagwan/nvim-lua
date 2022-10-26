@@ -134,9 +134,9 @@ local function setup()
             "]",
           },
         },
-        -- { "[" },
-        -- { builtin.percentage_through_window },
-        -- { "]" },
+        { "[" },
+        { builtin.percentage_through_window },
+        { "]" },
         { builtin.filetype },
       }
 

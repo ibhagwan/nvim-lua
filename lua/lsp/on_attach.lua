@@ -123,11 +123,11 @@ local on_attach = function(client, bufnr)
     end
   end
 
-  if client_has_capability(client, 'codeLensProvider') then
-    map("n", "<leader>lL", "<cmd>lua vim.lsp.codelens.run()<CR>",
-      { desc = "[LSP] code lens" })
-    vim.api.nvim_command [[autocmd CursorHold,CursorHoldI,InsertLeave <buffer> lua vim.lsp.codelens.refresh()]]
-  end
+  -- if client_has_capability(client, 'codeLensProvider') then
+  --   map("n", "<leader>lL", "<cmd>lua vim.lsp.codelens.run()<CR>",
+  --     { desc = "[LSP] code lens" })
+  --   vim.api.nvim_command [[autocmd CursorHold,CursorHoldI,InsertLeave <buffer> lua vim.lsp.codelens.refresh()]]
+  -- end
 
 end
 
