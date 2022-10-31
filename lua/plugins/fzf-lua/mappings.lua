@@ -53,10 +53,13 @@ map_fzf('n', '<leader>f"', "registers",       { desc = "registers" })
 map_fzf('n', '<leader>fk', "keymaps",         { desc = "keymaps" })
 map_fzf('n', '<leader>fz', "spell_suggest",   {
   desc = "spell suggestions",
+  prompt = "Spell> ",
   winopts = {
-    win_height       = 0.60,
-    win_width        = 0.50,
-    win_row          = 0.40,
+    relative  = "cursor",
+    row       = 1.01,
+    col       = 0,
+    height    = 0.30,
+    width     = 0.30,
   }})
 map_fzf('n', '<leader>fT', "tags",        { desc = "tags (project)" })
 map_fzf('n', '<leader>ft', "btags",       { desc = "tags (buffer)" })
@@ -123,9 +126,11 @@ map_fzf('n', '<leader>lS', "lsp_workspace_symbols", { desc = "workspace symbols 
 map_fzf('n', '<leader>la', "lsp_code_actions", {
   desc = "code actions [LSP]",
   winopts = {
-    win_height       = 0.30,
-    win_width        = 0.70,
-    win_row          = 0.40,
+    relative  = "cursor",
+    row       = 1.01,
+    col       = 0,
+    height    = 0.20,
+    width     = 0.55,
   }})
 map_fzf('n', '<leader>lg', "lsp_document_diagnostics", { desc = "document diagnostics [LSP]" })
 map_fzf('n', '<leader>lG', "lsp_workspace_diagnostics", { desc = "workspace diagnostics [LSP]" })
@@ -196,5 +201,3 @@ map_fzf('n', '<leader>yS', "git_status_tmuxZ",
       }
     }
   }))
-
-

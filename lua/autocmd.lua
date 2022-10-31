@@ -188,26 +188,3 @@ augroup('Help', function(g)
     end
   })
 end)
-
--- https://vim.fandom.com/wiki/Avoid_scrolling_when_switch_buffers
--- somewhat annoying behavior: neovim always centers the screen
--- around the current cursor line when switching bufers
-augroup('BufSwitchNoScroll', function(g)
-  aucmd("BufLeave", {
-    group = g,
-    pattern = '*',
-    callback = function()
-      vim.b.__VIEWSTATE = vim.fn.winsaveview()
-    end
-  })
-  aucmd("BufEnter", {
-    group = g,
-    pattern = '*',
-    callback = function()
-      if vim.b.__VIEWSTATE then
-        vim.fn.winrestview(vim.b.__VIEWSTATE)
-        vim.b.__VIEWSTATE = nil
-      end
-    end
-  })
-end)
