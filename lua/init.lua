@@ -205,10 +205,14 @@ local disabled_built_ins = {
   'logipat',
   'rrhelper',
   'spellfile_plugin',
-  'fzf',
   -- 'matchit',
    --'matchparen',
 }
+-- disable default fzf plugin if not
+-- root since we will be using fzf-lua
+if not require'utils'.is_root() then
+  table.insert(disabled_built_ins, 'fzf')
+end
 for _, plugin in pairs(disabled_built_ins) do
   vim.g['loaded_' .. plugin] = 1
 end

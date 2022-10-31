@@ -46,6 +46,14 @@ vim.cmd([[
     cnoreabbrev Qall qall
 ]])
 
+-- root doesn't use plugins, use builtin FZF
+if require'utils'.is_root() then
+  vim.env.FZF_DEFAULT_OPTS = vim.env.FZF_DEFAULT_OPTS
+    .. " --info=default"
+  vim.g.fzf_layout = {window={['width']=0.9,height=0.9}}
+  map('n', '<C-p>', '<cmd>FZF<CR>', { desc = "FZF" })
+end
+
 -- alternate file mapping without zz
 for _, k in ipairs({ '<C-6>', '<C-^>' }) do
   map('n', k, function()
