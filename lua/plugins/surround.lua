@@ -41,7 +41,7 @@ surround.setup({
 })
 
 -- Remap adding surrounding to Visual mode selection
-vim.keymap.set('x', 'S', [[:<C-u>lua MiniSurround.add('visual')<CR>]])
+vim.keymap.set('x', 'S', [[:<C-u>lua MiniSurround.add('visual')<CR>]], { silent = true })
 
 -- unmap config generated `ys` mapping, prevents visual mode yank delay
 if vim.keymap then

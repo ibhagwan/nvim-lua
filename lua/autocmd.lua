@@ -32,7 +32,7 @@ augroup('SmartTextYankPost', function(g)
         -- we use `-w` to also copy to client's clipboard
         vim.fn.system({'tmux', 'set-buffer', '-w', yank_data})
       end
-      vim.highlight.on_yank({ higroup='IncSearch', timeout=2000 })
+      vim.highlight.on_yank({ higroup='IncSearch', timeout=1000 })
     end
   })
 end)

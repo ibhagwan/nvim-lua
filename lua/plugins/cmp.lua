@@ -23,6 +23,7 @@ cmp.setup {
     keyword_length = 1,
   },
 
+
   sources = {
     { name = 'nvim_lsp' },
     { name = 'nvim_lua' },
@@ -30,6 +31,11 @@ cmp.setup {
     { name = 'path' },
     { name = 'buffer' },
   },
+
+  -- we use 'comleteopt=...,noselect' but we still want cmp to autoselect
+  -- an item if recommended by the LSP server (try with gopls, rust_analyzer)
+  -- uncomment to disable
+  -- preselect = cmp.PreselectMode.None,
 
   mapping = {
     ['<Up>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i' }),
@@ -46,7 +52,20 @@ cmp.setup {
       c = cmp.mapping.close(),
     }),
     ['<C-y>'] = cmp.mapping.confirm({ select = true, behavior = cmp.ConfirmBehavior.Replace }),
-    ['<CR>'] = cmp.mapping.confirm({ select = false, behavior = cmp.ConfirmBehavior.Insert })
+    -- ['<CR>'] = cmp.mapping.confirm({ select = false, behavior = cmp.ConfirmBehavior.Insert })
+    -- close the cmp interface if no item is selected, I find it more
+    -- intuitive when using LSP autoselect (instead of sending <CR>)
+    ['<CR>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        if cmp.get_selected_entry() then
+          cmp.confirm({ select = false, cmp.ConfirmBehavior.Insert })
+        else
+          cmp.close()
+        end
+      else
+        fallback()
+      end
+    end),
   },
 
   formatting = {

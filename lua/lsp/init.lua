@@ -100,6 +100,29 @@ __settings['sumneko_lua'] = {
   }
 }
 
+-- use nightly rustfmt if exists
+-- https://github.com/rust-lang/rust-analyzer/issues/3627
+-- https://github.com/rust-lang/rust-analyzer/blob/master/docs/user/generated_config.adoc
+__settings['rust_analyzer'] = {
+  settings = {
+    ["rust-analyzer"] = {
+      rustfmt = {
+        extraArgs = { "+nightly", },
+        -- overrideCommand = {
+        --   "rustup",
+        --   "run",
+        --   "nightly",
+        --   "--",
+        --   "rustfmt",
+        --   "--edition",
+        --   "2021",
+        --   "--",
+        -- },
+      },
+    }
+  }
+}
+
 __settings['ccls'] = {
   init_options = {
     codeLens = {
@@ -109,6 +132,7 @@ __settings['ccls'] = {
     }
   }
 }
+
 
 local function make_config()
   local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -144,7 +168,7 @@ local function is_installed(cfg)
     return true
   end
   -- otherwise, check 'nvim-lsp-installer' path
-  local has_cfg, srv = require"nvim-lsp-installer".get_server(cfg.name)
+  local has_cfg, srv = require "nvim-lsp-installer".get_server(cfg.name)
   return has_cfg and srv:is_installed()
 end
 

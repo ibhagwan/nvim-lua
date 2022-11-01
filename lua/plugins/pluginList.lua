@@ -29,7 +29,12 @@ local packer_startup = function(use)
 
   -- SmartYank (by me), load at 'VimEnter' so
   -- it's downloaded to 'site/pack/packer/opt'
-  use { prefer_local('ibhagwan/smartyank.nvim'), event = "VimEnter" }
+  use { prefer_local('ibhagwan/smartyank.nvim'),
+    config = [[
+      require'smartyank'.setup({ highlight = { timeout = 1000 } })
+    ]],
+    event = "VimEnter"
+  }
 
   -- vim-surround/sandwich, lua version
   -- mini also has an indent highlighter
@@ -37,6 +42,7 @@ local packer_startup = function(use)
     config = [[
         require'plugins.surround'
         require'plugins.indent'
+        require'mini.ai'.setup()
       ]],
     event = "VimEnter"
   }
@@ -81,7 +87,7 @@ local packer_startup = function(use)
 
   -- Terminal and REPLs
   use { 'akinsho/toggleterm.nvim',
-    config = "require('plugins.neoterm')",
+    config = "require('plugins.toggleterm')",
     keys = { 'gxx', 'gx', '<C-\\>' },
     cmd = { 'T' },
   }
