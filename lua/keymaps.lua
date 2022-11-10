@@ -216,8 +216,10 @@ map('n', "<leader>'",  '<Esc>:set list!<CR>',
   { silent = true, desc = "toggle 'listchars' on/off" })
 
 -- Toggle colored column at 81
-map('n', '<leader>|',
-    ':execute "set colorcolumn=" . (&colorcolumn == "" ? "81" : "")<CR>',
+map('n', '<leader>|', function()
+      vim.opt.colorcolumn = #vim.o.colorcolumn > 0 and ""
+        or tostring(vim.g._colorcolumn)
+    end,
     { silent = true, desc = "toggle color column on/off" })
 
 -- Change current working dir (:pwd) to curent file's folder
