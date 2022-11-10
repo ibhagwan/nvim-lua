@@ -115,6 +115,10 @@ local packer_startup = function(use)
   if require "utils".have_compiler() then
     use({
       { prefer_local("nvim-treesitter/nvim-treesitter"),
+        -- workaround until this is fixed:
+        -- https://github.com/nvim-treesitter/nvim-treesitter-textobjects/issues/316
+        -- commit = "58f61e563fadd1788052586f4d6869a99022df3c",
+        -- using custom '~/.config/nvim/queries/rust/textobjects.scm' instead
         config = "require('plugins.treesitter')",
         run = ":TSUpdate",
         event = "BufRead"

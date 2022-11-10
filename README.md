@@ -56,11 +56,6 @@
 - [nvim-lsp-installer](https://github.com/williamboman/nvim-lsp-installer):
   automatic installation of LSP servers using the `:LspInstall` command
 
-- [null-ls.nvim](https://github.com/jose-elias-alvarez/null-ls.nvim): a lua
-  in-memory pseudo LSP server providing custom functionalities via the Neovim
-  LSP API, provides spelling word completion and lua code formatting using
-  [`stylua`](https://github.com/JohnnyMorganz/StyLua)
-
 - [nvim-dap](https://github.com/mfussenegger/nvim-dap):
   set breakpoints and debug applications using Debug Adapter Protocol (DAP)
 
