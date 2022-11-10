@@ -4,7 +4,7 @@ end
 
 local M = {}
 
-local _winopts = { border = 'rounded' }
+local _winopts = { border = "rounded" }
 local _float_win = nil
 
 function M.preview_location(loc, _, _)
@@ -20,29 +20,29 @@ function M.preview_location(loc, _, _)
   local lines = vim.api.nvim_buf_get_lines(bufnr,
     (range.start.line - before),
     -- end is reserved, can't use 'range.end'
-    (range['end'].line + after + 1),
+    (range["end"].line + after + 1),
     false)
   -- empty lines at the start don't count
   for _, l in ipairs(lines) do
-    if #l>0 then break end
-    before = before-1
+    if #l > 0 then break end
+    before = before - 1
   end
   local ft = vim.api.nvim_buf_get_option(bufnr, "filetype")
   local buf, win = vim.lsp.util.open_floating_preview(lines, ft)
   vim.api.nvim_win_set_config(win, _winopts)
-  vim.api.nvim_buf_set_option(buf, 'bufhidden', 'wipe')
-  vim.api.nvim_buf_set_option(buf, 'modifiable', false)
-  vim.api.nvim_buf_set_option(buf, 'filetype', ft)
-  vim.api.nvim_win_set_option(win, 'winhighlight', 'Normal:Normal,FloatBorder:FloatBorder')
-  vim.api.nvim_win_set_option(win, 'cursorline', true)
+  vim.api.nvim_buf_set_option(buf, "bufhidden", "wipe")
+  vim.api.nvim_buf_set_option(buf, "modifiable", false)
+  vim.api.nvim_buf_set_option(buf, "filetype", ft)
+  vim.api.nvim_win_set_option(win, "winhighlight", "Normal:Normal,FloatBorder:FloatBorder")
+  vim.api.nvim_win_set_option(win, "cursorline", true)
   -- partial data, numbers make no sense
-  vim.api.nvim_win_set_option(win, 'number', false)
-  vim.api.nvim_win_set_cursor(win, {before+1,1})
+  vim.api.nvim_win_set_option(win, "number", false)
+  vim.api.nvim_win_set_cursor(win, { before + 1, 1 })
   local pos = range.start.line == range["end"].line and
-    { before+1, range.start.character+1, range["end"].character-range.start.character } or
-    { before+1 }
+      { before + 1, range.start.character + 1, range["end"].character - range.start.character } or
+      { before + 1 }
   vim.api.nvim_win_call(win, function()
-    vim.fn.matchaddpos('Cursor', {pos})
+    vim.fn.matchaddpos("Cursor", { pos })
   end)
   return buf, win
 end
@@ -67,7 +67,7 @@ end
 -- https://github.com/neovim/neovim/pull/15504#discussion_r698424017
 M.mk_handler = function(fn)
   return function(...)
-    local is_new = not select(4, ...) or type(select(4, ...)) ~= 'number'
+    local is_new = not select(4, ...) or type(select(4, ...)) ~= "number"
     if is_new then
       -- function(err, result, context, config)
       fn(...)

@@ -20,12 +20,12 @@ terminal.setup({
   insert_mappings = true,
   persist_size = true,
   -- direction = 'float',
-  direction = 'horizontal',
+  direction = "horizontal",
   close_on_exit = true,
   float_opts = {
-    border = 'rounded',
-    width = math.floor(vim.o.columns*0.85),
-    height = math.floor(vim.o.lines*0.8),
+    border = "rounded",
+    width = math.floor(vim.o.columns * 0.85),
+    height = math.floor(vim.o.lines * 0.8),
     winblend = 15,
     highlights = {
       border = "Normal",
@@ -83,7 +83,7 @@ local function ft_repl_cmd(ft)
 end
 
 local function term_exec(cmd, id)
-  if not id or id<1 then id=1 end
+  if not id or id < 1 then id = 1 end
   local terms = require("toggleterm.terminal").get_all()
   local term_init = false
   for i = #terms, 1, -1 do
@@ -103,13 +103,13 @@ local function term_exec(cmd, id)
 end
 
 vim.keymap.set({ "n" }, "gxx", function()
-  return term_exec(vim.fn.getline('.'))
+  return term_exec(vim.fn.getline("."))
 end, { desc = "REPL send to terminal (line)" })
 
 vim.keymap.set({ "v" }, "gx", function()
   local mode = vim.fn.mode()
-  if mode == 'v' or mode == 'V' or mode == '' then
-    local text = require'utils'.get_visual_selection()
+  if mode == "v" or mode == "V" or mode == "" then
+    local text = require "utils".get_visual_selection()
     term_exec(text)
   end
 end, { desc = "REPL send to terminal (motion)" })
@@ -118,5 +118,5 @@ vim.api.nvim_create_user_command("T",
   function(t)
     term_exec(t.args, t.count)
   end,
-  { nargs = '*', count = true }
+  { nargs = "*", count = true }
 )

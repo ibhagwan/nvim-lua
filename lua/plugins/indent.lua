@@ -20,12 +20,12 @@ indent.setup({
   -- Module mappings. Use `''` (empty string) to disable one.
   mappings = {
     -- Textobjects
-    object_scope = 'ii',
-    object_scope_with_border = 'ai',
+    object_scope = "ii",
+    object_scope_with_border = "ai",
 
     -- Motions (jump to respective border line; if not present - body line)
-    goto_top = '[i',
-    goto_bottom = ']i',
+    goto_top = "[i",
+    goto_bottom = "]i",
   },
 
   -- Options which control computation of scope. Buffer local values can be
@@ -33,7 +33,7 @@ indent.setup({
   options = {
     -- Type of scope's border: which line(s) with smaller indent to
     -- categorize as border. Can be one of: 'both', 'top', 'bottom', 'none'.
-    border = 'both',
+    border = "both",
 
     -- Whether to use cursor column when computing reference indent. Useful to
     -- see incremental scopes with horizontal cursor movements.
@@ -47,7 +47,7 @@ indent.setup({
 
   -- Which character to use for drawing scope indicator
   -- alternative styles: ┆ ┊ ╎
-  symbol = '╎',
+  symbol = "╎",
 })
 
 
@@ -64,7 +64,7 @@ local btoggle = function()
   toggle(vim.api.nvim_get_current_buf())
 end
 
-vim.keymap.set('', '<leader>"',
+vim.keymap.set("", '<leader>"',
   "<cmd>lua require'plugins.indent'.btoggle()<CR>",
   { silent = true, desc = "toggle 'mini.indentscope' on/off" })
 
@@ -72,4 +72,3 @@ return {
   toggle = toggle,
   btoggle = btoggle
 }
-

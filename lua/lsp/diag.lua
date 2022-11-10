@@ -2,29 +2,29 @@
 local signs = {
   {
     name = "DiagnosticSignHint",
-    text = ''
+    text = ""
   },
   {
     name = "DiagnosticSignInfo",
-    text = ''
+    text = ""
     -- text = '',
     -- text = '',
   },
   {
     name = "DiagnosticSignWarn",
-    text = '',
+    text = "",
     -- text = ''
   },
   {
     name = "DiagnosticSignError",
-    text = ''
+    text = ""
     -- text = ''
   },
 }
 
 -- set sign highlights to same name as sign
 -- i.e. 'DiagnosticWarn' gets highlighted with hl-DiagnosticWarn
-for i=1,#signs do
+for i = 1, #signs do
   signs[i].texthl = signs[i].name
 end
 
@@ -37,34 +37,34 @@ vim.diagnostic.config({
   update_in_insert = false,
   virtual_text = {
     spacing = 4,
-    source = 'always',
+    source = "always",
     severity = {
       min = vim.diagnostic.severity.HINT,
     },
     -- format = function(diagnostic)
-      -- if diagnostic.severity == vim.diagnostic.severity.ERROR then
-      --   return string.format('E: %s', diagnostic.message)
-      -- end
-      -- return ("%s"):format(diagnostic.message)
+    -- if diagnostic.severity == vim.diagnostic.severity.ERROR then
+    --   return string.format('E: %s', diagnostic.message)
+    -- end
+    -- return ("%s"):format(diagnostic.message)
     -- end,
   },
   signs = true,
   severity_sort = true,
   float = {
     show_header = false,
-    source = 'always',
-    border = 'rounded',
+    source = "always",
+    border = "rounded",
   },
 })
 
 return {
   toggle = function()
     if not vim.g.diag_is_hidden then
-      require'utils'.info("Diagnostic virtual text is now hidden.")
+      require "utils".info("Diagnostic virtual text is now hidden.")
       vim.diagnostic.hide()
       -- vim.diagnostic.disable()
     else
-      require'utils'.info("Diagnostic virtual text is now visible.")
+      require "utils".info("Diagnostic virtual text is now visible.")
       vim.diagnostic.show()
       -- vim.diagnostic.enable()
     end

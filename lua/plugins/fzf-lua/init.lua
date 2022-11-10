@@ -5,8 +5,8 @@ end
 
 -- local fzf_bin = 'sk'
 local img_prev_bin = vim.fn.executable("ueberzug") == 1
-  and { "ueberzug" }
-  or  { "viu", "-b" }
+    and { "ueberzug" }
+    or { "viu", "-b" }
 
 -- return first matching highlight or nil
 local function hl_match(t)
@@ -37,7 +37,7 @@ local fzf_colors = function(opts)
     ["header"] = { "fg", "Comment" },
     ["gutter"] = { "bg", "Normal" },
   }
-  if binary == 'sk' and vim.fn.executable(binary) == 1 then
+  if binary == "sk" and vim.fn.executable(binary) == 1 then
     colors["matched_bg"] = { "bg", "Normal" }
     colors["current_match_bg"] = { "bg", hl_match({ "NightflyVisual", "CursorLine" }) }
   end
@@ -48,20 +48,21 @@ end
 fzf_lua.config._devicons_setup = "~/.config/nvim/lua/plugins/devicons.lua"
 
 fzf_lua.setup {
-  fzf_bin            = fzf_bin,
-  fzf_colors         = fzf_colors,
-  winopts = {
+  fzf_bin     = fzf_bin,
+  fzf_colors  = fzf_colors,
+  winopts     = {
     -- split         = "belowright new",
     -- split         = "aboveleft vnew",
-    height           = 0.85,
-    width            = 0.80,
-    row              = 0.35,
-    col              = 0.55,
-    -- border = { {'╭', 'IncSearch'}, {'─', 'IncSearch'}, {'╮', 'IncSearch'}, '│', '╯', '─', '╰', '│' },
+    height  = 0.85,
+    width   = 0.80,
+    row     = 0.35,
+    col     = 0.55,
+    -- border = { {'╭', 'IncSearch'}, {'─', 'IncSearch'},
+    -- {'╮', 'IncSearch'}, '│', '╯', '─', '╰', '│' },
     preview = {
-      layout              = 'flex',
-      flip_columns        = 130,
-      scrollbar           = 'float',
+      layout       = "flex",
+      flip_columns = 130,
+      scrollbar    = "float",
       -- scrolloff        = '-1',
       -- scrollchars      = {'█', '░' },
     },
@@ -69,70 +70,70 @@ fzf_lua.setup {
     --   print("on_create")
     -- end,
   },
-  winopts_fn = function()
+  winopts_fn  = function()
     local hl = {
-      border = hl_match({ 'NightflySteelBlue' }),
-      cursorline = hl_match({ 'NightflyVisual' }),
-      cursorlinenr = hl_match({ 'NightflyVisual' }),
+      border = hl_match({ "NightflySteelBlue" }),
+      cursorline = hl_match({ "NightflyVisual" }),
+      cursorlinenr = hl_match({ "NightflyVisual" }),
     }
     return { hl = hl }
   end,
-  previewers = {
-    bat               = { theme = 'Coldark-Dark', },
+  previewers  = {
+    bat     = { theme = "Coldark-Dark", },
     builtin = {
       ueberzug_scaler = "cover",
       extensions      = {
-        ["gif"]       = img_prev_bin,
-        ["png"]       = img_prev_bin,
-        ["jpg"]       = img_prev_bin,
-        ["jpeg"]      = img_prev_bin,
+        ["gif"]  = img_prev_bin,
+        ["png"]  = img_prev_bin,
+        ["jpg"]  = img_prev_bin,
+        ["jpeg"] = img_prev_bin,
       }
     },
   },
-  files               = {
+  files       = {
     -- uncomment to override .gitignore
     -- fd_opts           = "--no-ignore --color=never --type f --hidden --follow --exclude .git",
-    action            = { ["ctrl-l"] = fzf_lua.actions.arg_add }
+    action = { ["ctrl-l"] = fzf_lua.actions.arg_add }
   },
-  grep = {
-    rg_glob           = true,
-    rg_opts           = "--hidden --column --line-number --no-heading"
-                      .. " --color=always --smart-case -g '!.git'",
+  grep        = {
+    rg_glob = true,
+    rg_opts = "--hidden --column --line-number --no-heading"
+        .. " --color=always --smart-case -g '!.git'",
   },
-  git = {
-    status = {
-      cmd             = "git status -su",
-      winopts         = {
-        preview       = { vertical = "down:70%", horizontal = "right:70%" }
+  git         = {
+    status   = {
+      cmd           = "git status -su",
+      winopts       = {
+        preview = { vertical = "down:70%", horizontal = "right:70%" }
       },
-      actions         = {
-        ["ctrl-x"]    = { fzf_lua.actions.git_reset, fzf_lua.actions.resume },
+      actions       = {
+        ["ctrl-x"] = { fzf_lua.actions.git_reset, fzf_lua.actions.resume },
       },
-      preview_pager   = vim.fn.executable("delta")==1 and "delta --width=$COLUMNS",
+      preview_pager = vim.fn.executable("delta") == 1 and "delta --width=$COLUMNS",
     },
-    commits = {
-      winopts         = { preview = { vertical = "down:60%", }},
-      preview_pager   = vim.fn.executable("delta")==1 and "delta --width=$COLUMNS",
+    commits  = {
+      winopts       = { preview = { vertical = "down:60%", } },
+      preview_pager = vim.fn.executable("delta") == 1 and "delta --width=$COLUMNS",
     },
-    bcommits          = {
-      winopts         = { preview = { vertical = "down:60%", }},
-      preview_pager   = vim.fn.executable("delta")==1 and "delta --width=$COLUMNS",
+    bcommits = {
+      winopts       = { preview = { vertical = "down:60%", } },
+      preview_pager = vim.fn.executable("delta") == 1 and "delta --width=$COLUMNS",
     },
-    branches          = { winopts = {
-      preview         = { vertical = "down:75%", horizontal = "right:75%", }
-    }},
+    branches = { winopts = {
+      preview = { vertical = "down:75%", horizontal = "right:75%", }
+    } },
   },
-  lsp                 = { symbols = { path_shorten=1 } },
-  diagnostics         = { file_icons=false, icon_padding=' ', path_shorten=1 },
+  lsp         = { symbols = { path_shorten = 1 } },
+  diagnostics = { file_icons = false, icon_padding = " ", path_shorten = 1 },
 }
 
 -- register fzf-lua as vim.ui.select interface
 if vim.ui then
   fzf_lua.register_ui_select({
     winopts = {
-      win_height       = 0.30,
-      win_width        = 0.70,
-      win_row          = 0.40,
+      win_height = 0.30,
+      win_width  = 0.70,
+      win_row    = 0.40,
     }
   })
 end
@@ -148,6 +149,7 @@ function M.git_bcommits(opts)
       vim.api.nvim_set_current_win(curwin)
     end
   end
+
   opts.actions = {
     ["ctrl-v"] = diffthis(fzf_lua.actions.git_buf_vsplit),
   }
@@ -158,6 +160,7 @@ function M.git_status_tmuxZ(opts)
   local function tmuxZ()
     vim.cmd("!tmux resize-pane -Z")
   end
+
   opts = opts or {}
   opts.fn_pre_win = function(_)
     if not opts.__want_resume then
@@ -170,7 +173,7 @@ function M.git_status_tmuxZ(opts)
     opts.__want_resume = nil
   end
   opts.fn_post_fzf = function(_, s)
-    opts.__want_resume = s and (s[1] == 'left' or s[1] == 'right')
+    opts.__want_resume = s and (s[1] == "left" or s[1] == "right")
     if not opts.__want_resume then
       -- resume asked do not resize
       -- signals fn_pre to do the same
@@ -186,7 +189,7 @@ function M.workdirs(opts)
   if not opts then opts = {} end
 
   -- workdirs.lua returns a table of workdirs
-  local ok, dirs = pcall(require, 'workdirs')
+  local ok, dirs = pcall(require, "workdirs")
   if not ok then dirs = {} end
 
   local iconify = function(path, color, icon)
@@ -202,11 +205,11 @@ function M.workdirs(opts)
     path = vim.fn.expand(path)
     if not vim.loop.fs_stat(path) then return end
     if dedup[path] ~= nil then return end
-    entries[#entries+1] = iconify(path, color or "blue", icon or '')
+    entries[#entries + 1] = iconify(path, color or "blue", icon or "")
     dedup[path] = true
   end
 
-  add_entry(vim.loop.cwd(), "magenta", '')
+  add_entry(vim.loop.cwd(), "magenta", "")
   add_entry(_previous_cwd, "yellow")
   for _, path in ipairs(dirs) do
     add_entry(path)
@@ -220,19 +223,19 @@ function M.workdirs(opts)
   end
 
   opts.fzf_opts = {
-    ['--no-multi']        = '',
-    ['--prompt']          = 'Workdirs❯ ',
-    ['--preview-window']  = 'hidden:right:0',
-    ['--header-lines']    = '1',
+    ["--no-multi"]       = "",
+    ["--prompt"]         = "Workdirs❯ ",
+    ["--preview-window"] = "hidden:right:0",
+    ["--header-lines"]   = "1",
   }
 
   opts.actions = {
-    ['default'] = function(selected)
+    ["default"] = function(selected)
       _previous_cwd = vim.loop.cwd()
       local newcwd = selected[1]:match("[^ ]*$")
       newcwd = fzf_lua.path.starts_with_separator(newcwd) and newcwd
-      or fzf_lua.path.join({ vim.env.HOME, newcwd })
-      require'utils'.set_cwd(newcwd)
+          or fzf_lua.path.join({ vim.env.HOME, newcwd })
+      require "utils".set_cwd(newcwd)
     end
   }
 
@@ -241,11 +244,10 @@ end
 
 return setmetatable({}, {
   __index = function(_, k)
-
     if M[k] then
       return M[k]
     else
-      return require('fzf-lua')[k]
+      return require("fzf-lua")[k]
     end
   end,
 })

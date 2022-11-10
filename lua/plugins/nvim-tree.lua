@@ -1,14 +1,14 @@
-vim.keymap.set('', '<leader>ee', "<Esc>:NvimTreeToggle<CR>",         { silent = true })
-vim.keymap.set('', '<leader>ef', "<Esc>:NvimTreeFindFileToggle<CR>", { silent = true })
+vim.keymap.set("", "<leader>ee", "<Esc>:NvimTreeToggle<CR>", { silent = true })
+vim.keymap.set("", "<leader>ef", "<Esc>:NvimTreeFindFileToggle<CR>", { silent = true })
 
-require'nvim-tree'.setup {
+require "nvim-tree".setup {
   disable_netrw = true,
   hijack_cursor = true,
   hijack_netrw = false,
   update_cwd = true,
   view = {
     width = 30,
-    side = 'left',
+    side = "left",
     mappings = {
       custom_only = false,
       list = {
@@ -27,7 +27,7 @@ require'nvim-tree'.setup {
       },
     },
     icons = {
-      symlink_arrow = " → ",  -- ➜ → ➛
+      symlink_arrow = " → ", -- ➜ → ➛
       show = {
         file = true,
         folder = true,
@@ -39,13 +39,13 @@ require'nvim-tree'.setup {
           -- staged      = "✓",
           -- renamed     = "➜",
           -- renamed     = "→",
-          unstaged    = "M",
-          staged      = "S",
-          unmerged    = "U",
-          renamed     = "R",
-          untracked   = "?",
-          deleted     = "✗",
-          ignored     = "◌",
+          unstaged  = "M",
+          staged    = "S",
+          unmerged  = "U",
+          renamed   = "R",
+          untracked = "?",
+          deleted   = "✗",
+          ignored   = "◌",
         },
       },
     },

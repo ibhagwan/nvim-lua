@@ -4,12 +4,12 @@ local uv = vim.loop
 local m = {}
 
 m.path_sep = function()
-    return vim.loop.os_uname().sysname == 'Windows' and [[\]] or '/'
+  return vim.loop.os_uname().sysname == "Windows" and [[\]] or "/"
 end
 
 m.path_exists = function(path)
-    local stat = vim.loop.fs_stat(path) or {}
-    return not vim.tbl_isempty(stat)
+  local stat = vim.loop.fs_stat(path) or {}
+  return not vim.tbl_isempty(stat)
 end
 
 local os_sep = m.path_sep()
@@ -133,7 +133,8 @@ end
 -- @param opts: table to change behavior
 --   opts.hidden (bool):              if true hidden files will be added
 --   opts.add_dirs (bool):            if true dirs will also be added to the results
---   opts.respect_gitignore (bool):   if true will only add files that are not ignored by the git (uses each gitignore found in path table)
+--   opts.respect_gitignore (bool):   if true will only add files that are not ignored by the git
+--                                    (uses each gitignore found in path table)
 --   opts.depth (int):                depth on how deep the search should go
 --   opts.search_pattern (regex):     regex for which files will be added, string or table of strings
 --   opts.on_insert(entry):           Will be called for each element
@@ -170,7 +171,8 @@ m.scan_dir = function(path, opts)
         if name == nil then
           break
         end
-        process_item(opts, name, typ, current_dir, next_dir, base_paths, data, gitignore, match_seach_pat)
+        process_item(opts, name, typ, current_dir, next_dir, base_paths, data, gitignore,
+          match_seach_pat)
       end
     end
   until table.getn(next_dir) == 0
@@ -225,7 +227,8 @@ m.scan_dir_async = function(path, opts)
         if name == nil then
           break
         end
-        process_item(opts, name, typ, current_dir, next_dir, base_paths, data, gitignore, match_seach_pat)
+        process_item(opts, name, typ, current_dir, next_dir, base_paths, data, gitignore,
+          match_seach_pat)
       end
       if table.getn(next_dir) == 0 then
         if opts.on_exit then
@@ -505,7 +508,8 @@ local gen_ls = function(data, path, opts)
         table.insert(sections, section)
         table.insert(
           results,
-          string.format(fmt_str, args[1], args[2], args[3], args[4], args[5], check_link(args[1], args[6]))
+          string.format(fmt_str, args[1], args[2], args[3], args[4], args[5],
+            check_link(args[1], args[6]))
         )
       end
     end
@@ -549,7 +553,8 @@ end
 --   string has to be a valid path
 -- @param opts: table to change behavior
 --   opts.hidden (bool):                  if true hidden files will be added
---   opts.add_dirs (bool):                if true dirs will also be added to the results, default: true
+--   opts.add_dirs (bool):                if true dirs will also be added to the results,
+--                                        default: true
 --   opts.respect_gitignore (bool):       if true will only add files that are not ignored by git
 --   opts.depth (int):                    depth on how deep the search should go, default: 1
 --   opts.group_directories_first (bool): same as real ls
@@ -569,7 +574,8 @@ end
 --   string has to be a valid path
 -- @param opts: table to change behavior
 --   opts.hidden (bool):                  if true hidden files will be added
---   opts.add_dirs (bool):                if true dirs will also be added to the results, default: true
+--   opts.add_dirs (bool):                if true dirs will also be added to the results,
+--                                        default: true
 --   opts.respect_gitignore (bool):       if true will only add files that are not ignored by git
 --   opts.depth (int):                    depth on how deep the search should go, default: 1
 --   opts.group_directories_first (bool): same as real ls

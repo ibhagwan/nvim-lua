@@ -15,9 +15,8 @@ local nvim_chanID
 -- once the instance is running we can call `:luafile <file>` in order
 -- to start debugging
 local function dap_server(opts)
-
   assert(dap.adapters.nlua,
-    "nvim-dap adapter configuration for nlua not found. "..
+    "nvim-dap adapter configuration for nlua not found. " ..
     "Please refer to the README.md or :help osv.txt")
 
   -- server already started?
@@ -25,13 +24,13 @@ local function dap_server(opts)
     local pid = vim.fn.jobpid(nvim_chanID)
     vim.fn.rpcnotify(nvim_chanID, "nvim_exec_lua", [[return require"osv".stop()]])
     vim.fn.jobstop(nvim_chanID)
-    if type(uv.os_getpriority(pid)) == 'number' then
+    if type(uv.os_getpriority(pid)) == "number" then
       uv.kill(pid, 9)
     end
     nvim_chanID = nil
   end
 
-  nvim_chanID = vim.fn.jobstart({vim.v.progpath, '--embed', '--headless'}, {rpc = true})
+  nvim_chanID = vim.fn.jobstart({ vim.v.progpath, "--embed", "--headless" }, { rpc = true })
   assert(nvim_chanID, "Could not create neovim instance with jobstart!")
 
   local mode = vim.fn.rpcrequest(nvim_chanID, "nvim_get_mode")
@@ -57,8 +56,8 @@ dap.adapters.nlua = function(callback, config)
     config.host = server.host
     config.port = server.port
   end
-  callback({ type = 'server', host = config.host, port = config.port })
-  if type(config.post) == 'function' then
+  callback({ type = "server", host = config.host, port = config.port })
+  if type(config.post) == "function" then
     config.post()
   end
 end
@@ -73,11 +72,11 @@ dap.configurations.lua = {
     -- host = function() end,
     -- port = function() end,
     post = function()
-      dap.listeners.after['setBreakpoints']['osv'] = function(session, body)
+      dap.listeners.after["setBreakpoints"]["osv"] = function(session, body)
         assert(nvim_chanID, "Fatal: neovim RPC channel is nil!")
         vim.fn.rpcnotify(nvim_chanID, "nvim_command", "luafile " .. vim.fn.expand("%:p"))
         -- clear the lisener or we get called in any dap-config run
-        dap.listeners.after['setBreakpoints']['osv'] = nil
+        dap.listeners.after["setBreakpoints"]["osv"] = nil
       end
       -- for k, v in pairs(dap.listeners.after) do
       --   v["test"] = function()
@@ -87,18 +86,18 @@ dap.configurations.lua = {
     end
   },
   {
-    type = 'nlua',
-    request = 'attach',
+    type = "nlua",
+    request = "attach",
     name = "Attach to running Neovim instance",
     host = function()
-      local value = vim.fn.input('Host [127.0.0.1]: ')
+      local value = vim.fn.input("Host [127.0.0.1]: ")
       if value ~= "" then
         return value
       end
-      return '127.0.0.1'
+      return "127.0.0.1"
     end,
     port = function()
-      local val = tonumber(vim.fn.input('Port: '))
+      local val = tonumber(vim.fn.input("Port: "))
       assert(val, "Please provide a port number")
       return val
     end,

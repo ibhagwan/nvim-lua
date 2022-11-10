@@ -1,31 +1,31 @@
 if not pcall(require, "nvim-treesitter") then
-    return
+  return
 end
 
-require'nvim-treesitter.configs'.setup {
-  ensure_installed = {
-      "bash",
-      "c",
-      "cpp",
-      "go",
-      "javascript",
-      "typescript",
-      "json",
-      "jsonc",
-      "jsdoc",
-      "lua",
-      "python",
-      "rust",
-      "html",
-      "css",
-      "toml",
-      "markdown",
-      "markdown_inline",
-      "solidity",
-      -- for `nvim-treesitter/playground`
-      "query",
+require "nvim-treesitter.configs".setup {
+  ensure_installed      = {
+    "bash",
+    "c",
+    "cpp",
+    "go",
+    "javascript",
+    "typescript",
+    "json",
+    "jsonc",
+    "jsdoc",
+    "lua",
+    "python",
+    "rust",
+    "html",
+    "css",
+    "toml",
+    "markdown",
+    "markdown_inline",
+    "solidity",
+    -- for `nvim-treesitter/playground`
+    "query",
   },
-  highlight   = {
+  highlight             = {
     enable = true,
     disable = {
       -- Slow on big C|CPP files
@@ -40,22 +40,22 @@ require'nvim-treesitter.configs'.setup {
   incremental_selection = {
     enable = true,
     keymaps = {
-      init_selection = '<CR>',
-      node_incremental = '<CR>',
-      node_decremental = '<S-Tab>',
-      scope_incremental = '<Tab>',
+      init_selection = "<CR>",
+      node_incremental = "<CR>",
+      node_decremental = "<S-Tab>",
+      scope_incremental = "<Tab>",
     },
   },
-  textobjects = {
+  textobjects           = {
     select = {
       enable  = true,
       keymaps = {
-        ["ac"] = "@comment.outer"    ,
-        ["ic"] = "@comment.outer"    ,
-        ["ao"] = "@class.outer"      ,
-        ["io"] = "@class.inner"      ,
-        ["af"] = "@function.outer"   ,
-        ["if"] = "@function.inner"   ,
+        ["ac"] = "@comment.outer",
+        ["ic"] = "@comment.outer",
+        ["ao"] = "@class.outer",
+        ["io"] = "@class.inner",
+        ["af"] = "@function.outer",
+        ["if"] = "@function.inner",
       },
     },
     move = {
@@ -79,22 +79,22 @@ require'nvim-treesitter.configs'.setup {
       },
     },
   },
-  playground = {
+  playground            = {
     enable = true,
     disable = {},
     updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
     persist_queries = false, -- Whether the query persists across vim sessions
     keybindings = {
-      toggle_query_editor = 'o',
-      toggle_hl_groups = 'i',
-      toggle_injected_languages = 't',
-      toggle_anonymous_nodes = 'a',
-      toggle_language_display = 'I',
-      focus_language = 'f',
-      unfocus_language = 'F',
-      update = 'R',
-      goto_node = '<cr>',
-      show_help = '?',
+      toggle_query_editor = "o",
+      toggle_hl_groups = "i",
+      toggle_injected_languages = "t",
+      toggle_anonymous_nodes = "a",
+      toggle_language_display = "I",
+      focus_language = "f",
+      unfocus_language = "F",
+      update = "R",
+      goto_node = "<cr>",
+      show_help = "?",
     },
   },
 }

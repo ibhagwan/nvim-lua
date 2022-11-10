@@ -1,9 +1,9 @@
 -- backward compat
 local client_has_capability = function(client, capability)
   local resolved_capabilities = {
-    codeLensProvider = 'code_len',
-    documentFormattingProvider = 'document_formatting',
-    documentRangeFormattingProvider = 'document_range_formatting',
+    codeLensProvider = "code_len",
+    documentFormattingProvider = "document_formatting",
+    documentRangeFormattingProvider = "document_range_formatting",
   }
   if vim.fn.has("nvim-0.8") == 1 then
     return client.server_capabilities[capability]
@@ -21,8 +21,7 @@ local map = function(mode, lhs, rhs, opts)
 end
 
 local on_attach = function(client, bufnr)
-
-  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+  vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
 
   if client.config.flags then
     client.config.flags.allow_incremental_sync = true
@@ -30,105 +29,106 @@ local on_attach = function(client, bufnr)
   end
 
 
-  map('n', 'K',  '<cmd>lua vim.lsp.buf.hover()<CR>',
+  map("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>",
     { desc = "hover information [LSP]" })
-  map('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>',
+  map("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>",
     { desc = "goto definition [LSP]" })
-  map('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>',
+  map("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>",
     { desc = "goto declaration [LSP]" })
-  map('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>',
+  map("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>",
     { desc = "goto reference [LSP]" })
-  map('n', 'gm', '<cmd>lua vim.lsp.buf.implementation()<CR>',
+  map("n", "gm", "<cmd>lua vim.lsp.buf.implementation()<CR>",
     { desc = "goto implementation [LSP]" })
-  map('n', 'gy', '<cmd>lua vim.lsp.buf.type_definition()<CR>',
+  map("n", "gy", "<cmd>lua vim.lsp.buf.type_definition()<CR>",
     { desc = "goto type definition [LSP]" })
-  map('n', 'gA', '<cmd>lua vim.lsp.buf.code_action()<CR>',
+  map("n", "gA", "<cmd>lua vim.lsp.buf.code_action()<CR>",
     { desc = "code actions [LSP]" })
-  map('v', 'gA', '<cmd>lua vim.lsp.buf.range_code_action()<CR>',
+  map("v", "gA", "<cmd>lua vim.lsp.buf.range_code_action()<CR>",
     { desc = "range code actions [LSP]" })
   -- use our own rename popup implementation
-  map('n', 'gR', '<cmd>lua require("lsp.rename").rename()<CR>',
+  map("n", "gR", '<cmd>lua require("lsp.rename").rename()<CR>',
     { desc = "rename [LSP]" })
-  map('n', '<leader>lR', '<cmd>lua require("lsp.rename").rename()<CR>',
+  map("n", "<leader>lR", '<cmd>lua require("lsp.rename").rename()<CR>',
     { desc = "rename [LSP]" })
-  map('n', '<leader>K',  '<cmd>lua vim.lsp.buf.signature_help()<CR>',
+  map("n", "<leader>K", "<cmd>lua vim.lsp.buf.signature_help()<CR>",
     { desc = "signature help [LSP]" })
-  map('n', '<leader>k', '<cmd>lua require("lsp.handlers").peek_definition()<CR>',
+  map("n", "<leader>k", '<cmd>lua require("lsp.handlers").peek_definition()<CR>',
     { desc = "peek definition [LSP]" })
 
   -- using fzf-lua instead
   --map('n', '<leader>ls', '<cmd>lua vim.lsp.buf.document_symbol()<CR>')
   --map('n', '<leader>lS', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>')
 
-  map('n', '<leader>lt', "<cmd>lua require'lsp.diag'.toggle()<CR>",
+  map("n", "<leader>lt", "<cmd>lua require'lsp.diag'.toggle()<CR>",
     { desc = "toggle virtual text [LSP]" })
 
   -- neovim PR #16057
   -- https://github.com/neovim/neovim/pull/16057
   local winopts = "{ float =  { border = 'rounded' } }"
-  map('n', '[d', ('<cmd>lua vim.diagnostic.goto_prev(%s)<CR>'):format(winopts),
+  map("n", "[d", ("<cmd>lua vim.diagnostic.goto_prev(%s)<CR>"):format(winopts),
     { desc = "previous diagnostic [LSP]" })
-  map('n', ']d', ('<cmd>lua vim.diagnostic.goto_next(%s)<CR>'):format(winopts),
+  map("n", "]d", ("<cmd>lua vim.diagnostic.goto_next(%s)<CR>"):format(winopts),
     { desc = "next diagnostic [LSP]" })
-  map('n', '<leader>lc', '<cmd>lua vim.diagnostic.reset()<CR>',
+  map("n", "<leader>lc", "<cmd>lua vim.diagnostic.reset()<CR>",
     { desc = "clear diagnostics [LSP]" })
-  map('n', '<leader>ll', '<cmd>lua vim.diagnostic.open_float(0, { scope = "line", border = "rounded" })<CR>',
+  map("n", "<leader>ll",
+    '<cmd>lua vim.diagnostic.open_float(0, { scope = "line", border = "rounded" })<CR>',
     { desc = "show line diagnostic [LSP]" })
-  map('n', '<leader>lq', '<cmd>lua vim.diagnostic.setqflist()<CR>',
+  map("n", "<leader>lq", "<cmd>lua vim.diagnostic.setqflist()<CR>",
     { desc = "send diagnostics to quickfix [LSP]" })
-  map('n', '<leader>lQ', '<cmd>lua vim.diagnostic.setloclist()<CR>',
+  map("n", "<leader>lQ", "<cmd>lua vim.diagnostic.setloclist()<CR>",
     { desc = "send diagnostics to loclist [LSP]" })
 
 
-  if client_has_capability(client, 'documentFormattingProvider') then
+  if client_has_capability(client, "documentFormattingProvider") then
     -- neovim >= 0.8
     if vim.lsp.buf.format then
       -- format lua specifically using 'sumneko_lua'
-      local fmt_opts = vim.bo[bufnr].ft=="lua"
-        and 'async=true,bufnr=0,name="sumneko_lua"'
-        or 'async=true,bufnr=0'
-      map('n', 'gq',
-        string.format('<cmd>lua vim.lsp.buf.format({%s})<CR>', fmt_opts),
-          { desc = "format document [LSP]" })
+      local fmt_opts = vim.bo[bufnr].ft == "lua"
+          and 'async=true,bufnr=0,name="sumneko_lua"'
+          or "async=true,bufnr=0"
+      map("n", "gq",
+        string.format("<cmd>lua vim.lsp.buf.format({%s})<CR>", fmt_opts),
+        { desc = "format document [LSP]" })
     else
-      map('n', 'gq', '<cmd>lua vim.lsp.buf.formatting()<CR>',
+      map("n", "gq", "<cmd>lua vim.lsp.buf.formatting()<CR>",
         { desc = "format document [LSP]" })
     end
   end
-  if client_has_capability(client, 'documentRangeFormattingProvider') then
+  if client_has_capability(client, "documentRangeFormattingProvider") then
     -- neovim >= 0.8
     if vim.lsp.buf.format then
-      map('v', 'gq', function()
+      map("v", "gq", function()
         local _, csrow, cscol, cerow, cecol
         local mode = vim.fn.mode()
-        assert(mode == 'v' or mode == 'V' or mode == '')
+        assert(mode == "v" or mode == "V" or mode == "")
         _, csrow, cscol, _ = unpack(vim.fn.getpos("."))
         _, cerow, cecol, _ = unpack(vim.fn.getpos("v"))
-        if mode == 'V' then
+        if mode == "V" then
           -- visual line doesn't provide columns
           cscol, cecol = 0, 999
         end
         local fmt_opts = {
           async   = true,
           bufnr   = 0,
-          name    = vim.bo[bufnr].ft=="lua" and "sumneko_lua" or nil,
+          name    = vim.bo[bufnr].ft == "lua" and "sumneko_lua" or nil,
           start   = { csrow, cscol },
-          ['end'] = { cerow, cecol },
+          ["end"] = { cerow, cecol },
         }
         vim.lsp.buf.format(fmt_opts)
       end, { desc = "format selection [LSP]" })
     else
-      map('v', 'gq', '<cmd>lua vim.lsp.buf.range_formatting()<CR>',
+      map("v", "gq", "<cmd>lua vim.lsp.buf.range_formatting()<CR>",
         { desc = "format selection [LSP]" })
     end
   end
 
-  -- if client_has_capability(client, 'codeLensProvider') then
+  -- if client_has_capability(client, "codeLensProvider") then
   --   map("n", "<leader>lL", "<cmd>lua vim.lsp.codelens.run()<CR>",
   --     { desc = "[LSP] code lens" })
-  --   vim.api.nvim_command [[autocmd CursorHold,CursorHoldI,InsertLeave <buffer> lua vim.lsp.codelens.refresh()]]
+  --   vim.api.nvim_command
+  --     [[autocmd CursorHold,CursorHoldI,InsertLeave <buffer> lua vim.lsp.codelens.refresh()]]
   -- end
-
 end
 
 return { on_attach = on_attach }

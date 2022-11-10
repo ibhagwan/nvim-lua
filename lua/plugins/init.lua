@@ -1,5 +1,5 @@
 -- Do not use plugins when running as root or neovim < 0.5
-if require'utils'.is_root() or not require'utils'.has_neovim_v05() then
+if require "utils".is_root() or not require "utils".has_neovim_v05() then
   return
 end
 
@@ -10,7 +10,7 @@ local install_suffix = "/site/pack/packer/%s/packer.nvim"
 local install_path = vim.fn.stdpath("data") .. string.format(install_suffix, "opt")
 local compile_path = vim.fn.stdpath("data") .. compile_suffix
 
-local ok, packer = pcall(require('plugins.bootstrap'), install_path, compile_path)
+local ok, packer = pcall(require("plugins.bootstrap"), install_path, compile_path)
 if not ok or not packer then return end -- user cancelled installation?
 
 
@@ -26,7 +26,7 @@ vim.cmd [[command! PU PackerSync]]
 
 -- delete leftover 'packer_compiled.lua'
 if packer.config.compile_path ~= compile_path and
-  vim.loop.fs_stat(packer.config.compile_path) then
+    vim.loop.fs_stat(packer.config.compile_path) then
   vim.fn.delete(packer.config.compile_path, "rf")
   vim.fn.delete(vim.fn.fnamemodify(packer.config.compile_path, ":p:h"), "d")
 end
@@ -36,11 +36,11 @@ local config = {
   compile_path = compile_path,
   git = {
     -- never fail if plugin author rebased the git repo
-    subcommands = { update = 'pull --progress --rebase=true' }
+    subcommands = { update = "pull --progress --rebase=true" }
   },
   display = {
     open_fn = function()
-      return require("packer.util").float({ border = 'rounded' })
+      return require("packer.util").float({ border = "rounded" })
     end
   }
 }

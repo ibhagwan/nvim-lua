@@ -15,18 +15,18 @@ surround.setup({
     S = {
       -- lua bracketed string mapping
       -- 'ysiwS'  foo -> [[foo]]
-      input = { '%[%[().-()%]%]' },
-      output = { left = '[[', right = ']]' },
+      input = { "%[%[().-()%]%]" },
+      output = { left = "[[", right = "]]" },
     },
   },
   mappings = {
-    add = 'ys',
-    delete = 'ds',
-    find = '',
-    find_left = '',
-    highlight = 'gs',     -- hijack 'gs' (sleep) for highlight
-    replace = 'cs',
-    update_n_lines = '',  -- bind for updating 'config.n_lines'
+    add = "ys",
+    delete = "ds",
+    find = "",
+    find_left = "",
+    highlight = "gs", -- hijack 'gs' (sleep) for highlight
+    replace = "cs",
+    update_n_lines = "", -- bind for updating 'config.n_lines'
   },
   -- Number of lines within which surrounding is searched
   n_lines = 62,
@@ -37,11 +37,11 @@ surround.setup({
   -- How to search for surrounding (first inside current line, then inside
   -- neighborhood). One of 'cover', 'cover_or_next', 'cover_or_prev',
   -- 'cover_or_nearest'. For more details, see `:h MiniSurround.config`.
-  search_method = 'cover_or_next',
+  search_method = "cover_or_next",
 })
 
 -- Remap adding surrounding to Visual mode selection
-vim.keymap.set('x', 'S', [[:<C-u>lua MiniSurround.add('visual')<CR>]], { silent = true })
+vim.keymap.set("x", "S", [[:<C-u>lua MiniSurround.add('visual')<CR>]], { silent = true })
 
 -- unmap config generated `ys` mapping, prevents visual mode yank delay
 if vim.keymap then
@@ -51,4 +51,4 @@ else
 end
 
 -- Make special mapping for "add surrounding for line"
-vim.keymap.set('n', 'yss', 'ys_', { remap = true })
+vim.keymap.set("n", "yss", "ys_", { remap = true })

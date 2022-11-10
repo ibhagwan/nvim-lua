@@ -10,30 +10,30 @@ local M = {}
 
 function M._echo_multiline(msg)
   for _, s in ipairs(vim.fn.split(msg, "\n")) do
-    vim.cmd("echom '" .. s:gsub("'", "''").."'")
+    vim.cmd("echom '" .. s:gsub("'", "''") .. "'")
   end
 end
 
 function M.info(msg)
-  vim.cmd('echohl Directory')
+  vim.cmd("echohl Directory")
   M._echo_multiline(msg)
-  vim.cmd('echohl None')
+  vim.cmd("echohl None")
 end
 
 function M.warn(msg)
-  vim.cmd('echohl WarningMsg')
+  vim.cmd("echohl WarningMsg")
   M._echo_multiline(msg)
-  vim.cmd('echohl None')
+  vim.cmd("echohl None")
 end
 
 function M.err(msg)
-  vim.cmd('echohl ErrorMsg')
+  vim.cmd("echohl ErrorMsg")
   M._echo_multiline(msg)
-  vim.cmd('echohl None')
+  vim.cmd("echohl None")
 end
 
 function M.has_neovim_v05()
-  return (vim.fn.has('nvim-0.5') == 1)
+  return (vim.fn.has("nvim-0.5") == 1)
 end
 
 function M.is_root()
@@ -41,7 +41,7 @@ function M.is_root()
 end
 
 function M.is_darwin()
-  return vim.loop.os_uname().sysname == 'Darwin'
+  return vim.loop.os_uname().sysname == "Darwin"
 end
 
 function M.shell_error()
@@ -49,10 +49,10 @@ function M.shell_error()
 end
 
 function M.have_compiler()
-  if vim.fn.executable('cc') == 1 or
-    vim.fn.executable('gcc') == 1 or
-    vim.fn.executable('clang') == 1 or
-    vim.fn.executable('cl') == 1 then
+  if vim.fn.executable("cc") == 1 or
+      vim.fn.executable("gcc") == 1 or
+      vim.fn.executable("clang") == 1 or
+      vim.fn.executable("cl") == 1 then
     return true
   end
   return false
@@ -87,51 +87,51 @@ function M.set_cwd(pwd)
 end
 
 function M.get_visual_selection(nl_literal)
-    -- this will exit visual mode
-    -- use 'gv' to reselect the text
-    local _, csrow, cscol, cerow, cecol
-    local mode = vim.fn.mode()
-    if mode == 'v' or mode == 'V' or mode == '' then
-      -- if we are in visual mode use the live position
-      _, csrow, cscol, _ = unpack(vim.fn.getpos("."))
-      _, cerow, cecol, _ = unpack(vim.fn.getpos("v"))
-      if mode == 'V' then
-        -- visual line doesn't provide columns
-        cscol, cecol = 0, 999
-      end
-      -- exit visual mode
-      vim.api.nvim_feedkeys(
-        vim.api.nvim_replace_termcodes("<Esc>",
-          true, false, true), 'n', true)
-    else
-      -- otherwise, use the last known visual position
-      _, csrow, cscol, _ = unpack(vim.fn.getpos("'<"))
-      _, cerow, cecol, _ = unpack(vim.fn.getpos("'>"))
+  -- this will exit visual mode
+  -- use 'gv' to reselect the text
+  local _, csrow, cscol, cerow, cecol
+  local mode = vim.fn.mode()
+  if mode == "v" or mode == "V" or mode == "" then
+    -- if we are in visual mode use the live position
+    _, csrow, cscol, _ = unpack(vim.fn.getpos("."))
+    _, cerow, cecol, _ = unpack(vim.fn.getpos("v"))
+    if mode == "V" then
+      -- visual line doesn't provide columns
+      cscol, cecol = 0, 999
     end
-    -- swap vars if needed
-    if cerow < csrow then csrow, cerow = cerow, csrow end
-    if cecol < cscol then cscol, cecol = cecol, cscol end
-    local lines = vim.fn.getline(csrow, cerow)
-    -- local n = cerow-csrow+1
-    local n = #lines
-    if n <= 0 then return '' end
-    lines[n] = string.sub(lines[n], 1, cecol)
-    lines[1] = string.sub(lines[1], cscol)
-    return table.concat(lines, nl_literal and "\\n" or "\n")
+    -- exit visual mode
+    vim.api.nvim_feedkeys(
+      vim.api.nvim_replace_termcodes("<Esc>",
+        true, false, true), "n", true)
+  else
+    -- otherwise, use the last known visual position
+    _, csrow, cscol, _ = unpack(vim.fn.getpos("'<"))
+    _, cerow, cecol, _ = unpack(vim.fn.getpos("'>"))
+  end
+  -- swap vars if needed
+  if cerow < csrow then csrow, cerow = cerow, csrow end
+  if cecol < cscol then cscol, cecol = cecol, cscol end
+  local lines = vim.fn.getline(csrow, cerow)
+  -- local n = cerow-csrow+1
+  local n = #lines
+  if n <= 0 then return "" end
+  lines[n] = string.sub(lines[n], 1, cecol)
+  lines[1] = string.sub(lines[1], cscol)
+  return table.concat(lines, nl_literal and "\\n" or "\n")
 end
 
 function M.toggle_colorcolumn()
   local wininfo = vim.fn.getwininfo()
   for _, win in pairs(wininfo) do
-    local ft = vim.api.nvim_buf_get_option(win['bufnr'], 'filetype')
-    if ft == nil or ft == 'TelescopePrompt' then return end
-    local colorcolumn = ''
-    if win['width'] >= vim.g._colorcolumn then
+    local ft = vim.api.nvim_buf_get_option(win["bufnr"], "filetype")
+    if ft == nil or ft == "TelescopePrompt" then return end
+    local colorcolumn = ""
+    if win["width"] >= vim.g._colorcolumn then
       colorcolumn = tostring(vim.g._colorcolumn)
     end
     -- TOOD: messes up tab highlighting, why?
     -- vim.api.nvim_win_set_option(win['winid'], 'colorcolumn', colorcolumn)
-    vim.api.nvim_win_call(win['winid'], function()
+    vim.api.nvim_win_call(win["winid"], function()
       vim.wo.colorcolumn = colorcolumn
     end)
   end
@@ -143,28 +143,28 @@ function M.find_qf(type)
   local wininfo = vim.fn.getwininfo()
   local win_tbl = {}
   for _, win in pairs(wininfo) do
-      local found = false
-      if type == 'l' and win['loclist'] == 1 then
-        found = true
-      end
-      -- loclist window has 'quickfix' set, eliminate those
-      if type == 'q' and win['quickfix'] == 1 and win['loclist'] == 0  then
-        found = true
-      end
-      if found then
-        table.insert(win_tbl, { winid = win['winid'], bufnr = win['bufnr'] })
-      end
+    local found = false
+    if type == "l" and win["loclist"] == 1 then
+      found = true
+    end
+    -- loclist window has 'quickfix' set, eliminate those
+    if type == "q" and win["quickfix"] == 1 and win["loclist"] == 0 then
+      found = true
+    end
+    if found then
+      table.insert(win_tbl, { winid = win["winid"], bufnr = win["bufnr"] })
+    end
   end
   return win_tbl
 end
 
 -- open quickfix if not empty
 function M.open_qf()
-  local qf_name = 'quickfix'
+  local qf_name = "quickfix"
   local qf_empty = function() return vim.tbl_isempty(vim.fn.getqflist()) end
   if not qf_empty() then
-    vim.cmd('copen')
-    vim.cmd('wincmd J')
+    vim.cmd("copen")
+    vim.cmd("wincmd J")
   else
     print(string.format("%s is empty.", qf_name))
   end
@@ -174,18 +174,18 @@ end
 -- loclist on all windows where not empty
 function M.open_loclist_all()
   local wininfo = vim.fn.getwininfo()
-  local qf_name = 'loclist'
+  local qf_name = "loclist"
   local qf_empty = function(winnr) return vim.tbl_isempty(vim.fn.getloclist(winnr)) end
   for _, win in pairs(wininfo) do
-      if win['quickfix'] == 0 then
-        if not qf_empty(win['winnr']) then
-          -- switch active window before ':lopen'
-          vim.api.nvim_set_current_win(win['winid'])
-          vim.cmd('lopen')
-        else
-          print(string.format("%s is empty.", qf_name))
-        end
+    if win["quickfix"] == 0 then
+      if not qf_empty(win["winnr"]) then
+        -- switch active window before ':lopen'
+        vim.api.nvim_set_current_win(win["winid"])
+        vim.cmd("lopen")
+      else
+        print(string.format("%s is empty.", qf_name))
       end
+    end
   end
 end
 
@@ -201,7 +201,7 @@ function M.toggle_qf(type)
     end
   else
     -- no windows are visible, attempt to open
-    if type == 'l' then
+    if type == "l" then
       M.open_loclist_all()
     else
       M.open_qf()
@@ -218,7 +218,7 @@ end
 M.resize = function(vertical, margin)
   local cur_win = vim.api.nvim_get_current_win()
   -- go (possibly) right
-  vim.cmd(string.format('wincmd %s', vertical and 'l' or 'j'))
+  vim.cmd(string.format("wincmd %s", vertical and "l" or "j"))
   local new_win = vim.api.nvim_get_current_win()
 
   -- determine direction cond on increase and existing right-hand buffer
@@ -231,9 +231,9 @@ M.resize = function(vertical, margin)
     sign = not sign
   end
 
-  sign = sign and '+' or '-'
-  local dir = vertical and 'vertical ' or ''
-  local cmd = dir .. 'resize ' .. sign .. math.abs(margin) .. '<CR>'
+  local sign_str = sign and "+" or "-"
+  local dir = vertical and "vertical " or ""
+  local cmd = dir .. "resize " .. sign_str .. math.abs(margin) .. "<CR>"
   vim.cmd(cmd)
 end
 
@@ -242,8 +242,8 @@ M.sudo_exec = function(cmd, print_output)
   local password = vim.fn.inputsecret("Password: ")
   vim.fn.inputrestore()
   if not password or #password == 0 then
-      M.warn("Invalid password, sudo aborted")
-      return false
+    M.warn("Invalid password, sudo aborted")
+    return false
   end
   local out = vim.fn.system(string.format("sudo -p '' -S %s", cmd), password)
   if vim.v.shell_error ~= 0 then
@@ -278,7 +278,7 @@ end
 
 M.osc52printf = function(...)
   local str = string.format(...)
-  local base64 = require'base64'.encode(str)
+  local base64 = require "base64".encode(str)
   local osc52str = string.format("\x1b]52;c;%s\x07", base64)
   local bytes = vim.fn.chansend(vim.v.stderr, osc52str)
   assert(bytes > 0)

@@ -1,8 +1,7 @@
 local fn = vim.fn
-local utils = require'utils'
+local utils = require "utils"
 
 local function packer_bootstrap(install_path, compile_path)
-
   if not install_path then
     local install_suffix = "/site/pack/packer/%s/packer.nvim"
     install_path = vim.fn.stdpath("data") .. string.format(install_suffix, "opt")

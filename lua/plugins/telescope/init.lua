@@ -3,7 +3,6 @@ if not pcall(require, "telescope") then
 end
 
 local actions = require "telescope.actions"
-local themes = require "telescope.themes"
 
 require("telescope").setup {
   defaults = {
@@ -72,7 +71,7 @@ require("telescope").setup {
 
         ["<C-c>"] = actions.close,
 
-        ["<F4>"]  = require("telescope.actions.layout").toggle_preview,
+        ["<F4>"] = require("telescope.actions.layout").toggle_preview,
       },
       n = {
         ["<CR>"] = actions.select_default + actions.center,
@@ -95,7 +94,7 @@ require("telescope").setup {
         ["<C-c>"] = actions.close,
         ["<Esc>"] = false,
 
-        ["<F4>"]  = require("telescope.actions.layout").toggle_preview,
+        ["<F4>"] = require("telescope.actions.layout").toggle_preview,
       },
     },
 
@@ -105,13 +104,13 @@ require("telescope").setup {
     qflist_previewer = require("telescope.previewers").vim_buffer_qflist.new,
 
     vimgrep_arguments = {
-        "rg",
-        "--column",
-        "--line-number",
-        "--with-filename",
-        "--no-heading",
-        "--smart-case",
-        -- "--hidden",
+      "rg",
+      "--column",
+      "--line-number",
+      "--with-filename",
+      "--no-heading",
+      "--smart-case",
+      -- "--hidden",
     },
   },
 
@@ -128,15 +127,15 @@ require("telescope").setup {
   },
 }
 
-require('telescope').load_extension('fzy_native')
+require("telescope").load_extension("fzy_native")
 
 local M = {}
 
 function M.buffers()
   require("telescope.builtin").buffers {
     attach_mappings = function(_, map)
-        map('i', '<c-x>', actions.delete_buffer)
-        map('n', '<c-x>', actions.delete_buffer)
+      map("i", "<c-x>", actions.delete_buffer)
+      map("n", "<c-x>", actions.delete_buffer)
       return true
     end,
   }
@@ -178,7 +177,7 @@ end
 function M.grep_visual()
   require("telescope.builtin").grep_string {
     path_display = { "absolute" },
-    search = require('utils').get_visual_selection()
+    search = require("utils").get_visual_selection()
   }
 end
 
@@ -198,13 +197,13 @@ function M.grep_cWORD()
 end
 
 M.git_branches = function()
-    require("telescope.builtin").git_branches({
-        attach_mappings = function(_, map)
-            map('i', '<c-x>', actions.git_delete_branch)
-            map('n', '<c-x>', actions.git_delete_branch)
-            return true
-        end
-    })
+  require("telescope.builtin").git_branches({
+    attach_mappings = function(_, map)
+      map("i", "<c-x>", actions.git_delete_branch)
+      map("n", "<c-x>", actions.git_delete_branch)
+      return true
+    end
+  })
 end
 
 return setmetatable({}, {
