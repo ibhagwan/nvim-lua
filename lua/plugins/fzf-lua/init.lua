@@ -92,8 +92,9 @@ fzf_lua.setup {
   },
   files       = {
     -- uncomment to override .gitignore
-    -- fd_opts           = "--no-ignore --color=never --type f --hidden --follow --exclude .git",
-    action = { ["ctrl-l"] = fzf_lua.actions.arg_add }
+    -- fd_opts  = "--no-ignore --color=never --type f --hidden --follow --exclude .git",
+    fzf_opts = { ["--tiebreak"] = "end" },
+    action   = { ["ctrl-l"] = fzf_lua.actions.arg_add }
   },
   grep        = {
     rg_glob = true,
