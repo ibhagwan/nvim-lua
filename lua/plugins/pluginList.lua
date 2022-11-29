@@ -135,13 +135,13 @@ local packer_startup = function(use)
   end
 
   -- optional for fzf-lua, telescope, nvim-tree
-  use { "kyazdani42/nvim-web-devicons",
+  use { "nvim-tree/nvim-web-devicons",
     config = "require('plugins.devicons')",
     event = "VimEnter"
   }
 
   -- nvim-tree
-  use { "kyazdani42/nvim-tree.lua",
+  use { "nvim-tree/nvim-tree.lua",
     config = "require('plugins.nvim-tree')",
     cmd = { "NvimTreeToggle", "NvimTreeFindFileToggle" },
   }

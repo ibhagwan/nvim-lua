@@ -71,7 +71,7 @@
 - [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim): fuzzy
   search framework for searching project files, buffers, ripgrep and much more
 
-- [nvim-tree](https://github.com/kyazdani42/nvim-tree.lua): file-explorer tree
+- [nvim-tree](https://github.com/nvim-tree/nvim-tree.lua): file-explorer tree
 
 - [nvim-bqf](https://github.com/kevinhwang91/nvim-bqf): better quickfix and
   location list, provides quickfix previews, history and fuzzy search, great
