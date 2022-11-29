@@ -33,7 +33,7 @@ o.cmdwinheight     = math.floor(vim.o.lines / 2) -- 'q:' window height
 o.laststatus       = 2 -- 2 = always show status line (filename, etc)
 o.scrolloff        = 3 -- min number of lines to keep between cursor and screen edge
 o.sidescrolloff    = 5 -- min number of cols to keep between cursor and screen edge
-o.textwidth        = 78 -- max inserted text width for paste operations
+o.textwidth        = 99 -- max inserted text width for paste operations
 o.linespace        = 0 -- font spacing
 o.ruler            = true -- show line,col at the cursor pos
 o.number           = true -- show absolute line no. at the cursor pos

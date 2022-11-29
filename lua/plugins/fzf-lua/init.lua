@@ -90,6 +90,7 @@ fzf_lua.setup {
       }
     },
   },
+  buffers     = { no_action_zz = true },
   files       = {
     -- uncomment to override .gitignore
     -- fd_opts  = "--no-ignore --color=never --type f --hidden --follow --exclude .git",

@@ -54,22 +54,6 @@ if require "utils".is_root() then
   map("n", "<C-p>", "<cmd>FZF<CR>", { desc = "FZF" })
 end
 
--- alternate file mapping without zz
-for _, k in ipairs({ "<C-6>", "<C-^>" }) do
-  map("n", k, function()
-    local to = vim.fn.bufnr("#")
-    -- no alternate file, abort
-    if to <= 0 then return end
-    vim.b.__VIEWSTATE = vim.fn.winsaveview()
-    vim.api.nvim_set_current_buf(to)
-    if vim.b.__VIEWSTATE then
-      vim.fn.winrestview(vim.b.__VIEWSTATE)
-      vim.b.__VIEWSTATE = nil
-    end
-  end,
-    { silent = true, desc = "Alternate file" })
-end
-
 -- <ctrl-s> to Save
 map({ "n", "v", "i" }, "<C-S>", "<C-c>:update<cr>", { silent = true, desc = "Save" })
 
