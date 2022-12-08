@@ -53,8 +53,8 @@
 - [lspconfig](https://github.com/neovim/nvim-lspconfig): configuration
   quickstart for nvim's built in LSP
 
-- [nvim-lsp-installer](https://github.com/williamboman/nvim-lsp-installer):
-  automatic installation of LSP servers using the `:LspInstall` command
+- [mason.nvim](https://github.com/williamboman/mason.nvim):
+  automatic installation of LSP servers using the `:Mason` command
 
 - [nvim-dap](https://github.com/mfussenegger/nvim-dap):
   set breakpoints and debug applications using Debug Adapter Protocol (DAP)
@@ -98,9 +98,6 @@
 - [express\_line](https://github.com/tjdevries/express_line.nvim):
   [TJ's](https://github.com/tjdevries) status line plugin, customized and
   highlighted by me and, LSP/diag patched to work on any neovim >= 0.5
-
-- [nvcode-color-schemes](https://github.com/christianchiarulli/nvcode-color-schemes.vim):
-  a collection of treesitter compatible color schemes
 
 - [nvim-colorizer.lua](https://github.com/nvchad/nvim-colorizer.lua): color
   code highlighter, use `ColorizerAttachToBuffer` to provide a live preview of

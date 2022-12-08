@@ -46,7 +46,7 @@ reload.post_reload_hook = function()
   require("plugins").compile()
   if reload.lsp_was_loaded and vim.fn.exists(":PackerLoad") ~= 0 then
     vim.cmd("PackerLoad nvim-lspconfig")
-    vim.cmd("PackerLoad nvim-lsp-installer")
+    vim.cmd("PackerLoad mason-lspconfig.nvim")
   end
   -- re-source all language specific settings, scans all runtime files under
   -- '/usr/share/nvim/runtime/(indent|syntax)' and 'after/ftplugin'

@@ -174,29 +174,22 @@ local packer_startup = function(use)
   -- LSP
   use({
     { "neovim/nvim-lspconfig", event = "BufRead" },
-    { "williamboman/nvim-lsp-installer",
-      config = "require('lsp')",
-      after  = { "nvim-lspconfig" },
-    },
     { "j-hui/fidget.nvim",
       config = [[require('fidget').setup()]],
       after  = { "nvim-lspconfig" },
     }
   })
 
-  -- NOT IN USE
-  -- use({
-  --   "jose-elias-alvarez/null-ls.nvim",
-  --   config = [[
-  --     require("null-ls").setup({
-  --       sources = {
-  --         require("null-ls").builtins.formatting.stylua,
-  --         --require("null-ls").builtins.completion.spell,
-  --       },
-  --     })
-  --   ]],
-  --   after  = { "nvim-lspconfig" },
-  -- })
+  -- LSP Installer
+  use({
+    { "williamboman/mason.nvim",
+      after = { "nvim-lspconfig" }
+    },
+    { "williamboman/mason-lspconfig.nvim",
+      config = "require('lsp')",
+      after  = { "mason.nvim" },
+    },
+  })
 
   -- DAP
   use({

@@ -1,15 +1,9 @@
--- setup nvim-lsp-installer before interacting with lspconfig
--- https://github.com/williamboman/nvim-lsp-installer/discussions/636
+-- setup mason-lspconfig before interacting with lspconfig
+-- https://github.com/williamboman/mason-lspconfig.nvim
 pcall(function()
-  require("nvim-lsp-installer").setup({
+  require("mason").setup()
+  require("mason-lspconfig").setup({
     ensure_installed = { "sumneko_lua" },
-    ui = {
-      icons = {
-        server_installed = "✓",
-        server_pending = "➜",
-        server_uninstalled = "✗"
-      }
-    }
   })
 end)
 
@@ -145,9 +139,15 @@ local function is_installed(cfg)
   if cmd and cmd[1] and vim.fn.executable(cmd[1]) == 1 then
     return true
   end
-  -- otherwise, check 'nvim-lsp-installer' path
-  local has_cfg, srv = require "nvim-lsp-installer".get_server(cfg.name)
-  return has_cfg and srv:is_installed()
+  -- otherwise, check if installed via 'mason-lspconfig'
+  local mason_installed = false
+  local mason_servers = require "mason-lspconfig".get_installed_servers()
+  for _, s in ipairs(mason_servers) do
+    if s == cfg.name then
+      mason_installed = true
+    end
+  end
+  return mason_installed
 end
 
 for _, srv in ipairs(servers) do
