@@ -1,9 +1,4 @@
-local res, surround = pcall(require, "mini.surround")
-if not res then
-  return
-end
-
-surround.setup({
+require("mini.surround").setup({
   -- vim-surround style mappings
   -- left brackets add space around the text object
   -- 'ysiw('    foo -> ( foo )

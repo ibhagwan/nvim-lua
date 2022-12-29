@@ -239,24 +239,4 @@ vim.g.maplocalleader = " "
 
 -- We do this to prevent the loading of the system fzf.vim plugin. This is
 -- present at least on Arch/Manjaro/Void
-vim.api.nvim_command("set rtp-=/usr/share/vim/vimfiles")
-
-require "plugins"
-require "autocmd"
-require "keymaps"
-
--- set colorscheme to modified embark
--- https://github.com/embark-theme/vim
--- vim.g.embark_transparent = true
--- vim.g.embark_terminal_italics = true
-vim.g.lua_embark_transparent = true
-if require "utils".is_root() then
-  pcall(vim.cmd, [[colorscheme lua-embark]])
-else
-  pcall(vim.cmd, [[colorscheme nightfly]])
-end
-
--- set 'listchars' highlight
-if vim.g.colors_name == "nightfly" then
-  vim.cmd("hi! link Whitespace NonText")
-end
+-- vim.api.nvim_command("set rtp-=/usr/share/vim/vimfiles")

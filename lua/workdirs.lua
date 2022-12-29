@@ -18,5 +18,6 @@ return {
   "~/Sources/nvim/ts-vimdoc.nvim",
   "~/Sources/nvim/smartyank.nvim",
   "~/Sources/nvim/vim-cheatsheet",
+  vim.fn.stdpath("data") .. "/lazy",
   vim.fn.stdpath("data") .. "/site/pack/packer",
 }

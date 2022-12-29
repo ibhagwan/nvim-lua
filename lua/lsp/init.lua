@@ -1,12 +1,3 @@
--- setup mason-lspconfig before interacting with lspconfig
--- https://github.com/williamboman/mason-lspconfig.nvim
-pcall(function()
-  require("mason").setup()
-  require("mason-lspconfig").setup({
-    ensure_installed = { "sumneko_lua" },
-  })
-end)
-
 local ok, lspconfig = pcall(require, "lspconfig")
 if not ok then return end
 

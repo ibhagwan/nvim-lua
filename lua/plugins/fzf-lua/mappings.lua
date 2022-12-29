@@ -8,10 +8,12 @@ local map_fzf = function(mode, key, f, options, buffer)
   end
 
   local rhs = function()
-    if not pcall(require, "fzf-lua") then
-      require("packer").loader("fzf-lua")
+    local fzf_lua = require("fzf-lua")
+    if fzf_lua[f] then
+      fzf_lua[f](options or {})
+    else
+      require("plugins.fzf-lua.cmds")[f](options or {})
     end
-    require("plugins.fzf-lua")[f](options or {})
   end
 
   local map_options = {
@@ -36,9 +38,9 @@ map_fzf("n", "<c-K>", "workdirs", { desc = "cwd workdirs",
   } })
 
 map_fzf("n", "<leader>fp", "files", {
-  desc = "plugin files (packer)",
+  desc = "plugin files",
   prompt = "Plugins❯ ",
-  cwd = vim.fn.stdpath "data" .. "/site/pack/packer/"
+  cwd = vim.fn.stdpath "data" .. "/lazy"
 })
 
 map_fzf("n", "<leader>f?", "builtin", { desc = "builtin commands" })

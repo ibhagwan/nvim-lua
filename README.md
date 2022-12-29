@@ -4,7 +4,7 @@
 
 ## What's in this repo?
 
-**My personal neovim lua config (requires neovim >= `0.7`)**
+**My personal neovim lua config (requires neovim >= `0.8`)**
 
 - Minimum changes to default key mapping
 - A good selection of carefully hand-picked plugins
@@ -14,12 +14,12 @@
 
 ## Plugins
 
-- [packer.nvim](https://github.com/wbthomason/packer.nvim): lua plugin
+- [lazy.nvim](https://github.com/folke/lazy.nvim): lua plugin
   manager to auto-install and update our plugins
 
 ### Basics
 
-- [smartyank.nvim](https://github.com/ibhagwan/smartyank.nvim): Only pollute
+- [smartyank.nvim](https://github.com/ibhagwan/smartyank.nvim): only pollute
   the clipboard when you really mean it!
 
 - [mini.surround](https://github.com/echasnovski/mini.nvim): adds the missing
@@ -56,6 +56,9 @@
 - [mason.nvim](https://github.com/williamboman/mason.nvim):
   automatic installation of LSP servers using the `:Mason` command
 
+- [null-ls.nvim](https://github.com/jose-elias-alvarez/null-ls.nvim): pseudo
+  LSP server to help us format JS|web files with `prettier` on `gq`
+
 - [nvim-dap](https://github.com/mfussenegger/nvim-dap):
   set breakpoints and debug applications using Debug Adapter Protocol (DAP)
 
@@ -86,9 +89,6 @@
 
 - [toggleterm.nvim](https://github.com/akinsho/toggleterm.nvim): better term and
   REPLs (use `gx` and `gxx` to send REPLs to an interpreter)
-
-- [nvim-reload](https://github.com/ibhagwan/nvim-lua/tree/main/lua/plugins/nvim-reload):
-  reload your nvim configuration and lua modules with `<space>R`
 
 - [previm](https://github.com/previm/previm): live preview markdown files in
   the browser with `<space>r`

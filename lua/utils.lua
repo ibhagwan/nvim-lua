@@ -6,6 +6,8 @@ function _G.dump(...)
   print(unpack(objects))
 end
 
+local DEV_DIR = "$HOME/Sources/nvim"
+
 local M = {}
 
 function M._echo_multiline(msg)
@@ -32,8 +34,8 @@ function M.err(msg)
   vim.cmd("echohl None")
 end
 
-function M.has_neovim_v05()
-  return (vim.fn.has("nvim-0.5") == 1)
+function M.has_neovim_v08()
+  return (vim.fn.has("nvim-0.8") == 1)
 end
 
 function M.is_root()
@@ -42,6 +44,11 @@ end
 
 function M.is_darwin()
   return vim.loop.os_uname().sysname == "Darwin"
+end
+
+function M.is_dev(path)
+  return vim.loop.fs_stat(string.format("%s/%s",
+    vim.fn.expand(DEV_DIR), path))
 end
 
 function M.shell_error()
@@ -283,6 +290,39 @@ M.osc52printf = function(...)
   local bytes = vim.fn.chansend(vim.v.stderr, osc52str)
   assert(bytes > 0)
   M.info(string.format("[OSC52] %d chars copied (%d bytes)", #str, bytes))
+end
+
+M.unload_modules = function(patterns)
+  for _, p in ipairs(patterns) do
+    if not p.mod and type(p[1]) == "string" then
+      p = { mod = p[1], fn = p.fn }
+    end
+    local unloaded = false
+    for m, _ in pairs(package.loaded) do
+      if m:match(p.mod) then
+        unloaded = true
+        package.loaded[m] = nil
+        M.info(string.format("UNLOADED module '%s'", m))
+      end
+    end
+    if unloaded and p.fn then
+      p.fn()
+      M.warn(string.format("RELOADED module '%s'", p.mod))
+    end
+  end
+end
+
+M.reload_config = function()
+  M.unload_modules({
+    { "^options$", fn = function() require("options") end },
+    { "^autocmd$", fn = function() require("autocmd") end },
+    { "^keymaps$", fn = function() require("keymaps") end },
+    { "^utils$" },
+    { "^workdirs$" },
+    { mod = "ts%-vimdoc" },
+    { mod = "smartyank", fn = function() require("smartyank") end },
+    { mod = "fzf%-lua", fn = function() require("plugins.fzf-lua.setup").setup() end },
+  })
 end
 
 return M

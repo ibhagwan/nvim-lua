@@ -1,9 +1,4 @@
-local res, indent = pcall(require, "mini.indentscope")
-if not res then
-  return
-end
-
-indent.setup({
+require("mini.indentscope").setup({
   draw = {
     -- Delay (in ms) between event and start of drawing scope indicator
     delay = 100,
@@ -50,25 +45,23 @@ indent.setup({
   symbol = "╎",
 })
 
+vim.keymap.set("", '<leader>"',
+  "<cmd>lua require'plugins.mini.indentscope'.btoggle()<CR>",
+  { silent = true, desc = "toggle 'mini.indentscope' on/off" })
 
-local toggle = function(bufnr)
+local M = {}
+
+M.toggle = function(bufnr)
   if bufnr then
     vim.b.miniindentscope_disable = not vim.b.miniindentscope_disable
   else
     vim.g.miniindentscope_disable = not vim.g.miniindentscope_disable
   end
-  indent.auto_draw({ lazy = true })
+  require("mini.indentscope").auto_draw({ lazy = true })
 end
 
-local btoggle = function()
-  toggle(vim.api.nvim_get_current_buf())
+M.btoggle = function()
+  M.toggle(vim.api.nvim_get_current_buf())
 end
 
-vim.keymap.set("", '<leader>"',
-  "<cmd>lua require'plugins.indent'.btoggle()<CR>",
-  { silent = true, desc = "toggle 'mini.indentscope' on/off" })
-
-return {
-  toggle = toggle,
-  btoggle = btoggle
-}
+return M

@@ -6,12 +6,12 @@ local map_tele = function(mode, key, f, options, buffer)
   end
 
   local rhs = function()
-    if not pcall(require, "telescope.nvim") then
-      require("packer").loader("plenary.nvim")
-      require("packer").loader("telescope-fzy-native.nvim")
-      require("packer").loader("telescope.nvim")
+    local builtins = require("telescope.builtin")
+    if builtins[f] then
+      builtins[f](options or {})
+    else
+      require("plugins.telescope.cmds")[f](options or {})
     end
-    require("plugins.telescope")[f](options or {})
   end
 
   local map_options = {
@@ -72,5 +72,5 @@ map_tele("n", "<leader>tlG", "diagnostics")
 map_tele("n", "<leader>tls", "lsp_document_symbols")
 map_tele("n", "<leader>tlS", "lsp_workspace_symbols")
 
--- Packer folder
+-- Insalled plugin folder
 map_tele("n", "<leader>tp", "installed_plugins")

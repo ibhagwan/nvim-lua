@@ -1,71 +1,42 @@
--- Do not use plugins when running as root or neovim < 0.5
-if require "utils".is_root() or not require "utils".has_neovim_v05() then
-  return
-end
-
--- we don't want the compilation file in '~/.config/nvim'
--- place it under '~/.local/shared/nvim/plugin' instead
-local compile_suffix = "/plugin/packer_compiled.lua"
-local install_suffix = "/site/pack/packer/%s/packer.nvim"
-local install_path = vim.fn.stdpath("data") .. string.format(install_suffix, "opt")
-local compile_path = vim.fn.stdpath("data") .. compile_suffix
-
-local ok, packer = pcall(require("plugins.bootstrap"), install_path, compile_path)
-if not ok or not packer then return end -- user cancelled installation?
-
-
--- Packer commands
-vim.cmd [[command! PackerInstall packadd packer.nvim | lua require('plugins').install()]]
-vim.cmd [[command! PackerUpdate packadd packer.nvim | lua require('plugins').update()]]
-vim.cmd [[command! PackerSync packadd packer.nvim | lua require('plugins').sync()]]
-vim.cmd [[command! PackerClean packadd packer.nvim | lua require('plugins').clean()]]
-vim.cmd [[command! PackerCompile packadd packer.nvim | lua require('plugins').compile()]]
-vim.cmd [[command! PC PackerCompile]]
-vim.cmd [[command! PS PackerStatus]]
-vim.cmd [[command! PU PackerSync]]
-
--- delete leftover 'packer_compiled.lua'
-if packer.config.compile_path ~= compile_path and
-    vim.loop.fs_stat(packer.config.compile_path) then
-  vim.fn.delete(packer.config.compile_path, "rf")
-  vim.fn.delete(vim.fn.fnamemodify(packer.config.compile_path, ":p:h"), "d")
-end
-
--- Packer config
-local config = {
-  compile_path = compile_path,
-  git = {
-    -- never fail if plugin author rebased the git repo
-    subcommands = { update = "pull --progress --rebase=true" }
+return {
+  {
+    "bluz71/vim-nightfly-guicolors",
+    lazy = false,
+    priority = 1000,
   },
-  display = {
-    open_fn = function()
-      return require("packer.util").float({ border = "rounded" })
-    end
+  {
+    "dstein64/vim-startuptime",
+    cmd = "StartupTime",
+  },
+  -- SmartYank (by me)
+  {
+    "ibhagwan/smartyank.nvim",
+    config = function()
+      require("smartyank").setup({ highlight = { timeout = 1000 } })
+    end,
+    event = "VeryLazy",
+    dev = require("utils").is_dev("smartyank.nvim")
+  },
+  -- plenary is required by gitsigns and telescope
+  { "nvim-lua/plenary.nvim" },
+  { "previm/previm",
+    commit = "1978acc23c16cddcaf70c856a3b39d17943d7df0",
+    config = function()
+      -- vim.g.previm_open_cmd = 'firefox';
+      vim.g.previm_open_cmd = "/shared/$USER/Applications/chromium/chrome";
+      vim.g.previm_enable_realtime = 0
+      vim.g.previm_disable_default_css = 1
+      vim.g.previm_custom_css_path = vim.fn.stdpath("config") .. "/css/previm-gh-dark.css"
+      -- clear cache every time we open neovim
+      vim.fn["previm#wipe_cache"]()
+    end,
+    ft = { "markdown" },
+  },
+  {
+    "nvchad/nvim-colorizer.lua",
+    config = function()
+      require("colorizer").setup()
+    end,
+    cmd = { "ColorizerAttachToBuffer", "ColorizerDetachFromBuffer" },
   }
 }
-
--- hook to avoid the 'packer.compile: Complete' notify
-packer.on_compile_done = function() end
-
--- Setup our plugins
-packer.startup({ require("plugins.pluginList"), config = config })
-
-if vim.loop.fs_stat(config.compile_path) then
-  -- since we customized the compilation path for packer
-  -- we need to manually load 'packer_compiled.lua'
-  vim.cmd("luafile " .. config.compile_path)
-else
-  -- no 'packer_compiled.lua', we assume this is the
-  -- first time install, 'sync()' will clone|update
-  -- our plugins and generate 'packer_compiled.lua'
-  packer.sync()
-end
-
-local plugins = setmetatable({}, {
-  __index = function(_, key)
-    return packer[key]
-  end
-})
-
-return plugins

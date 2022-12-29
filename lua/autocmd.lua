@@ -37,15 +37,6 @@ augroup("SmartTextYankPost", function(g)
   })
 end)
 
--- update statusline highlights
-augroup("StatusLineColorschemeUpdate", function(g)
-  aucmd("ColorScheme", {
-    group = g,
-    pattern = "*",
-    command = "lua require'plugins.statusline'.setup()",
-  })
-end)
-
 -- disable mini.indentscope for certain filetype|buftype
 augroup("MiniIndentscopeDisable", function(g)
   aucmd("BufEnter", {
@@ -111,14 +102,6 @@ augroup("ActiveWinCursorLine", function(g)
     group = g,
     pattern = "*",
     command = "if &cursorline && ! &pvw | setlocal nocursorline | endif"
-  })
-end)
-
-augroup("PackerCompile", function(g)
-  aucmd("BufWritePost", {
-    group = g,
-    pattern = "pluginList.lua",
-    command = 'lua require("plugins").compile()',
   })
 end)
 

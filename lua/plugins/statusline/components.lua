@@ -343,7 +343,7 @@ end
 M.vim_diagnostics = function(opts)
   opts = opts or {}
   local formatter = opts.formatter or diag_formatter(opts)
-  return el_sub.buf_autocmd("el_buf_diagnostic", "DiagnosticChanged",
+  return el_sub.buf_autocmd("el_buf_diagnostic", "LspAttach,DiagnosticChanged",
     wrap_fnc(opts, function(window, buffer)
       return formatter(window, buffer, get_buffer_counts(vim.diagnostic, window, buffer))
     end))
