@@ -5,12 +5,19 @@ return {
     cond = require("utils").have_compiler,
   {
     "nvim-treesitter/nvim-treesitter",
+    -- treesitter requires a C compiler
     cond = require("utils").have_compiler,
-    build = ":TSUpdate",
     event = "BufReadPost",
     dependencies = {
       "nvim-treesitter/nvim-treesitter-textobjects",
     },
+    build = function()
+      -- build step is run independent of the condition
+      -- make sure we have treesitter before running ':TSUpdate'
+      if require("utils").have_compiler() then
+        vim.cmd("TSUpdate")
+      end
+    end,
     config = function()
       require "nvim-treesitter.configs".setup {
         ensure_installed      = {

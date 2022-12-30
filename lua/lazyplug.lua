@@ -10,6 +10,7 @@ if not vim.loop.fs_stat(lazypath) then
     "https://github.com/folke/lazy.nvim.git",
     lazypath,
   })
+  print("Succesfully downloaded lazy.nvim.")
 end
 vim.opt.runtimepath:prepend(lazypath)
 
