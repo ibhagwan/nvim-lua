@@ -323,6 +323,20 @@ M.reload_config = function()
     { mod = "smartyank", fn = function() require("smartyank") end },
     { mod = "fzf%-lua", fn = function() require("plugins.fzf-lua.setup").setup() end },
   })
+  -- re-source all language specific settings, scans all runtime files under
+  -- '/usr/share/nvim/runtime/(indent|syntax)' and 'after/ftplugin'
+  local ft = vim.bo.filetype
+  vim.tbl_filter(function(s)
+    for _, e in ipairs({ "vim", "lua" }) do
+      if ft and #ft > 0 and s:match(("/%s.%s"):format(ft, e)) then
+        local file = vim.fn.expand(s:match("[^: ]*$"))
+        vim.cmd("source " .. file)
+        M.warn("RESOURCED " .. vim.fn.fnamemodify(file, ":."))
+        return s
+      end
+    end
+    return nil
+  end, vim.fn.split(vim.fn.execute("scriptnames"), "\n"))
 end
 
 return M

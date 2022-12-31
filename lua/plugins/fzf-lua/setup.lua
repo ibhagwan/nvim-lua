@@ -2,7 +2,15 @@ return {
   setup = function()
     local fzf_lua = require("fzf-lua")
 
-    -- local fzf_bin = 'sk'
+    local pkg_opts = {
+        sk = { bin = "sk", opts = {} },
+        fzf = { opts = { ["--no-separator"] = "" } },
+        -- fzf = { opts = { ["--info"] = "default" } },
+    }
+    -- easily switch between fzf|sk
+    -- local fzf_pkg = pkg_opts.sk
+    local fzf_pkg = pkg_opts.fzf
+
     local img_prev_bin = vim.fn.executable("ueberzug") == 1
         and { "ueberzug" }
         or { "viu", "-b" }
@@ -47,7 +55,8 @@ return {
     fzf_lua.config._devicons_setup = "~/.config/nvim/lua/plugins/devicons.lua"
 
     fzf_lua.setup {
-      fzf_bin     = fzf_bin,
+      fzf_bin     = fzf_pkg.bin,
+      fzf_opts    = fzf_pkg.opts,
       fzf_colors  = fzf_colors,
       winopts     = {
         -- split   = "belowright new",

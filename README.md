@@ -12,10 +12,13 @@
 - Which-key to rule them all
 - Misc utilities and goodies
 
-## Plugins
+## Plugins & Packages
 
 - [lazy.nvim](https://github.com/folke/lazy.nvim): lua plugin
   manager to auto-install and update our plugins
+
+- [mason.nvim](https://github.com/williamboman/mason.nvim):
+  automatic installation of LSP servers using the `:Mason` command
 
 ### Basics
 
@@ -52,9 +55,6 @@
 
 - [lspconfig](https://github.com/neovim/nvim-lspconfig): configuration
   quickstart for nvim's built in LSP
-
-- [mason.nvim](https://github.com/williamboman/mason.nvim):
-  automatic installation of LSP servers using the `:Mason` command
 
 - [null-ls.nvim](https://github.com/jose-elias-alvarez/null-ls.nvim): pseudo
   LSP server to help us format JS|web files with `prettier` on `gq`
