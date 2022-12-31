@@ -119,6 +119,7 @@ local servers = {
   "pylsp",
   "clangd",
   -- 'ccls',
+  "tsserver",
   "solc"
 }
 

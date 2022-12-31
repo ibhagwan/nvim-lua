@@ -83,13 +83,15 @@ local on_attach = function(client, bufnr)
   if client_has_capability(client, "documentFormattingProvider") then
     -- neovim >= 0.8
     if vim.lsp.buf.format then
-      -- format lua specifically using 'sumneko_lua'
-      local fmt_opts = vim.bo[bufnr].ft == "lua"
-          and 'async=true,bufnr=0,name="sumneko_lua"'
-          or "async=true,bufnr=0"
+      -- get the last attached client name
+      -- as most likely null-ls is at [1]
+      local clients = vim.lsp.buf_get_clients(bufnr)
+      local client_name = clients and clients[#clients].name or client.name
+      local fmt_opts = string.format(
+        [[async=true,bufnr=%d,name="%s"]], bufnr, client_name)
       map("n", "gq",
         string.format("<cmd>lua vim.lsp.buf.format({%s})<CR>", fmt_opts),
-        { desc = "format document [LSP]" })
+        { desc = string.format("format document [LSP:%s]", client_name) })
     else
       map("n", "gq", "<cmd>lua vim.lsp.buf.formatting()<CR>",
         { desc = "format document [LSP]" })

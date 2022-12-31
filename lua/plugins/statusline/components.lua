@@ -268,23 +268,18 @@ M.git_changes_all = function(opts)
     end))
 end
 
-local function lsp_srvname()
-  local buf_ft = vim.api.nvim_buf_get_option(0, "filetype")
-  local clients = vim.lsp.get_active_clients()
-  if next(clients) == nil then
-    return nil
+local function lsp_srvname(bufnr)
+  local buf_clients = vim.lsp.buf_get_clients(bufnr)
+  if not buf_clients or #buf_clients == 0 then
+    return "<unknown>"
   end
-  for _, client in ipairs(clients) do
-    local filetypes = client.config.filetypes
-    if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
-      return client.name
-    end
-  end
-  return nil
+  -- get the last attached client name
+  -- as most likely null-ls is at [1]
+  return buf_clients[#buf_clients].name
 end
 
 local function diag_formatter(opts)
-  return function(_, _, counts)
+  return function(_, buffer, counts)
     local items = {}
     local icons = {
       ["errors"]   = { opts.icon_err or "E", opts.hl_err },
@@ -299,7 +294,7 @@ local function diag_formatter(opts)
       end
     end
     local fmt = opts.fmt or "%s"
-    local lsp_name = opts.lsp and lsp_srvname()
+    local lsp_name = opts.lsp and lsp_srvname(buffer.bufnr)
     if not lsp_name and vim.tbl_isempty(items) then
       return ""
     else
@@ -330,31 +325,13 @@ local get_buffer_counts = function(diagnostic, _, buffer)
   }
 end
 
-M.lsp_diagnostics = function(opts)
-  opts = opts or {}
-  local formatter = opts.formatter or diag_formatter(opts)
-  return el_sub.user_autocmd("el_buf_diagnostic", "LspDiagnosticsChanged",
-    wrap_fnc(opts, function(window, buffer)
-      return formatter(window, buffer, get_buffer_counts(vim.lsp.diagnostic, window, buffer))
-    end))
-end
-
-
-M.vim_diagnostics = function(opts)
+M.diagnostics = function(opts)
   opts = opts or {}
   local formatter = opts.formatter or diag_formatter(opts)
   return el_sub.buf_autocmd("el_buf_diagnostic", "LspAttach,DiagnosticChanged",
     wrap_fnc(opts, function(window, buffer)
       return formatter(window, buffer, get_buffer_counts(vim.diagnostic, window, buffer))
     end))
-end
-
-M.diagnostics = function(opts)
-  if vim.diagnostic then
-    return M.vim_diagnostics(opts)
-  else
-    return M.lsp_diagnostics(opts)
-  end
 end
 
 return M
