@@ -43,6 +43,7 @@ map_fzf("n", "<leader>fp", "files", {
   cwd = vim.fn.stdpath "data" .. "/lazy"
 })
 
+map_fzf("n", "<leader>fP", "toggle_previewer", { desc = "toggle bat|default previewer" })
 map_fzf("n", "<leader>f?", "builtin", { desc = "builtin commands" })
 map_fzf("n", "<leader>;", "buffers", { desc = "Fzf buffers" })
 map_fzf("n", "<leader>ff", "resume", { desc = "resume" })

@@ -104,4 +104,14 @@ function M.workdirs(opts)
   fzf_lua.fzf_exec(fzf_fn, opts)
 end
 
+function M.toggle_previewer()
+  local g = require("fzf-lua.config").globals;
+  for _, s in ipairs({ "buffers", "files", "grep" }) do
+    print("prev", g[s].previewer, fzf_lua.defaults[s].previewer)
+    local previewer = g[s].previewer ~= "bat" and "bat" or "builtin"
+    require("utils").info(string.format([[FzfLua previewer set to '%s']], previewer))
+    g[s].previewer = previewer
+  end
+end
+
 return M
