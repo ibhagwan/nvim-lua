@@ -271,7 +271,7 @@ end
 local function lsp_srvname(bufnr)
   local buf_clients = vim.lsp.buf_get_clients(bufnr)
   if not buf_clients or #buf_clients == 0 then
-    return "<unknown>"
+    return nil
   end
   -- get the last attached client name
   -- as most likely null-ls is at [1]
