@@ -3,17 +3,18 @@ return {
     local fzf_lua = require("fzf-lua")
 
     local pkg_opts = {
-        sk = { bin = "sk", opts = {} },
-        fzf = { opts = { ["--no-separator"] = "" } },
-        -- fzf = { opts = { ["--info"] = "default" } },
+      sk = { bin = "sk", opts = {} },
+      fzf = { opts = { ["--no-separator"] = "" } },
+      -- fzf = { opts = { ["--info"] = "default" } },
     }
     -- easily switch between fzf|sk
     -- local fzf_pkg = pkg_opts.sk
     local fzf_pkg = pkg_opts.fzf
 
-    local img_prev_bin = vim.fn.executable("ueberzug") == 1
-        and { "ueberzug" }
-        or { "viu", "-b" }
+    local img_prev_bin = vim.fn.executable("ueberzug") == 1 and { "ueberzug" }
+        or vim.fn.executable("chafa") == 1 and { "chafa" }
+        or vim.fn.executable("viu") == 1 and { "viu", "-b" }
+        or nil
 
     -- return first matching highlight or nil
     local function hl_match(t)
@@ -95,6 +96,7 @@ return {
             ["png"]  = img_prev_bin,
             ["jpg"]  = img_prev_bin,
             ["jpeg"] = img_prev_bin,
+            ["svg"]  = { "chafa" },
           }
         },
       },
