@@ -6,9 +6,15 @@ return {
       sk = { bin = "sk", opts = {} },
       fzf = { opts = { ["--no-separator"] = "" } },
       -- fzf = { opts = { ["--info"] = "default" } },
+      fzf_tmux = { bin = "fzf-tmux", opts = {
+        ["--border"] = "sharp",
+        ["--no-separator"] = "",
+        ["--preview-window"] = "nohidden:right:50%",
+      } },
     }
     -- easily switch between fzf|sk
     -- local fzf_pkg = pkg_opts.sk
+    -- local fzf_pkg = pkg_opts.fzf_tmux
     local fzf_pkg = pkg_opts.fzf
 
     local img_prev_bin = vim.fn.executable("ueberzug") == 1 and { "ueberzug" }
@@ -44,6 +50,7 @@ return {
         ["spinner"] = { "fg", "Label" },
         ["header"] = { "fg", "Comment" },
         ["gutter"] = { "bg", "Normal" },
+        ["scrollbar"] = { "fg", hl_match({ "NightflyPeach", "WarningMsg" }) },
       }
       if binary == "sk" and vim.fn.executable(binary) == 1 then
         colors["matched_bg"] = { "bg", "Normal" }
@@ -56,10 +63,11 @@ return {
     fzf_lua.config._devicons_setup = "~/.config/nvim/lua/plugins/devicons.lua"
 
     fzf_lua.setup {
-      fzf_bin     = fzf_pkg.bin,
-      fzf_opts    = fzf_pkg.opts,
-      fzf_colors  = fzf_colors,
-      winopts     = {
+      fzf_bin       = fzf_pkg.bin,
+      fzf_opts      = fzf_pkg.opts,
+      fzf_tmux_opts = { ["-p"] = "80%,90%" },
+      fzf_colors    = fzf_colors,
+      winopts       = {
         -- split   = "belowright new",
         -- split   = "aboveleft vnew",
         height  = 0.85,
@@ -79,7 +87,7 @@ return {
         --   print("on_create")
         -- end,
       },
-      winopts_fn  = function()
+      winopts_fn    = function()
         local hl = {
           border = hl_match({ "NightflySteelBlue", "FloatBorder" }),
           cursorline = hl_match({ "NightflyVisual" }),
@@ -87,9 +95,9 @@ return {
         }
         return { hl = hl }
       end,
-      previewers  = {
-        bat     = { theme = "Coldark-Dark", },
-        builtin = {
+      previewers    = {
+        bat        = { theme = "Coldark-Dark", },
+        builtin    = {
           ueberzug_scaler = "cover",
           extensions      = {
             ["gif"]  = img_prev_bin,
@@ -99,20 +107,25 @@ return {
             ["svg"]  = { "chafa" },
           }
         },
+        man_native = {
+          cmd = require("utils").is_darwin()
+              and [[man -P "bat -l man -p --color=always" %s]]
+              or "man -c %s | bat -l man -p --color=always",
+        },
       },
-      buffers     = { no_action_zz = true },
-      files       = {
+      buffers       = { no_action_zz = true },
+      files         = {
         -- uncomment to override .gitignore
         -- fd_opts  = "--no-ignore --color=never --type f --hidden --follow --exclude .git",
         fzf_opts = { ["--tiebreak"] = "end" },
         action   = { ["ctrl-l"] = fzf_lua.actions.arg_add }
       },
-      grep        = {
+      grep          = {
         rg_glob = true,
         rg_opts = "--hidden --column --line-number --no-heading"
             .. " --color=always --smart-case -g '!.git'",
       },
-      git         = {
+      git           = {
         status   = {
           cmd           = "git status -su",
           winopts       = {
@@ -135,8 +148,8 @@ return {
           preview = { vertical = "down:75%", horizontal = "right:75%", }
         } },
       },
-      lsp         = { symbols = { path_shorten = 1 } },
-      diagnostics = { file_icons = false, icon_padding = " ", path_shorten = 1 },
+      lsp           = { symbols = { path_shorten = 1 } },
+      diagnostics   = { file_icons = false, icon_padding = " ", path_shorten = 1 },
     }
   end
 }

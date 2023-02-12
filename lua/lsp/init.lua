@@ -19,7 +19,7 @@ local runtime_path = vim.split(package.path, ";")
 table.insert(runtime_path, "lua/?.lua")
 table.insert(runtime_path, "lua/?/init.lua")
 
-__settings["sumneko_lua"] = {
+__settings["lua_ls"] = {
   -- enables sumneko_lua formatting, see:
   -- https://github.com/sumneko/lua-language-server/issues/960
   -- https://github.com/sumneko/lua-language-server/wiki/Code-Formatter
@@ -113,7 +113,7 @@ local function make_config()
 end
 
 local servers = {
-  "sumneko_lua",
+  "lua_ls",
   "rust_analyzer",
   "gopls",
   "pylsp",

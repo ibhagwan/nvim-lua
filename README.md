@@ -76,10 +76,6 @@
 
 - [nvim-tree](https://github.com/nvim-tree/nvim-tree.lua): file-explorer tree
 
-- [nvim-bqf](https://github.com/kevinhwang91/nvim-bqf): better quickfix and
-  location list, provides quickfix previews, history and fuzzy search, great
-  companion for both telescope and fzf after sending search results to a list
-
 ### Misc
 
 - [which-key](https://github.com/folke/which-key.nvim): a must plugin in every
