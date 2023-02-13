@@ -68,6 +68,7 @@ return {
             ["<M-a>"] = actions.toggle_all,
 
             ["<C-c>"] = actions.close,
+            ["<Esc>"] = actions.close,
 
             ["<F4>"] = require("telescope.actions.layout").toggle_preview,
           },
@@ -90,7 +91,7 @@ return {
             ["<M-a>"] = actions.toggle_all,
 
             ["<C-c>"] = actions.close,
-            ["<Esc>"] = false,
+            ["<Esc>"] = actions.close,
 
             ["<F4>"] = require("telescope.actions.layout").toggle_preview,
           },

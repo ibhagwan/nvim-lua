@@ -337,6 +337,8 @@ M.reload_config = function()
     end
     return nil
   end, vim.fn.split(vim.fn.execute("scriptnames"), "\n"))
+  -- remove last search highlight
+  vim.cmd("nohl")
 end
 
 M.tmux_aware_navigate = function(direction, no_wrap)

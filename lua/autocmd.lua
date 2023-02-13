@@ -43,8 +43,8 @@ augroup("MiniIndentscopeDisable", function(g)
     group = g,
     pattern = "*",
     command = "if index(['fzf', 'help'], &ft) >= 0 "
-        .. "|| index(['nofile', 'terminal'], &bt) >= 0 "
-        .. "| let b:miniindentscope_disable=v:true | endif"
+    .. "|| index(['nofile', 'terminal'], &bt) >= 0 "
+    .. "| let b:miniindentscope_disable=v:true | endif"
   })
 end)
 
@@ -75,7 +75,7 @@ augroup("ResizeWindows", function(g)
 end)
 
 augroup("ToggleColorcolumn", function(g)
-  aucmd("VimResized,WinEnter,BufWinEnter", {
+  aucmd({ "VimResized", "WinEnter", "BufWinEnter" }, {
     group = g,
     pattern = "*",
     command = 'lua require"utils".toggle_colorcolumn()',
@@ -93,12 +93,12 @@ end)
 
 augroup("ActiveWinCursorLine", function(g)
   -- Highlight current line only on focused window
-  aucmd("WinEnter,BufEnter,InsertLeave", {
+  aucmd({ "WinEnter", "BufEnter", "InsertLeave" }, {
     group = g,
     pattern = "*",
     command = "if ! &cursorline && ! &pvw | setlocal cursorline | endif"
   })
-  aucmd("WinLeave,BufLeave,InsertEnter", {
+  aucmd({ "WinLeave", "BufLeave", "InsertEnter" }, {
     group = g,
     pattern = "*",
     command = "if &cursorline && ! &pvw | setlocal nocursorline | endif"
@@ -116,7 +116,7 @@ end)
 
 -- Solidity abi JSON
 augroup("SolidityABI", function(g)
-  aucmd("BufRead,BufNewFile", {
+  aucmd({ "BufRead", "BufNewFile" }, {
     group = g,
     pattern = "*.abi",
     command = "set filetype=jsonc"
