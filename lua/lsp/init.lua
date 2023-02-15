@@ -20,45 +20,15 @@ table.insert(runtime_path, "lua/?.lua")
 table.insert(runtime_path, "lua/?/init.lua")
 
 __settings["lua_ls"] = {
-  -- enables sumneko_lua formatting, see:
-  -- https://github.com/sumneko/lua-language-server/issues/960
-  -- https://github.com/sumneko/lua-language-server/wiki/Code-Formatter
-  -- cmd = { "lua-language-server", "--preview" },
-  -- cmd = { "lua-language-server", "--preview", "--loglevel=trace" },
-  -- root_dir = require'lspconfig.util'.root_pattern(
-  --   ".luarc.json", ".stylua.toml", "selene.toml", ".git"),
+  -- uncomment to enable trace logging into:
+  -- '~/.local/share/nvim/mason/packages/lua-language-server/log'
+  -- cmd = { "lua-language-server", "--loglevel=trace" },
   settings = {
     Lua = {
       telemetry = { enable = false },
-      -- MOVED -> ".luarc.json"
-      -- runtime = {
-      --   -- LuaJIT in the case of Neovim
-      --   version = "LuaJIT",
-      --   path = runtime_path,
-      -- },
-      -- workspace = {
-      --   -- Make the server aware of Neovim runtime files
-      --   library = {
-      --     [vim.fn.expand("$VIMRUNTIME/lua")] = true,
-      --     [vim.fn.expand("$VIMRUNTIME/lua/vim/lsp")] = true,
-      --   }
-      -- },
-      -- diagnostics = {
-      --   -- Get the language server to recognize the `vim` global
-      --   globals = {
-      --     'vim',
-      --     'root',         -- awesomeWM
-      --     'awesome',      -- awesomeWM
-      --     'screen',       -- awesomeWM
-      --     'client',       -- awesomeWM
-      --     'clientkeys',   -- awesomeWM
-      --     'clientbuttons',-- awesomeWM
-      --     'describe',     -- busted
-      --     'it'            -- busted
-      --   },
-      --   -- enables formatter warnings
-      --   -- neededFileStatus = { ['codestyle-check'] = "Any" }
-      -- },
+      -- removes the annoying "Do you need to configure your work environment as"
+      -- when opening a lua project that doesn't have a '.luarc.json'
+      workspace = { checkThirdParty = false }
     }
   }
 }
