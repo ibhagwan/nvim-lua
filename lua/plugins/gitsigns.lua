@@ -6,27 +6,22 @@ local M = {
 
 M.config = function()
   require("gitsigns").setup {
-    signs = {
-      add          = { hl = "GitSignsAdd", text = "┃", numhl = "GitSignsAddNr",
-        linehl = "GitSignsAddLn" },
-      change       = { hl = "GitSignsChange", text = "┃", numhl = "GitSignsChangeNr",
-        linehl = "GitSignsChangeLn" },
-      delete       = { hl = "GitSignsDelete", text = "_", numhl = "GitSignsDeleteNr",
-        linehl = "GitSignsDeleteLn" },
-      topdelete    = { hl = "GitSignsDelete", text = "‾", numhl = "GitSignsDeleteNr",
-        linehl = "GitSignsDeleteLn" },
-      changedelete = { hl = "GitSignsChange", text = "~", numhl = "GitSignsChangeNr",
-        linehl = "GitSignsChangeLn" },
+    signs          = {
+      add          = { text = "┃" },
+      change       = { text = "┃" },
+      delete       = { text = "_" },
+      topdelete    = { text = "‾" },
+      changedelete = { text = "~" },
+      untracked    = { text = "┆" },
     },
-    numhl = false,
-    linehl = false,
-    watch_gitdir = { interval = 1000 },
-    current_line_blame = false,
-    current_line_blame_opts = { delay = 1000, virt_text_pos = "eol" },
+    signcolumn     = true, -- Toggle with `:Gitsigns toggle_signs`
+    numhl          = false, -- Toggle with `:Gitsigns toggle_numhl`
+    linehl         = false, -- Toggle with `:Gitsigns toggle_linehl`
+    word_diff      = false, -- Toggle with `:Gitsigns toggle_word_diff`
+    sign_priority  = 4, -- Lower priorirty means diag signs supercede
     preview_config = { border = "rounded" },
-    diff_opts = { internal = true, },
-    yadm = { enable = true, },
-    on_attach = function(bufnr)
+    yadm           = { enable = true, },
+    on_attach      = function(bufnr)
       local gs = package.loaded.gitsigns
 
       local function map(mode, l, r, opts)

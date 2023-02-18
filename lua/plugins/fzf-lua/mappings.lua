@@ -157,11 +157,10 @@ map_fzf("n", "<leader>gS", "git_status_tmuxZ", { desc = "git status (fullscreen)
 })
 
 -- yadm repo
-local yadm_git_dir = "$HOME/dots/yadm-repo"
-local yadm_cmd = string.format("yadm -C $HOME --yadm-repo %s", yadm_git_dir)
+local yadm_cmd = "yadm -C $HOME --yadm-repo ${YADM_REPO}"
 local yadm_git_opts = {
   show_cwd_header = false,
-  git_dir = "$HOME/dots/yadm-repo",
+  git_dir = "$YADM_REPO",
 }
 local yadm_grep_opts = {
   prompt = "YadmGrep❯ ",

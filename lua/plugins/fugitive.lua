@@ -27,7 +27,7 @@ end
 
 M.config = function()
   -- fugitive shortcuts for yadm
-  local yadm_repo = "$HOME/dots/yadm-repo"
+  local yadm_repo = "$YADM_REPO"
 
   -- auto-complete for our custom fugitive Yadm command
   -- https://github.com/tpope/vim-fugitive/issues/1981#issuecomment-1113825991

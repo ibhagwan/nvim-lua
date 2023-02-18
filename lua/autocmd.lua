@@ -4,6 +4,18 @@ local function augroup(name, fnc)
   fnc(vim.api.nvim_create_augroup(name, { clear = true }))
 end
 
+augroup("FzfLuaCtrlC", function(g)
+  aucmd("FileType",
+    {
+      group = g,
+      pattern = "fzf",
+      callback = function()
+        vim.api.nvim_buf_del_keymap(0, "", "<C-c>")
+        vim.api.nvim_buf_del_keymap(0, "t", "<C-c>")
+      end,
+    })
+end)
+
 augroup("SmartTextYankPost", function(g)
   -- highlight yanked text and copy to system clipboard
   -- TextYankPost is also called on deletion, limit to
