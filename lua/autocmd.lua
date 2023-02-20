@@ -10,7 +10,6 @@ augroup("FzfLuaCtrlC", function(g)
       group = g,
       pattern = "fzf",
       callback = function()
-        vim.api.nvim_buf_del_keymap(0, "", "<C-c>")
         vim.api.nvim_buf_del_keymap(0, "t", "<C-c>")
       end,
     })
