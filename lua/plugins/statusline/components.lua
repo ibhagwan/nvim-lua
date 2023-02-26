@@ -273,9 +273,12 @@ local function lsp_srvname(bufnr)
   if not buf_clients or #buf_clients == 0 then
     return nil
   end
-  -- get the last attached client name
-  -- as most likely null-ls is at [1]
-  return buf_clients[#buf_clients].name
+  local names = ""
+  for i, c in ipairs(buf_clients) do
+    if i > 1 then names = names .. ", " end
+    names = names .. c.name
+  end
+  return names
 end
 
 local function diag_formatter(opts)

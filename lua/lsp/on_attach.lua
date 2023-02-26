@@ -83,12 +83,18 @@ local on_attach = function(client, bufnr)
   if client_has_capability(client, "documentFormattingProvider") then
     -- neovim >= 0.8
     if vim.lsp.buf.format then
-      -- get the last attached client name
-      -- as most likely null-ls is at [1]
+      -- prioritize null-ls as formatter
       local clients = vim.lsp.buf_get_clients(bufnr)
-      local client_name = clients and clients[#clients].name or client.name
-      local fmt_opts = string.format(
-        [[async=true,bufnr=%d,name="%s"]], bufnr, client_name)
+      local client_name = (function()
+        local name = client.name
+        for _, c in ipairs(clients) do
+          if c.name == "null-ls" then
+            return c.name
+          end
+        end
+        return name
+      end)()
+      local fmt_opts = string.format([[async=true,bufnr=%d,name="%s"]], bufnr, client_name)
       map("n", "gq",
         string.format("<cmd>lua vim.lsp.buf.format({%s})<CR>", fmt_opts),
         { desc = string.format("format document [LSP:%s]", client_name) })

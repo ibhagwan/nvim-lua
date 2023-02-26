@@ -157,8 +157,9 @@ M.default_opts = {
 }
 
 M.setup = function()
+  -- NOT NEEDED since fzf-lua commit 604eadf
   -- custom devicons setup file to be loaded when `multiprocess = true`
-  fzf_lua.config._devicons_setup = "~/.config/nvim/lua/plugins/devicons/setup.lua"
+  -- fzf_lua.config._devicons_setup = "~/.config/nvim/lua/plugins/devicons/setup.lua"
 
   -- merge defaults with the active profile
   fzf_lua.setup(vim.tbl_deep_extend("keep", vim.deepcopy(M.active_profile), M.default_opts))
