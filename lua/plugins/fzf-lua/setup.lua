@@ -152,7 +152,39 @@ M.default_opts = {
       preview = { vertical = "down:75%", horizontal = "right:75%", }
     } },
   },
-  lsp = { symbols = { path_shorten = 1 } },
+  lsp = {
+    symbols = {
+      path_shorten = 1,
+      symbol_icons = {
+        File          = "",
+        Module        = "",
+        Namespace     = "",
+        Package       = "",
+        Class         = "",
+        Method        = "",
+        Property      = "",
+        Field         = "",
+        Constructor   = "",
+        Enum          = "",
+        Interface     = "ﴯ",
+        Function      = "",
+        Variable      = "",
+        Constant      = "",
+        String        = "",
+        Number        = "",
+        Boolean       = "ﱔ",
+        Array         = "",
+        Object        = "ﰩ",
+        Key           = "",
+        Null          = "Ø",
+        EnumMember    = "",
+        Struct        = "פּ",
+        Event         = "",
+        Operator      = "",
+        TypeParameter = "",
+      },
+    }
+  },
   diagnostics = { file_icons = false, icon_padding = " ", path_shorten = 1 },
 }
 
