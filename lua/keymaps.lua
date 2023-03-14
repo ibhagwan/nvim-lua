@@ -63,7 +63,7 @@ map("c", "<C-e>", "<end>", {})
 -- TODO: why the below doesn't work with nightly 0.8?
 -- map('c', '<down>', '(pumvisible() ? "\\<C-n>" : "\\<down>")', { expr = true })
 -- map('c', '<up>',   '(pumvisible() ? "\\<C-p>" : "\\<up>")',   { expr = true })
-for k, v in pairs({ ["<down>"] = "<C-n>", ["<up>"] = "<C-p>" }) do
+for k, v in pairs({ ["<down>"] = "<C-n>",["<up>"] = "<C-p>" }) do
   map("c", k, function()
     local key = vim.fn.pumvisible() ~= 0 and v or k
     vim.api.nvim_feedkeys(
@@ -124,22 +124,22 @@ map("n", "]L", ":llast<CR>", { desc = "Last location" })
 -- shortcut to view :messages
 map({ "n", "v" }, "<leader>m", "<cmd>messages<CR>",
   { desc = "open :messages" })
-map({ "n", "v" }, "<leader>M", '<cmd>mes clear|echo "cleared :messages"<CR>',
+map({ "n", "v" }, "<leader>M", [[<cmd>mes clear|echo "cleared :messages"<CR>]],
   { desc = "clear :messages" })
 
 -- <leader>v|<leader>s act as <cmd-v>|<cmd-s>
 -- <leader>p|P paste from yank register (0)
-map({ "n", "v" }, "<leader>v", '"+p', { desc = "paste AFTER from clipboard" })
-map({ "n", "v" }, "<leader>V", '"+P', { desc = "paste BEFORE from clipboard" })
-map({ "n", "v" }, "<leader>s", '"*p', { desc = "paste AFTER from primary" })
-map({ "n", "v" }, "<leader>S", '"*P', { desc = "paste BEFORE from primary" })
-map({ "n", "v" }, "<leader>p", '"0p', { desc = "paste AFTER  from yank (reg:0)" })
-map({ "n", "v" }, "<leader>P", '"0P', { desc = "paste BEFORE from yank (reg:0)" })
+map({ "n", "v" }, "<leader>v", [["+p]], { desc = "paste AFTER from clipboard" })
+map({ "n", "v" }, "<leader>V", [["+P]], { desc = "paste BEFORE from clipboard" })
+map({ "n", "v" }, "<leader>s", [["*p]], { desc = "paste AFTER from primary" })
+map({ "n", "v" }, "<leader>S", [["*P]], { desc = "paste BEFORE from primary" })
+map({ "n", "v" }, "<leader>p", [["0p]], { desc = "paste AFTER  from yank (reg:0)" })
+map({ "n", "v" }, "<leader>P", [["0P]], { desc = "paste BEFORE from yank (reg:0)" })
 
 -- Overloads for 'd|c' that don't pollute the unnamed registers
-map("n", "<leader>D", '"_D', { desc = "blackhole 'D'" })
-map("n", "<leader>C", '"_C', { desc = "blackhole 'C'" })
-map({ "n", "v" }, "<leader>c", '"_c', { desc = "blackhole 'c'" })
+map("n", "<leader>D", [["_D]], { desc = "blackhole 'D'" })
+map("n", "<leader>C", [["_C]], { desc = "blackhole 'C'" })
+map({ "n", "v" }, "<leader>c", [["_c]], { desc = "blackhole 'c'" })
 
 -- keep visual selection when (de)indenting
 map("v", "<", "<gv", {})
@@ -162,7 +162,6 @@ map("n", "N", "Nzzzv", { desc = "Back search '/' or '?'" })
 --[[ for _, c in ipairs({',', '.', '!', '?', ';'}) do
    map('i', c, c .. "<C-g>u", {})
 end --]]
-
 -- any jump over 5 modifies the jumplist
 -- so we can use <C-o> <C-i> to jump back and forth
 for _, c in ipairs({
@@ -177,7 +176,7 @@ end
 -- without interferring with {count}<down|up>
 for _, m in ipairs({ "n", "v" }) do
   for _, c in ipairs({
-    { "<up>", "k", "Visual line up" },
+    { "<up>",   "k", "Visual line up" },
     { "<down>", "j", "Visual line down" }
   }) do
     map(m, c[1], ([[v:count == 0 ? 'g%s' : '%s']]):format(c[2], c[2]),
@@ -204,21 +203,21 @@ map("n", "<leader>'", "<Esc>:set list!<CR>",
 
 -- Toggle colored column at 81
 map("n", "<leader>|", function()
-  vim.opt.colorcolumn = #vim.o.colorcolumn > 0 and ""
-      or tostring(vim.g._colorcolumn)
-end,
+    vim.opt.colorcolumn = #vim.o.colorcolumn > 0 and ""
+        or tostring(vim.g._colorcolumn)
+  end,
   { silent = true, desc = "toggle color column on/off" })
 
 -- Change current working dir (:pwd) to curent file's folder
-map("n", "<leader>%", '<Esc>:lua require"utils".set_cwd()<CR>',
+map("n", "<leader>%", [[<Esc>:lua require"utils".set_cwd()<CR>]],
   { silent = true, desc = "smart set cwd (git|file parent)" })
 
 -- Map <leader>o & <leader>O to newline without insert mode
 map("n", "<leader>o",
-  ':<C-u>call append(line("."), repeat([""], v:count1))<CR>',
+  [[:<C-u>call append(line("."), repeat([""], v:count1))<CR>]],
   { silent = true, desc = "newline below (no insert-mode)" })
 map("n", "<leader>O",
-  ':<C-u>call append(line(".")-1, repeat([""], v:count1))<CR>',
+  [[:<C-u>call append(line(".")-1, repeat([""], v:count1))<CR>]],
   { silent = true, desc = "newline above (no insert-mode)" })
 
 -- Use operator pending mode to visually select entire buffer, e.g.

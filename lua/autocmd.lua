@@ -54,8 +54,8 @@ augroup("MiniIndentscopeDisable", function(g)
     group = g,
     pattern = "*",
     command = "if index(['fzf', 'help'], &ft) >= 0 "
-    .. "|| index(['nofile', 'terminal'], &bt) >= 0 "
-    .. "| let b:miniindentscope_disable=v:true | endif"
+        .. "|| index(['nofile', 'terminal'], &bt) >= 0 "
+        .. "| let b:miniindentscope_disable=v:true | endif"
   })
 end)
 
@@ -89,7 +89,7 @@ augroup("ToggleColorcolumn", function(g)
   aucmd({ "VimResized", "WinEnter", "BufWinEnter" }, {
     group = g,
     pattern = "*",
-    command = 'lua require"utils".toggle_colorcolumn()',
+    command = [[lua require"utils".toggle_colorcolumn()]],
   })
 end)
 

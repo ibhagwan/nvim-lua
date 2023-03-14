@@ -9,7 +9,7 @@ dapui.setup({
       position = "bottom",
       size = 10,
       elements = {
-        { id = "repl", size = 0.50, },
+        { id = "repl",    size = 0.50, },
         { id = "console", size = 0.50 },
       },
     },
@@ -17,8 +17,8 @@ dapui.setup({
       position = "right",
       size = 40,
       elements = {
-        { id = "scopes", size = 0.46, },
-        { id = "stacks", size = 0.36 },
+        { id = "scopes",      size = 0.46, },
+        { id = "stacks",      size = 0.36 },
         { id = "breakpoints", size = 0.18 },
         -- { id = "watches", size = 00.25 },
       },

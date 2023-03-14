@@ -30,12 +30,14 @@ map_fzf("n", "<F1>", "help_tags", { desc = "help tags" })
 map_fzf("n", "<leader>fM", "man_pages", { desc = "man pages" })
 
 map_fzf("n", "<c-P>", "files", { desc = "find files" })
-map_fzf("n", "<c-K>", "workdirs", { desc = "cwd workdirs",
+map_fzf("n", "<c-K>", "workdirs", {
+  desc = "cwd workdirs",
   winopts = {
     height = 0.40,
     width  = 0.60,
     row    = 0.40,
-  } })
+  }
+})
 
 map_fzf("n", "<leader>fp", "files", {
   desc = "plugin files",
@@ -51,7 +53,7 @@ map_fzf("n", "<leader>fm", "marks", { desc = "marks" })
 map_fzf("n", "<leader>fx", "commands", { desc = "commands" })
 map_fzf("n", "<leader>f:", "command_history", { desc = "command history" })
 map_fzf("n", "<leader>f/", "search_history", { desc = "search history" })
-map_fzf("n", '<leader>f"', "registers", { desc = "registers" })
+map_fzf("n", [[<leader>f"]], "registers", { desc = "registers" })
 map_fzf("n", "<leader>fk", "keymaps", { desc = "keymaps" })
 map_fzf("n", "<leader>fz", "spell_suggest", {
   desc = "spell suggestions",
@@ -146,7 +148,8 @@ map_fzf("n", "<leader>gB", "git_branches", { desc = "git branches" })
 map_fzf("n", "<leader>gc", "git_bcommits", { desc = "git commits (buffer)" })
 map_fzf("n", "<leader>gC", "git_commits", { desc = "git commits (project)" })
 -- Full screen git status
-map_fzf("n", "<leader>gS", "git_status_tmuxZ", { desc = "git status (fullscreen)",
+map_fzf("n", "<leader>gS", "git_status_tmuxZ", {
+  desc = "git status (fullscreen)",
   winopts = {
     fullscreen = true,
     preview = {

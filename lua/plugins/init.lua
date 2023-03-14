@@ -19,7 +19,8 @@ return {
   },
   -- plenary is required by gitsigns and telescope
   { "nvim-lua/plenary.nvim" },
-  { "previm/previm",
+  {
+    "previm/previm",
     commit = "1978acc23c16cddcaf70c856a3b39d17943d7df0",
     config = function()
       -- vim.g.previm_open_cmd = 'firefox';

@@ -46,13 +46,13 @@ local on_attach = function(client, bufnr)
   map("v", "gA", "<cmd>lua vim.lsp.buf.range_code_action()<CR>",
     { desc = "range code actions [LSP]" })
   -- use our own rename popup implementation
-  map("n", "gR", '<cmd>lua require("lsp.rename").rename()<CR>',
+  map("n", "gR", [[<cmd>lua require("lsp.rename").rename()<CR>]],
     { desc = "rename [LSP]" })
-  map("n", "<leader>lR", '<cmd>lua require("lsp.rename").rename()<CR>',
+  map("n", "<leader>lR", [[<cmd>lua require("lsp.rename").rename()<CR>]],
     { desc = "rename [LSP]" })
   map("n", "<leader>K", "<cmd>lua vim.lsp.buf.signature_help()<CR>",
     { desc = "signature help [LSP]" })
-  map("n", "<leader>k", '<cmd>lua require("lsp.handlers").peek_definition()<CR>',
+  map("n", "<leader>k", [[<cmd>lua require("lsp.handlers").peek_definition()<CR>]],
     { desc = "peek definition [LSP]" })
 
   -- using fzf-lua instead
@@ -72,7 +72,7 @@ local on_attach = function(client, bufnr)
   map("n", "<leader>lc", "<cmd>lua vim.diagnostic.reset()<CR>",
     { desc = "clear diagnostics [LSP]" })
   map("n", "<leader>ll",
-    '<cmd>lua vim.diagnostic.open_float(0, { scope = "line", border = "rounded" })<CR>',
+    [[<cmd>lua vim.diagnostic.open_float(0, { scope = "line", border = "rounded" })<CR>]],
     { desc = "show line diagnostic [LSP]" })
   map("n", "<leader>lq", "<cmd>lua vim.diagnostic.setqflist()<CR>",
     { desc = "send diagnostics to quickfix [LSP]" })

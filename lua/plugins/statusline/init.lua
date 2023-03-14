@@ -100,11 +100,11 @@ local function setup()
         local components = {
           { c.mode { modes = modes, fmt = " %s %s ", icon = "", hl_icon_only = false } },
           { c.git_branch { fmt = " %s %s ", icon = "", hl = highlights.magenta_fg } },
-          { sections.split, required = true },
+          { sections.split,                                                               required = true },
           { c.file_icon { fmt = "%s ", hl_icon = false } },
-          { sections.maximum_width(builtin.make_responsive_file(140, 90), 0.40), required = true },
+          { sections.maximum_width(builtin.make_responsive_file(140, 90), 0.40),          required = true },
           { sections.collapse_builtin { { " " }, { builtin.modified_flag } } },
-          { sections.split, required = true },
+          { sections.split,                                                               required = true },
           { c.diagnostics {
             fmt = "[%s]", lsp = true,
             hl_err = highlights.red_fg,

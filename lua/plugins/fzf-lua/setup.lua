@@ -111,15 +111,17 @@ M.default_opts = {
       }
     },
   },
-  actions = { files = {
-    ["default"] = fzf_lua.actions.file_edit_or_qf,
-    ["ctrl-l"]  = fzf_lua.actions.arg_add,
-    ["ctrl-s"]  = fzf_lua.actions.file_split,
-    ["ctrl-v"]  = fzf_lua.actions.file_vsplit,
-    ["ctrl-t"]  = fzf_lua.actions.file_tabedit,
-    ["ctrl-q"]  = fzf_lua.actions.file_sel_to_qf,
-    ["alt-q"]   = fzf_lua.actions.file_sel_to_ll,
-  } },
+  actions = {
+    files = {
+      ["default"] = fzf_lua.actions.file_edit_or_qf,
+      ["ctrl-l"]  = fzf_lua.actions.arg_add,
+      ["ctrl-s"]  = fzf_lua.actions.file_split,
+      ["ctrl-v"]  = fzf_lua.actions.file_vsplit,
+      ["ctrl-t"]  = fzf_lua.actions.file_tabedit,
+      ["ctrl-q"]  = fzf_lua.actions.file_sel_to_qf,
+      ["alt-q"]   = fzf_lua.actions.file_sel_to_ll,
+    }
+  },
   buffers = { no_action_zz = true },
   files = {
     -- uncomment to override .gitignore
@@ -129,7 +131,7 @@ M.default_opts = {
   grep = {
     rg_glob = true,
     rg_opts = "--hidden --column --line-number --no-heading"
-    .. " --color=always --smart-case -g '!.git'",
+        .. " --color=always --smart-case -g '!.git'",
   },
   git = {
     status   = {
@@ -148,9 +150,11 @@ M.default_opts = {
       winopts = { preview = { vertical = "down:60%", } },
       preview_pager = vim.fn.executable("delta") == 1 and "delta --width=$COLUMNS",
     },
-    branches = { winopts = {
-      preview = { vertical = "down:75%", horizontal = "right:75%", }
-    } },
+    branches = {
+      winopts = {
+        preview = { vertical = "down:75%", horizontal = "right:75%", }
+      }
+    },
   },
   lsp = {
     symbols = {

@@ -142,26 +142,26 @@ hl.syntax = {
 
 -- TS highlights
 hl.treesitter = {
-  ["@punctuation.bracket"]  = { fg = colors.fg },
-  ["@string.special"]       = { fg = colors.dark_blue },
-  ["@string.escape"]        = { fg = colors.cyan },
-  ["@function"]             = { fg = colors.red },
-  ["@function.call"]        = { fg = colors.blue },
-  ["@constructor"]          = { fg = colors.purple },
-  ["@keyword.operator"]     = { fg = colors.cyan },
-  ["@constant.builtin"]     = { fg = colors.cyan },
-  ["@variable.builtin"]     = { fg = colors.cyan },
-  ["@symbol"]               = { fg = colors.yellow },
-  ["@text.literal"]         = { fg = colors.cyan },
-  ["@text.uri"]             = { fg = colors.blue },
-  ["@text.reference"]       = { fg = colors.purple },
-  ["@text.strong"]          = { bold = true },
-  ["@text.emphasis"]        = { italic = true },
-  ["@text.todo.unchecked"]  = { fg = colors.dark_cyan, bold = true },
-  ["@text.todo.checked"]    = { fg = colors.comment_grey },
-  ["@tag"]                  = { fg = colors.green },
-  ["@tag.delimiter"]        = { fg = colors.cyan },
-  ["@tag.attribute"]        = { fg = colors.purple },
+  ["@punctuation.bracket"] = { fg = colors.fg },
+  ["@string.special"]      = { fg = colors.dark_blue },
+  ["@string.escape"]       = { fg = colors.cyan },
+  ["@function"]            = { fg = colors.red },
+  ["@function.call"]       = { fg = colors.blue },
+  ["@constructor"]         = { fg = colors.purple },
+  ["@keyword.operator"]    = { fg = colors.cyan },
+  ["@constant.builtin"]    = { fg = colors.cyan },
+  ["@variable.builtin"]    = { fg = colors.cyan },
+  ["@symbol"]              = { fg = colors.yellow },
+  ["@text.literal"]        = { fg = colors.cyan },
+  ["@text.uri"]            = { fg = colors.blue },
+  ["@text.reference"]      = { fg = colors.purple },
+  ["@text.strong"]         = { bold = true },
+  ["@text.emphasis"]       = { italic = true },
+  ["@text.todo.unchecked"] = { fg = colors.dark_cyan, bold = true },
+  ["@text.todo.checked"]   = { fg = colors.comment_grey },
+  ["@tag"]                 = { fg = colors.green },
+  ["@tag.delimiter"]       = { fg = colors.cyan },
+  ["@tag.attribute"]       = { fg = colors.purple },
 }
 
 -- vim.diagnostic
@@ -673,9 +673,9 @@ local function h(group, style)
   hl_opts.bold = style.bold
   hl_opts.underline = style.underline
   hl_opts.underlineline = style.underlineline -- double underline
-  hl_opts.undercurl = style.undercurl -- curly underline
-  hl_opts.underdot = style.underdot -- dotted underline
-  hl_opts.underdash = style.underdash -- dashed underline
+  hl_opts.undercurl = style.undercurl         -- curly underline
+  hl_opts.underdot = style.underdot           -- dotted underline
+  hl_opts.underdash = style.underdash         -- dashed underline
   hl_opts.strikethrough = style.strikethrough
   hl_opts.reverse = style.reverse or style.inverse
   hl_opts.italic = style.italic
@@ -693,11 +693,11 @@ do
     vim.cmd("syntax reset")
   end
 
-  vim.o.background = "dark"
-  vim.g.colors_name = "lua-embark"
+  vim.o.background                = "dark"
+  vim.g.colors_name               = "lua-embark"
 
   -- 256-color terminal colors
-  vim.g.terminal_ansi_colors = {
+  vim.g.terminal_ansi_colors      = {
     colors.special_grey.gui, colors.red.gui, colors.green.gui,
     colors.yellow.gui, colors.blue.gui, colors.purple.gui,
     colors.cyan.gui, colors.white.gui, colors.visual_grey.gui,
@@ -733,5 +733,4 @@ do
       h(hlname, style)
     end
   end
-
 end

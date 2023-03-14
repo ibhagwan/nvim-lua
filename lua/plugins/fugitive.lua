@@ -22,7 +22,6 @@ M.init = function()
   map("n", "<leader>gl", "<Esc>:Git log --stat %<CR>", { silent = true, desc = "Git log (buffer)" })
   map("n", "<leader>gL", "<Esc>:Git log --stat -n 100<CR>",
     { silent = true, desc = "Git log (project)" })
-
 end
 
 M.config = function()

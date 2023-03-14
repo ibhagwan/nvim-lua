@@ -277,7 +277,7 @@ M.sudo_write = function(tmpfile, filepath)
   -- no need to check error as this fails the entire function
   vim.api.nvim_exec(string.format("write! %s", tmpfile), true)
   if M.sudo_exec(cmd) then
-    M.info(string.format('\r\n"%s" written', filepath))
+    M.info(string.format([[\r\n"%s" written]], filepath))
     vim.cmd("e!")
   end
   vim.fn.delete(tmpfile)
@@ -314,14 +314,14 @@ end
 
 M.reload_config = function()
   M.unload_modules({
-    { "^options$", fn = function() require("options") end },
-    { "^autocmd$", fn = function() require("autocmd") end },
-    { "^keymaps$", fn = function() require("keymaps") end },
+    { "^options$",       fn = function() require("options") end },
+    { "^autocmd$",       fn = function() require("autocmd") end },
+    { "^keymaps$",       fn = function() require("keymaps") end },
     { "^utils$" },
     { "^workdirs$" },
     { mod = "ts%-vimdoc" },
     { mod = "smartyank", fn = function() require("smartyank") end },
-    { mod = "fzf%-lua", fn = function() require("plugins.fzf-lua.setup").setup() end },
+    { mod = "fzf%-lua",  fn = function() require("plugins.fzf-lua.setup").setup() end },
   })
   -- re-source all language specific settings, scans all runtime files under
   -- '/usr/share/nvim/runtime/(indent|syntax)' and 'after/ftplugin'

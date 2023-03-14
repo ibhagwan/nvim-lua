@@ -65,7 +65,7 @@ local function handler(...)
   local utils = require "utils"
   if result and (result.changes or result.documentChanges) then
     for f, c in pairs(result.changes or result.documentChanges) do
-      utils.info(('"%s", %d change(s)')
+      utils.info(([["%s", %d change(s)]])
         :format(c.textDocument and c.textDocument.uri or f, #c))
     end
   end
