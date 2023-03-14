@@ -150,6 +150,8 @@ hl.treesitter = {
   ["@constructor"]         = { fg = colors.purple },
   ["@keyword.operator"]    = { fg = colors.cyan },
   ["@constant.builtin"]    = { fg = colors.cyan },
+  -- NOTE: added ontop of original embark
+  ["@variable"]            = { fg = colors.cyan },
   ["@variable.builtin"]    = { fg = colors.cyan },
   ["@symbol"]              = { fg = colors.yellow },
   ["@text.literal"]        = { fg = colors.cyan },
