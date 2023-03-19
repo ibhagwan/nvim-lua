@@ -11,7 +11,7 @@ function M.config()
   require("plugins.mini.surround")
   require("plugins.mini.indentscope")
   require("mini.ai").setup()
-  require("mini.pairs").setup()
+  -- require("mini.pairs").setup()
 end
 
 return M

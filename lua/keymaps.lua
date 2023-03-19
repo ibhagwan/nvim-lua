@@ -49,6 +49,14 @@ if require "utils".is_root() then
   map("n", "<C-p>", "<cmd>FZF<CR>", { desc = "FZF" })
 end
 
+map({ "n", "v", "i" }, "<C-x><C-f>",
+  function() require("fzf-lua").complete_file() end,
+  { silent = true, desc = "Fuzzy complete path" })
+
+map({ "n", "v", "i" }, "<C-x><C-l>",
+  function() require("fzf-lua").complete_line() end,
+  { silent = true, desc = "Fuzzy complete line" })
+
 -- <ctrl-s> to Save
 map({ "n", "v", "i" }, "<C-S>", "<C-c>:update<cr>", { silent = true, desc = "Save" })
 

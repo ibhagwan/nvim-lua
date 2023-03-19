@@ -39,5 +39,11 @@ return {
       require("colorizer").setup()
     end,
     cmd = { "ColorizerAttachToBuffer", "ColorizerDetachFromBuffer" },
+  },
+  {
+    "junegunn/fzf.vim",
+    enabled = false,
+    lazy = false,
+    dev = true,
   }
 }
