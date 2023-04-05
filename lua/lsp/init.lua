@@ -12,60 +12,84 @@ vim.lsp.handlers["textDocument/hover"] =
 vim.lsp.handlers["textDocument/signatureHelp"] =
     vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
 
-local __settings = {}
-
--- Lua settings
-local runtime_path = vim.split(package.path, ";")
-table.insert(runtime_path, "lua/?.lua")
-table.insert(runtime_path, "lua/?/init.lua")
-
-__settings["lua_ls"] = {
-  -- uncomment to enable trace logging into:
-  -- '~/.local/share/nvim/mason/packages/lua-language-server/log'
-  -- cmd = { "lua-language-server", "--loglevel=trace" },
-  settings = {
-    Lua = {
-      telemetry = { enable = false },
-      -- removes the annoying "Do you need to configure your work environment as"
-      -- when opening a lua project that doesn't have a '.luarc.json'
-      workspace = { checkThirdParty = false }
+local custom_settings = {
+  ["lua_ls"] = {
+    -- uncomment to enable trace logging into:
+    -- '~/.local/share/nvim/mason/packages/lua-language-server/log'
+    -- cmd = { "lua-language-server", "--loglevel=trace" },
+    settings = {
+      Lua = {
+        telemetry = { enable = false },
+        -- removes the annoying "Do you need to configure your work environment as"
+        -- when opening a lua project that doesn't have a '.luarc.json'
+        workspace = { checkThirdParty = false }
+      }
     }
-  }
+  },
+  ["rust_analyzer"] = {
+    -- use nightly rustfmt if exists
+    -- https://github.com/rust-lang/rust-analyzer/issues/3627
+    -- https://github.com/rust-lang/rust-analyzer/blob/master/docs/user/generated_config.adoc
+    settings = {
+      ["rust-analyzer"] = {
+        rustfmt = {
+          extraArgs = { "+nightly", },
+          -- overrideCommand = {
+          --   "rustup",
+          --   "run",
+          --   "nightly",
+          --   "--",
+          --   "rustfmt",
+          --   "--edition",
+          --   "2021",
+          --   "--",
+          -- },
+        },
+      }
+    }
+  },
+  ["ccls"] = {
+    init_options = {
+      codeLens = {
+        enabled = false,
+        renderInline = false,
+        localVariables = false,
+      }
+    }
+  },
 }
 
--- use nightly rustfmt if exists
--- https://github.com/rust-lang/rust-analyzer/issues/3627
--- https://github.com/rust-lang/rust-analyzer/blob/master/docs/user/generated_config.adoc
-__settings["rust_analyzer"] = {
-  settings = {
-    ["rust-analyzer"] = {
-      rustfmt = {
-        extraArgs = { "+nightly", },
-        -- overrideCommand = {
-        --   "rustup",
-        --   "run",
-        --   "nightly",
-        --   "--",
-        --   "rustfmt",
-        --   "--edition",
-        --   "2021",
-        --   "--",
-        -- },
-      },
-    }
-  }
+local manually_installed_servers = {
+  -- 'ccls',
+  "clangd",
+  "solc"
 }
 
-__settings["ccls"] = {
-  init_options = {
-    codeLens = {
-      enabled = false,
-      renderInline = false,
-      localVariables = false,
-    }
-  }
-}
+local all_servers = (function()
+  -- use map for dedup
+  local srv_map = {}
+  local srv_tbl = {}
+  local srv_iter = function(t)
+    for _, s in ipairs(t) do
+      if not srv_map[s] then
+        srv_map[s] = true
+        table.insert(srv_tbl, s)
+      end
+    end
+  end
+  srv_iter(manually_installed_servers)
+  srv_iter(require("mason-lspconfig").get_installed_servers())
+  return srv_tbl
+end)()
 
+local function is_installed(cfg)
+  local cmd = cfg.document_config
+      and cfg.document_config.default_config
+      and cfg.document_config.default_config.cmd
+      or nil
+  -- server binary is executable within neovim's PATH
+  return cmd and cmd[1] and vim.fn.executable(cmd[1]) == 1
+end
 
 local function make_config()
   local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -82,40 +106,10 @@ local function make_config()
   }
 end
 
-local servers = {
-  "lua_ls",
-  "rust_analyzer",
-  "gopls",
-  "pylsp",
-  "clangd",
-  -- 'ccls',
-  "tsserver",
-  "solc"
-}
-
-local function is_installed(cfg)
-  local cmd = cfg.document_config
-      and cfg.document_config.default_config
-      and cfg.document_config.default_config.cmd or nil
-  -- server globally installed?
-  if cmd and cmd[1] and vim.fn.executable(cmd[1]) == 1 then
-    return true
-  end
-  -- otherwise, check if installed via 'mason-lspconfig'
-  local mason_installed = false
-  local mason_servers = require "mason-lspconfig".get_installed_servers()
-  for _, s in ipairs(mason_servers) do
-    if s == cfg.name then
-      mason_installed = true
-    end
-  end
-  return mason_installed
-end
-
-for _, srv in ipairs(servers) do
+for _, srv in ipairs(all_servers) do
   local cfg = make_config()
-  if __settings[srv] then
-    cfg = vim.tbl_deep_extend("force", __settings[srv], cfg)
+  if custom_settings[srv] then
+    cfg = vim.tbl_deep_extend("force", custom_settings[srv], cfg)
   end
   if is_installed(lspconfig[srv]) then
     lspconfig[srv].setup(cfg)
