@@ -3,11 +3,19 @@ local fzf_lua = require("fzf-lua")
 -- return first matching highlight or nil
 local function hl_match(t)
   for _, h in ipairs(t) do
-    local ok, hl = pcall(vim.api.nvim_get_hl_by_name, h, true)
-    -- must have at least bg or fg, otherwise this returns
-    -- succesffully for cleared highlights (on colorscheme switch)
-    if ok and (hl.foreground or hl.background) then
-      return h
+    -- `vim.api.nvim_get_hl_by_name` is deprecated since v0.9.0
+    if vim.api.nvim_get_hl then
+      local ok, hl = pcall(vim.api.nvim_get_hl, 0, { name = h, link = false })
+      if ok and type(hl) == "table" and (hl.fg or hl.bg) then
+        return h
+      end
+    else
+      local ok, hl = pcall(vim.api.nvim_get_hl_by_name, h, true)
+      -- must have at least bg or fg, otherwise this returns
+      -- succesffully for cleared highlights (on colorscheme switch)
+      if ok and (hl.foreground or hl.background) then
+        return h
+      end
     end
   end
 end
@@ -54,22 +62,24 @@ M.active_profile = M.profiles.fzf
 
 M.default_opts = {
   fzf_opts = { ["--no-separator"] = "" },
-  fzf_colors = {
-    ["fg"] = { "fg", "Normal" },
-    ["bg"] = { "bg", "Normal" },
-    ["hl"] = { "fg", hl_match({ "NightflyViolet", "Directory" }) },
-    ["fg+"] = { "fg", "Normal" },
-    ["bg+"] = { "bg", hl_match({ "NightflyVisual", "CursorLine" }) },
-    ["hl+"] = { "fg", "CmpItemKindVariable" },
-    ["info"] = { "fg", hl_match({ "NightflyPeach", "WarningMsg" }) },
-    -- ["prompt"] = { "fg", "SpecialKey" },
-    ["pointer"] = { "fg", "DiagnosticError" },
-    ["marker"] = { "fg", "DiagnosticError" },
-    ["spinner"] = { "fg", "Label" },
-    ["header"] = { "fg", "Comment" },
-    ["gutter"] = { "bg", "Normal" },
-    ["scrollbar"] = { "fg", hl_match({ "NightflyPeach", "WarningMsg" }) },
-  },
+  fzf_colors = function()
+    return {
+      ["fg"] = { "fg", "Normal" },
+      ["bg"] = { "bg", "Normal" },
+      ["hl"] = { "fg", hl_match({ "NightflyViolet", "Directory" }) },
+      ["fg+"] = { "fg", "Normal" },
+      ["bg+"] = { "bg", hl_match({ "NightflyVisual", "CursorLine" }) },
+      ["hl+"] = { "fg", "CmpItemKindVariable" },
+      ["info"] = { "fg", hl_match({ "NightflyPeach", "WarningMsg" }) },
+      -- ["prompt"] = { "fg", "SpecialKey" },
+      ["pointer"] = { "fg", "DiagnosticError" },
+      ["marker"] = { "fg", "DiagnosticError" },
+      ["spinner"] = { "fg", "Label" },
+      ["header"] = { "fg", "Comment" },
+      ["gutter"] = { "bg", "Normal" },
+      ["scrollbar"] = { "fg", hl_match({ "NightflyPeach", "WarningMsg" }) },
+    }
+  end,
   winopts = {
     -- split   = "belowright new",
     -- split   = "aboveleft vnew",

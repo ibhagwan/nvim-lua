@@ -12,15 +12,13 @@ function M.config()
   require("plugins.fzf-lua.setup").setup()
 
   -- register fzf-lua as vim.ui.select interface
-  if vim.ui then
-    require("fzf-lua").register_ui_select({
-      winopts = {
-        win_height = 0.30,
-        win_width  = 0.70,
-        win_row    = 0.40,
-      }
-    })
-  end
+  require("fzf-lua").register_ui_select({
+    winopts = {
+      height = 0.30,
+      width  = 0.70,
+      row    = 0.40,
+    }
+  })
 end
 
 return M
