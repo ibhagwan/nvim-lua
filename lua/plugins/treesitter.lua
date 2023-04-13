@@ -1,9 +1,10 @@
 return {
-  {
-    "nvim-treesitter/playground",
-    cmd = "TSPlaygroundToggle"
-  },
-  cond = require("utils").have_compiler,
+  -- not needed since neovim 0.9, use `:InspectTree` instead
+  -- {
+  --   "nvim-treesitter/playground",
+  --   cmd = "TSPlaygroundToggle",
+  --   enabled = false,
+  -- },
   {
     "nvim-treesitter/nvim-treesitter",
     -- treesitter requires a C compiler
@@ -40,7 +41,8 @@ return {
           "markdown",
           "markdown_inline",
           "solidity",
-          -- for `nvim-treesitter/playground`
+          "vimdoc",
+          -- for `nvim-treesitter/playground` / `:InspectTree`
           "query",
         },
         highlight             = {
