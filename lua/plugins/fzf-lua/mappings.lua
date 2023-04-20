@@ -9,10 +9,11 @@ local map_fzf = function(mode, key, f, options, buffer)
 
   local rhs = function()
     local fzf_lua = require("fzf-lua")
-    if fzf_lua[f] then
-      fzf_lua[f](options or {})
+    local custom = require("plugins.fzf-lua.cmds")
+    if custom[f] then
+      custom[f](options or {})
     else
-      require("plugins.fzf-lua.cmds")[f](options or {})
+      fzf_lua[f](options or {})
     end
   end
 

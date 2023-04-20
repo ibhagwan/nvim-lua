@@ -149,16 +149,15 @@ M.default_opts = {
       winopts = {
         preview = { vertical = "down:70%", horizontal = "right:70%" }
       },
-      actions = { ["ctrl-x"] = { fzf_lua.actions.git_reset, fzf_lua.actions.resume } },
       preview_pager = vim.fn.executable("delta") == 1 and "delta --width=$COLUMNS",
     },
     commits  = {
       winopts = { preview = { vertical = "down:60%", } },
-      preview_pager = vim.fn.executable("delta") == 1 and "delta --width=$COLUMNS",
+      preview_pager = vim.fn.executable("delta") == 1 and "delta --width=${COLUMNS:-0}",
     },
     bcommits = {
       winopts = { preview = { vertical = "down:60%", } },
-      preview_pager = vim.fn.executable("delta") == 1 and "delta --width=$COLUMNS",
+      preview_pager = vim.fn.executable("delta") == 1 and "delta --width=${COLUMNS:-0}",
     },
     branches = {
       winopts = {

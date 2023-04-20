@@ -6,11 +6,12 @@ local map_tele = function(mode, key, f, options, buffer)
   end
 
   local rhs = function()
-    local builtins = require("telescope.builtin")
-    if builtins[f] then
-      builtins[f](options or {})
+    local builtin = require("telescope.builtin")
+    local custom = require("plugins.telescope.cmds")
+    if custom[f] then
+      custom[f](options or {})
     else
-      require("plugins.telescope.cmds")[f](options or {})
+      builtin[f](options or {})
     end
   end
 

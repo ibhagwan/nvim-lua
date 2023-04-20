@@ -111,7 +111,8 @@ for _, srv in ipairs(all_servers) do
   if custom_settings[srv] then
     cfg = vim.tbl_deep_extend("force", custom_settings[srv], cfg)
   end
-  if is_installed(lspconfig[srv]) then
+  -- jdtls is configured via 'mfussenegger/nvim-jdtls'
+  if srv ~= "jdtls" and is_installed(lspconfig[srv]) then
     lspconfig[srv].setup(cfg)
   end
 end

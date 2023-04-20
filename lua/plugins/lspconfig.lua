@@ -1,6 +1,7 @@
 return {
   { "j-hui/fidget.nvim" },
   { "williamboman/mason-lspconfig.nvim" },
+  {  "mfussenegger/nvim-jdtls", ft = "java" },
   {
     "neovim/nvim-lspconfig",
     event = "BufReadPre",
