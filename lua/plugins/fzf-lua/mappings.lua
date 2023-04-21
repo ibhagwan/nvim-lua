@@ -101,7 +101,11 @@ map_fzf("n", "<leader>f*", "grep_curbuf", function()
     search = vim.fn.expand("<cWORD>")
   }
 end)
-map_fzf("n", "<leader>fH", "oldfiles", { desc = "file history (all)", cwd = "~" })
+map_fzf("n", "<leader>fH", "oldfiles", {
+  desc = "file history (all)",
+  cwd = "~",
+  show_cwd_header = false,
+})
 map_fzf("n", "<leader>fh", "oldfiles", function()
   return {
     desc = "file history (cwd)",

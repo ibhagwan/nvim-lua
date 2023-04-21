@@ -28,7 +28,10 @@ local img_prev_bin = vim.fn.executable("ueberzug") == 1 and { "ueberzug" }
 local M = {}
 
 M.profiles = {
-  fzf = {},
+  fzf = {
+    files = { fzf_opts = { ["--info"] = "default",["--no-separator"] = false } },
+    grep = { fzf_opts = { ["--info"] = "default",["--no-separator"] = false } },
+  },
   fzf_native = {
     fzf_bin = "fzf",
     winopts = { preview = { default = "bat" } },
@@ -137,6 +140,7 @@ M.default_opts = {
     -- uncomment to override .gitignore
     -- fd_opts  = "--no-ignore --color=never --type f --hidden --follow --exclude .git",
     fzf_opts = { ["--tiebreak"] = "end" },
+    cwd_prompt = true,
   },
   grep = {
     rg_glob = true,
