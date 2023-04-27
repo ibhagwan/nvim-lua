@@ -38,7 +38,7 @@ M.config = function()
 
   vim.cmd((
     [[command! -bang -nargs=? -range=-1 -complete=customlist,YadmComplete Yadm exe fugitive#Command(<line1>, <count>, +"<range>", <bang>0, "<mods>", <q-args>, { 'git_dir': expand("%s") })]]
-    ):format(yadm_repo))
+  ):format(yadm_repo))
 
   local function fugitive_command(nargs, cmd_name, cmd_fugitive, cmd_comp)
     vim.api.nvim_create_user_command(cmd_name,

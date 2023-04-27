@@ -71,7 +71,7 @@ map("c", "<C-e>", "<end>", {})
 -- TODO: why the below doesn't work with nightly 0.8?
 -- map('c', '<down>', '(pumvisible() ? "\\<C-n>" : "\\<down>")', { expr = true })
 -- map('c', '<up>',   '(pumvisible() ? "\\<C-p>" : "\\<up>")',   { expr = true })
-for k, v in pairs({ ["<down>"] = "<C-n>",["<up>"] = "<C-p>" }) do
+for k, v in pairs({ ["<down>"] = "<C-n>", ["<up>"] = "<C-p>" }) do
   map("c", k, function()
     local key = vim.fn.pumvisible() ~= 0 and v or k
     vim.api.nvim_feedkeys(

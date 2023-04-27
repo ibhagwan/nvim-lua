@@ -34,9 +34,9 @@ augroup("SmartTextYankPost", function(g)
         pcall(vim.fn.setreg, "+", yank_data)
       end
       if valid_yank and (vim.env.SSH_CONNECTION or
-          -- $SSH_CONNECTION doesn't pass over to
-          -- root when using `su -`, copy indiscriminately
-          require "utils".is_root()) then
+            -- $SSH_CONNECTION doesn't pass over to
+            -- root when using `su -`, copy indiscriminately
+            require "utils".is_root()) then
         require "utils".osc52printf(yank_data)
       end
       if valid_yank and vim.env.TMUX then

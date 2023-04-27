@@ -29,8 +29,8 @@ local M = {}
 
 M.profiles = {
   fzf = {
-    files = { fzf_opts = { ["--info"] = "default",["--no-separator"] = false } },
-    grep = { fzf_opts = { ["--info"] = "default",["--no-separator"] = false } },
+    files = { fzf_opts = { ["--info"] = "default", ["--no-separator"] = false } },
+    grep = { fzf_opts = { ["--info"] = "default", ["--no-separator"] = false } },
   },
   fzf_native = {
     fzf_bin = "fzf",
