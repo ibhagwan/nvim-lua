@@ -111,7 +111,7 @@ local function setup()
             hl_warn = highlights.yellow_fg,
             hl_info = highlights.green_fg,
             hl_hint = highlights.magenta_fg,
-            -- icon_err = ' ', icon_warn = ' ', icon_info = '', icon_hint = ''
+            -- icon_err = ' ', icon_warn = ' ', icon_info = '', icon_hint = '󰌵'
           }
           },
           { c.git_changes_buf {

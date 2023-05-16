@@ -2,7 +2,7 @@
 local signs = {
   {
     name = "DiagnosticSignHint",
-    text = ""
+    text = "󰌵"
   },
   {
     name = "DiagnosticSignInfo",
@@ -18,7 +18,7 @@ local signs = {
   {
     name = "DiagnosticSignError",
     text = ""
-    -- text = ''
+    -- text = '󰅚'
   },
 }
 

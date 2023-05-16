@@ -1,29 +1,29 @@
 -- LSP icons
 local icons = {
-  Text          = "", -- 
-  Method        = "",
+  Text          = "󰊄", -- 
+  Method        = "󰊕",
   Function      = "",
   Constructor   = "", -- 
-  Field         = "", --  
-  Variable      = "", --   
-  Class         = "", --   ﴯ  
-  Interface     = "", --  ﰮ
-  Module        = "",
+  Field         = "", -- 󰆧 
+  Variable      = "󰆧", -- 󰆧  󰈜
+  Class         = "󰌗", --   󰠱  
+  Interface     = "", --  󰜰
+  Module        = "󰅩",
   Property      = "",
-  Unit          = "ﰩ", --       塞
-  Value         = "",
-  Enum          = "ﬧ", -- ﬧ   練
+  Unit          = "󰜫", -- 󰆧      󰑭
+  Value         = "󰎠",
+  Enum          = "󰘨", -- 󰘨   󰕘
   EnumMember    = "",
-  Keyword       = "", -- 
-  Snippet       = "﬌", --  
-  Color         = "", --   
+  Keyword       = "󰌆", -- 󰌋
+  Snippet       = "󰘍", --󰅱 󰈙
+  Color         = "󰏘", -- 󰌁 󰏘 
   File          = "",
   Folder        = "",
-  Reference     = "", --  
-  Constant      = "", -- ﱃ 洞     π
-  Struct        = "פּ", -- 
+  Reference     = "󰆑", -- 󰀾 󰈇
+  Constant      = "󰏿", -- 󰝅 󰔆    󰐀 󰏿 π
+  Struct        = "󰙅", -- 
   Event         = "",
-  Operator      = "璉", -- 
+  Operator      = "󰒕", -- 󰆕
   TypeParameter = "",
 }
 
