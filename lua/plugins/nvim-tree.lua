@@ -17,13 +17,6 @@ M.config = function()
     view = {
       width = 30,
       side = "left",
-      mappings = {
-        custom_only = false,
-        list = {
-          { key = "<C-x>", action = nil },
-          { key = "<C-s>", action = "split" },
-        }
-      }
     },
     renderer = {
       indent_markers = {
@@ -104,6 +97,24 @@ M.config = function()
         resize_window = true,
       },
     },
+    -- https://github.com/nvim-tree/nvim-tree.lua/wiki/Migrating-To-on_attach
+    on_attach = function(bufnr)
+      local api = require("nvim-tree.api")
+
+      local function opts(desc)
+        return {
+          desc = "nvim-tree: " .. desc,
+          buffer = bufnr,
+          noremap = true,
+          silent = true,
+          nowait = true
+        }
+      end
+
+      api.config.mappings.default_on_attach(bufnr)
+
+      vim.keymap.set("n", "<C-s>", api.node.open.horizontal, opts("Open: Horizontal Split"))
+    end,
   }
 end
 
