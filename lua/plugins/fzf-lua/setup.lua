@@ -29,8 +29,8 @@ local M = {}
 
 M.profiles = {
   fzf = {
-    files = { fzf_opts = { ["--info"] = "default", ["--no-separator"] = false } },
-    grep = { fzf_opts = { ["--info"] = "default", ["--no-separator"] = false } },
+    files = { fzf_opts = { ["--no-separator"] = false } },
+    grep = { fzf_opts = { ["--no-separator"] = false } },
   },
   fzf_native = {
     fzf_bin = "fzf",
@@ -86,22 +86,23 @@ M.default_opts = {
   winopts = {
     -- split   = "belowright new",
     -- split   = "aboveleft vnew",
-    height  = 0.85,
-    width   = 0.80,
-    row     = 0.35,
-    col     = 0.55,
+    height    = 0.85,
+    width     = 0.80,
+    row       = 0.35,
+    col       = 0.55,
     -- border = { {'╭', 'IncSearch'}, {'─', 'IncSearch'},
     -- {'╮', 'IncSearch'}, '│', '╯', '─', '╰', '│' },
-    preview = {
+    preview   = {
       layout       = "flex",
       flip_columns = 130,
       scrollbar    = "float",
       -- scrolloff        = '-1',
       -- scrollchars      = {'█', '░' },
     },
-    -- on_create        = function()
-    --   print("on_create")
-    -- end,
+    on_create = function()
+      -- disable miniindentscope
+      vim.b.miniindentscope_disable = true
+    end,
   },
   winopts_fn = function()
     local hl = {
@@ -140,7 +141,6 @@ M.default_opts = {
     -- uncomment to override .gitignore
     -- fd_opts  = "--no-ignore --color=never --type f --hidden --follow --exclude .git",
     fzf_opts = { ["--tiebreak"] = "end" },
-    cwd_prompt = true,
   },
   grep = {
     rg_glob = true,
@@ -170,6 +170,17 @@ M.default_opts = {
     },
   },
   lsp = {
+    finder  = {
+      providers = {
+        { "declarations",    prefix = fzf_lua.utils.ansi_codes.magenta("decl") },
+        { "implementations", prefix = fzf_lua.utils.ansi_codes.green("impl") },
+        { "typedefs",        prefix = fzf_lua.utils.ansi_codes.red("tdef") },
+        { "definitions",     prefix = fzf_lua.utils.ansi_codes.green("def ") },
+        { "references",      prefix = fzf_lua.utils.ansi_codes.blue("ref ") },
+        { "incoming_calls",  prefix = fzf_lua.utils.ansi_codes.cyan("in  ") },
+        { "outgoing_calls",  prefix = fzf_lua.utils.ansi_codes.yellow("out ") },
+      },
+    },
     symbols = {
       path_shorten = 1,
       symbol_icons = {

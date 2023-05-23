@@ -71,7 +71,7 @@ local on_attach = function(client, bufnr)
     { desc = "next diagnostic [LSP]" })
   map("n", "<leader>lc", "<cmd>lua vim.diagnostic.reset()<CR>",
     { desc = "clear diagnostics [LSP]" })
-  map("n", "<leader>ll",
+  map("n", "<leader>l?",
     [[<cmd>lua vim.diagnostic.open_float(0, { scope = "line", border = "rounded" })<CR>]],
     { desc = "show line diagnostic [LSP]" })
   map("n", "<leader>lq", "<cmd>lua vim.diagnostic.setqflist()<CR>",

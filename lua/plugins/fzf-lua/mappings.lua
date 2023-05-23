@@ -104,13 +104,13 @@ end)
 map_fzf("n", "<leader>fH", "oldfiles", {
   desc = "file history (all)",
   cwd = "~",
-  show_cwd_header = false,
+  cwd_header = false,
 })
 map_fzf("n", "<leader>fh", "oldfiles", function()
   return {
     desc = "file history (cwd)",
     cwd = vim.loop.cwd(),
-    show_cwd_header = true,
+    cwd_header = true,
     cwd_only = true,
   }
 end)
@@ -125,7 +125,7 @@ map_fzf("n", "<leader>fo", "colorschemes", {
 })
 
 -- LSP
-map_fzf("n", "<leader>lf", "lsp_finder", { desc = "location finder [LSP]" })
+map_fzf("n", "<leader>ll", "lsp_finder", { desc = "location finder [LSP]" })
 map_fzf("n", "<leader>lr", "lsp_references", { desc = "references [LSP]" })
 map_fzf("n", "<leader>ld", "lsp_definitions",
   { desc = "definitions [LSP]", jump_to_single_result = false })
@@ -168,7 +168,7 @@ map_fzf("n", "<leader>gS", "git_status_tmuxZ", {
 -- yadm repo
 local yadm_cmd = "yadm -C $HOME --yadm-repo ${YADM_REPO}"
 local yadm_git_opts = {
-  show_cwd_header = false,
+  cwd_header = false,
   git_dir = "$YADM_REPO",
 }
 local yadm_grep_opts = {
