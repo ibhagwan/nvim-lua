@@ -36,6 +36,7 @@ return {
           "python",
           "rust",
           "html",
+          "yaml",
           "css",
           "toml",
           "markdown",
