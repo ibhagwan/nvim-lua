@@ -10,10 +10,13 @@ local map_fzf = function(mode, key, f, options, buffer)
   local rhs = function()
     local fzf_lua = require("fzf-lua")
     local custom = require("plugins.fzf-lua.cmds")
+    -- use deepcopy so options ref isn't saved in the mapping
+    -- as this can create weird issues, for example, `lgrep_curbuf`
+    -- saving the filename in between executions
     if custom[f] then
-      custom[f](options or {})
+      custom[f](options and vim.deepcopy(options) or {})
     else
-      fzf_lua[f](options or {})
+      fzf_lua[f](options and vim.deepcopy(options) or {})
     end
   end
 
