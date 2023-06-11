@@ -107,6 +107,7 @@ M.default_opts = {
   winopts_fn = function()
     local hl = {
       border = hl_match({ "NightflySteelBlue", "FloatBorder" }),
+      preview_border = hl_match({ "NightflySteelBlue", "FloatBorder" }),
       cursorline = hl_match({ "NightflyVisual" }),
       cursorlinenr = hl_match({ "NightflyVisual" }),
     }
