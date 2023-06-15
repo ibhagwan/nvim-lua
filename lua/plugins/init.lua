@@ -45,5 +45,14 @@ return {
     enabled = false,
     lazy = false,
     dev = true,
+  },
+  {
+    "pwntester/octo.nvim",
+    enabled = false,
+    lazy = false,
+    dev = true,
+    config = function()
+      require "octo".setup({ picker = "fzf-lua" })
+    end
   }
 }
