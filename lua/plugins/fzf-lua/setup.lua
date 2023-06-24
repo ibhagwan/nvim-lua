@@ -144,9 +144,10 @@ M.default_opts = {
     fzf_opts = { ["--tiebreak"] = "end" },
   },
   grep = {
+    debug = false,
     rg_glob = true,
     rg_opts = "--hidden --column --line-number --no-heading"
-        .. " --color=always --smart-case -g '!.git'",
+        .. " --color=always --smart-case -g '!.git' -e",
   },
   git = {
     status   = {
