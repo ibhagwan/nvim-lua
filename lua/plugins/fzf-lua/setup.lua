@@ -148,6 +148,9 @@ M.default_opts = {
     rg_glob = true,
     rg_opts = "--hidden --column --line-number --no-heading"
         .. " --color=always --smart-case -g '!.git' -e",
+    fzf_opts = {
+      ["--history"] = vim.fn.shellescape(vim.fn.stdpath("data") .. "/fzf_search_hist")
+    },
   },
   git = {
     status   = {
