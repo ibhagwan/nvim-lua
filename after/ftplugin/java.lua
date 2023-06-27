@@ -2,8 +2,9 @@ if not pcall(require, "jdtls") then
   return
 end
 
--- `:help vim.lsp.start_client`
-require("jdtls").start_or_attach({
+local root_dir = require("jdtls.setup").find_root({ ".git", "mvnw", "gradlew" })
+
+local config = {
   -- https://github.com/eclipse/eclipse.jdt.ls#running-from-the-command-line
   cmd = {
     "java",
@@ -16,15 +17,13 @@ require("jdtls").start_or_attach({
     "--add-modules=ALL-SYSTEM",
     "--add-opens", "java.base/java.util=ALL-UNNAMED",
     "--add-opens", "java.base/java.lang=ALL-UNNAMED",
-    "-jar",
-    -- vim.fn.stdpath("data") ..
-    -- "/mason/packages/jdtls/plugins/org.eclipse.equinox.launcher_1.6.400.v20210924-0641.jar",
-    vim.fn.glob(vim.fn.stdpath("data") ..
-      "/mason/packages/jdtls/plugins/org.eclipse.equinox.launcher_*.jar"),
-    "-configuration",
-    vim.fn.stdpath("data") .. "/mason/packages/jdtls/plugins/config_linux",
-    "-data",
-    vim.fn.expand("$XDG_DATA_HOME/eclipse/") .. vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
+    "-jar", vim.fn.glob(vim.fn.stdpath("data") ..
+    "/mason/packages/jdtls/plugins/org.eclipse.equinox.launcher_*.jar"),
+    "-configuration", vim.fn.stdpath("data") .. "/mason/packages/jdtls/config_linux",
+    "-data", (root_dir or vim.loop.cwd()) .. "/.jdtls",
   },
-  root_dir = require("jdtls.setup").find_root({ ".git", "mvnw", "gradlew" }),
-})
+  root_dir = root_dir
+}
+
+-- `:help vim.lsp.start_client`
+require("jdtls").start_or_attach(config)
