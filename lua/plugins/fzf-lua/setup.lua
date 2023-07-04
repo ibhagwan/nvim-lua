@@ -104,14 +104,13 @@ M.default_opts = {
       vim.b.miniindentscope_disable = true
     end,
   },
-  winopts_fn = function()
-    local hl = {
+  hls = function()
+    return {
       border = hl_match({ "NightflySteelBlue", "FloatBorder" }),
       preview_border = hl_match({ "NightflySteelBlue", "FloatBorder" }),
       cursorline = hl_match({ "NightflyVisual" }),
       cursorlinenr = hl_match({ "NightflyVisual" }),
     }
-    return { hl = hl }
   end,
   previewers = {
     bat = { theme = "Coldark-Dark", },
