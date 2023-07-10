@@ -8,7 +8,7 @@ return {
   {
     "nvim-treesitter/nvim-treesitter",
     -- treesitter requires a C compiler
-    cond = require("utils").have_compiler,
+    cond = not require("utils").is_NetBSD() and require("utils").have_compiler,
     event = "BufReadPost",
     dependencies = {
       "nvim-treesitter/nvim-treesitter-textobjects",

@@ -46,6 +46,10 @@ function M.is_darwin()
   return vim.loop.os_uname().sysname == "Darwin"
 end
 
+function M.is_NetBSD()
+  return vim.loop.os_uname().sysname == "NetBSD"
+end
+
 function M.is_dev(path)
   return vim.loop.fs_stat(string.format("%s/%s",
     vim.fn.expand(DEV_DIR), path))

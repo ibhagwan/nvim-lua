@@ -11,7 +11,7 @@ return {
     config = function()
       require("fidget").setup()
       require("mason-lspconfig").setup({
-        ensure_installed = { "lua_ls" },
+        ensure_installed = not require("utils").is_NetBSD() and { "lua_ls" } or nil,
       })
       -- lazy load null-ls
       require("null-ls")

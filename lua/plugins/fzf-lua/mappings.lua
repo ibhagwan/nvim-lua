@@ -169,15 +169,18 @@ map_fzf("n", "<leader>gS", "git_status_tmuxZ", {
 })
 
 -- yadm repo
-local yadm_cmd = "yadm -C $HOME --yadm-repo ${YADM_REPO}"
 local yadm_git_opts = {
   cwd_header = false,
+  cwd = "$HOME",
   git_dir = "$YADM_REPO",
+  git_worktree = "$HOME",
+  git_config = "status.showUntrackedFiles=no",
 }
 local yadm_grep_opts = {
   prompt = "YadmGrep❯ ",
+  cwd_header = false,
   cwd = "$HOME",
-  cmd = ("%s grep --line-number --column --color=always"):format(yadm_cmd),
+  cmd = "git --git-dir=${YADM_REPO} -C ${HOME} grep --line-number --column --color=always",
   rg_glob = false, -- this isn't `rg`
 }
 
@@ -196,9 +199,6 @@ map_fzf("n", "<leader>yc", "git_bcommits",
   vim.tbl_extend("force", yadm_git_opts, { desc = "yadm commits (buffer)" }))
 
 map_fzf("n", "<leader>ys", "git_status",
-  vim.tbl_extend("force", yadm_git_opts,
-    { desc = "yadm status", cmd = "git status -s", prompt = "YadmStatus> " }))
-map_fzf("n", "<leader>es", "git_status",
   vim.tbl_extend("force", yadm_git_opts,
     { desc = "yadm status", cmd = "git status -s", prompt = "YadmStatus> " }))
 

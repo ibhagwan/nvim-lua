@@ -141,12 +141,6 @@ if require "utils".is_darwin() then
   }
 end
 
-if require "utils".is_darwin() then
-  vim.g.python3_host_prog = "/usr/local/bin/python3"
-else
-  vim.g.python3_host_prog = "/usr/bin/python3"
-end
-
 -- use ':grep' to send resulsts to quickfix
 -- use ':lgrep' to send resulsts to loclist
 if vim.fn.executable("rg") == 1 then
