@@ -154,8 +154,8 @@ map_fzf("n", "<leader>lG", "lsp_workspace_diagnostics", { desc = "workspace diag
 map_fzf("n", "<leader>gf", "git_files", { desc = "git ls-files" })
 map_fzf("n", "<leader>gs", "git_status", { desc = "git status" })
 map_fzf("n", "<leader>gB", "git_branches", { desc = "git branches" })
-map_fzf("n", "<leader>gc", "git_bcommits", { desc = "git commits (buffer)" })
 map_fzf("n", "<leader>gC", "git_commits", { desc = "git commits (project)" })
+map_fzf({ "n", "v" }, "<leader>gc", "git_bcommits", { desc = "git commits (buffer)" })
 -- Full screen git status
 map_fzf("n", "<leader>gS", "git_status_tmuxZ", {
   desc = "git status (fullscreen)",
@@ -192,11 +192,14 @@ map_fzf("n", "<leader>yg", "grep_project",
 map_fzf("n", "<leader>yl", "live_grep",
   vim.tbl_extend("force", yadm_grep_opts, { desc = "yadm live grep" }))
 map_fzf("n", "<leader>yb", "git_branches",
-  vim.tbl_extend("force", yadm_git_opts, { desc = "yadm branches" }))
+  vim.tbl_extend("force", yadm_git_opts,
+    { desc = "yadm branches", prompt = "YadmBranches> " }))
 map_fzf("n", "<leader>yC", "git_commits",
-  vim.tbl_extend("force", yadm_git_opts, { desc = "yadm commits (project)" }))
-map_fzf("n", "<leader>yc", "git_bcommits",
-  vim.tbl_extend("force", yadm_git_opts, { desc = "yadm commits (buffer)" }))
+  vim.tbl_extend("force", yadm_git_opts,
+    { desc = "yadm commits (project)", prompt = "YadmCommits> " }))
+map_fzf({ "n", "v" }, "<leader>yc", "git_bcommits",
+  vim.tbl_extend("force", yadm_git_opts,
+    { desc = "yadm commits (buffer)", prompt = "YadmBCommits> " }))
 
 map_fzf("n", "<leader>ys", "git_status",
   vim.tbl_extend("force", yadm_git_opts,
