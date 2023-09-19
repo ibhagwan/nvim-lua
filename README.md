@@ -56,9 +56,10 @@
 - [lspconfig](https://github.com/neovim/nvim-lspconfig): configuration
   quickstart for nvim's built in LSP
 
-- [null-ls.nvim](https://github.com/jose-elias-alvarez/null-ls.nvim): pseudo
-  LSP server to help us format JS|web files with `prettier` on `gq`
-
+- [conform.nvim](https://github.com/stevearc/conform.nvim): formatter
+  plugin where LSP formatting isn't what you need, format `js|json|html`
+  with `prettier` or lua with `stylua` using the `gQ` mapping.
+  
 - [nvim-dap](https://github.com/mfussenegger/nvim-dap):
   set breakpoints and debug applications using Debug Adapter Protocol (DAP)
 
