@@ -92,9 +92,8 @@
 
 ### Appearence
 
-- [express\_line](https://github.com/tjdevries/express_line.nvim):
-  [TJ's](https://github.com/tjdevries) status line plugin, customized and
-  highlighted by me and, LSP/diag patched to work on any neovim >= 0.5
+- [heirline.nvim](https://github.com/rebelot/heirline.nvim):
+  DIY status line plugin, semi-minimalistic setup.
 
 - [nvim-colorizer.lua](https://github.com/nvchad/nvim-colorizer.lua): color
   code highlighter, use `ColorizerAttachToBuffer` to provide a live preview of

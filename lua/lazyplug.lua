@@ -30,7 +30,8 @@ lazy.setup("plugins", {
     -- patterns = { "ibhagwan" },
   },
   install = { colorscheme = { "nightfly", "lua-embark" } },
-  checker = { enabled = false },
+  checker = { enabled = false },          -- don't auto-check for plugin updates
+  change_detection = { enabled = false }, -- don't auto-check for config updates
   ui = {
     border = "rounded",
     custom_keys = {

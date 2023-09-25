@@ -324,6 +324,7 @@ M.reload_config = function()
     { mod = "ts%-vimdoc" },
     { mod = "smartyank", fn = function() require("smartyank") end },
     { mod = "fzf%-lua",  fn = function() require("plugins.fzf-lua.setup").setup() end },
+    { mod = "heirline",  fn = function() require("plugins.heirline").config() end },
   })
   -- re-source all language specific settings, scans all runtime files under
   -- '/usr/share/nvim/runtime/(indent|syntax)' and 'after/ftplugin'
