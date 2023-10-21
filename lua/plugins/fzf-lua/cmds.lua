@@ -109,30 +109,4 @@ function M.workdirs(opts)
   fzf_lua.fzf_exec(fzf_fn, opts)
 end
 
-function M.toggle_previewer()
-  local g = require("fzf-lua.config").globals;
-  for _, s in ipairs({ "buffers", "files", "grep" }) do
-    print("prev", g[s].previewer, fzf_lua.defaults[s].previewer)
-    local previewer = g[s].previewer ~= "bat" and "bat" or "builtin"
-    require("utils").info(string.format([[FzfLua previewer set to '%s']], previewer))
-    g[s].previewer = previewer
-  end
-end
-
-function M.rotate_profile()
-  local setup = require("plugins.fzf-lua.setup")
-  for k, v in pairs(setup.profiles) do
-    local next_k, next_v = next(setup.profiles, k)
-    if not next_k then
-      next_k, next_v = next(setup.profiles)
-    end
-    if v == setup.active_profile then
-      setup.active_profile = next_v
-      setup.setup()
-      require("utils").info(string.format([[FzfLua profile set to '%s']], next_k))
-      return
-    end
-  end
-end
-
 return M

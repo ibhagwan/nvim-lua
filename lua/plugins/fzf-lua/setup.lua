@@ -1,5 +1,10 @@
 local fzf_lua = require("fzf-lua")
 
+local img_prev_bin = vim.fn.executable("ueberzug") == 1 and { "ueberzug" }
+    or vim.fn.executable("chafa") == 1 and { "chafa" }
+    or vim.fn.executable("viu") == 1 and { "viu", "-b" }
+    or nil
+
 -- return first matching highlight or nil
 local function hl_match(t)
   for _, h in ipairs(t) do
@@ -20,50 +25,7 @@ local function hl_match(t)
   end
 end
 
-local img_prev_bin = vim.fn.executable("ueberzug") == 1 and { "ueberzug" }
-    or vim.fn.executable("chafa") == 1 and { "chafa" }
-    or vim.fn.executable("viu") == 1 and { "viu", "-b" }
-    or nil
-
-local M = {}
-
-M.profiles = {
-  fzf = {
-    files = { fzf_opts = { ["--no-separator"] = false } },
-    grep = { fzf_opts = { ["--no-separator"] = false } },
-  },
-  fzf_native = {
-    fzf_bin = "fzf",
-    winopts = { preview = { default = "bat" } },
-    manpages = { previewer = "man_native" },
-    helptags = { previewer = "help_native" },
-    tags = { previewer = "bat" },
-    btags = { previewer = "bat" },
-  },
-  fzf_tmux = {
-    fzf_bin = "fzf-tmux",
-    fzf_opts = { ["--border"] = "rounded" },
-    fzf_tmux_opts = { ["-p"] = "80%,90%" },
-    winopts = { preview = { default = "bat", layout = "horizontal" } },
-    manpages = { previewer = "man_native" },
-    helptags = { previewer = "help_native" },
-    tags = { previewer = "bat" },
-    btags = { previewer = "bat" },
-  },
-  sk = {
-    fzf_bin = "sk",
-    fzf_opts = { ["--no-separator"] = false },
-    fzf_colors = {
-      ["matched_bg"] = { "bg", "Normal" },
-      ["current_match_bg"] = { "bg", hl_match({ "NightflyVisual", "CursorLine" }) },
-    },
-  },
-}
-
--- default profile
-M.active_profile = M.profiles.fzf
-
-M.default_opts = {
+local default_opts = {
   fzf_opts = { ["--no-separator"] = "" },
   fzf_colors = function()
     return {
@@ -140,7 +102,10 @@ M.default_opts = {
   files = {
     -- uncomment to override .gitignore
     -- fd_opts  = "--no-ignore --color=never --type f --hidden --follow --exclude .git",
-    fzf_opts = { ["--tiebreak"] = "end" },
+    fzf_opts = {
+      ["--tiebreak"]     = "end",
+      ["--no-separator"] = false,
+    }
   },
   grep = {
     debug = false,
@@ -148,7 +113,8 @@ M.default_opts = {
     rg_opts = "--hidden --column --line-number --no-heading"
         .. " --color=always --smart-case -g '!.git' -e",
     fzf_opts = {
-      ["--history"] = vim.fn.shellescape(vim.fn.stdpath("data") .. "/fzf_search_hist")
+      ["--no-separator"] = false,
+      ["--history"] = vim.fn.shellescape(vim.fn.stdpath("data") .. "/fzf_search_hist"),
     },
   },
   git = {
@@ -220,13 +186,12 @@ M.default_opts = {
   diagnostics = { file_icons = false, icon_padding = " ", path_shorten = 1 },
 }
 
-M.setup = function()
-  -- NOT NEEDED since fzf-lua commit 604eadf
-  -- custom devicons setup file to be loaded when `multiprocess = true`
-  -- fzf_lua.config._devicons_setup = "~/.config/nvim/lua/plugins/devicons/setup.lua"
+return {
+  setup = function()
+    -- NOT NEEDED since fzf-lua commit 604eadf
+    -- custom devicons setup file to be loaded when `multiprocess = true`
+    -- fzf_lua.config._devicons_setup = "~/.config/nvim/lua/plugins/devicons/setup.lua"
 
-  -- merge defaults with the active profile
-  fzf_lua.setup(vim.tbl_deep_extend("keep", vim.deepcopy(M.active_profile), M.default_opts))
-end
-
-return M
+    fzf_lua.setup(default_opts)
+  end
+}
