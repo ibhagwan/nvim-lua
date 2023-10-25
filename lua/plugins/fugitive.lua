@@ -1,5 +1,5 @@
 local M = {
-  url = "https://tpope.io/vim/fugitive.git",
+  "tpope/vim-fugitive",
   cmd = { "Git", "Yit", "Gread", "Gwrite", "Gvdiffsplit", "Gdiffsplit" },
 }
 
