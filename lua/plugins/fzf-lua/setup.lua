@@ -183,7 +183,7 @@ local default_opts = {
       },
     }
   },
-  diagnostics = { file_icons = false, icon_padding = " ", path_shorten = 1 },
+  diagnostics = { file_icons = false, path_shorten = 1 },
 }
 
 return {

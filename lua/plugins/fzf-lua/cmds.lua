@@ -52,6 +52,22 @@ end
 
 local _previous_cwd = nil
 
+function M.diagnostics_document(opts)
+  opts = opts or {}
+  opts.diag_source =
+      #vim.lsp.get_active_clients({ bufnr = vim.api.nvim_get_current_buf() }) > 1
+      and true or false
+  opts.icon_padding = opts.diag_source and "" or " "
+  fzf_lua.diagnostics_document(opts)
+end
+
+function M.diagnostics_workspace(opts)
+  opts = opts or {}
+  opts.diag_source = #vim.lsp.get_active_clients() > 1 and true or false
+  opts.icon_padding = opts.diag_source and "" or " "
+  fzf_lua.diagnostics_workspace(opts)
+end
+
 function M.workdirs(opts)
   if not opts then opts = {} end
 

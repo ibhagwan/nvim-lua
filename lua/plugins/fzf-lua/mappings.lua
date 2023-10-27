@@ -147,8 +147,8 @@ map_fzf("n", "<leader>la", "lsp_code_actions", {
     width    = 0.55,
   }
 })
-map_fzf("n", "<leader>lg", "lsp_document_diagnostics", { desc = "document diagnostics [LSP]" })
-map_fzf("n", "<leader>lG", "lsp_workspace_diagnostics", { desc = "workspace diagnostics [LSP]" })
+map_fzf("n", "<leader>lg", "diagnostics_document", { desc = "document diagnostics [LSP]" })
+map_fzf("n", "<leader>lG", "diagnostics_workspace", { desc = "workspace diagnostics [LSP]" })
 
 -- Git
 map_fzf("n", "<leader>gf", "git_files", { desc = "git ls-files" })
