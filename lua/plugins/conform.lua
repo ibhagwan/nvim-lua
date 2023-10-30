@@ -8,6 +8,7 @@ return {
         html = { { "prettier", "prettierd" } },
         jsonc = { { "prettier", "prettierd" } },
         javascript = { { "prettier", "prettierd" } },
+        python = { "black" },
       },
     })
   end,
