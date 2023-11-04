@@ -67,7 +67,7 @@ local symbol_hl = function(s)
       Key = "Keyword",
       Array = "Directory",
       Null = "Float",
-      Package = "Operator",
+      Package = "@function",
     })
   end
   return symbol_hls[s]
