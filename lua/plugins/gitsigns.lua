@@ -57,8 +57,12 @@ M.config = function()
         { desc = "reset buffer" })
       map("n", "<leader>hp", [[<cmd>lua require("gitsigns").preview_hunk()<CR>]],
         { desc = "preview hunk" })
-      map("n", "<leader>hb", [[<cmd>lua require("gitsigns").blame_line({full=true})<CR>]],
-        { desc = "line blame (popup)" })
+      -- map gb, yb and hb to git blame
+      for _, c in ipairs({ "g", "y", "h" }) do
+        map("n", string.format("<leader>%sb", c),
+          [[<cmd>lua require("gitsigns").blame_line({full=true})<CR>]],
+          { desc = "line blame (popup)" })
+      end
       map("n", "<leader>hB", [[<cmd>lua require("gitsigns").toggle_current_line_blame()<CR>]],
         { desc = "line blame (toggle)" })
       map("n", "<leader>hd", [[<cmd>lua require("gitsigns").diffthis()<CR>]],

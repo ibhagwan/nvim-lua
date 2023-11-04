@@ -154,6 +154,7 @@ map_fzf("n", "<leader>lG", "diagnostics_workspace", { desc = "workspace diagnost
 map_fzf("n", "<leader>gf", "git_files", { desc = "git ls-files" })
 map_fzf("n", "<leader>gs", "git_status", { desc = "git status" })
 map_fzf("n", "<leader>gB", "git_branches", { desc = "git branches" })
+map_fzf("n", "<leader>gt", "git_tags", { desc = "git tags" })
 map_fzf("n", "<leader>gC", "git_commits", { desc = "git commits (project)" })
 map_fzf({ "n", "v" }, "<leader>gc", "git_bcommits", { desc = "git commits (buffer)" })
 -- Full screen git status
@@ -191,7 +192,7 @@ map_fzf("n", "<leader>yg", "grep_project",
   vim.tbl_extend("force", yadm_grep_opts, { desc = "yadm grep" }))
 map_fzf("n", "<leader>yl", "live_grep",
   vim.tbl_extend("force", yadm_grep_opts, { desc = "yadm live grep" }))
-map_fzf("n", "<leader>yb", "git_branches",
+map_fzf("n", "<leader>yB", "git_branches",
   vim.tbl_extend("force", yadm_git_opts,
     { desc = "yadm branches", prompt = "YadmBranches> " }))
 map_fzf("n", "<leader>yC", "git_commits",
