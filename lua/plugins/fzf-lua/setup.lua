@@ -126,8 +126,8 @@ local default_opts = {
     bat = { theme = "Coldark-Dark", },
     builtin = {
       title_fnamemodify = function(s) return s end,
-      ueberzug_scaler = "cover",
-      extensions      = {
+      ueberzug_scaler   = "cover",
+      extensions        = {
         ["gif"]  = img_prev_bin,
         ["png"]  = img_prev_bin,
         ["jpg"]  = img_prev_bin,
@@ -154,7 +154,8 @@ local default_opts = {
     fzf_opts = {
       ["--tiebreak"]     = "end",
       ["--no-separator"] = false,
-    }
+    },
+    actions = { ["ctrl-g"] = { fzf_lua.actions.toggle_ignore } },
   },
   grep = {
     debug = false,
