@@ -31,9 +31,10 @@ local dap = require("dap")
 dap.listeners.after.event_initialized["dapui_config"] = function()
   dapui.open()
 end
-dap.listeners.before.event_terminated["dapui_config"] = function()
-  dapui.close()
+dap.listeners.before.event_terminated["dapui_config"] = function(e)
+  require("utils").info(
+    string.format("program '%s' was terminated.", vim.fn.fnamemodify(e.config.program, ":t")))
 end
-dap.listeners.before.event_exited["dapui_config"] = function()
-  dapui.close()
-end
+-- dap.listeners.before.event_exited["dapui_config"] = function(e)
+--   dapui.close()
+-- end

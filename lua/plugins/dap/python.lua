@@ -1,4 +1,4 @@
-local res, dap = pcall(require, "dap")
+local res, dap_python = pcall(require, "dap-python")
 if not res then
   return
 end
@@ -22,5 +22,5 @@ else
   end
 end
 
-require("dap-python").setup(prefix .. "/bin/python")
-require("dap-python").test_runner = prefix .. "/bin/pytest"
+dap_python.setup(prefix .. "/bin/python")
+dap_python.test_runner = prefix .. "/bin/pytest"

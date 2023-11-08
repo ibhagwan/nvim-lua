@@ -3,8 +3,9 @@ local M = {
   keys = { "<F5>", "<F8>", "<F9>" },
   dependencies = {
     { "rcarriga/nvim-dap-ui" },
+    { "theHamsta/nvim-dap-virtual-text" },
     { "jbyuki/one-small-step-for-vimkind" },
-    { "mfussenegger/nvim-dap-python" }
+    { "mfussenegger/nvim-dap-python" },
   },
 }
 
@@ -48,11 +49,29 @@ M.config = function()
   map({ "n", "v" }, "<leader>dx", function() fzf_lua("dap_configurations") end,
     { silent = true, desc = "fzf debugger configurations" })
 
+  -- Lazy load fzf-lua to register_ui_select
+  require("fzf-lua")
+
   -- configure dap-ui and language adapaters
   require "plugins.dap.ui"
   require "plugins.dap.go"
   require "plugins.dap.lua"
   require "plugins.dap.python"
+
+  -- links by default to DiagnosticVirtualTextXXX which linkx to Comment in nightgly
+  vim.api.nvim_set_hl(0, "NvimDapVirtualText", { link = "Comment" })
+  vim.api.nvim_set_hl(0, "NvimDapVirtualTextInfo", { link = "DiagnosticInfo" })
+  vim.api.nvim_set_hl(0, "NvimDapVirtualTextError", { link = "DiagnosticError" })
+  vim.api.nvim_set_hl(0, "NvimDapVirtualTextChanged", { link = "DiagnosticWarn" })
+
+  -- configure nvim-dap-virtual-text
+  local ok, dapvt = pcall(require, "nvim-dap-virtual-text")
+  if ok and dapvt then
+    dapvt.setup({
+      -- "inline" is also possible with nvim-0.10, IMHO is confusing
+      virt_text_pos = "eol",
+    })
+  end
 end
 
 return M
