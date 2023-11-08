@@ -4,6 +4,7 @@ local M = {
   dependencies = {
     { "rcarriga/nvim-dap-ui" },
     { "jbyuki/one-small-step-for-vimkind" },
+    { "mfussenegger/nvim-dap-python" }
   },
 }
 
@@ -51,6 +52,7 @@ M.config = function()
   require "plugins.dap.ui"
   require "plugins.dap.go"
   require "plugins.dap.lua"
+  require "plugins.dap.python"
 end
 
 return M
