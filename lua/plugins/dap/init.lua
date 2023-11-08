@@ -52,6 +52,9 @@ M.config = function()
   -- Lazy load fzf-lua to register_ui_select
   require("fzf-lua")
 
+  -- Set logging level
+  require("dap").set_log_level("DEBUG")
+
   -- configure dap-ui and language adapaters
   require "plugins.dap.ui"
   require "plugins.dap.go"
