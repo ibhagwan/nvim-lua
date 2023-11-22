@@ -44,7 +44,6 @@ vim.cmd([[
 
 -- root doesn't use plugins, use builtin FZF
 if require "utils".is_root() then
-  vim.env.FZF_DEFAULT_OPTS = (vim.env.FZF_DEFAULT_OPTS or "") .. " --info=default"
   vim.g.fzf_layout = { window = { ["width"] = 0.9, height = 0.9 } }
   map("n", "<C-p>", "<cmd>FZF<CR>", { desc = "FZF" })
 end

@@ -74,7 +74,7 @@ local symbol_hl = function(s)
 end
 
 local default_opts = {
-  fzf_opts = { ["--no-separator"] = "" },
+  -- fzf_opts = { ["--info"] = "default" },
   fzf_colors = function()
     return {
       ["fg"] = { "fg", "Normal" },
@@ -151,10 +151,7 @@ local default_opts = {
   files = {
     -- uncomment to override .gitignore
     -- fd_opts  = "--no-ignore --color=never --type f --hidden --follow --exclude .git",
-    fzf_opts = {
-      ["--tiebreak"]     = "end",
-      ["--no-separator"] = false,
-    },
+    fzf_opts = { ["--tiebreak"] = "end" },
     actions = { ["ctrl-g"] = { fzf_lua.actions.toggle_ignore } },
   },
   grep = {
@@ -163,7 +160,6 @@ local default_opts = {
     rg_opts = "--hidden --column --line-number --no-heading"
         .. " --color=always --smart-case -g '!.git' -e",
     fzf_opts = {
-      ["--no-separator"] = false,
       ["--history"] = vim.fn.shellescape(vim.fn.stdpath("data") .. "/fzf_search_hist"),
     },
   },

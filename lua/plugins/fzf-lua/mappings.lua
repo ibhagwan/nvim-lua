@@ -181,7 +181,7 @@ local yadm_grep_opts = {
   prompt = "YadmGrep❯ ",
   cwd_header = false,
   cwd = "$HOME",
-  cmd = "git --git-dir=${YADM_REPO} -C ${HOME} grep --line-number --column --color=always",
+  cmd = "git --git-dir=${YADM_REPO} -C ${HOME} grep -i --line-number --column --color=always",
   rg_glob = false, -- this isn't `rg`
 }
 

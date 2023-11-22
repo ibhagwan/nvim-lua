@@ -68,30 +68,6 @@ function M.diagnostics_workspace(opts)
   fzf_lua.diagnostics_workspace(opts)
 end
 
-local symbols_fmt = function(opts)
-  opts = opts or {}
-  opts.separator = "│"
-  opts._fmt = {
-    to = function(s, o)
-      local file, text = s:match("^(.+:.+:.+:)(.*)")
-      return string.format("%-76s%s%s%s", text, o.separator, fzf_lua.utils.nbsp, file)
-    end,
-    from = function(s, o)
-      local file, text = s:match(string.format("(.*)%s%s(.*)", o.separator, fzf_lua.utils.nbsp))
-      return file .. text
-    end
-  }
-  return opts
-end
-
-function M.lsp_workspace_symbols(opts)
-  fzf_lua.lsp_workspace_symbols(symbols_fmt(opts))
-end
-
-function M.lsp_live_workspace_symbols(opts)
-  fzf_lua.lsp_live_workspace_symbols(symbols_fmt(opts))
-end
-
 function M.workdirs(opts)
   if not opts then opts = {} end
 
