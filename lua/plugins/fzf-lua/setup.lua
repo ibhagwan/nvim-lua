@@ -201,7 +201,10 @@ local default_opts = {
       path_shorten = 1,
       symbol_icons = symbol_icons,
       symbol_hl = symbol_hl,
-    }
+    },
+    code_actions = {
+      previewer = vim.fn.executable("delta") == 1 and "codeaction_native" or nil
+    },
   },
   diagnostics = { file_icons = false, path_shorten = 1 },
 }

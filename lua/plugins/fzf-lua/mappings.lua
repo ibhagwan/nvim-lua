@@ -137,16 +137,7 @@ map_fzf("n", "<leader>ly", "lsp_typedefs", { desc = "type definitions [LSP]" })
 map_fzf("n", "<leader>lm", "lsp_implementations", { desc = "implementations [LSP]" })
 map_fzf("n", "<leader>ls", "lsp_document_symbols", { desc = "document symbols [LSP]" })
 map_fzf("n", "<leader>lS", "lsp_workspace_symbols", { desc = "workspace symbols [LSP]" })
-map_fzf("n", "<leader>la", "lsp_code_actions", {
-  desc = "code actions [LSP]",
-  winopts = {
-    relative = "cursor",
-    row      = 1.01,
-    col      = 0,
-    height   = 0.20,
-    width    = 0.55,
-  }
-})
+map_fzf("n", "<leader>la", "lsp_code_actions", { desc = "code actions [LSP]" })
 map_fzf("n", "<leader>lg", "diagnostics_document", { desc = "document diagnostics [LSP]" })
 map_fzf("n", "<leader>lG", "diagnostics_workspace", { desc = "workspace diagnostics [LSP]" })
 
