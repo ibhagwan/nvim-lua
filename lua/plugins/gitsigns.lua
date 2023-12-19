@@ -55,7 +55,9 @@ M.config = function()
       -- map('n', '<leader>hU', '<cmd>lua require("gitsigns").undo_stage_buffer()<CR>')
       map("n", "<leader>hR", [[<cmd>lua require("gitsigns").reset_buffer()<CR>]],
         { desc = "reset buffer" })
-      map("n", "<leader>hp", [[<cmd>lua require("gitsigns").preview_hunk()<CR>]],
+      map("n", "<leader>hp", [[<cmd>lua require("gitsigns").preview_hunk_inline()<CR>]],
+        { desc = "preview hunk (inline)" })
+      map("n", "<leader>hP", [[<cmd>lua require("gitsigns").preview_hunk()<CR>]],
         { desc = "preview hunk" })
       -- map gb, yb and hb to git blame
       for _, c in ipairs({ "g", "y", "h" }) do
