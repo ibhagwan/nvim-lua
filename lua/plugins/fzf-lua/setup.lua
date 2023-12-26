@@ -147,6 +147,11 @@ local default_opts = {
       ["alt-q"]   = fzf_lua.actions.file_sel_to_ll,
     }
   },
+  -- all providers inherit from defaults, easier than to set this individually
+  -- for git diff, commits and bcommits (we have an override for lsp.code_actions)
+  defaults = {
+    preview_pager = vim.fn.executable("delta") == 1 and "delta --width=$COLUMNS",
+  },
   buffers = { no_action_zz = true },
   files = {
     -- uncomment to override .gitignore
@@ -169,16 +174,9 @@ local default_opts = {
       winopts = {
         preview = { vertical = "down:70%", horizontal = "right:70%" }
       },
-      preview_pager = vim.fn.executable("delta") == 1 and "delta --width=$COLUMNS",
     },
-    commits  = {
-      winopts = { preview = { vertical = "down:60%", } },
-      preview_pager = vim.fn.executable("delta") == 1 and "delta --width=${COLUMNS:-0}",
-    },
-    bcommits = {
-      winopts = { preview = { vertical = "down:60%", } },
-      preview_pager = vim.fn.executable("delta") == 1 and "delta --width=${COLUMNS:-0}",
-    },
+    commits  = { winopts = { preview = { vertical = "down:60%", } } },
+    bcommits = { winopts = { preview = { vertical = "down:60%", } } },
     branches = {
       winopts = {
         preview = { vertical = "down:75%", horizontal = "right:75%", }
@@ -203,7 +201,16 @@ local default_opts = {
       symbol_hl = symbol_hl,
     },
     code_actions = {
-      previewer = vim.fn.executable("delta") == 1 and "codeaction_native" or nil
+      winopts = {
+        relative = "cursor",
+        row      = 1,
+        col      = 0,
+        height   = 0.4,
+        preview  = { vertical = "down:70%" }
+      },
+      previewer = vim.fn.executable("delta") == 1 and "codeaction_native" or nil,
+      preview_pager = "delta --width=$FZF_PREVIEW_COLUMNS "
+          .. "--hunk-header-style='omit' --file-style='omit'",
     },
   },
   diagnostics = { file_icons = false, path_shorten = 1 },
