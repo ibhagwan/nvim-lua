@@ -120,6 +120,7 @@ local default_opts = {
       preview_border = hl_match({ "NightflySteelBlue", "FloatBorder" }),
       cursorline = hl_match({ "NightflyVisual" }),
       cursorlinenr = hl_match({ "NightflyVisual" }),
+      dir_icon = hl_match({ "NightflyGreyBlue", "Directory" }),
     }
   end,
   previewers = {
@@ -184,7 +185,7 @@ local default_opts = {
     },
   },
   lsp = {
-    finder  = {
+    finder = {
       providers = {
         { "definitions",     prefix = fzf_lua.utils.ansi_codes.green("def ") },
         { "declarations",    prefix = fzf_lua.utils.ansi_codes.magenta("decl") },
@@ -214,6 +215,7 @@ local default_opts = {
     },
   },
   diagnostics = { file_icons = false, path_shorten = 1 },
+  dir_icon = "",
 }
 
 return {

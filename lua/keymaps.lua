@@ -49,7 +49,7 @@ if require "utils".is_root() then
 end
 
 map({ "n", "v", "i" }, "<C-x><C-f>",
-  function() require("fzf-lua").complete_path() end,
+  function() require("fzf-lua").complete_path({ file_icons = true }) end,
   { silent = true, desc = "Fuzzy complete path" })
 
 map({ "n", "v", "i" }, "<C-x><C-l>",
