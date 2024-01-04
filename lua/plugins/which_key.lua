@@ -125,8 +125,10 @@ M.config = function()
     },
     ["<leader>"] = {
       g = { name = "+git", },
+      G = { name = "+git", },
       f = { name = "+fzf", },
       l = { name = "+lsp", },
+      L = { name = "+Lsp", },
       d = { name = "+dap" },
       y = { name = "+yadm", },
       h = { name = "+gitsigns", },

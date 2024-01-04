@@ -50,8 +50,6 @@ function M.git_status_tmuxZ(opts)
   fzf_lua.git_status(opts)
 end
 
-local _previous_cwd = nil
-
 function M.diagnostics_document(opts)
   opts = opts or {}
   opts.diag_source =
@@ -72,34 +70,18 @@ function M.workdirs(opts)
   if not opts then opts = {} end
 
   -- workdirs.lua returns a table of workdirs
-  local ok, dirs = pcall(require, "workdirs")
+  local ok, dirs = pcall(function() return require("workdirs").get() end)
   if not ok then dirs = {} end
 
-  local iconify = function(path, color, icon)
-    icon = fzf_lua.utils.ansi_codes[color](icon)
-    path = fzf_lua.path.relative(path, vim.env.HOME)
-    return ("%s  %s"):format(icon, path)
-  end
-
-  local dedup = {}
-  local entries = {}
-  local add_entry = function(path, color, icon)
-    if not path then return end
-    path = vim.fn.expand(path)
-    if not vim.loop.fs_stat(path) then return end
-    if dedup[path] ~= nil then return end
-    entries[#entries + 1] = iconify(path, color or "blue", icon or "")
-    dedup[path] = true
-  end
-
-  add_entry(vim.loop.cwd(), "magenta", "")
-  add_entry(_previous_cwd, "yellow")
-  for _, path in ipairs(dirs) do
-    add_entry(path)
-  end
-
   local fzf_fn = function(cb)
-    for _, entry in ipairs(entries) do
+    for i, entry in ipairs(dirs) do
+      if i == 1 then
+        entry = fzf_lua.utils.ansi_codes.yellow(entry:sub(1, 1)) .. entry:sub(2)
+      elseif i == 2 then
+        entry = fzf_lua.utils.ansi_codes.magenta(entry:sub(1, 1)) .. entry:sub(2)
+      else
+        entry = fzf_lua.utils.ansi_codes.blue(entry:sub(1, 1)) .. entry:sub(2)
+      end
       cb(entry)
     end
     cb(nil)
@@ -114,11 +96,9 @@ function M.workdirs(opts)
 
   opts.actions = {
     ["default"] = function(selected)
-      _previous_cwd = vim.loop.cwd()
-      local newcwd = selected[1]:match("[^ ]*$")
-      newcwd = fzf_lua.path.starts_with_separator(newcwd) and newcwd
-          or fzf_lua.path.join({ vim.env.HOME, newcwd })
-      require "utils".set_cwd(newcwd)
+      require("workdirs").PREV_CWD = vim.loop.cwd()
+      local newcwd = vim.fs.normalize(selected[1]:match("[^ ]*$"))
+      require("utils").set_cwd(newcwd)
     end
   }
 

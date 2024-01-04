@@ -10,6 +10,24 @@ local DEV_DIR = "$HOME/Sources/nvim"
 
 local M = {}
 
+M.IS_WINDOWS = vim.fn.has("win32") == 1 or vim.fn.has("win64") == 1
+
+-- muscle memory: switch Telescope<->fzf-lua binds
+-- while I'm actively developing fzf-lua for windows
+M.SWITCH_TELE = M.IS_WINDOWS
+
+M._if_win = function(a, b)
+  if M.IS_WINDOWS then
+    return a
+  else
+    return b
+  end
+end
+
+M._if_win_fs_norm = function(a, b)
+  return M._if_win(vim.fs.normalize(a), b or a)
+end
+
 local fast_event_aware_notify = function(msg, level, opts)
   if vim.in_fast_event() then
     vim.schedule(function()
@@ -33,11 +51,11 @@ function M.err(msg)
 end
 
 function M.has_neovim_v08()
-  return (vim.fn.has("nvim-0.8") == 1)
+  return vim.fn.has("nvim-0.8") == 1
 end
 
 function M.is_root()
-  return (vim.loop.getuid() == 0)
+  return not M.IS_WINDOWS and vim.loop.getuid() == 0
 end
 
 function M.is_darwin()
@@ -49,8 +67,7 @@ function M.is_NetBSD()
 end
 
 function M.is_dev(path)
-  return vim.loop.fs_stat(string.format("%s/%s",
-    vim.fn.expand(DEV_DIR), path))
+  return vim.loop.fs_stat(string.format("%s/%s", vim.fn.expand(DEV_DIR), path))
 end
 
 function M.shell_error()
@@ -331,7 +348,7 @@ M.reload_config = function()
   local ft = vim.bo.filetype
   vim.tbl_filter(function(s)
     for _, e in ipairs({ "vim", "lua" }) do
-      if ft and #ft > 0 and s:match(("/%s.%s"):format(ft, e)) then
+      if ft and #ft > 0 and M._if_win_fs_norm(s):match(("/%s.%s"):format(ft, e)) then
         local file = vim.fn.expand(s:match("[^: ]*$"))
         vim.cmd("source " .. file)
         M.warn("RESOURCED " .. vim.fn.fnamemodify(file, ":."))

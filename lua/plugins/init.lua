@@ -42,9 +42,11 @@ return {
   },
   {
     "junegunn/fzf.vim",
-    enabled = false,
+    enabled = true,
     lazy = false,
     dev = true,
+    -- windows doesn't have fzf runtime plugin
+    dependencies = require("utils")._if_win({ "junegunn/fzf" }, nil),
   },
   {
     "pwntester/octo.nvim",

@@ -150,9 +150,7 @@ local default_opts = {
   },
   -- all providers inherit from defaults, easier than to set this individually
   -- for git diff, commits and bcommits (we have an override for lsp.code_actions)
-  defaults = {
-    preview_pager = vim.fn.executable("delta") == 1 and "delta --width=$COLUMNS",
-  },
+  defaults = {},
   buffers = { no_action_zz = true },
   files = {
     -- uncomment to override .gitignore
@@ -163,8 +161,8 @@ local default_opts = {
   grep = {
     debug = false,
     rg_glob = true,
-    rg_opts = "--hidden --column --line-number --no-heading"
-        .. " --color=always --smart-case -g '!.git' -e",
+    rg_opts = [[--hidden --column --line-number --no-heading]]
+        .. [[ --color=always --smart-case -g "!.git" -e]],
     fzf_opts = {
       ["--history"] = vim.fn.shellescape(vim.fn.stdpath("data") .. "/fzf_search_hist"),
     },
@@ -210,8 +208,9 @@ local default_opts = {
         preview  = { vertical = "down:70%" }
       },
       previewer = vim.fn.executable("delta") == 1 and "codeaction_native" or nil,
-      preview_pager = "delta --width=$FZF_PREVIEW_COLUMNS "
-          .. "--hunk-header-style='omit' --file-style='omit'",
+      preview_pager = "delta --width="
+          .. require("utils")._if_win("%COLUMNS%", "$COLUMNS")
+          .. " --hunk-header-style='omit' --file-style='omit'",
     },
   },
   diagnostics = { file_icons = false, path_shorten = 1 },

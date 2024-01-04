@@ -1,3 +1,5 @@
+local utils = require("utils")
+
 local map_fzf = function(mode, key, f, options, buffer)
   local desc = nil
   if type(options) == "table" then
@@ -5,6 +7,21 @@ local map_fzf = function(mode, key, f, options, buffer)
     options.desc = nil
   elseif type(options) == "function" then
     desc = options().desc
+  end
+
+  if utils.SWITCH_TELE then
+    for _, k in ipairs({ "f", "l", "g" }) do
+      key = key:gsub("<leader>" .. k, "<leader>" .. string.upper(k))
+    end
+    for _, k in ipairs({ "<F1>", "<c-P>", "<c-K>" }) do
+      if key == k then
+        key = "<leader>" .. k
+      end
+    end
+    -- remap buffers
+    if key == "<leader>;" then
+      key = "<leader>,"
+    end
   end
 
   local rhs = function()
@@ -29,10 +46,9 @@ local map_fzf = function(mode, key, f, options, buffer)
   vim.keymap.set(mode, key, rhs, map_options)
 end
 
--- mappings
+-- non "<leader>f" keys
+map_fzf("n", "<leader>;", "buffers", { desc = "Fzf buffers" })
 map_fzf("n", "<F1>", "help_tags", { desc = "help tags" })
-map_fzf("n", "<leader>fM", "man_pages", { desc = "man pages" })
-
 map_fzf("n", "<c-P>", "files", { desc = "find files" })
 map_fzf("n", "<c-K>", "workdirs", {
   desc = "cwd workdirs",
@@ -49,11 +65,16 @@ map_fzf("n", "<leader>fp", "files", {
   cwd = vim.fn.stdpath "data" .. "/lazy"
 })
 
+-- only fzf
 map_fzf("n", "<leader>fP", "profiles", { desc = "fzf-lua profiles" })
+map_fzf("n", "<leader>f0", "tmux_buffers", { desc = "tmux paste buffers" })
+
+-- same as tele
 map_fzf("n", "<leader>f?", "builtin", { desc = "builtin commands" })
-map_fzf("n", "<leader>;", "buffers", { desc = "Fzf buffers" })
 map_fzf("n", "<leader>ff", "resume", { desc = "resume" })
+map_fzf("n", "<leader>fF", "resume", { desc = "resume" })
 map_fzf("n", "<leader>fm", "marks", { desc = "marks" })
+map_fzf("n", "<leader>fM", "man_pages", { desc = "man pages" })
 map_fzf("n", "<leader>fx", "commands", { desc = "commands" })
 map_fzf("n", "<leader>f:", "command_history", { desc = "command history" })
 map_fzf("n", "<leader>f/", "search_history", { desc = "search history" })
@@ -104,11 +125,7 @@ map_fzf("n", "<leader>f*", "grep_curbuf", function()
     search = vim.fn.expand("<cWORD>")
   }
 end)
-map_fzf("n", "<leader>fH", "oldfiles", {
-  desc = "file history (all)",
-  cwd = "~",
-  cwd_header = false,
-})
+map_fzf("n", "<leader>fH", "oldfiles", { desc = "file history (all)" })
 map_fzf("n", "<leader>fh", "oldfiles", function()
   return {
     desc = "file history (cwd)",
@@ -118,7 +135,6 @@ map_fzf("n", "<leader>fh", "oldfiles", function()
   }
 end)
 
-map_fzf("n", "<leader>f0", "tmux_buffers", { desc = "tmux paste buffers" })
 map_fzf("n", "<leader>fq", "quickfix", { desc = "quickfix list" })
 map_fzf("n", "<leader>fQ", "loclist", { desc = "location list" })
 map_fzf("n", "<leader>fO", "highlights", { desc = "colorscheme highlights" })

@@ -2,17 +2,60 @@ return {
   setup = function()
     local actions = require "telescope.actions"
 
+    local insert_actions = {
+      ["<C-s>"] = actions.select_horizontal,
+      ["<C-v>"] = actions.select_vertical,
+      ["<C-t>"] = actions.select_tab,
+      ["<C-j>"] = actions.move_selection_next,
+      ["<C-k>"] = actions.move_selection_previous,
+      ["<C-n>"] = actions.cycle_history_next,
+      ["<C-p>"] = actions.cycle_history_prev,
+      ["<S-up>"] = actions.preview_scrolling_up,
+      ["<S-down>"] = actions.preview_scrolling_down,
+      ["<S-left>"] = actions.preview_scrolling_left,
+      ["<S-right>"] = actions.preview_scrolling_right,
+      ["<C-u>"] = false,
+      ["<C-d>"] = actions.results_scrolling_down,
+      ["<C-b>"] = actions.results_scrolling_up,
+      ["<C-f>"] = actions.results_scrolling_down,
+      ["<C-h>"] = actions.results_scrolling_left,
+      ["<C-l>"] = actions.results_scrolling_right,
+      ["<C-g>"] = actions.to_fuzzy_refine,
+      ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
+      ["<C-q>"] = actions.send_selected_to_loclist + actions.open_loclist,
+      ["<M-a>"] = actions.toggle_all,
+      ["<C-\\>"] = {
+        function()
+          -- exit to normal mode
+          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(
+            "<Esc>", true, false, true), "n", true)
+        end,
+        type = "command"
+      },
+      ["<C-c>"] = actions.close,
+      ["<C-z>"] = actions.close,
+      ["<Esc>"] = actions.close,
+      ["<F1>"] = actions.which_key,
+      ["<F4>"] = require("telescope.actions.layout").toggle_preview,
+      ["<F5>"] = require("telescope.actions.layout").cycle_layout_prev,
+      ["<F6>"] = require("telescope.actions.layout").cycle_layout_next,
+    }
+
+    local normal_actions = vim.tbl_extend("force", insert_actions, {
+      ["<CR>"] = actions.select_default + actions.center,
+    })
+
     require("telescope").setup {
       defaults = {
         prompt_prefix = "❯ ",
         selection_caret = "❯ ",
         selection_strategy = "reset",
         sorting_strategy = "ascending",
-        scroll_strategy = "cycle",
-        color_devicons = true,
-        winblend = 0,
-        borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
+        scroll_strategy = "limit",
         layout_strategy = "flex",
+        results_title = false,
+        dynamic_preview_title = true,
+        path_display = { truncate = 0 },
         layout_config = {
           width = 0.95,
           height = 0.85,
@@ -43,46 +86,7 @@ return {
             flip_columns = 120,
           },
         },
-        mappings = {
-          i = {
-            ["<C-s>"] = actions.select_horizontal,
-            ["<C-v>"] = actions.select_vertical,
-            ["<C-t>"] = actions.select_tab,
-            ["<C-j>"] = actions.move_selection_next,
-            ["<C-k>"] = actions.move_selection_previous,
-            ["<S-up>"] = actions.preview_scrolling_up,
-            ["<S-down>"] = actions.preview_scrolling_down,
-            ["<C-b>"] = actions.results_scrolling_down,
-            ["<C-f>"] = actions.results_scrolling_up,
-            ["<C-g>"] = actions.to_fuzzy_refine,
-            ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
-            ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
-            ["<M-a>"] = actions.toggle_all,
-            ["<C-c>"] = actions.close,
-            ["<Esc>"] = actions.close,
-            ["<F4>"] = require("telescope.actions.layout").toggle_preview,
-          },
-          n = {
-            ["<CR>"] = actions.select_default + actions.center,
-            ["<C-s>"] = actions.select_horizontal,
-            ["<C-v>"] = actions.select_vertical,
-            ["<C-t>"] = actions.select_tab,
-            ["<S-up>"] = actions.preview_scrolling_up,
-            ["<S-down>"] = actions.preview_scrolling_down,
-            ["<C-b>"] = actions.results_scrolling_down,
-            ["<C-f>"] = actions.results_scrolling_up,
-            ["<C-g>"] = actions.to_fuzzy_refine,
-            ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
-            ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
-            ["<M-a>"] = actions.toggle_all,
-            ["<C-c>"] = actions.close,
-            ["<Esc>"] = actions.close,
-            ["<F4>"] = require("telescope.actions.layout").toggle_preview,
-          },
-        },
-        file_previewer = require("telescope.previewers").vim_buffer_cat.new,
-        grep_previewer = require("telescope.previewers").vim_buffer_vimgrep.new,
-        qflist_previewer = require("telescope.previewers").vim_buffer_qflist.new,
+        mappings = { i = insert_actions, n = normal_actions },
         vimgrep_arguments = {
           "rg",
           "--column",
@@ -101,9 +105,17 @@ return {
           override_file_sorter = true,    -- override the file sorter
           case_mode = "smart_case",       -- or "ignore_case" or "respect_case"
         },
+        fzy_native = {
+          override_generic_sorter = false,
+          override_file_sorter = true,
+        }
       },
     }
 
-    require("telescope").load_extension("fzf")
+    if require("utils").IS_WINDOWS then
+      require("telescope").load_extension("fzy_native")
+    else
+      require("telescope").load_extension("fzf")
+    end
   end
 }
