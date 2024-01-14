@@ -120,7 +120,7 @@ end)
 augroup("Fugitive", function(g)
   aucmd("BufReadPost", {
     group = g,
-    pattern = "fugitive://*",
+    pattern = "fugitive:*",
     command = "set bufhidden=delete"
   })
 end)
@@ -236,6 +236,8 @@ augroup("GQFormatter", function(g)
       group = g,
       pattern = "*",
       callback = function(e)
+        -- exclude vim-fugitive buffers
+        if e.file:match("^fugitive:") then return end
         -- priortize LSP formatting as `gq`
         local lsp_has_formatting = false
         local lsp_clients = vim.lsp.get_active_clients()
