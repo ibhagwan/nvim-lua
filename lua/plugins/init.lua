@@ -18,7 +18,18 @@ return {
     dev = require("utils").is_dev("smartyank.nvim")
   },
   -- plenary is required by gitsigns and telescope
-  { "nvim-lua/plenary.nvim" },
+  {
+    "nvim-lua/plenary.nvim",
+    keys = { "<leader>tt", "<leader>td" },
+    config = function()
+      vim.keymap.set({ "n", "v" }, "<leader>tt",
+        function() require("plenary.test_harness").test_file(vim.fn.expand("%")) end,
+        { silent = true, desc = "Run tests in current file" })
+      vim.keymap.set({ "n", "v" }, "<leader>td",
+        function() require("plenary.test_harness").test_directory_command("tests") end,
+        { silent = true, desc = "Run tests in 'tests' directory" })
+    end,
+  },
   {
     "previm/previm",
     commit = "1978acc23c16cddcaf70c856a3b39d17943d7df0",
