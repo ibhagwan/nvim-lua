@@ -5,7 +5,7 @@ local actions = require "telescope.actions"
 function M.buffers()
   require("telescope.builtin").buffers {
     sort_mru = true,
-    ignore_current_buffer = true,
+    ignore_current_buffer = false,
     attach_mappings = function(_, map)
       map("i", "<c-x>", actions.delete_buffer)
       map("n", "<c-x>", actions.delete_buffer)

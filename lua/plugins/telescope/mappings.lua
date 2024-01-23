@@ -19,8 +19,8 @@ local map_tele = function(mode, key, f, options, buffer)
       end
     end
     -- remap buffers
-    if key == "<leader>," then
-      key = "<leader>;"
+    if key == "<leader>;" then
+      key = "<leader>,"
     end
   end
 
@@ -44,7 +44,7 @@ local map_tele = function(mode, key, f, options, buffer)
 end
 
 -- non "<leader>F" keys
-map_tele("n", "<leader>,", "buffers", { desc = "buffers" })
+map_tele("n", "<leader>;", "buffers", { desc = "buffers" })
 map_tele("n", "<leader><F1>", "help_tags", { desc = "help tags" })
 map_tele("n", "<leader><c-P>", "find_files", { desc = "find files" })
 map_tele("n", "<leader><c-K>", "workdirs", {

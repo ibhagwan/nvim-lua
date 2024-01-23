@@ -19,8 +19,8 @@ local map_fzf = function(mode, key, f, options, buffer)
       end
     end
     -- remap buffers
-    if key == "<leader>;" then
-      key = "<leader>,"
+    if key == "<leader>," then
+      key = "<leader>;"
     end
   end
 
@@ -47,7 +47,7 @@ local map_fzf = function(mode, key, f, options, buffer)
 end
 
 -- non "<leader>f" keys
-map_fzf("n", "<leader>;", "buffers", { desc = "Fzf buffers" })
+map_fzf("n", "<leader>,", "buffers", { desc = "Fzf buffers" })
 map_fzf("n", "<F1>", "help_tags", { desc = "help tags" })
 map_fzf("n", "<c-P>", "files", { desc = "find files" })
 map_fzf("n", "<c-K>", "workdirs", {
