@@ -169,7 +169,6 @@ local default_opts = {
   },
   git = {
     status   = {
-      cmd = "git status -su",
       winopts = {
         preview = { vertical = "down:70%", horizontal = "right:70%" }
       },

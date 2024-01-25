@@ -218,7 +218,7 @@ map_fzf("n", "<leader>yS", "git_status_tmuxZ",
     {
       desc = "yadm status (fullscreen)",
       prompt = "YadmStatus> ",
-      cmd = "git status -s",
+      cmd = "git -c color.status=false --no-optional-locks status --porcelain=v1",
       winopts = {
         fullscreen = true,
         preview = {
