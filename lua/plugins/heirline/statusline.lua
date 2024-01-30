@@ -186,7 +186,7 @@ local FileFlags = {
 }
 
 local FileNameBlock = {
-  update = { "DirChanged", "BufModifiedSet", "VimResized" },
+  update = { "BufEnter", "DirChanged", "BufModifiedSet", "VimResized" },
   init = function(self)
     self.filename = vim.api.nvim_buf_get_name(0)
   end,
