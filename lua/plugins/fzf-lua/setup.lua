@@ -156,7 +156,6 @@ local default_opts = {
     -- uncomment to override .gitignore
     -- fd_opts  = "--no-ignore --color=never --type f --hidden --follow --exclude .git",
     fzf_opts = { ["--tiebreak"] = "end" },
-    actions = { ["ctrl-g"] = { fzf_lua.actions.toggle_ignore } },
   },
   grep = {
     debug = false,
@@ -166,7 +165,15 @@ local default_opts = {
     fzf_opts = {
       ["--history"] = fzf_lua.path.join({ vim.fn.stdpath("data"), "fzf_search_hist" }),
     },
+    actions = {
+      ["ctrl-r"] = { fzf_lua.actions.grep_lgrep },
+      ["ctrl-g"] = { fzf_lua.actions.toggle_ignore }
+    },
   },
+  tags = {
+    actions = { ["ctrl-g"] = false, ["ctrl-r"] = { fzf_lua.actions.grep_lgrep } }
+  },
+  btags = { actions = { ["ctrl-g"] = false, ["ctrl-r"] = false } },
   git = {
     status   = {
       winopts = {
