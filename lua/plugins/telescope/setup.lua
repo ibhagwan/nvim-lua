@@ -1,3 +1,5 @@
+local utils = require("utils")
+
 return {
   setup = function()
     local actions = require "telescope.actions"
@@ -112,10 +114,13 @@ return {
       },
     }
 
-    if require("utils").IS_WINDOWS then
-      require("telescope").load_extension("fzy_native")
-    else
-      require("telescope").load_extension("fzf")
+    -- verify a successfull build
+    if not pcall(require("telescope").load_extension,
+          utils.IS_WINDOWS and "fzy_native" or "fzf") then
+      require("utils").warn(
+        string.format("Unable to build telescope-fz%s-native, is `cmake` inatalled?",
+          utils.IS_WINDOWS and "y" or "f")
+      )
     end
   end
 }
