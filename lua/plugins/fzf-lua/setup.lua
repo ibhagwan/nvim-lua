@@ -204,6 +204,7 @@ local default_opts = {
       path_shorten = 1,
       symbol_icons = symbol_icons,
       symbol_hl = symbol_hl,
+      actions = { ["ctrl-g"] = false, ["ctrl-r"] = { fzf_lua.actions.sym_lsym } },
     },
     code_actions = {
       winopts = {
