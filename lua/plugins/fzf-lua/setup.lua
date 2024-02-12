@@ -124,7 +124,7 @@ local default_opts = {
     }
   end,
   previewers = {
-    bat = { theme = "Coldark-Dark", },
+    bat = { theme = "Coldark-Dark", args = "--color=always --style=default" },
     builtin = {
       title_fnamemodify = function(s) return s end,
       ueberzug_scaler   = "cover",
