@@ -350,7 +350,7 @@ M.reload_config = function()
     for _, e in ipairs({ "vim", "lua" }) do
       if ft and #ft > 0 and M._if_win_fs_norm(s):match(("/%s.%s"):format(ft, e)) then
         local file = vim.fn.expand(s:match("[^: ]*$"))
-        vim.cmd("source " .. file)
+        vim.cmd("source " .. M._if_win(vim.fn.shellescape(file), file))
         M.warn("RESOURCED " .. vim.fn.fnamemodify(file, ":."))
         return s
       end

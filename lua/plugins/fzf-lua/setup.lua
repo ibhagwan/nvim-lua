@@ -93,6 +93,12 @@ local default_opts = {
       ["scrollbar"] = { "fg", hl_match({ "NightflyPeach", "WarningMsg" }) },
     }
   end,
+  -- winopts_fn = function()
+  --   -- local split = "botright new" -- use for split under **all** windows
+  --   local split = "belowright new"  -- use for split under current windows
+  --   local height = math.floor(vim.o.lines * 0.3)
+  --   return { split = split .. " | resize " .. tostring(height) }
+  -- end,
   winopts = {
     -- split   = "belowright new",
     -- split   = "aboveleft vnew",
