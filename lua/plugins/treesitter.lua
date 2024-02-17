@@ -69,34 +69,49 @@ return {
         },
         textobjects           = {
           select = {
-            enable  = true,
-            keymaps = {
-              ["ac"] = "@comment.outer",
-              ["ic"] = "@comment.outer",
-              ["ao"] = "@class.outer",
-              ["io"] = "@class.inner",
-              ["af"] = "@function.outer",
-              ["if"] = "@function.inner",
+            enable          = true,
+            -- Automatically jump forward to textobj, similar to targets.vim
+            lookahead       = true,
+            keymaps         = {
+              ["ac"] = { query = "@comment.outer", desc = "Select comment (outer)" },
+              ["ic"] = { query = "@comment.inner", desc = "Select comment (inner)" },
+              ["ao"] = { query = "@class.outer", desc = "Select class (outer)" },
+              ["io"] = { query = "@class.inner", desc = "Select class (inner)" },
+              ["af"] = { query = "@function.outer", desc = "Select function (outer)" },
+              ["if"] = { query = "@function.inner", desc = "Select function (inner)" },
+              ["ap"] = { query = "@parameter.outer", desc = "Select parameter (outer)" },
+              ["ip"] = { query = "@parameter.inner", desc = "Select parameter (inner)" },
+              ["as"] = { query = "@scope", query_group = "locals", desc = "Select language scope" }
+            },
+            selection_modes = {
+              -- default is charwise 'v'
+              ["@parameter.inner"] = "v", -- charwise
+              ["@parameter.outer"] = "v", -- charwise
+              ["@function.inner"] = "V",  -- linewise
+              ["@function.outer"] = "V",  -- linewise
+              ["@class.inner"] = "V",     -- linewise
+              ["@class.outer"] = "V",     -- linewise
+              ["@scope"] = "v",           -- charwise
             },
           },
           move = {
             enable = true,
             set_jumps = true, -- whether to set jumps in the jumplist
-            goto_next_start = {
-              ["]m"] = "@function.outer",
-              ["]]"] = "@class.outer",
+            goto_next = {     -- jump to next start or end
+              ["]f"] = { query = "@function.outer", desc = "Next function start|end" },
+              ["]s"] = { query = "@scope", query_group = "locals", desc = "Next scope" },
             },
-            goto_next_end = {
-              ["]M"] = "@function.outer",
-              ["]["] = "@class.outer",
+            goto_previous = { -- jump to previous start or end
+              ["[f"] = { query = "@function.outer", desc = "Previous function start" },
+              ["[s"] = { query = "@scope", query_group = "locals", desc = "Previous scope" },
+            },
+            goto_next_start = {
+              ["]F"] = { query = "@function.outer", desc = "Next function" },
+              ["]p"] = { query = "@parameter.inner", desc = "Next parameter" },
             },
             goto_previous_start = {
-              ["[m"] = "@function.outer",
-              ["[["] = "@class.outer",
-            },
-            goto_previous_end = {
-              ["[M"] = "@function.outer",
-              ["[]"] = "@class.outer",
+              ["[F"] = { query = "@function.outer", desc = "Previous function" },
+              ["[p"] = { query = "@parameter.inner", desc = "Previous parameter" },
             },
           },
         },
@@ -120,6 +135,10 @@ return {
           },
         },
       }
+      -- repeat `]f` moves with `;,` disabled as doesn't fallback to normal `;,`
+      -- local ts_repeat_move = require "nvim-treesitter.textobjects.repeatable_move"
+      -- vim.keymap.set({ "n", "x", "o" }, ";", ts_repeat_move.repeat_last_move)
+      -- vim.keymap.set({ "n", "x", "o" }, ",", ts_repeat_move.repeat_last_move_opposite)
     end,
   }
 }
