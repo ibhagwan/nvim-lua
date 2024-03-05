@@ -8,19 +8,9 @@ local img_prev_bin = vim.fn.executable("ueberzug") == 1 and { "ueberzug" }
 -- return first matching highlight or nil
 local function hl_match(t)
   for _, h in ipairs(t) do
-    -- `vim.api.nvim_get_hl_by_name` is deprecated since v0.9.0
-    if vim.api.nvim_get_hl then
-      local ok, hl = pcall(vim.api.nvim_get_hl, 0, { name = h, link = false })
-      if ok and type(hl) == "table" and (hl.fg or hl.bg) then
-        return h
-      end
-    else
-      local ok, hl = pcall(vim.api.nvim_get_hl_by_name, h, true)
-      -- must have at least bg or fg, otherwise this returns
-      -- succesffully for cleared highlights (on colorscheme switch)
-      if ok and (hl.foreground or hl.background) then
-        return h
-      end
+    local ok, hl = pcall(vim.api.nvim_get_hl, 0, { name = h, link = false })
+    if ok and type(hl) == "table" and (hl.fg or hl.bg) then
+      return h
     end
   end
 end
@@ -77,20 +67,23 @@ local default_opts = {
   -- fzf_opts = { ["--info"] = "default" },
   fzf_colors = function()
     return {
-      ["fg"] = { "fg", "Normal" },
-      ["bg"] = { "bg", "Normal" },
-      ["hl"] = { "fg", hl_match({ "NightflyViolet", "Directory" }) },
+      -- Set to `-1` to use neovim fg/bg, from `man fzf`:
+      --   Default terminal foreground/background color
+      --   (or the original color of the text)
+      ["fg"] = { "fg", "Comment" },
+      ["bg"] = "-1",
+      ["hl"] = { "fg", { "NightflyViolet", "Directory" } },
       ["fg+"] = { "fg", "Normal" },
-      ["bg+"] = { "bg", hl_match({ "NightflyVisual", "CursorLine" }) },
+      ["bg+"] = { "bg", { "Visual" } },
       ["hl+"] = { "fg", "CmpItemKindVariable" },
-      ["info"] = { "fg", hl_match({ "NightflyPeach", "WarningMsg" }) },
+      ["info"] = { "fg", { "NightflyPeach", "WarningMsg" } },
       -- ["prompt"] = { "fg", "SpecialKey" },
       ["pointer"] = { "fg", "DiagnosticError" },
       ["marker"] = { "fg", "DiagnosticError" },
       ["spinner"] = { "fg", "Label" },
       ["header"] = { "fg", "Comment" },
-      ["gutter"] = { "bg", "Normal" },
-      ["scrollbar"] = { "fg", hl_match({ "NightflyPeach", "WarningMsg" }) },
+      ["gutter"] = "-1",
+      ["scrollbar"] = { "fg", { "NightflyPeach", "WarningMsg" } },
     }
   end,
   -- winopts_fn = function()
@@ -122,10 +115,10 @@ local default_opts = {
   },
   hls = function()
     return {
-      border = hl_match({ "NightflySteelBlue", "FloatBorder" }),
-      preview_border = hl_match({ "NightflySteelBlue", "FloatBorder" }),
-      cursorline = hl_match({ "NightflyVisual" }),
-      cursorlinenr = hl_match({ "NightflyVisual" }),
+      border = hl_match({ "FloatBorder", "LineNr" }),
+      preview_border = hl_match({ "FloatBorder", "LineNr" }),
+      cursorline = "Visual",
+      cursorlinenr = "Visual",
       dir_icon = hl_match({ "NightflyGreyBlue", "Directory" }),
     }
   end,

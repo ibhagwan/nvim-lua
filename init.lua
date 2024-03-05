@@ -12,23 +12,12 @@ require("options")
 require("autocmd")
 require("keymaps")
 
--- we don't use plugins as root
+-- Don't load plugins as root and use a different colorscheme
+-- NOTE: embark colorscheme set transparent background for root in "options.lua"
 if not utils.is_root() then
   require("lazyplug")
-end
-
--- set colorscheme to modified embark
--- https://github.com/embark-theme/vim
--- vim.g.embark_transparent = true
--- vim.g.embark_terminal_italics = true
-vim.g.lua_embark_transparent = true
-if utils.is_root() then
-  pcall(vim.cmd, [[colorscheme lua-embark]])
+  -- vim.cmd.colorscheme("nightfly")
+  vim.cmd.colorscheme("lua-embark")
 else
-  pcall(vim.cmd, [[colorscheme nightfly]])
-end
-
--- set 'listchars' highlight
-if vim.g.colors_name == "nightfly" then
-  vim.cmd("hi! link Whitespace NonText")
+  vim.cmd.colorscheme("lua-embark")
 end

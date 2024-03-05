@@ -1,0 +1,43 @@
+{
+  "$schema": "https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json",
+  "runtime.version": "LuaJIT",
+  "diagnostics": {
+    "enable": true,
+    "globals": [
+      "vim",
+      "describe",
+      "pending",
+      "it",
+      "before_each",
+      "after_each",
+    ],
+    "neededFileStatus": {
+      "codestyle-check": "Any",
+    },
+  },
+  "workspace": {
+    "library": [
+      "lua",
+      "$VIMRUNTIME/lua",
+      "${3rd}/luv/library",
+      "$HOME/Sources/nvim/fzf-lua/lua",
+      "$HOME/Sources/nvim/smartyank.nvim/lua",
+      "$HOME/Sources/nvim/ts-vimdoc.nvim/lua/",
+      "$XDG_DATA_HOME/nvim/lazy/fzf-lua/lua",
+      "$XDG_DATA_HOME/nvim/lazy/smartyank.nvim/lua",
+      "$XDG_DATA_HOME/nvim/lazy/ts-vimdoc.nvim/lua",
+      "$XDG_DATA_HOME/nvim/lazy/mini.nvim/lua",
+      "$XDG_DATA_HOME/nvim/lazy/nvim-web-devicons/lua",
+      "$XDG_DATA_HOME/nvim/lazy/telescope.nvim/lua",
+    ],
+    "checkThirdParty": false,
+    "maxPreload": 2000,
+    "preloadFileSize": 1000,
+  },
+  "type": {
+    "weakNilCheck": true,
+    "weakUnionCheck": true,
+    "castNumberToInteger": true,
+  },
+  "telemetry.enable": false,
+}

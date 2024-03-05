@@ -4,7 +4,7 @@ local function augroup(name, fnc)
   fnc(vim.api.nvim_create_augroup(name, { clear = true }))
 end
 
-augroup("FzfLuaCtrlC", function(g)
+augroup("ibhagwan/FzfLuaCtrlC", function(g)
   aucmd("FileType",
     {
       group = g,
@@ -15,109 +15,101 @@ augroup("FzfLuaCtrlC", function(g)
     })
 end)
 
-augroup("SmartTextYankPost", function(g)
-  -- highlight yanked text and copy to system clipboard
-  -- TextYankPost is also called on deletion, limit to
-  -- yanks via v:operator
-  -- if we are connected over ssh also copy using OSC52
-  aucmd("TextYankPost", {
-    group = g,
-    pattern = "*",
-    -- command = "if has('clipboard') && v:operator=='y' && len(@0)>0 | "
-    --   .. "let @+=@0 | endif | "
-    --   .. "lua vim.highlight.on_yank{higroup='IncSearch', timeout=2000}"
-    desc = "Copy to clipboard/tmux/OSC52",
-    callback = function()
-      local ok, yank_data = pcall(vim.fn.getreg, "0")
-      local valid_yank = ok and #yank_data > 0 and vim.v.operator == "y"
-      if valid_yank and vim.fn.has("clipboard") == 1 then
-        pcall(vim.fn.setreg, "+", yank_data)
-      end
-      if valid_yank and (vim.env.SSH_CONNECTION or
-            -- $SSH_CONNECTION doesn't pass over to
-            -- root when using `su -`, copy indiscriminately
-            require "utils".is_root()) then
-        require "utils".osc52printf(yank_data)
-      end
-      if valid_yank and vim.env.TMUX then
-        -- we use `-w` to also copy to client's clipboard
-        vim.fn.system({ "tmux", "set-buffer", "-w", yank_data })
-      end
-      vim.highlight.on_yank({ higroup = "IncSearch", timeout = 1000 })
-    end
-  })
+augroup("ibhagwan/StatusLineColors", function(g)
+  aucmd("ColorScheme",
+    {
+      group = g,
+      callback = function(_)
+        -- fix 'listchars' highlight on nightfly
+        if vim.g.colors_name == "nightfly" then
+          vim.api.nvim_set_hl(0, "Whitespace", { default = false, link = "NonText" })
+        end
+        -- update heirline highlights, only do this after
+        -- statusline is loaded or we lose the :intro screen
+        if package.loaded.heirline then
+          local utils = require("heirline.utils")
+          local get_colors = require("plugins.heirline")._get_colors
+          utils.on_colorscheme(get_colors)
+        end
+      end,
+    })
 end)
 
 -- disable mini.indentscope for certain filetype|buftype
-augroup("MiniIndentscopeDisable", function(g)
+augroup("ibhagwan/MiniIndentscopeDisable", function(g)
   aucmd("BufEnter", {
     group = g,
-    pattern = "*",
-    command = "if index(['fzf', 'help'], &ft) >= 0 "
-        .. "|| index(['nofile', 'terminal'], &bt) >= 0 "
-        .. "| let b:miniindentscope_disable=v:true | endif"
+    callback = function(_)
+      if vim.bo.filetype == "fzf"
+          or vim.bo.filetype == "help"
+          or vim.bo.buftype == "nofile"
+          or vim.bo.buftype == "terminal"
+      then
+        vim.b.miniindentscope_disable = true
+      end
+    end,
   })
 end)
 
-augroup("NewlineNoAutoComments", function(g)
-  aucmd("BufEnter", {
-    group = g,
-    pattern = "*",
-    command = "setlocal formatoptions-=o"
-  })
-end)
-
-augroup("TermOptions", function(g)
+augroup("ibhagwan/TermOptions", function(g)
   aucmd("TermOpen",
     {
       group = g,
-      pattern = "*",
       command = "setlocal listchars= nonumber norelativenumber"
     })
 end)
 
-augroup("ResizeWindows", function(g)
+augroup("ibhagwan/ResizeWindows", function(g)
   aucmd("VimResized",
     {
       group = g,
-      pattern = "*",
       command = "tabdo wincmd ="
     })
 end)
 
-augroup("ToggleColorcolumn", function(g)
+augroup("ibhagwan/ToggleColorcolumn", function(g)
   aucmd({ "VimResized", "WinEnter", "BufWinEnter" }, {
     group = g,
-    pattern = "*",
-    command = [[lua require"utils".toggle_colorcolumn()]],
+    callback = require("utils").toggle_colorcolumn
   })
 end)
 
-augroup("ToggleSearchHL", function(g)
+augroup("ibhagwan/ToggleSearchHL", function(g)
   aucmd("InsertEnter",
     {
       group = g,
-      pattern = "*",
       command = ":nohl | redraw"
     })
 end)
 
-augroup("ActiveWinCursorLine", function(g)
+augroup("ibhagwan/ActiveWinCursorLine", function(g)
   -- Highlight current line only on focused window
   aucmd({ "WinEnter", "BufEnter", "InsertLeave" }, {
     group = g,
-    pattern = "*",
     command = "if ! &cursorline && ! &pvw | setlocal cursorline | endif"
   })
   aucmd({ "WinLeave", "BufLeave", "InsertEnter" }, {
     group = g,
-    pattern = "*",
     command = "if &cursorline && ! &pvw | setlocal nocursorline | endif"
   })
 end)
 
+-- goto last location when opening a buffer
+augroup("ibhagwan/BufLastLocation", function(g)
+  aucmd("BufReadPost", {
+    group = g,
+    callback = function(args)
+      local mark = vim.api.nvim_buf_get_mark(args.buf, '"')
+      local line_count = vim.api.nvim_buf_line_count(args.buf)
+      if mark[1] > 0 and mark[1] <= line_count then
+        vim.cmd 'normal! g`"zz'
+      end
+    end,
+  })
+end)
+
 -- auto-delete fugitive buffers
-augroup("Fugitive", function(g)
+augroup("ibhagwan/Fugitive", function(g)
   aucmd("BufReadPost", {
     group = g,
     pattern = "fugitive:*",
@@ -126,7 +118,7 @@ augroup("Fugitive", function(g)
 end)
 
 -- Solidity abi JSON
-augroup("SolidityABI", function(g)
+augroup("ibhagwan/SolidityABI", function(g)
   aucmd({ "BufRead", "BufNewFile" }, {
     group = g,
     pattern = "*.abi",
@@ -135,7 +127,7 @@ augroup("SolidityABI", function(g)
 end)
 
 -- Display help|man in vertical splits and map 'q' to quit
-augroup("Help", function(g)
+augroup("ibhagwan/Help", function(g)
   local function open_vert()
     -- do nothing for floating windows or if this is
     -- the fzf-lua minimized help window (height=1)
@@ -188,7 +180,7 @@ augroup("Help", function(g)
 end)
 
 -- https://vim.fandom.com/wiki/Avoid_scrolling_when_switch_buffers
-augroup("DoNotAutoScroll", function(g)
+augroup("ibhagwan/DoNotAutoScroll", function(g)
   local function is_float(winnr)
     local wincfg = vim.api.nvim_win_get_config(winnr)
     if wincfg and (wincfg.external or wincfg.relative and #wincfg.relative > 0) then
@@ -199,7 +191,6 @@ augroup("DoNotAutoScroll", function(g)
 
   aucmd("BufLeave", {
     group = g,
-    pattern = "*",
     desc = "Avoid autoscroll when switching buffers",
     callback = function()
       -- at this stage, current buffer is the buffer we leave
@@ -215,7 +206,6 @@ augroup("DoNotAutoScroll", function(g)
   })
   aucmd("BufEnter", {
     group = g,
-    pattern = "*",
     desc = "Avoid autoscroll when switching buffers",
     callback = function()
       if vim.b.__VIEWSTATE then
@@ -229,15 +219,15 @@ augroup("DoNotAutoScroll", function(g)
   })
 end)
 
-
-augroup("GQFormatter", function(g)
+augroup("ibhagwan/GQFormatter", function(g)
   aucmd({ "FileType", "LspAttach" },
     {
       group = g,
-      pattern = "*",
       callback = function(e)
         -- exclude vim-fugitive buffers
-        if e.file:match("^fugitive:") then return end
+        if vim.bo.filetype == "fugitive" or e.file:match("^fugitive:") then
+          return
+        end
         -- priortize LSP formatting as `gq`
         local lsp_has_formatting = false
         local lsp_clients = vim.lsp.get_active_clients()

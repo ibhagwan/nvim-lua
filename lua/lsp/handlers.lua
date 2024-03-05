@@ -28,12 +28,12 @@ function M.preview_location(loc, _, _)
     before = before - 1
   end
   local ft = vim.api.nvim_buf_get_option(bufnr, "filetype")
-  local buf, win = vim.lsp.util.open_floating_preview(lines, ft)
+  local buf, win = vim.lsp.util.open_floating_preview(lines, ft, {})
   vim.api.nvim_win_set_config(win, _winopts)
   vim.api.nvim_buf_set_option(buf, "bufhidden", "wipe")
   vim.api.nvim_buf_set_option(buf, "modifiable", false)
   vim.api.nvim_buf_set_option(buf, "filetype", ft)
-  vim.api.nvim_win_set_option(win, "winhighlight", "Normal:Normal,FloatBorder:FloatBorder")
+  vim.api.nvim_win_set_option(win, "winhighlight", "Normal:NormalFloat,FloatBorder:FloatBorder")
   vim.api.nvim_win_set_option(win, "cursorline", true)
   -- partial data, numbers make no sense
   vim.api.nvim_win_set_option(win, "number", false)
@@ -42,7 +42,7 @@ function M.preview_location(loc, _, _)
       { before + 1, range.start.character + 1, range["end"].character - range.start.character } or
       { before + 1 }
   vim.api.nvim_win_call(win, function()
-    vim.fn.matchaddpos("Cursor", { pos })
+    vim.fn.matchaddpos("IncSearch", { pos })
   end)
   return buf, win
 end
@@ -56,32 +56,7 @@ function M.preview_location_callback(err, res, ctx, cfg)
     vim.notify("Unable to find code location.", vim.log.levels.WARN)
     return nil
   end
-  if vim.tbl_islist(res) then
-    _, _float_win = M.preview_location(res[1], ctx, cfg)
-  else
-    _, _float_win = M.preview_location(res, ctx, cfg)
-  end
-end
-
--- see neovim #15504
--- https://github.com/neovim/neovim/pull/15504#discussion_r698424017
-M.mk_handler = function(fn)
-  return function(...)
-    local is_new = not select(4, ...) or type(select(4, ...)) ~= "number"
-    if is_new then
-      -- function(err, result, context, config)
-      fn(...)
-    else
-      -- function(err, method, params, client_id, bufnr, config)
-      local err = select(1, ...)
-      local method = select(2, ...)
-      local result = select(3, ...)
-      local client_id = select(4, ...)
-      local bufnr = select(5, ...)
-      local lspcfg = select(6, ...)
-      fn(err, result, { method = method, client_id = client_id, bufnr = bufnr }, lspcfg)
-    end
-  end
+  _, _float_win = M.preview_location(vim.tbl_islist(res) and res[1] or res, ctx, cfg)
 end
 
 function M.peek_definition()
@@ -93,8 +68,7 @@ function M.peek_definition()
     vim.api.nvim_set_current_win(_float_win)
   else
     local params = vim.lsp.util.make_position_params()
-    return vim.lsp.buf_request(0, "textDocument/definition", params,
-      M.mk_handler(M.preview_location_callback))
+    return vim.lsp.buf_request(0, "textDocument/definition", params, M.preview_location_callback)
   end
 end
 

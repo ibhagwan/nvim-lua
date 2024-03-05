@@ -296,19 +296,13 @@ M.sudo_write = function(tmpfile, filepath)
   -- no need to check error as this fails the entire function
   vim.api.nvim_exec(string.format("write! %s", tmpfile), true)
   if M.sudo_exec(cmd) then
-    M.info(string.format([[\r\n"%s" written]], filepath))
-    vim.cmd("e!")
+    -- refreshes the buffer and prints the "written" message
+    vim.cmd.checktime()
+    -- exit command mode
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(
+      "<Esc>", true, false, true), "n", true)
   end
   vim.fn.delete(tmpfile)
-end
-
-M.osc52printf = function(...)
-  local str = string.format(...)
-  local base64 = require "base64".encode(str)
-  local osc52str = string.format("\x1b]52;c;%s\x07", base64)
-  local bytes = vim.fn.chansend(vim.v.stderr, osc52str)
-  assert(bytes > 0)
-  M.info(string.format("[OSC52] %d chars copied (%d bytes)", #str, bytes))
 end
 
 M.unload_modules = function(patterns)

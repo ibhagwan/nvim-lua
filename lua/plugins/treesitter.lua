@@ -99,11 +99,13 @@ return {
             set_jumps = true, -- whether to set jumps in the jumplist
             goto_next = {     -- jump to next start or end
               ["]f"] = { query = "@function.outer", desc = "Next function start|end" },
-              ["]s"] = { query = "@scope", query_group = "locals", desc = "Next scope" },
+              -- overrides next misspelled word
+              -- ["]s"] = { query = "@scope", query_group = "locals", desc = "Next scope" },
             },
             goto_previous = { -- jump to previous start or end
               ["[f"] = { query = "@function.outer", desc = "Previous function start" },
-              ["[s"] = { query = "@scope", query_group = "locals", desc = "Previous scope" },
+              -- overrides previous misspelled word
+              -- ["[s"] = { query = "@scope", query_group = "locals", desc = "Previous scope" },
             },
             goto_next_start = {
               ["]F"] = { query = "@function.outer", desc = "Next function" },

@@ -50,7 +50,7 @@ M.toggle = function(bufnr)
   else
     vim.g.miniindentscope_disable = not vim.g.miniindentscope_disable
   end
-  require("mini.indentscope").auto_draw({ lazy = true })
+  require("mini.indentscope").draw()
 end
 
 M.btoggle = function()

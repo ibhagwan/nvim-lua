@@ -174,13 +174,13 @@ local disabled_built_ins     = {
   "rrhelper",
   "spellfile_plugin",
   -- 'matchit',
-  --'matchparen',
+  -- 'matchparen',
 }
 -- disable default fzf plugin if not
 -- root since we will be using fzf-lua
--- if not require "utils".is_root() then
---   table.insert(disabled_built_ins, "fzf")
--- end
+if not require "utils".is_root() then
+  table.insert(disabled_built_ins, "fzf")
+end
 for _, plugin in pairs(disabled_built_ins) do
   vim.g["loaded_" .. plugin] = 1
 end
@@ -205,6 +205,7 @@ vim.g.markdown_fenced_languages = {
 vim.g.mapleader                 = " "
 vim.g.maplocalleader            = " "
 
--- We do this to prevent the loading of the system fzf.vim plugin. This is
--- present at least on Arch/Manjaro/Void
--- vim.api.nvim_command("set rtp-=/usr/share/vim/vimfiles")
+-- set transparent background for root
+-- https://github.com/embark-theme/vim
+-- vim.g.embark_transparent        = true
+vim.g.embark_transparent        = require("utils").is_root() and true or nil

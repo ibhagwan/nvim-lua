@@ -1,14 +1,6 @@
 local map = vim.keymap.set
 
--- Reload the config (including certain plugins)
-vim.api.nvim_create_user_command("NvimRestart",
-  function()
-    require("utils").reload_config()
-  end,
-  { nargs = "*" }
-)
-
-map("", "<leader>R", "<Esc>:NvimRestart<CR>",
+map("", "<leader>R", require("utils").reload_config,
   { silent = true, desc = "reload nvim configuration" })
 
 -- Use ':Grep' or ':LGrep' to grep into quickfix|loclist
@@ -60,24 +52,11 @@ map({ "n", "v", "i" }, "<C-x><C-l>",
 map({ "n", "v", "i" }, "<C-S>", "<C-c>:update<cr>", { silent = true, desc = "Save" })
 
 -- w!! to save with sudo
-map("c", "w!!", "<esc>:lua require'utils'.sudo_write()<CR>", { silent = true })
+map("c", "w!!", require("utils").sudo_write, { silent = true })
 
 -- Beginning and end of line in `:` command mode
 map("c", "<C-a>", "<home>", {})
 map("c", "<C-e>", "<end>", {})
-
--- Arrows in command line mode (':') menus
--- TODO: why the below doesn't work with nightly 0.8?
--- map('c', '<down>', '(pumvisible() ? "\\<C-n>" : "\\<down>")', { expr = true })
--- map('c', '<up>',   '(pumvisible() ? "\\<C-p>" : "\\<up>")',   { expr = true })
-for k, v in pairs({ ["<down>"] = "<C-n>", ["<up>"] = "<C-p>" }) do
-  map("c", k, function()
-    local key = vim.fn.pumvisible() ~= 0 and v or k
-    vim.api.nvim_feedkeys(
-      vim.api.nvim_replace_termcodes(key,
-        true, false, true), "n", false)
-  end, { silent = false })
-end
 
 -- Terminal mappings
 map("t", "<M-[>", [[<C-\><C-n>]], {})
@@ -103,30 +82,24 @@ map("n", "<leader><Left>", "<cmd>lua require'utils'.resize(true,  -5)<CR>",
 map("n", "<leader><Right>", "<cmd>lua require'utils'.resize(true,   5)<CR>",
   { silent = true, desc = "vertical split increase" })
 
--- Navigate tabs
-map("n", "[t", ":tabprevious<CR>", { desc = "Previous tab" })
-map("n", "]t", ":tabnext<CR>", { desc = "Next tab" })
-map("n", "[T", ":tabfirst<CR>", { desc = "First tab" })
-map("n", "]T", ":tablast<CR>", { desc = "Last tab" })
--- Navigate buffers
-map("n", "[b", ":bprevious<CR>", { desc = "Previous buffer" })
-map("n", "]b", ":bnext<CR>", { desc = "Next buffer" })
-map("n", "[B", ":bfirst<CR>", { desc = "First buffer" })
-map("n", "]B", ":blast<CR>", { desc = "Last buffer" })
--- Quickfix list mappings
+-- Navigate buffers|tabs|quickfix|loclist
+for k, v in pairs({
+  b = { cmd = "b", desc = "buffer" },
+  t = { cmd = "tab", desc = "tab" },
+  q = { cmd = "c", desc = "quickfix" },
+  l = { cmd = "l", desc = "location" },
+}) do
+  map("n", "[" .. k:lower(), "<cmd>" .. v.cmd .. "previous<CR>", { desc = "Previous " .. v.desc })
+  map("n", "]" .. k:lower(), "<cmd>" .. v.cmd .. "next<CR>", { desc = "Next " .. v.desc })
+  map("n", "[" .. k:upper(), "<cmd>" .. v.cmd .. "first<CR>", { desc = "First " .. v.desc })
+  map("n", "]" .. k:upper(), "<cmd>" .. v.cmd .. "last<CR>", { desc = "Last " .. v.desc })
+end
+
+-- Quickfix|loclist toggles
 map("n", "<leader>q", "<cmd>lua require'utils'.toggle_qf('q')<CR>",
   { desc = "toggle quickfix list" })
-map("n", "[q", ":cprevious<CR>", { desc = "Next quickfix" })
-map("n", "]q", ":cnext<CR>", { desc = "Previous quickfix" })
-map("n", "[Q", ":cfirst<CR>", { desc = "First quickfix" })
-map("n", "]Q", ":clast<CR>", { desc = "Last quickfix" })
--- Location list mappings
 map("n", "<leader>Q", "<cmd>lua require'utils'.toggle_qf('l')<CR>",
   { desc = "toggle location list" })
-map("n", "[l", ":lprevious<CR>", { desc = "Previous location" })
-map("n", "]l", ":lnext<CR>", { desc = "Next location" })
-map("n", "[L", ":lfirst<CR>", { desc = "First location" })
-map("n", "]L", ":llast<CR>", { desc = "Last location" })
 
 -- shortcut to view :messages
 map({ "n", "v" }, "<leader>m", "<cmd>messages<CR>",
@@ -163,12 +136,6 @@ map("n", "g<C-v>", "`[v`]", { desc = "visual select last yank/paste" })
 map("n", "n", "nzzzv", { desc = "Fwd  search '/' or '?'" })
 map("n", "N", "Nzzzv", { desc = "Back search '/' or '?'" })
 
--- Break undo chain on punctuation so we can
--- use 'u' to undo sections of an edit
--- DISABLED, ALL KINDS OF ODDITIES
---[[ for _, c in ipairs({',', '.', '!', '?', ';'}) do
-   map('i', c, c .. "<C-g>u", {})
-end --]]
 -- any jump over 5 modifies the jumplist
 -- so we can use <C-o> <C-i> to jump back and forth
 for _, c in ipairs({
@@ -226,10 +193,3 @@ map("n", "<leader>o",
 map("n", "<leader>O",
   [[:<C-u>call append(line(".")-1, repeat([""], v:count1))<CR>]],
   { silent = true, desc = "newline above (no insert-mode)" })
-
--- Use operator pending mode to visually select entire buffer, e.g.
---    d<A-a> = delete entire buffer
---    y<A-a> = yank entire buffer
---    v<A-a> = visual select entire buffer
-map("o", "<A-a>", ":<C-U>normal! mzggVG<CR>`z")
-map("x", "<A-a>", ":<C-U>normal! ggVG<CR>")

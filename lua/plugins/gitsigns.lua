@@ -19,8 +19,15 @@ M.config = function()
     linehl         = false, -- Toggle with `:Gitsigns toggle_linehl`
     word_diff      = false, -- Toggle with `:Gitsigns toggle_word_diff`
     sign_priority  = 4,     -- Lower priorirty means diag signs supercede
-    preview_config = { border = "rounded" },
-    yadm           = { enable = not require("utils").IS_WINDOWS and true, },
+    -- Use detached worktrees instead of `yadm`
+    -- https://github.com/lewis6991/gitsigns.nvim/pull/600
+    -- yadm           = { enable = not require("utils").IS_WINDOWS and true, },
+    worktrees      = not require("utils").IS_WINDOWS and {
+      {
+        toplevel = vim.env.HOME,
+        gitdir   = vim.env.HOME .. "/dots/.git"
+      }
+    } or nil,
     on_attach      = function(bufnr)
       local gs = package.loaded.gitsigns
 
@@ -43,36 +50,27 @@ M.config = function()
       end, { expr = true, desc = "Previous hunk" })
 
       -- Actions
-      map({ "n", "v" }, "<leader>hr", [[<cmd>lua require("gitsigns").reset_hunk()<CR>]],
-        { desc = "reset hunk" })
-      map("n", "<leader>hS", [[<cmd>lua require("gitsigns").stage_buffer()<CR>]],
-        { desc = "stage buffer" })
-      map({ "n", "v" }, "<leader>hs", [[<cmd>lua require("gitsigns").stage_hunk()<CR>]],
-        { desc = "stage hunk" })
-      map("n", "<leader>hu", [[<cmd>lua require("gitsigns").undo_stage_hunk()<CR>]],
-        { desc = "undo stage hunk" })
-      -- doesn't exist yet
-      -- map('n', '<leader>hU', '<cmd>lua require("gitsigns").undo_stage_buffer()<CR>')
-      map("n", "<leader>hR", [[<cmd>lua require("gitsigns").reset_buffer()<CR>]],
-        { desc = "reset buffer" })
-      map("n", "<leader>hp", [[<cmd>lua require("gitsigns").preview_hunk_inline()<CR>]],
-        { desc = "preview hunk (inline)" })
-      map("n", "<leader>hP", [[<cmd>lua require("gitsigns").preview_hunk()<CR>]],
-        { desc = "preview hunk" })
+      map("n", "<leader>hs", gs.stage_hunk, { desc = "Stage hunk" })
+      map("n", "<leader>hr", gs.reset_hunk, { desc = "Reset hunk" })
+      map("v", "<leader>hs", function() gs.stage_hunk { vim.fn.line("."), vim.fn.line("v") } end,
+        { desc = "Stage hunk" })
+      map("v", "<leader>hr", function() gs.reset_hunk { vim.fn.line("."), vim.fn.line("v") } end,
+        { desc = "Reset hunk" })
+      map("n", "<leader>hu", gs.undo_stage_hunk, { desc = "Undo stage hunk" })
+      map("n", "<leader>hS", gs.stage_buffer, { desc = "Stage buffer" })
+      map("n", "<leader>hR", gs.reset_buffer, { desc = "Reset buffer" })
+      map("n", "<leader>hp", gs.preview_hunk_inline, { desc = "preview hunk (inline)" })
+      map("n", "<leader>hP", gs.preview_hunk, { desc = "preview hunk (float)" })
       -- map gb, yb and hb to git blame
       for _, c in ipairs({ "g", "y", "h" }) do
         map("n", string.format("<leader>%sb", c),
-          [[<cmd>lua require("gitsigns").blame_line({full=true})<CR>]],
-          { desc = "line blame (popup)" })
+          function() gs.blame_line({ full = true }) end, { desc = "Line blame (float)" })
       end
-      map("n", "<leader>hB", [[<cmd>lua require("gitsigns").toggle_current_line_blame()<CR>]],
-        { desc = "line blame (toggle)" })
-      map("n", "<leader>hd", [[<cmd>lua require("gitsigns").diffthis()<CR>]],
-        { desc = "diff against the index" })
-      map("n", "<leader>hD", [[<cmd>lua require("gitsigns").diffthis("~1")<CR>]],
+      map("n", "<leader>hB", gs.toggle_current_line_blame, { desc = "line blame (toggle)" })
+      map("n", "<leader>hd", gs.diffthis, { desc = "diff against the index" })
+      map("n", "<leader>hD", function() gs.diffthis("~1") end,
         { desc = "diff against previous commit" })
-      map("n", "<leader>hx", [[<cmd>lua require("gitsigns").toggle_deleted()<CR>]],
-        { desc = "toggle deleted lines" })
+      map("n", "<leader>hx", gs.toggle_deleted, { desc = "toggle deleted lines" })
 
       -- Text object
       map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>")

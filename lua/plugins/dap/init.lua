@@ -1,6 +1,6 @@
 local M = {
   "mfussenegger/nvim-dap",
-  keys = { "<F5>", "<F8>", "<F9>" },
+  keys = { "<F5>", "<S-F5>", "<F8>", "<F9>" },
   dependencies = {
     { "rcarriga/nvim-dap-ui" },
     { "theHamsta/nvim-dap-virtual-text" },
@@ -14,6 +14,8 @@ M.config = function()
 
   map({ "n", "v" }, "<F5>", "<cmd>lua require'dap'.continue()<CR>",
     { silent = true, desc = "DAP launch or continue" })
+  map({ "n", "v" }, "<S-F5>", "<cmd>lua require'osv'.launch({port=8086})<CR>",
+    { silent = true, desc = "Start OSV Lua Debug Server" })
   map({ "n", "v" }, "<F8>", "<cmd>lua require'dapui'.toggle()<CR>",
     { silent = true, desc = "DAP toggle UI" })
   map({ "n", "v" }, "<F9>", "<cmd>lua require'dap'.toggle_breakpoint()<CR>",

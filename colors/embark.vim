@@ -3,7 +3,7 @@
 " Based On: Challenger Deep, Ayu Mirage, and Manta
 "
 " source: https://github.com/embark-theme/vim
-" last updated: 2023-02-25, 484eb68
+" last updated: 2024-03-04, d0ce050
 "
 " == PRELUDE ==
 "
@@ -218,7 +218,7 @@ call s:h("DiffText",      {"bg": s:diff_changed, "gui": "underline"})
 " ErrorMsg - Error messages on the command line.
 call s:h("ErrorMsg",      {"fg": s:dark_red})
 " WinSeparator - Separators between window splits.
-call s:h("WinSeparator",     {"fg": s:bg_dark})
+call s:h("WinSeparator",  {"fg": s:space3})
 " Folded - Line used for closed folds.
 call s:h("Folded",        {"fg": s:dark_purple})
 " FoldColumn - 'foldcolumn'
@@ -287,9 +287,9 @@ else
   call s:h("SpellLocal",  {"gui": "underline", "sp": s:dark_green})
 endif
 " StatusLine - Status line of current window.
-call s:h("StatusLine",    {"bg": s:bg, "fg": s:norm})
+call s:h("StatusLine",    {"bg": s:bg_dark, "fg": s:norm})
 " StatusLineNC - Status lines of not-current windows.
-call s:h("StatusLineNC",  {"bg": s:bg})
+call s:h("StatusLineNC",  {"bg": s:bg_dark, "fg": s:norm_subtle})
 " TabLine - Tab pages line, not active tab page label.
 call s:h("TabLine",       {"fg": s:norm_subtle, "bg": s:bg})
 " TabLineFill - Tab pages line, where there are no labels.
@@ -376,23 +376,60 @@ if has('nvim')
   call s:h("LeapLabelPrimary", {"fg": s:bg_dark, "bg": s:dark_cyan, "gui": "bold"})
   call s:h("LeapLabelSecondary", {"fg": s:bg_dark, "bg": s:purple})
 
+  " nvim notify support
+  call s:h("NotifyERRORBorder", {"fg": s:red})
+  hi! link NotifyERRORTitle NotifyERRORBorder
+  hi! link NotifyERRORIcon NotifyERRORBorder
+
+  call s:h("NotifyWARNBorder", {"fg": s:yellow})
+  hi! link NotifyWARNTitle NotifyWARNBorder
+  hi! link NotifyWARNIcon NotifyWARNTitle
+
+  call s:h("NotifyINFOBorder", {"fg": s:green})
+  hi! link NotifyINFOTitle NotifyInfoBorder
+  hi! link NotifyINFOIcon NotifyInfoBorder
+  hi! link NotifyINFOBODY NotifyInfoBorder
+
+  call s:h("NotifyDEBUGBorder", {"fg": s:blue})
+  hi! link NotifyDEBUGTitle NotifyDEBUGBorder
+  hi! link NotifyDEBUGIcon NotifyDEBUGIcon
+
+  call s:h("NotifyTRACEBorder", {"fg": s:purple})
+  hi! link NotifyTRACETitle NotifyTRACEBorder
+  hi! link NotifyTRACEIcon NotifyTRACEBorder
+
   if has('nvim-0.8')
     " Treesitter support
-    call s:h("@punctuation.bracket", {"fg": s:norm})
+    call s:h("@keyword.operator", {"fg": s:cyan})
+    hi! link @constant.builtin Special
+    call s:h("@punctuation.bracket", {"fg": s:cyan})
+    call s:h("@variable.builtin", {"fg": s:cyan})
 
     call s:h("@string.special", {"fg": s:dark_blue})
     call s:h("@string.escape", {"fg": s:cyan})
+    call s:h("@string.special.symbol", {"fg": s:yellow})
 
+    call s:h("@module", {"fg": s:purple })
     call s:h("@function", {"fg": s:red})
     call s:h("@function.call", {"fg": s:blue})
     call s:h("@constructor", {"fg": s:purple})
 
-    call s:h("@keyword.operator", {"fg": s:cyan})
+    hi! link @markup.heading Title
+    call s:h("@markup.raw", {"fg": s:cyan})
+    call s:h("@markup.link.uri", {"fg": s:blue})
+    call s:h("@markup.link", {"fg": s:purple})
+    call s:h("@markup.strong", {"gui": "bold"})
+    call s:h("@markup.emphasis", {"gui": s:maybe_italic("")})
+    call s:h("@markup.list.unchecked", {"fg": s:dark_cyan, "gui": "bold"})
+    call s:h("@markup.list.checked", {"fg": s:norm_subtle})
 
-    hi! link @constant.builtin Special
-    call s:h("@variable.builtin", {"fg": s:cyan})
+    hi! link @tag Keyword
+    hi! link @tag.delimiter Special
+    hi! link @tag.attribute Constant
+
+    " Deprecated nvim-treesitter highlights
+    " Will remove in a few months
     call s:h("@symbol", {"fg": s:yellow})
-
     call s:h("@text.literal", {"fg": s:cyan})
     call s:h("@text.uri", {"fg": s:blue})
     call s:h("@text.reference", {"fg": s:purple})
@@ -400,10 +437,6 @@ if has('nvim')
     call s:h("@text.emphasis", {"gui": s:maybe_italic("")})
     call s:h("@text.todo.unchecked", {"fg": s:dark_cyan, "gui": "bold"})
     call s:h("@text.todo.checked", {"fg": s:norm_subtle})
-
-    hi! link @tag Keyword
-    hi! link @tag.delimiter Special
-    hi! link @tag.attribute Constant
   endif
 endif
 
@@ -572,4 +605,3 @@ let g:terminal_ansi_colors = [
     \ s:blue.gui,      s:purple.gui,      s:cyan.gui,       s:bg.gui,
     \ s:bg_bright.gui, s:dark_red.gui,    s:dark_green.gui, s:dark_yellow.gui,
     \ s:dark_blue.gui, s:dark_purple.gui, s:dark_cyan.gui,  s:norm_subtle.gui]
-

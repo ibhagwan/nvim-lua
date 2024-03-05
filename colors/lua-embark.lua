@@ -1,661 +1,425 @@
-local hl = {}
-
-local NONE = "NONE"
-
-local colors = {
-  bg             = { gui = "#323F4E", cterm = 233, cterm16 = NONE },
-  fg             = { gui = "#cbe3e7", cterm = 253, cterm16 = 7 },
-  red            = { gui = "#F48FB1", cterm = 204, cterm16 = 1 },
-  dark_red       = { gui = "#F02E6E", cterm = 203, cterm16 = 9 },
-  green          = { gui = "#A1EFD3", cterm = 120, cterm16 = 2 },
-  dark_green     = { gui = "#7fe9c3", cterm = 119, cterm16 = 10 },
-  yellow         = { gui = "#ffe6b3", cterm = 228, cterm16 = 3 },
-  dark_yellow    = { gui = "#F2B482", cterm = 215, cterm16 = 11 },
-  blue           = { gui = "#91ddff", cterm = 159, cterm16 = 4 },
-  dark_blue      = { gui = "#78a8ff", cterm = 135, cterm16 = 13 },
-  purple         = { gui = "#d4bfff", cterm = 141, cterm16 = 5 },
-  dark_purple    = { gui = "#7676ff", cterm = 75, cterm16 = 12 },
-  cyan           = { gui = "#ABF8F7", cterm = 122, cterm16 = 6 },
-  dark_cyan      = { gui = "#63f2f1", cterm = 121, cterm16 = 14 },
-  white          = { gui = "#E4E4E4", cterm = 145, cterm16 = 7 },
-  black          = { gui = "#100E23", cterm = 232, cterm16 = 0 },
-  visual_black   = { gui = NONE, cterm = NONE, cterm16 = 0 },
-  comment_grey   = { gui = "#8A889D", cterm = 252, cterm16 = 15 },
-  gutter_fg_grey = { gui = "#656A7c", cterm = 238, cterm16 = 15 },
-  cursor_grey    = { gui = "#100E23", cterm = 236, cterm16 = 8 },
-  visual_grey    = { gui = "#56687E", cterm = 237, cterm16 = 15 },
-  menu_grey      = { gui = "#56687E", cterm = 237, cterm16 = 8 },
-  special_grey   = { gui = "#656A7c", cterm = 238, cterm16 = 15 },
-  vertsplit      = { gui = "#181A1F", cterm = 59, cterm16 = 15 },
-  statusline     = { gui = "#7E9CD8", cterm = 236, cterm16 = 8 },
-  space1         = { gui = "#1e1c31", cterm = 233, cterm16 = NONE },
-  space2         = { gui = "#2D2B40", cterm = 233, cterm16 = NONE },
-  space3         = { gui = "#3E3869", cterm = 236, cterm16 = 8 },
-  space4         = { gui = "#585273", cterm = 236, cterm16 = 8 },
-  diff_del       = { gui = "#411E35", cterm = 203, cterm16 = 9 },
-  diff_add       = { gui = "#133246", cterm = 119, cterm16 = 10 },
-  diff_change    = { gui = "#22244C", cterm = 215, cterm16 = 11 },
+local C       = {
+  space0      = { gui = "#100c31", cterm = 232, cterm16 = 0 },
+  space1      = { gui = "#1e1c31", cterm = 233, cterm16 = "NONE" },
+  space2      = { gui = "#2D2B40", cterm = 233, cterm16 = "NONE" },
+  space3      = { gui = "#3E3869", cterm = 236, cterm16 = 8 },
+  space4      = { gui = "#585273", cterm = 236, cterm16 = 8 },
+  astral0     = { gui = "#8A889D", cterm = 252, cterm16 = 15 },
+  astral1     = { gui = "#cbe3e7", cterm = 253, cterm16 = 7 },
+  red         = { gui = "#F48FB1", cterm = 204, cterm16 = 1 },
+  dark_red    = { gui = "#F02E6E", cterm = 203, cterm16 = 9 },
+  green       = { gui = "#A1EFD3", cterm = 120, cterm16 = 2 },
+  dark_green  = { gui = "#7fe9c3", cterm = 119, cterm16 = 10 },
+  yellow      = { gui = "#ffe6b3", cterm = 228, cterm16 = 3 },
+  dark_yellow = { gui = "#F2B482", cterm = 215, cterm16 = 11 },
+  blue        = { gui = "#91ddff", cterm = 159, cterm16 = 4 },
+  dark_blue   = { gui = "#78a8ff", cterm = 135, cterm16 = 13 },
+  purple      = { gui = "#d4bfff", cterm = 141, cterm16 = 5 },
+  dark_purple = { gui = "#7676ff", cterm = 75, cterm16 = 12 },
+  cyan        = { gui = "#ABF8F7", cterm = 122, cterm16 = 6 },
+  dark_cyan   = { gui = "#63f2f1", cterm = 121, cterm16 = 14 },
+  diff_del    = { gui = "#411E35", cterm = 203, cterm16 = 9 },
+  diff_add    = { gui = "#133246", cterm = 119, cterm16 = 10 },
+  diff_change = { gui = "#22244C", cterm = 215, cterm16 = 11 },
+  -- addded to orignal embark
+  NONE        = { gui = "NONE", cterm = "NONE", cterm16 = "NONE" },
+  white       = { gui = "#E4E4E4", cterm = 145, cterm16 = 7 },
+  statusline  = { gui = "#7E9CD8", cterm = 236, cterm16 = 8 },
+  grey0       = { gui = "#656A7c", cterm = 238, cterm16 = 15 },
+  grey1       = { gui = "#56687E", cterm = 237, cterm16 = 15 },
 }
 
-if not vim.g.lua_embark_transparent then
-  colors.bg = colors.space1
+C.bg          = C.space1
+C.bg_dark     = C.space0
+C.bg_bright   = C.space4
+C.norm        = C.astral1
+C.norm_subtle = C.astral0
+C.visual      = C.space3
+C.head_a      = C.dark_blue
+C.head_b      = C.blue
+C.head_c      = C.dark_cyan
+
+if vim.g.embark_transparent == true then
+  C.bg     = C.NONE
+  C.space3 = C.grey1
+  C.space4 = C.grey0
+  C.visual = C.space3
+  -- C.norm_subtle = C.grey0
 end
 
-hl.common = {
-  Normal = { fg = colors.fg, bg = colors.bg },
-  -- NormalNC =          { fg = colors.fg, bg = colors.black },
-  NormalFloat = { fg = colors.fg, bg = colors.bg },
-  Conceal = { fg = colors.fg },
-  Cursor = { fg = colors.special_grey, bg = colors.blue },
-  CursorIM = {},
-  CursorLine = { bg = colors.cursor_grey },
-  CursorColumn = { bg = colors.cursor_grey },
-  ColorColumn = { bg = colors.cursor_grey },
-  Directory = { fg = colors.purple },
-  DiffAdd = { fg = colors.bg, bg = colors.diff_add },
-  DiffDelete = { fg = colors.bg, bg = colors.diff_del },
-  DiffChange = { fg = colors.diff_change, underline = true },
-  DiffText = { fg = colors.bg, bg = colors.diff_change, bold = true },
-  EndOfBuffer = { fg = colors.gutter_fg_grey },
-  ErrorMsg = { fg = colors.dark_red },
-  VertSplit = { fg = colors.vertsplit },
-  WinSeparator = { fg = colors.statusline },
-  Folded = { fg = colors.comment_grey },
-  FoldColumn = { fg = colors.dark_purple },
-  SignColumn = { fg = colors.green },
-  Search = { fg = colors.black, bg = colors.dark_yellow },
-  IncSearch = { fg = colors.black, bg = colors.yellow },
-  LineNr = { fg = colors.gutter_fg_grey },
-  CursorLineNr = { fg = colors.blue, bg = colors.black, bold = true },
-  MatchParen = { fg = colors.purple, bg = colors.black, bold = true, underline = true },
-  ModeMsg = { fg = colors.comment_grey, bold = true },
-  MoreMsg = { fg = colors.comment_grey, bold = true },
-  NonText = { fg = colors.special_grey },
-  Pmenu = { fg = colors.fg, bg = colors.space2 },
-  PmenuSel = { fg = colors.purple, bg = colors.black },
-  PmenuSbar = { bg = colors.special_grey },
-  PmenuThumb = { bg = colors.fg },
-  Question = { fg = colors.red },
-  QuickFixLine = { fg = colors.black, bg = colors.yellow },
-  SpecialKey = { fg = colors.blue },
-  -- if vim.fn.has("gui_running") then
-  SpellBad = { fg = colors.dark_red, underline = true },
-  SpellCap = { fg = colors.green, underline = true },
-  SpellLocal = { fg = colors.dark_green, underline = true },
-  SpellRare = { fg = colors.red, underline = true },
-  -- end
-  -- StatusLine =        { fg = colors.fg,           bg = colors.cursor_grey },
-  -- StatusLineNC =      { fg = colors.visual_grey,  bg = colors.cursor_grey },
-  StatusLine = { fg = colors.black, bg = colors.statusline },
-  StatusLineNC = { fg = colors.comment_grey, bg = colors.cursor_grey },
-  TabLine = { fg = colors.comment_grey, bg = colors.black },
-  TabLineFill = {},
-  TabLineSel = { fg = colors.black, bg = colors.dark_blue, bold = true },
-  Terminal = { fg = colors.fg, bg = colors.black },
-  Title = { fg = colors.dark_blue },
-  Visual = { fg = colors.visual_black, bg = colors.visual_grey },
-  VisualNOS = { bg = colors.visual_grey },
-  WarningMsg = { fg = colors.yellow },
-  WildMenu = { fg = colors.black, bg = colors.blue },
-  FloatBorder = { fg = colors.comment_grey },
-  Underlined = { fg = colors.dark_cyan, underline = true },
-  Ignore = {},
-  Error = { fg = colors.dark_red, bg = colors.black, bold = true },
-  Todo = { fg = colors.dark_yellow, bg = colors.bg, bold = true },
-  Debug = { fg = colors.yellow },
-  debugPC = { bg = hl.cspecial_grey },
-  debugBreakpoint = { fg = colors.black, bg = colors.red },
-}
+local HLS = {
+  -- Common groups, generated with `:help E669`
+  { "Comment",                       { fg = C.norm_subtle, italic = true } },
+  { "Constant",                      { fg = C.purple } },
+  { "String",                        { fg = C.yellow } },
+  -- { "Character",                  { fg = C.yellow } },
+  { "Number",                        { fg = C.dark_yellow } },
+  { "Boolean",                       { fg = C.dark_yellow } },
+  { "Float",                         { fg = C.dark_yellow } },
+  -- { "Identifier",                    { fg = C.norm } },
+  { "Identifier",                    { fg = C.blue } },
+  { "Function",                      { fg = C.red } },
+  { "Statement",                     { fg = C.green } },
+  -- { "Conditional",                { link = "Statement" } },
+  -- { "Repeat",                     { link = "Statement" } },
+  { "Label",                         { fg = C.dark_blue } },
+  { "Operator",                      { fg = C.dark_cyan } },
+  { "Keyword",                       { fg = C.green } },
+  -- { "Exception",                  { link = "Statement" } },
+  { "PreProc",                       { fg = C.green } },
+  -- { "Include",                    { link = "PreProc" } },
+  -- { "Define",                     { link = "PreProc" } },
+  -- { "Macro",                      { link = "PreProc" } },
+  -- { "PreCondit",                  { link = "PreProc" } },
+  { "Type",                          { fg = C.purple } },
+  -- { "StorageClass",               { link = "Type" } },
+  -- { "Structure",                  { link = "Type" } },
+  -- { "Typedef",                    { link = "Type" } },
+  { "Special",                       { fg = C.cyan } },
+  -- { "SpecialChar",                { link = "Special" } },
+  -- { "Tag",                        { link = "Special" } },
+  -- { "Delimiter",                  { link = "Special" } },
+  -- { "SpecialComment",             { link = "Special" } },
+  -- { "Debug",                      { link = "Special" } },
+  { "Underlined",                    { fg = C.dark_cyan, underline = true } },
+  { "Ignore",                        { fg = C.bg } },
+  { "Error",                         { fg = C.dark_red, bg = C.bg_dark, bold = true } },
+  { "Todo",                          { fg = C.dark_yellow, bg = C.bg, bold = true } },
+  -- Generated with `:help highlight-default`
+  { "ColorColumn",                   { bg = C.space2 } },
+  { "Conceal",                       { fg = C.norm } },
+  { "Cursor",                        { bg = C.blue, fg = C.bg_bright } },
+  { "CursorColumn",                  { bg = C.bg_dark } },
+  { "CursorLine",                    { bg = C.bg_dark } },
+  { "Directory",                     { fg = C.purple } },
+  { "DiffAdd",                       { bg = C.diff_add } },
+  -- { "DiffChange",                 { fg = C.diff_change, underline = true } },
+  { "DiffChange",                    { bg = C.space2 } },
+  { "DiffDelete",                    { fg = C.visual, bg = C.diff_del } },
+  -- { "DiffText",                   { fg = C.bg, bg = C.diff_change, bold = true } },
+  { "DiffText",                      { bg = C.diff_change } },
+  { "ErrorMsg",                      { fg = C.dark_red } },
+  { "WinSeparator",                  { fg = C.space3 } },
+  -- Links on Linux to `WinSeparator` and `NormalFloat` on Windows
+  { "FloatBorder",                { link = "WinSeparator" } },
+  { "Folded",                        { fg = C.dark_purple } },
+  { "FoldColumn",                    { fg = C.dark_purple } },
+  { "SignColumn",                    { fg = C.green } },
+  { "IncSearch",                     { fg = C.bg, bg = C.yellow } },
+  { "LineNr",                        { fg = C.space4 } },
+  { "CursorLineNr",                  { bg = C.bg_dark, fg = C.blue, bold = true } },
+  { "MatchParen",                    { bg = C.bg_dark, fg = C.purple, bold = true, underline = true } },
+  { "ModeMsg",                       { fg = C.norm_subtle, bold = true } },
+  { "MoreMsg",                       { link = "ModeMsg" } },
+  { "NonText",                       { fg = C.bg_bright } },
+  -- { "EndOfBuffer",                { link = "NonText" } },
+  -- { "Whitespace",                 { link = "NonText" } },
+  { "Normal",                        { bg = C.bg, fg = C.norm } },
+  -- { "VertSplit",                  { link = "Normal" } },
+  { "Pmenu",                         { fg = C.norm, bg = C.space2 } },
+  -- { "NormalFloat",                { link = "Pmenu" } },
+  { "PmenuSel",                      { fg = C.purple, bg = C.bg } },
+  { "PmenuSbar",                     { fg = C.norm, bg = C.bg_dark } },
+  { "PmenuThumb",                    { fg = C.norm, bg = C.bg_dark } },
+  { "Question",                      { fg = C.green } },
+  { "Search",                        { bg = C.dark_yellow, fg = C.bg } },
+  -- { "Substitute",                 { link = "Search" } },
+  -- { "QuickFixLine",               { link = "Search" } },
+  { "SpecialKey",                    { fg = C.blue } },
+  { "SpellBad",                      { fg = C.dark_red, underline = true } },
+  { "SpellCap",                      { fg = C.green, underline = true } },
+  { "SpellLocal",                    { fg = C.dark_green, underline = true } },
+  { "SpellRare",                     { fg = C.red, underline = true } },
+  -- { "StatusLine",                    { bg = C.bg_dark, fg = C.norm } },
+  -- { "StatusLineNC",                  { bg = C.bg_dark, fg = C.norm_subtle } },
+  { "StatusLine",                    { bg = C.statusline, fg = C.bg_dark } },
+  { "StatusLineNC",                  { bg = C.bg_dark, fg = C.norm_subtle } },
+  { "TabLine",                       { fg = C.norm_subtle, bg = C.bg } },
+  { "TabLineFill",                   { fg = C.norm_subtle, bg = C.bg } },
+  { "TabLineSel",                    { fg = C.norm, bg = C.visual, bold = true } },
+  { "Title",                         { fg = C.dark_blue } },
+  { "Visual",                        { bg = C.visual } },
+  -- { "VisualNOS",                  { link = "visual" } },
+  { "WarningMsg",                    { fg = C.yellow } },
+  { "WildMenu",                      { fg = C.bg_dark, bg = C.cyan } },
+  -- { "WinBar",                     { bold = true } },
+  -- { "WinBarNC",                   { link = "WinBar" } },
 
-hl.syntax = {
-  Constant = { fg = colors.purple },
-  String = { fg = colors.yellow },
-  Character = { fg = colors.yellow },
-  Number = { fg = colors.dark_yellow },
-  Boolean = { fg = colors.dark_yellow },
-  Float = { fg = colors.dark_yellow },
-  Identifier = { fg = colors.fg },
-  Function = { fg = colors.red },
-  Label = { fg = colors.dark_blue },
-  Conditional = { fg = colors.green },
-  Exception = { fg = colors.green },
-  Operator = { fg = colors.dark_cyan },
-  Repeat = { fg = colors.dark_cyan },
-  PreProc = { fg = colors.green },
-  Include = { fg = colors.green },
-  Define = { fg = colors.green },
-  Macro = { fg = colors.green },
-  PreCondit = { fg = colors.green },
-  Keyword = { fg = colors.green },
-  Statement = { fg = colors.green },
-  Type = { fg = colors.purple },
-  StorageClass = { fg = colors.blue },
-  Structure = { fg = colors.blue },
-  Typedef = { fg = colors.blue },
-  Special = { fg = colors.cyan },
-  SpecialChar = { fg = colors.cyan },
-  Tag = { fg = colors.cyan },
-  Delimiter = { fg = colors.cyan },
-  Comment = { fg = colors.comment_grey, italic = true },
-  SpecialComment = { fg = colors.comment_grey },
-}
+  -- Added to original Embark
+  { "Terminal",                      { fg = C.norm, bg = C.bg_dark } },
 
--- TS highlights
-hl.treesitter = {
-  ["@punctuation.bracket"] = { fg = colors.fg },
-  ["@string.special"]      = { fg = colors.dark_blue },
-  ["@string.escape"]       = { fg = colors.cyan },
-  ["@function"]            = { fg = colors.red },
-  ["@function.call"]       = { fg = colors.blue },
-  ["@constructor"]         = { fg = colors.purple },
-  ["@keyword.operator"]    = { fg = colors.cyan },
-  ["@constant.builtin"]    = { fg = colors.cyan },
-  -- NOTE: added ontop of original embark
-  ["@variable"]            = { fg = colors.cyan },
-  ["@variable.builtin"]    = { fg = colors.cyan },
-  ["@symbol"]              = { fg = colors.yellow },
-  ["@text.literal"]        = { fg = colors.cyan },
-  ["@text.uri"]            = { fg = colors.blue },
-  ["@text.reference"]      = { fg = colors.purple },
-  ["@text.strong"]         = { bold = true },
-  ["@text.emphasis"]       = { italic = true },
-  ["@text.todo.unchecked"] = { fg = colors.dark_cyan, bold = true },
-  ["@text.todo.checked"]   = { fg = colors.comment_grey },
-  ["@tag"]                 = { fg = colors.green },
-  ["@tag.delimiter"]       = { fg = colors.cyan },
-  ["@tag.attribute"]       = { fg = colors.purple },
-}
+  -- Diagnostics
+  { "DiagnosticHint",                { fg = C.purple, bg = C.bg_dark } },
+  { "DiagnosticInfo",                { fg = C.blue, bg = C.bg_dark } },
+  { "DiagnosticWarn",                { fg = C.yellow, bg = C.bg_dark } },
+  { "DiagnosticError",               { fg = C.red, bg = C.bg_dark } },
+  -- For signs and floating menus drop the dark background
+  { "DiagnosticSignHint",            { fg = C.purple } },
+  { "DiagnosticSignInfo",            { fg = C.blue } },
+  { "DiagnosticSignWarn",            { fg = C.yellow } },
+  { "DiagnosticSignError",           { fg = C.red } },
+  { "DiagnosticFloatingHint",        { link = "DiagnosticSignHint" } },
+  { "DiagnosticFloatingInfo",        { link = "DiagnosticSignInfo" } },
+  { "DiagnosticFloatingWarn",        { link = "DiagnosticSignWarn" } },
+  { "DiagnosticFloatingError",       { link = "DiagnosticSignError" } },
+  { "DiagnosticVirtualTextHint",     { link = "DiagnosticHint" } },
+  { "DiagnosticVirtualTextInfo",     { link = "DiagnosticInfo" } },
+  { "DiagnosticVirtualTextWarn",     { link = "DiagnosticWarn" } },
+  { "DiagnosticVirtualTextError",    { link = "DiagnosticError" } },
+  { "DiagnosticUnderlineHint",       { undercurl = true } }, --, fg = C.purple } },
+  { "DiagnosticUnderlineInfo",       { undercurl = true } }, --, fg = C.blue } },
+  { "DiagnosticUnderlineWarn",       { undercurl = true } }, --, fg = C.yellow } },
+  { "DiagnosticUnderlineError",      { undercurl = true } }, --, fg = C.red } },
 
--- vim.diagnostic
-hl.diagnostic = {
-  DiagnosticError            = { fg = colors.red },
-  DiagnosticWarn             = { fg = colors.yellow },
-  DiagnosticInfo             = { fg = colors.blue },
-  DiagnosticHint             = { fg = colors.purple },
-  DiagnosticSignError        = { fg = colors.red },
-  DiagnosticSignWarn         = { fg = colors.yellow },
-  DiagnosticSignInfo         = { fg = colors.blue },
-  DiagnosticSignHint         = { fg = colors.purple },
-  DiagnosticFloatingError    = { link = "DiagnosticSignError" },
-  DiagnosticFloatingWarn     = { link = "DiagnosticSignWarning" },
-  DiagnosticFloatingInfo     = { link = "DiagnosticSignInformation" },
-  DiagnosticFloatingHint     = { link = "DiagnosticSignHint" },
-  DiagnosticUnderlineError   = { undercurl = true, fg = colors.red },
-  DiagnosticUnderlineWarn    = { undercurl = true, fg = colors.yellow },
-  DiagnosticUnderlineInfo    = { undercurl = true, fg = colors.blue },
-  DiagnosticUnderlineHint    = { undercurl = true, fg = colors.purple },
-  DiagnosticVirtualTextError = { fg = colors.red },
-  DiagnosticVirtualTextWarn  = { fg = colors.yellow },
-  DiagnosticVirtualTextInfo  = { fg = colors.blue },
-  DiagnosticVirtualTextHint  = { fg = colors.purple },
-}
+  -- Treesitter
+  { "@keyword.operator",             { fg = C.cyan } },
+  { "@constant.builtin",             { link = "Special" } },
+  { "@punctuation.bracket",          { fg = C.cyan } },
+  { "@variable.builtin",             { fg = C.cyan } },
+  { "@string.special",               { fg = C.dark_blue } },
+  { "@string.escape",                { fg = C.cyan } },
+  { "@string.special.symbol",        { fg = C.yellow } },
+  { "@module",                       { fg = C.purple } },
+  { "@function",                     { fg = C.red } },
+  { "@function.call",                { fg = C.blue } },
+  { "@constructor",                  { fg = C.purple } },
+  { "@markup",                       { link = "Title" } },
+  { "@markup.raw",                   { fg = C.cyan } },
+  { "@markup.link.uri",              { fg = C.blue } },
+  { "@markup.link",                  { fg = C.purple } },
+  { "@markup.strong",                { bold = true } },
+  { "@markup.emphasis",              { italic = true } },
+  { "@markup.list.unchecked",        { fg = C.dark_cyan, bold = true } },
+  { "@markup.list.checked",          { fg = C.norm_subtle } },
+  { "@tag",                          { link = "Keyword" } },
+  { "@tag.delimiter",                { link = "Special" } },
+  { "@tag.attribute",                { link = "Constant" } },
+  -- Deprecated nvim-treesitter highlights
+  { "@symbol",                       { fg = C.yellow } },
+  { "@text.literal",                 { fg = C.cyan } },
+  { "@text.uri",                     { fg = C.blue } },
+  { "@text.reference",               { fg = C.purple } },
+  { "@text.strong",                  { bold = true } },
+  { "@text.emphasis",                { italic = true } },
+  { "@text.todo.unchecked",          { fg = C.dark_cyan, bold = true } },
+  { "@text.todo.checked",            { fg = C.norm_subtle } },
 
--- XML
-hl.xml = {
-  xmlAttrib  = { fg = colors.green },
-  xmlEndTag  = { fg = colors.red },
-  xmlTag     = { fg = colors.blue },
-  xmlTagName = { fg = colors.red },
-}
+  -- HTML
+  { "htmlTag",                       { link = "Special" } },
+  { "htmlEndTag",                    { link = "htmlTag" } },
+  { "htmlTagName",                   { link = "Keyword" } },
+  { "htmlTagN",                      { link = "Keyword" } },
+  { "htmlH1",                        { fg = C.head_a, bold = true } },
+  { "htmlH2",                        { fg = C.head_a, bold = true } },
+  { "htmlH3",                        { fg = C.head_b, italic = true } },
+  { "htmlH4",                        { fg = C.head_b, italic = true } },
+  { "htmlH5",                        { fg = C.head_c } },
+  { "htmlH6",                        { fg = C.head_c } },
+  { "htmlLink",                      { fg = C.blue, underline = true } },
+  { "htmlItalic",                    { italic = true } },
+  { "htmlBold",                      { bold = true } },
+  { "htmlBoldItalic",                { bold = true, italic = true } },
 
--- CSS
-hl.css = {
-  cssAttrComma = { fg = colors.purple },
-  cssAttributeSelector = { fg = colors.green },
-  cssBraces = { fg = colors.white },
-  cssClassName = { fg = colors.dark_yellow },
-  cssClassNameDot = { fg = colors.dark_yellow },
-  cssDefinition = { fg = colors.purple },
-  cssFontAttr = { fg = colors.dark_yellow },
-  cssFontDescriptor = { fg = colors.purple },
-  cssFunctionName = { fg = colors.blue },
-  cssIdentifier = { fg = colors.blue },
-  cssImportant = { fg = colors.purple },
-  cssInclude = { fg = colors.white },
-  cssIncludeKeyword = { fg = colors.purple },
-  cssMediaType = { fg = colors.dark_yellow },
-  cssProp = { fg = colors.white },
-  cssPseudoClassId = { fg = colors.dark_yellow },
-  cssSelectorOp = { fg = colors.purple },
-  cssSelectorOp2 = { fg = colors.purple },
-  cssTagName = { fg = colors.red },
-}
-
--- Fish Shell
-hl.fish = {
-  fishKeyword = { fg = colors.purple },
-  fishConditional = { fg = colors.purple },
-}
-
--- Go
-hl.go = {
-  goDeclaration = { fg = colors.purple },
-  goBuiltins = { fg = colors.cyan },
-  goFunctionCall = { fg = colors.blue },
-  goVarDefs = { fg = colors.red },
-  goVarAssign = { fg = colors.red },
-  goVar = { fg = colors.purple },
-  goConst = { fg = colors.purple },
-  goType = { fg = colors.yellow },
-  goTypeName = { fg = colors.yellow },
-  goDeclType = { fg = colors.cyan },
-  goTypeDecl = { fg = colors.purple },
-}
-
--- HTML (keep consistent with Markdown, below)
-hl.html = {
-  htmlArg = { fg = colors.dark_yellow },
-  htmlBold = { fg = colors.dark_yellow, bold = true },
-  htmlEndTag = { fg = colors.white },
-  htmlH1 = { fg = colors.dark_blue, bold = true },
-  htmlH2 = { fg = colors.dark_blue, bold = true },
-  htmlH3 = { fg = colors.blue },
-  htmlH4 = { fg = colors.blue },
-  htmlH5 = { fg = colors.dark_cyan },
-  htmlH6 = { fg = colors.dark_cyan },
-  htmlItalic = { fg = colors.purple, italic = true },
-  htmlLink = { fg = colors.dark_cyan, underline = true },
-  htmlSpecialChar = { fg = colors.dark_yellow },
-  htmlSpecialTagName = { fg = colors.red },
-  htmlTag = { fg = colors.white },
-  htmlTagN = { fg = colors.red },
-  htmlTagName = { fg = colors.red },
-  htmlTitle = { fg = colors.white },
-}
-
--- JavaScript
-hl.javascript = {
-  javaScriptBraces = { fg = colors.white },
-  javaScriptFunction = { fg = colors.purple },
-  javaScriptIdentifier = { fg = colors.purple },
-  javaScriptNull = { fg = colors.dark_yellow },
-  javaScriptNumber = { fg = colors.dark_yellow },
-  javaScriptRequire = { fg = colors.cyan },
-  javaScriptReserved = { fg = colors.purple },
+  -- JavaScript
   -- http//github.com/pangloss/vim-javascript
-  jsArrowFunction = { fg = colors.purple },
-  jsClassKeyword = { fg = colors.purple },
-  jsClassMethodType = { fg = colors.purple },
-  jsDocParam = { fg = colors.blue },
-  jsDocTags = { fg = colors.purple },
-  jsExport = { fg = colors.purple },
-  jsExportDefault = { fg = colors.purple },
-  jsExtendsKeyword = { fg = colors.purple },
-  jsFrom = { fg = colors.purple },
-  jsFuncCall = { fg = colors.blue },
-  jsFunction = { fg = colors.purple },
-  jsGenerator = { fg = colors.yellow },
-  jsGlobalObjects = { fg = colors.yellow },
-  jsImport = { fg = colors.purple },
-  jsModuleAs = { fg = colors.purple },
-  jsModuleWords = { fg = colors.purple },
-  jsModules = { fg = colors.purple },
-  jsNull = { fg = colors.dark_yellow },
-  jsOperator = { fg = colors.purple },
-  jsStorageClass = { fg = colors.purple },
-  jsSuper = { fg = colors.red },
-  jsTemplateBraces = { fg = colors.dark_red },
-  jsTemplateVar = { fg = colors.green },
-  jsThis = { fg = colors.red },
-  jsUndefined = { fg = colors.dark_yellow },
-  -- http//github.com/othree/yajs.vim
-  javascriptArrowFunc = { fg = colors.purple },
-  javascriptClassExtends = { fg = colors.purple },
-  javascriptClassKeyword = { fg = colors.purple },
-  javascriptDocNotation = { fg = colors.purple },
-  javascriptDocParamName = { fg = colors.blue },
-  javascriptDocTags = { fg = colors.purple },
-  javascriptEndColons = { fg = colors.white },
-  javascriptExport = { fg = colors.purple },
-  javascriptFuncArg = { fg = colors.white },
-  javascriptFuncKeyword = { fg = colors.purple },
-  javascriptIdentifier = { fg = colors.red },
-  javascriptImport = { fg = colors.purple },
-  javascriptMethodName = { fg = colors.white },
-  javascriptObjectLabel = { fg = colors.white },
-  javascriptOpSymbol = { fg = colors.cyan },
-  javascriptOpSymbols = { fg = colors.cyan },
-  javascriptPropertyName = { fg = colors.green },
-  javascriptTemplateSB = { fg = colors.dark_red },
-  javascriptVariable = { fg = colors.purple },
-}
+  { "jsAsyncKeyword",                { link = "PreProc" } },
+  { "jsForAwait",                    { link = "PreProc" } },
+  { "jsClassKeyword",                { fg = C.purple } },
+  { "jsClassDefinition",             { link = "Type" } },
+  { "jsConditional",                 { link = "PreProc" } },
+  { "jsExtendsKeyword",              { link = "PreProc" } },
+  { "jsReturn",                      { link = "PreProc" } },
+  { "jsRepeat",                      { link = "PreProc" } },
+  { "jsxOpenPunct",                  { fg = C.norm_subtle } },
+  { "jsxClosePunct",                 { link = "jsxOpenPunct" } },
 
--- JSON
-hl.json = {
-  jsonCommentError = { fg = colors.white },
-  jsonKeyword = { fg = colors.red },
-  jsonBoolean = { fg = colors.dark_yellow },
-  jsonNumber = { fg = colors.dark_yellow },
-  jsonQuote = { fg = colors.white },
-  jsonMissingCommaError = { fg = colors.red, reverse = true },
-  jsonNoQuotesError = { fg = colors.red, reverse = true },
-  jsonNumError = { fg = colors.red, reverse = true },
-  jsonString = { fg = colors.green },
-  jsonStringSQError = { fg = colors.red, reverse = true },
-  jsonSemicolonError = { fg = colors.red, reverse = true },
-}
+  -- Elixir
+  { "elixirVariable",                { fg = C.purple } },
+  { "elixirAtom",                    { fg = C.yellow } },
 
--- LESS
-hl.less = {
-  lessVariable = { fg = colors.purple },
-  lessAmpersandChar = { fg = colors.white },
-  lessClass = { fg = colors.dark_yellow },
-}
+  -- Markdown
+  -- tpope/vim-markdown
+  { "markdownBlockquote",            { fg = C.norm_subtle } },
+  { "markdownBold",                  { fg = C.norm, bold = true } },
+  { "markdownBoldItalic",            { fg = C.norm, bold = true, italic = true } },
+  { "markdownEscape",                { fg = C.norm } },
+  { "markdownH1",                    { fg = C.head_a, bold = true } },
+  { "markdownH2",                    { fg = C.head_a, bold = true } },
+  { "markdownH3",                    { fg = C.head_a, bold = true, italic = true } },
+  { "markdownH4",                    { fg = C.head_a, bold = true, italic = true } },
+  { "markdownH5",                    { fg = C.dark_cyan } },
+  { "markdownH6",                    { fg = C.dark_cyan } },
+  { "markdownHeadingDelimiter",      { fg = C.norm } },
+  { "markdownHeadingRule",           { fg = C.norm } },
+  { "markdownId",                    { fg = C.norm_subtle } },
+  { "markdownIdDeclaration",         { fg = C.norm_subtle } },
+  { "markdownItalic",                { fg = C.norm, italic = true } },
+  { "markdownLinkDelimiter",         { fg = C.norm_subtle } },
+  { "markdownLinkText",              { fg = C.norm } },
+  { "markdownLinkTextDelimiter",     { fg = C.norm_subtle } },
+  { "markdownListMarker",            { fg = C.red } },
+  { "markdownOrderedListMarker",     { fg = C.red } },
+  { "markdownRule",                  { fg = C.norm } },
+  { "markdownUrl",                   { fg = C.dark_blue, underline = true } },
+  { "markdownUrlDelimiter",          { fg = C.norm_subtle } },
+  { "markdownUrlTitle",              { fg = C.norm } },
+  { "markdownUrlTitleDelimiter",     { fg = C.norm_subtle } },
+  { "markdownCode",                  { fg = C.green } },
+  { "markdownCodeDelimiter",         { fg = C.norm_subtle } },
 
--- Markdown (keep consistent with HTML, above)
-hl.test = {
-  markdownBlockquote = { fg = colors.comment_grey },
-  markdownBold = { fg = colors.dark_yellow, bold = true },
-  markdownCode = { fg = colors.green },
-  markdownCodeBlock = { fg = colors.green },
-  markdownCodeDelimiter = { fg = colors.green },
-  markdownH1 = { fg = colors.dark_blue, bold = true },
-  markdownH2 = { fg = colors.dark_blue, bold = true },
-  markdownH3 = { fg = colors.dark_blue },
-  markdownH4 = { fg = colors.dark_blue },
-  markdownH5 = { fg = colors.dark_cyan },
-  markdownH6 = { fg = colors.dark_cyan },
-  markdownHeadingDelimiter = { fg = colors.red },
-  markdownHeadingRule = { fg = colors.comment_grey },
-  markdownId = { fg = colors.purple },
-  markdownIdDeclaration = { fg = colors.blue },
-  markdownIdDelimiter = { fg = colors.purple },
-  markdownItalic = { fg = colors.purple, italic = true },
-  markdownLinkDelimiter = { fg = colors.purple },
-  markdownLinkText = { fg = colors.dark_blue },
-  markdownListMarker = { fg = colors.red },
-  markdownOrderedListMarker = { fg = colors.red },
-  markdownRule = { fg = colors.comment_grey },
-  markdownUrl = { fg = colors.dark_cyan, underline = true },
-}
+  -- XML
+  { "xmlTag",                        { link = "htmlTag" } },
+  { "xmlEndTag",                     { link = "xmlTag" } },
+  { "xmlTagName",                    { link = "htmlTagName" } },
 
--- Perl
-hl.perl = {
-  perlFiledescRead = { fg = colors.green },
-  perlFunction = { fg = colors.purple },
-  perlMatchStartEnd = { fg = colors.blue },
-  perlMethod = { fg = colors.purple },
-  perlPOD = { fg = colors.comment_grey },
-  perlSharpBang = { fg = colors.comment_grey },
-  perlSpecialString = { fg = colors.dark_yellow },
-  perlStatementFiledesc = { fg = colors.red },
-  perlStatementFlow = { fg = colors.red },
-  perlStatementInclude = { fg = colors.purple },
-  perlStatementScalar = { fg = colors.purple },
-  perlStatementStorage = { fg = colors.purple },
-  perlSubName = { fg = colors.yellow },
-  perlVarPlain = { fg = colors.blue },
-}
+  -- tpope/vim-fugitive
+  -- diffOnly       xxx links to Constant
+  -- diffIdentical  xxx links to Constant
+  -- diffDiffer     xxx links to Constant
+  -- diffBDiffer    xxx links to Constant
+  -- diffIsA        xxx links to Constant
+  -- diffCommon     xxx links to Constant
+  -- diffChanged    xxx links to PreProc
+  -- diffComment    xxx links to Comment
+  { "diffAdded",                     { fg = C.green } },
+  { "diffRemoved",                   { fg = C.red } },
+  { "diffFile",                      { fg = C.white, bold = true } },
+  { "diffFileId",                    { fg = C.blue, bold = true, reverse = true } },
+  { "diffNewFile",                   { fg = C.white, bold = true } },
+  { "diffOldFile",                   { fg = C.white, bold = true } },
+  { "diffIndexLine",                 { fg = C.white, bold = true } },
+  { "diffLine",                      { fg = C.purple } },
+  { "diffNoEOL",                     { fg = C.purple } },
+  { "diffSubname",                   { fg = C.white } },
 
--- PHP
-hl.php = {
-  phpVarSelector = { fg = colors.red },
-  phpOperator = { fg = colors.white },
-  phpParent = { fg = colors.white },
-  phpMemberSelector = { fg = colors.white },
-  phpType = { fg = colors.purple },
-  phpKeyword = { fg = colors.purple },
-  phpClass = { fg = colors.yellow },
-  phpUseClass = { fg = colors.white },
-  phpUseAlias = { fg = colors.white },
-  phpInclude = { fg = colors.purple },
-  phpClassExtends = { fg = colors.green },
-  phpDocTags = { fg = colors.white },
-  phpFunction = { fg = colors.blue },
-  phpFunctions = { fg = colors.cyan },
-  phpMethodsVar = { fg = colors.dark_yellow },
-  phpMagicConstants = { fg = colors.dark_yellow },
-  phpSuperglobals = { fg = colors.red },
-  phpConstants = { fg = colors.dark_yellow },
-}
+  -- Git Highlighting
+  { "gitcommitComment",              { fg = C.norm_subtle } },
+  { "gitcommitUnmerged",             { fg = C.green } },
+  { "gitcommitOnBranch",             {} },
+  { "gitcommitBranch",               { fg = C.purple } },
+  { "gitcommitDiscardedType",        { fg = C.red } },
+  { "gitcommitSelectedType",         { fg = C.green } },
+  { "gitcommitHeader",               {} },
+  { "gitcommitUntrackedFile",        { fg = C.cyan } },
+  { "gitcommitDiscardedFile",        { fg = C.red } },
+  { "gitcommitSelectedFile",         { fg = C.green } },
+  { "gitcommitUnmergedFile",         { fg = C.yellow } },
+  { "gitcommitFile",                 {} },
+  { "gitcommitSummary",              { fg = C.white } },
+  { "gitcommitOverflow",             { fg = C.red } },
+  { "gitcommitNoBranch",             { link = "gitcommitBranch" } },
+  { "gitcommitUntracked",            { link = "gitcommitComment" } },
+  { "gitcommitDiscarded",            { link = "gitcommitComment" } },
+  { "gitcommitSelected",             { link = "gitcommitComment" } },
+  { "gitcommitDiscardedArrow",       { link = "gitcommitDiscardedFile" } },
+  { "gitcommitSelectedArrow",        { link = "gitcommitSelectedFile" } },
+  { "gitcommitUnmergedArrow",        { link = "gitcommitUnmergedFile" } },
 
--- Ruby
-hl.ruby = {
-  rubyBlockParameter = { fg = colors.red },
-  rubyBlockParameterList = { fg = colors.red },
-  rubyClass = { fg = colors.purple },
-  rubyConstant = { fg = colors.yellow },
-  rubyControl = { fg = colors.purple },
-  rubyEscape = { fg = colors.red },
-  rubyFunction = { fg = colors.blue },
-  rubyGlobalVariable = { fg = colors.red },
-  rubyInclude = { fg = colors.blue },
-  rubyIncluderubyGlobalVariable = { fg = colors.red },
-  rubyInstanceVariable = { fg = colors.red },
-  rubyInterpolation = { fg = colors.cyan },
-  rubyInterpolationDelimiter = { fg = colors.red },
-  rubyRegexp = { fg = colors.cyan },
-  rubyRegexpDelimiter = { fg = colors.cyan },
-  rubyStringDelimiter = { fg = colors.green },
-  rubySymbol = { fg = colors.cyan },
-}
+  -- gitsigns.nvim
+  --   sign column
+  { "GitSignsAdd",                   { fg = C.green } },
+  { "GitSignsChange",                { fg = C.yellow } },
+  { "GitSignsChangeDelete",          { fg = C.dark_yellow } },
+  { "GitSignsDelete",                { fg = C.red } },
+  { "GitSignsUntracked",             { fg = C.blue } },
+  --   line highlights
+  { "GitSignsAddLn",                 { fg = C.dark_green } },
+  { "GitSignsChangeLn",              { fg = C.yellow } },
+  { "GitSignsChangeNr",              { fg = C.dark_yellow } },
+  --   word diff in preview
+  { "GitSignsAddInline",             { fg = C.bg_dark, bg = C.green } },
+  { "GitSignsChangeInline",          { fg = C.bg_dark, bg = C.yellow } },
+  { "GitSignsDeleteInline",          { fg = C.bg_dark, bg = C.red } },
+  --   word diff in buffer
+  { "GitSignsAddLnInline",           { fg = C.bg_dark, bg = C.green } },
+  { "GitSignsChangeLnInline",        { fg = C.bg_dark, bg = C.yellow } },
+  { "GitSignsDeleteLnInline",        { fg = C.bg_dark, bg = C.red } },
+  -- used by hunk preview (float/inline)
+  { "GitSignsAddPreview",            { bg = C.space2, fg = C.green } },
+  -- used by hunk preview (float)
+  { "GitSignsDeletePreview",         { bg = C.space2, fg = C.red } },
+  -- used by hunk preview (inline)
+  { "GitSignsDeleteVirtLn",          { bg = C.space2, fg = C.red } },
 
--- Sass
--- http//github.com/tpope/vim-haml
-hl.saas = {
-  sassAmpersand = { fg = colors.red },
-  sassClass = { fg = colors.dark_yellow },
-  sassControl = { fg = colors.purple },
-  sassExtend = { fg = colors.purple },
-  sassFor = { fg = colors.white },
-  sassFunction = { fg = colors.cyan },
-  sassId = { fg = colors.blue },
-  sassInclude = { fg = colors.purple },
-  sassMedia = { fg = colors.purple },
-  sassMediaOperators = { fg = colors.white },
-  sassMixin = { fg = colors.purple },
-  sassMixinName = { fg = colors.blue },
-  sassMixing = { fg = colors.purple },
-  sassVariable = { fg = colors.purple },
-  -- http//github.com/cakebaker/scss-syntax.vim
-  scssExtend = { fg = colors.purple },
-  scssImport = { fg = colors.purple },
-  scssInclude = { fg = colors.purple },
-  scssMixin = { fg = colors.purple },
-  scssSelectorName = { fg = colors.dark_yellow },
-  scssVariable = { fg = colors.purple },
-}
+  -- nvim-cmp
+  { "CmpItemMenu",                   { link = "Comment" } },
+  -- { "CmpItemKindDefault",            { fg = C.purple } },
+  { "CmpItemAbbrMatch",              { link = "Pmenu" } },
+  { "CmpItemKindDefault",            { link = "Pmenu" } },
+  { "CmpItemKindFunction",           { link = "Function" } },
+  { "CmpItemKindMethod",             { link = "CmpItemKindFunction" } },
+  { "CmpItemKindModule",             { link = "PreProc" } },
+  { "CmpItemKindStruct",             { link = "CmpItemKindModule" } },
+  { "CmpItemKindText",               { link = "Comment" } },
+  { "CmpItemKindSnippet",            { link = "Constant" } },
+  { "CmpItemKindReference",          { link = "CmpItemKindDefault" } },
+  { "CmpItemKindInterface",          { link = "CmpItemKindDefault" } },
+  -- { "CmpItemAbbr",                   { fg = C.blue } },
+  -- { "CmpItemAbbrDeprecated",         { fg = C.norm_subtle } },
+  -- { "CmpItemAbbrMatch",              { link = "Pmenu" } },
+  -- { "CmpItemAbbrMatchFuzzy",         { fg = C.purple } },
+  -- { "CmpItemKindDefault",            { link = "Identifier" } },
+  -- { "CmpItemKindText",               { fg = C.white } },
+  -- { "CmpItemKindMethod",             { fg = C.red } },
+  -- { "CmpItemKindFunction",           { fg = C.red } },
+  -- { "CmpItemKindConstructor",        { fg = C.dark_blue } },
+  -- { "CmpItemKindField",              { fg = C.purple } },
+  -- { "CmpItemKindVariable",           { fg = C.green } },
+  -- { "CmpItemKindClass",              { fg = C.blue } },
+  -- { "CmpItemKindInterface",          { fg = C.blue } },
+  -- { "CmpItemKindModule",             { fg = C.blue } },
+  -- { "CmpItemKindProperty",           { fg = C.norm } },
+  -- { "CmpItemKindUnit",               { fg = C.norm } },
+  -- { "CmpItemKindValue",              { fg = C.yellow } },
+  -- { "CmpItemKindEnum",               { fg = C.dark_yellow } },
+  -- { "CmpItemKindKeyword",            { fg = C.yellow } },
+  -- { "CmpItemKindSnippet",            { fg = C.dark_yellow } },
+  -- { "CmpItemKindColor",              { fg = C.white } },
+  -- { "CmpItemKindFile",               { fg = C.norm } },
+  -- { "CmpItemKindReference",          { fg = C.purple } },
+  -- { "CmpItemKindFolder",             { fg = C.norm } },
+  -- { "CmpItemKindEnumMember",         { fg = C.yellow } },
+  -- { "CmpItemKindConstant",           { fg = C.yellow } },
+  -- { "CmpItemKindStruct",             { fg = C.blue } },
+  -- { "CmpItemKindEvent",              { fg = C.green } },
+  -- { "CmpItemKindOperator",           { fg = C.dark_cyan } },
+  -- { "CmpItemKindTypeParameter",      { fg = C.dark_blue } },
 
--- TeX
-hl.tex = {
-  texStatement = { fg = colors.purple },
-  texSubscripts = { fg = colors.dark_yellow },
-  texSuperscripts = { fg = colors.dark_yellow },
-  texTodo = { fg = colors.dark_red },
-  texBeginEnd = { fg = colors.purple },
-  texBeginEndName = { fg = colors.blue },
-  texMathMatcher = { fg = colors.blue },
-  texMathDelim = { fg = colors.blue },
-  texDelimiter = { fg = colors.dark_yellow },
-  texSpecialChar = { fg = colors.dark_yellow },
-  texCite = { fg = colors.blue },
-  texRefZone = { fg = colors.blue },
-}
+  -- Nvim-tree
+  { "NvimTreeFolderIcon",            { fg = C.purple } },
+  { "NvimTreeFolderName",            { fg = C.blue } },
+  { "NvimTreeRootFolder",            { fg = C.green } },
 
--- TypeScript
-hl.typescript = {
-  typescriptReserved = { fg = colors.purple },
-  typescriptEndColons = { fg = colors.white },
-  typescriptBraces = { fg = colors.white },
-}
+  -- Nvim-telescope
+  { "TelescopeNormal",               { fg = C.astral0 } },
+  { "TelescopeBorder",               { link = "LineNr" } },
+  { "TelescopeSelection",            { fg = C.astral1, bg = C.visual } },
+  { "TelescopeMatching",             { link = "String" } },
+  { "TelescopePreviewTitle",         { fg = C.space0, bg = C.purple } },
+  { "TelescopePromptTitle",          { fg = C.space0, bg = C.green } },
+  { "TelescopePromptNormal",         { link = "Normal" } },
+  { "TelescopeResultsTitle",         { fg = C.space0, bg = C.blue } },
+  { "TelescopePromptPrefix",         { link = "Type" } },
+  { "TelescopeResultsDiffAdd",       { fg = C.green } },
+  { "TelescopeResultsDiffChange",    { fg = C.yellow } },
+  { "TelescopeResultsDiffDelete",    { fg = C.red } },
+  { "TelescopeResultsDiffUntracked", { link = "Title" } },
 
+  -- fzf-lua
+  { "FzfLuaTitle",                   { fg = C.white } },
+  { "FzfLuaScrollFloatFull",         { bg = C.dark_blue } },
+  { "FzfLuaScrollFloatEmpty",        { bg = C.space4 } },
 
-hl.gitsigns = {
-  GitSignsAdd = { fg = colors.green },
-  GitSignsAddLn = { fg = colors.dark_green },
-  GitSignsChange = { fg = colors.yellow },
-  GitSignsChangeDelete = { fg = colors.dark_yellow },
-  GitSignsChangeLn = { fg = colors.yellow },
-  GitSignsChangeNr = { fg = colors.dark_yellow },
-  GitSignsDelete = { fg = colors.red },
-  GitSignsDeleteLn = { fg = colors.dark_red },
-  GitSignsAddInline = { fg = colors.black, bg = colors.green },
-  GitSignsChangeInline = { fg = colors.black, bg = colors.yellow },
-  GitSignsDeleteInline = { fg = colors.black, bg = colors.red },
-}
-
--- mhinz/vim-signify
-hl.test = {
-  SignifySignAdd = { fg = colors.green },
-  SignifySignChange = { fg = colors.yellow },
-  SignifySignDelete = { fg = colors.red },
-}
-
--- airblade/vim-gitgutter
-hl.gitgutter = {
-  GitGutterAdd = { link = "SignifySignAdd" },
-  GitGutterChange = { link = "SignifySignChange" },
-  GitGutterDelete = { link = "SignifySignDelete" },
-}
-
--- dense-analysis/ale
-hl.ale = {
-  ALEError = { fg = colors.red, underline = true },
-  ALEWarning = { fg = colors.yellow, underline = true },
-  ALEInfo = { underline = true },
-}
-
--- easymotion/vim-easymotion
-hl.easymotion = {
-  EasyMotionTarget = { fg = colors.red, bold = true },
-  EasyMotionTarget2First = { fg = colors.yellow, bold = true },
-  EasyMotionTarget2Second = { fg = colors.dark_yellow, bold = true },
-  EasyMotionShade = { fg = colors.comment_grey },
-}
-
--- neomake/neomake
-hl.neomake = {
-  NeomakeWarningSign = { fg = colors.yellow },
-  NeomakeErrorSign = { fg = colors.red },
-  NeomakeInfoSign = { fg = colors.blue },
-}
-
--- plasticboy/vim-markdown (keep consistent with Markdown, above)
-hl.vim_markdown = {
-  mkdDelimiter = { fg = colors.purple },
-  mkdHeading = { fg = colors.red },
-  mkdLink = { fg = colors.blue },
-  mkdURL = { fg = colors.cyan, underline = true },
-}
-
--- tpope/vim-fugitive
--- diffOnly       xxx links to Constant
--- diffIdentical  xxx links to Constant
--- diffDiffer     xxx links to Constant
--- diffBDiffer    xxx links to Constant
--- diffIsA        xxx links to Constant
--- diffCommon     xxx links to Constant
--- diffChanged    xxx links to PreProc
--- diffComment    xxx links to Comment
-hl.fugitive = {
-  diffAdded = { fg = colors.green },
-  diffRemoved = { fg = colors.red },
-  diffFile = { fg = colors.white, bold = true },
-  diffFileId = { fg = colors.blue, bold = true, reverse = true },
-  diffNewFile = { fg = colors.white, bold = true },
-  diffOldFile = { fg = colors.white, bold = true },
-  diffIndexLine = { fg = colors.white, bold = true },
-  diffLine = { fg = colors.purple },
-  diffNoEOL = { fg = colors.purple },
-  diffSubname = { fg = colors.white },
-}
-
--- Git Highlighting
-hl.git = {
-  gitcommitComment = { fg = colors.comment_grey },
-  gitcommitUnmerged = { fg = colors.green },
-  gitcommitOnBranch = {},
-  gitcommitBranch = { fg = colors.purple },
-  gitcommitDiscardedType = { fg = colors.red },
-  gitcommitSelectedType = { fg = colors.green },
-  gitcommitHeader = {},
-  gitcommitUntrackedFile = { fg = colors.cyan },
-  gitcommitDiscardedFile = { fg = colors.red },
-  gitcommitSelectedFile = { fg = colors.green },
-  gitcommitUnmergedFile = { fg = colors.yellow },
-  gitcommitFile = {},
-  gitcommitSummary = { fg = colors.white },
-  gitcommitOverflow = { fg = colors.red },
-  gitcommitNoBranch = { link = "gitcommitBranch" },
-  gitcommitUntracked = { link = "gitcommitComment" },
-  gitcommitDiscarded = { link = "gitcommitComment" },
-  gitcommitSelected = { link = "gitcommitComment" },
-  gitcommitDiscardedArrow = { link = "gitcommitDiscardedFile" },
-  gitcommitSelectedArrow = { link = "gitcommitSelectedFile" },
-  gitcommitUnmergedArrow = { link = "gitcommitUnmergedFile" },
-}
-
--- Nvim-tree support
-hl.nvim_tree = {
-  NvimTreeFolderIcon = { fg = colors.purple },
-  NvimTreeFolderName = { fg = colors.blue },
-  NvimTreeRootFolder = { fg = colors.green },
-}
-
-
--- Nvim-telescope
-hl.telescope = {
-  TelescopeSelection            = { fg = colors.fg, bg = colors.space3 },
-  TelescopeBorder               = { fg = colors.comment_grey },
-  TelescopeMatching             = { fg = colors.yellow },
-  TelescopeNormal               = { fg = colors.comment_grey },
-  TelescopeResultsDiffAdd       = { link = "GitGutterAdd" },
-  TelescopeResultsDiffChange    = { link = "GitGutterChange" },
-  TelescopeResultsDiffDelete    = { link = "GitGutterDelete" },
-  TelescopeResultsDiffUntracked = { link = "Title" },
-}
-
--- fzf-lua
-hl.fzf_lua = {
-  FzfLuaTitle           = { fg = colors.white },
-  FzfLuaScrollFloatFull = { bg = colors.dark_blue },
-}
-
--- nvim-cmp
-hl.nvim_cmp = {
-  CmpItemMenu = { link = "Comment" },
-  CmpItemAbbr = { fg = colors.blue },
-  CmpItemAbbrDeprecated = { fg = colors.comment_grey },
-  CmpItemAbbrMatch = { link = "Pmenu" },
-  CmpItemAbbrMatchFuzzy = { fg = colors.purple },
-  CmpItemKindDefault = { link = "Identifier" },
-  CmpItemKindText = { fg = colors.white },
-  CmpItemKindMethod = { fg = colors.red },
-  CmpItemKindFunction = { fg = colors.red },
-  CmpItemKindConstructor = { fg = colors.dark_blue },
-  CmpItemKindField = { fg = colors.purple },
-  CmpItemKindVariable = { fg = colors.green },
-  CmpItemKindClass = { fg = colors.blue },
-  CmpItemKindInterface = { fg = colors.blue },
-  CmpItemKindModule = { fg = colors.blue },
-  CmpItemKindProperty = { fg = colors.fg },
-  CmpItemKindUnit = { fg = colors.fg },
-  CmpItemKindValue = { fg = colors.yellow },
-  CmpItemKindEnum = { fg = colors.dark_yellow },
-  CmpItemKindKeyword = { fg = colors.yellow },
-  CmpItemKindSnippet = { fg = colors.dark_yellow },
-  CmpItemKindColor = { fg = colors.white },
-  CmpItemKindFile = { fg = colors.fg },
-  CmpItemKindReference = { fg = colors.purple },
-  CmpItemKindFolder = { fg = colors.fg },
-  CmpItemKindEnumMember = { fg = colors.yellow },
-  CmpItemKindConstant = { fg = colors.yellow },
-  CmpItemKindStruct = { fg = colors.blue },
-  CmpItemKindEvent = { fg = colors.green },
-  CmpItemKindOperator = { fg = colors.dark_cyan },
-  CmpItemKindTypeParameter = { fg = colors.dark_blue },
-}
-
--- mini.indentscope
--- `MiniIndentscopeSymbol` - symbol showing on every line of scope.
--- `MiniIndentscopePrefix` - space before symbol. By default made so as to
-hl.mini_indent = {
-  MiniIndentscopeSymbol = { fg = colors.white },
+  -- mini.indentscope
+  -- `MiniIndentscopeSymbol` - symbol showing on every line of scope.
+  -- `MiniIndentscopePrefix` - space before symbol. By default made so as to
+  { "MiniIndentscopeSymbol",         { fg = C.white } },
 }
 
 local function h(group, style)
   if style.link then
-    vim.api.nvim_set_hl(0, group, { link = style.link })
+    vim.api.nvim_set_hl(0, group, { default = false, link = style.link })
+    return
   end
 
   local style2hl = {
@@ -672,6 +436,7 @@ local function h(group, style)
   end
 
   -- ':help highlight-cterm
+  hl_opts.default = false
   hl_opts.bold = style.bold
   hl_opts.underline = style.underline
   hl_opts.underlineline = style.underlineline -- double underline
@@ -695,44 +460,50 @@ do
     vim.cmd("syntax reset")
   end
 
-  vim.o.background                = "dark"
-  vim.g.colors_name               = "lua-embark"
+  vim.o.background           = "dark"
+  vim.g.colors_name          = "lua-embark"
 
   -- 256-color terminal colors
-  vim.g.terminal_ansi_colors      = {
-    colors.special_grey.gui, colors.red.gui, colors.green.gui,
-    colors.yellow.gui, colors.blue.gui, colors.purple.gui,
-    colors.cyan.gui, colors.white.gui, colors.visual_grey.gui,
-    colors.dark_red.gui, colors.dark_green.gui, colors.dark_yellow.gui,
-    colors.dark_blue.gui, colors.dark_purple.gui, colors.dark_cyan.gui,
-    colors.comment_grey.gui,
+  vim.g.terminal_ansi_colors = {
+    C.bg_bright.gui,
+    C.red.gui,
+    C.green.gui,
+    C.yellow.gui,
+    C.blue.gui,
+    C.purple.gui,
+    C.cyan.gui,
+    C.bg.gui,
+    C.bg_bright.gui,
+    C.dark_red.gui,
+    C.dark_green.gui,
+    C.dark_yellow.gui,
+    C.dark_blue.gui,
+    C.dark_purple.gui,
+    C.dark_cyan.gui,
+    C.norm_subtle.gui,
   }
 
   -- Neovim terminal colors
-  vim.g.terminal_color_0          = colors.black.gui
-  vim.g.terminal_color_1          = colors.red.gui
-  vim.g.terminal_color_2          = colors.green.gui
-  vim.g.terminal_color_3          = colors.yellow.gui
-  vim.g.terminal_color_4          = colors.blue.gui
-  vim.g.terminal_color_5          = colors.purple.gui
-  vim.g.terminal_color_6          = colors.cyan.gui
-  vim.g.terminal_color_7          = colors.white.gui
-  vim.g.terminal_color_8          = colors.visual_grey.gui
-  vim.g.terminal_color_9          = colors.dark_red.gui
-  vim.g.terminal_color_10         = colors.dark_green.gui
-  vim.g.terminal_color_11         = colors.dark_yellow.gui
-  vim.g.terminal_color_12         = colors.dark_blue.gui
-  vim.g.terminal_color_13         = colors.dark_purple.gui
-  vim.g.terminal_color_14         = colors.dark_cyan.gui
-  vim.g.terminal_color_15         = colors.comment_grey.gui
-  vim.g.terminal_color_background = vim.g.terminal_color_0
-  vim.g.terminal_color_foreground = vim.g.terminal_color_7
+  vim.g.terminal_color_0     = C.bg_bright.gui
+  vim.g.terminal_color_1     = C.red.gui
+  vim.g.terminal_color_2     = C.green.gui
+  vim.g.terminal_color_3     = C.yellow.gui
+  vim.g.terminal_color_4     = C.blue.gui
+  vim.g.terminal_color_5     = C.purple.gui
+  vim.g.terminal_color_6     = C.cyan.gui
+  vim.g.terminal_color_7     = C.bg.gui
+  vim.g.terminal_color_8     = C.bg_bright.gui
+  vim.g.terminal_color_9     = C.dark_red.gui
+  vim.g.terminal_color_10    = C.dark_green.gui
+  vim.g.terminal_color_11    = C.dark_yellow.gui
+  vim.g.terminal_color_12    = C.dark_blue.gui
+  vim.g.terminal_color_13    = C.dark_purple.gui
+  vim.g.terminal_color_14    = C.dark_cyan.gui
+  vim.g.terminal_color_15    = C.norm_subtle.gui
+  -- vim.g.terminal_color_background = vim.g.terminal_color_0
+  -- vim.g.terminal_color_foreground = vim.g.terminal_color_7
 
-  for _, hlgroup in pairs(hl) do
-    for hlname, style in pairs(hlgroup) do
-      -- for _, hlgroup in ipairs({ 'common', 'syntax', 'treesitter' }) do
-      --   for hlname, style in pairs(hl[hlgroup]) do
-      h(hlname, style)
-    end
+  for _, def in ipairs(HLS) do
+    h(def[1], def[2])
   end
 end

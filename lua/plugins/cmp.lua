@@ -24,15 +24,14 @@ M.config = function()
     },
 
     window = {
-      -- completion = { border = 'single' },
-      -- documentation = { border = 'single' },
+      -- completion = cmp.config.window.bordered(),
+      -- documentation = cmp.config.window.bordered(),
     },
 
     completion = {
       -- start completion immediately
       keyword_length = 1,
     },
-
 
     sources = {
       { name = "nvim_lsp" },
@@ -79,7 +78,7 @@ M.config = function()
     },
 
     formatting = {
-      deprecated = false,
+      expandable_indicator = true,
       fields = { "kind", "abbr", "menu" },
       format = function(entry, vim_item)
         local source_names = {

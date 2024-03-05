@@ -36,8 +36,16 @@ local function dap_server(opts)
   local mode = vim.fn.rpcrequest(nvim_chanID, "nvim_get_mode")
   assert(not mode.blocking, "Neovim is waiting for input at startup. Aborting.")
 
+  -- create the symlink from lazy
+  local plugin_name = "one-small-step-for-vimkind"
+  local plugin_dir = vim.fn.stdpath("data") .. "/site/pack/dap"
+  assert(vim.fn.mkdir(plugin_dir, "p"), "Unable to create plugin dir")
+  vim.loop.fs_symlink(vim.fn.stdpath("data") .. "/lazy", plugin_dir .. "/opt", { dir = true })
+
   -- make sure OSV is loaded
-  vim.fn.rpcrequest(nvim_chanID, "nvim_command", "packadd one-small-step-for-vimkind")
+  vim.fn.rpcrequest(nvim_chanID, "nvim_exec_lua",
+    [[vim.opt.packpath:append({ vim.fn.stdpath("data") .. "/site" })]], {})
+  vim.fn.rpcrequest(nvim_chanID, "nvim_command", "packadd " .. plugin_name)
 
   nvim_server = vim.fn.rpcrequest(nvim_chanID,
     "nvim_exec_lua",
@@ -66,6 +74,26 @@ end
 dap.configurations.lua = {
   {
     type = "nlua",
+    request = "attach",
+    name = "Attach to running Neovim instance (localhost:8086)",
+    host = "127.0.0.1",
+    port = 8086,
+  },
+  {
+    type = "nlua",
+    request = "attach",
+    name = "Attach to running Neovim instance (prompt)",
+    host = function()
+      local val = vim.fn.input("Host [127.0.0.1]: ")
+      return #val > 0 and val or "127.0.0.1"
+    end,
+    port = function()
+      local val = vim.fn.input("Port [8086]: ")
+      return #val > 0 and tonumber(val) or 8086
+    end,
+  },
+  {
+    type = "nlua",
     name = "Debug current file",
     request = "attach",
     -- we acquire host/port in the adapters function above
@@ -84,22 +112,5 @@ dap.configurations.lua = {
       --   end
       -- end
     end
-  },
-  {
-    type = "nlua",
-    request = "attach",
-    name = "Attach to running Neovim instance",
-    host = function()
-      local value = vim.fn.input("Host [127.0.0.1]: ")
-      if value ~= "" then
-        return value
-      end
-      return "127.0.0.1"
-    end,
-    port = function()
-      local val = tonumber(vim.fn.input("Port: "))
-      assert(val, "Please provide a port number")
-      return val
-    end,
   }
 }
