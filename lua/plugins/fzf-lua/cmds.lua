@@ -1,5 +1,6 @@
 local M = {}
 
+local utils = require("utils")
 local fzf_lua = require("fzf-lua")
 
 function M.git_bcommits(opts)
@@ -24,27 +25,24 @@ function M.git_status_tmuxZ(opts)
     return fzf_lua.git_status(opts)
   end
 
-  local function tmuxZ()
-    vim.cmd("!tmux resize-pane -Z")
-  end
-
   opts = opts or {}
   opts.fn_pre_win = function(_)
     if not opts.__want_resume then
-      -- new fzf window, set tmux Z
-      -- add small delay or fzf
-      -- win gets wrong dimensions
-      tmuxZ()
+      -- new fzf window, if unzoomed, toggle tmux zoom (-Z)
+      -- add small delay or fzf win gets wrong dimensions
+      opts._tmux_was_unzoomed = utils.tmux_zoom()
       vim.cmd("sleep! 20m")
     end
     opts.__want_resume = nil
   end
   opts.fn_post_fzf = function(_, s)
-    opts.__want_resume = s and (s[1] == "left" or s[1] == "right")
+    -- ignore triggers on resume (stage|unstage|reset)
+    -- this also signals `fn_pre` to ignore the event
+    opts.__want_resume = s and (s[1] == "left" or s[1] == "right" or s[1] == "ctrl-x")
     if not opts.__want_resume then
-      -- resume asked do not resize
-      -- signals fn_pre to do the same
-      tmuxZ()
+      if opts._tmux_was_unzoomed then
+        utils.tmux_unzoom()
+      end
     end
   end
   fzf_lua.git_status(opts)

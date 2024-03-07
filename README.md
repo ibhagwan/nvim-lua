@@ -37,6 +37,9 @@
 - [gitsigns](https://github.com/lewis6991/gitsigns.nvim): git gutter indicators
   and hunk management
 
+- [diffview.nvim](https://github.com/sindrets/diffview.nvim): powerful git diff/merge
+  tool (`<leader>gd|yd` to invoke for project|dotfiles)
+
 ### Coding, completion & LSP
 
 - [Comment.nvim](https://github.com/numToStr/Comment.nvim): use `gc` and

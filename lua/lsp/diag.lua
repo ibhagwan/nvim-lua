@@ -1,8 +1,14 @@
 -- https://github.com/neovim/nvim-lspconfig/wiki/UI-Customization
-local signs = {
+local sign_defs = {
   {
-    name = "DiagnosticSignHint",
-    text = "󰌵"
+    name = "DiagnosticSignError",
+    text = ""
+    -- text = '󰅚'
+  },
+  {
+    name = "DiagnosticSignWarn",
+    text = "",
+    -- text = ''
   },
   {
     name = "DiagnosticSignInfo",
@@ -11,25 +17,39 @@ local signs = {
     -- text = '',
   },
   {
-    name = "DiagnosticSignWarn",
-    text = "",
-    -- text = ''
-  },
-  {
-    name = "DiagnosticSignError",
-    text = ""
-    -- text = '󰅚'
+    name = "DiagnosticSignHint",
+    text = "󰌵"
   },
 }
 
--- set sign highlights to same name as sign
--- i.e. 'DiagnosticWarn' gets highlighted with hl-DiagnosticWarn
-for i = 1, #signs do
-  signs[i].texthl = signs[i].name
-end
+local sign_opt -- changes depending on nvim version
 
--- define all signs at once
-vim.fn.sign_define(signs)
+if require("utils").__HAS_NVIM_010 then
+  -- nvim 0.10.0 uses `nvim_buf_set_extmark`
+  -- https://github.com/ibhagwan/fzf-lua/pull/1074
+  -- vim.diagnostic.config({
+  --   signs = {
+  --     text = {
+  --       [vim.diagnostic.severity.ERROR]  = "E",  -- index:0
+  --       [vim.diagnostic.severity.WARN]   = "W",  -- index:1
+  --       [vim.diagnostic.severity.INFO]   = "I",  -- index:2
+  --       [vim.diagnostic.severity.HINT]   = "H",  -- index:3
+  --     },
+  --   },
+  -- })
+  sign_opt = { text = {} }
+  for i, def in ipairs(sign_defs) do
+    table.insert(sign_opt.text, def.text)
+  end
+else
+  -- set sign highlights to same name as sign
+  -- i.e. 'DiagnosticWarn' gets highlighted with hl-DiagnosticWarn
+  sign_opt = true
+  for i = 1, #sign_defs do
+    sign_defs[i].texthl = sign_defs[i].name
+  end
+  vim.fn.sign_define(sign_defs)
+end
 
 -- Diag config
 vim.diagnostic.config({
@@ -48,7 +68,7 @@ vim.diagnostic.config({
     -- return ("%s"):format(diagnostic.message)
     -- end,
   },
-  signs = true,
+  signs = sign_opt,
   severity_sort = true,
   float = {
     show_header = false,

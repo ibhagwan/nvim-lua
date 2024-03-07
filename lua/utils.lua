@@ -10,6 +10,8 @@ local DEV_DIR = "$HOME/Sources/nvim"
 
 local M = {}
 
+M.__HAS_NVIM_08 = vim.fn.has("nvim-0.8") == 1
+M.__HAS_NVIM_010 = vim.fn.has("nvim-0.10") == 1
 M.IS_WINDOWS = vim.fn.has("win32") == 1 or vim.fn.has("win64") == 1
 
 -- muscle memory: switch Telescope<->fzf-lua binds
@@ -48,10 +50,6 @@ end
 
 function M.err(msg)
   fast_event_aware_notify(msg, vim.log.levels.ERROR, {})
-end
-
-function M.has_neovim_v08()
-  return vim.fn.has("nvim-0.8") == 1
 end
 
 function M.is_root()
@@ -393,6 +391,30 @@ M.tmux_aware_navigate = function(direction, no_wrap)
     table.insert(args, tmux_pane_flag[direction])
   end
   vim.fn.system(args)
+end
+
+M.tmux_is_zoomed = function()
+  if not vim.env.TMUX then return end
+  local out = vim.fn.system({ "tmux", "display-message", "-p", "#{window_flags}" })
+  return type(out) == "string" and out:match("Z") and 1 or 0
+end
+
+M.tmux_toggle_Z = function()
+  if not vim.env.TMUX then return end
+  vim.fn.system({ "tmux", "resize-pane", "-Z" })
+  return true
+end
+
+M.tmux_zoom = function()
+  if M.tmux_is_zoomed() == 0 then
+    return M.tmux_toggle_Z()
+  end
+end
+
+M.tmux_unzoom = function()
+  if M.tmux_is_zoomed() == 1 then
+    return M.tmux_toggle_Z()
+  end
 end
 
 return M

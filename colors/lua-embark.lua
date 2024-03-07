@@ -1,5 +1,5 @@
 local C       = {
-  space0      = { gui = "#100c31", cterm = 232, cterm16 = 0 },
+  space0      = { gui = "#100E23", cterm = 232, cterm16 = 0 },
   space1      = { gui = "#1e1c31", cterm = 233, cterm16 = "NONE" },
   space2      = { gui = "#2D2B40", cterm = 233, cterm16 = "NONE" },
   space3      = { gui = "#3E3869", cterm = 236, cterm16 = 8 },
