@@ -100,8 +100,8 @@ local HLS = {
   { "DiffText",                      { bg = C.diff_change } },
   { "ErrorMsg",                      { fg = C.dark_red } },
   { "WinSeparator",                  { fg = C.space3 } },
-  -- Links on Linux to `WinSeparator` and `NormalFloat` on Windows
-  { "FloatBorder",                { link = "WinSeparator" } },
+  -- Links on Linux to  `NormalFloat` since 0.1.10
+  { "FloatBorder",                   { link = "WinSeparator" } },
   { "Folded",                        { fg = C.dark_purple } },
   { "FoldColumn",                    { fg = C.dark_purple } },
   { "SignColumn",                    { fg = C.green } },
@@ -344,7 +344,9 @@ local HLS = {
   -- nvim-cmp
   { "CmpItemMenu",                   { link = "Comment" } },
   -- { "CmpItemKindDefault",            { fg = C.purple } },
-  { "CmpItemAbbrMatch",              { link = "Pmenu" } },
+  -- { "CmpItemAbbrMatch",              { link = "Pmenu" } },
+  { "CmpItemAbbrMatch",              { fg = C.purple } },
+  { "CmpItemAbbrMatchFuzzy",         { fg = C.yellow } },
   { "CmpItemKindDefault",            { link = "Pmenu" } },
   { "CmpItemKindFunction",           { link = "Function" } },
   { "CmpItemKindMethod",             { link = "CmpItemKindFunction" } },
@@ -357,7 +359,6 @@ local HLS = {
   -- { "CmpItemAbbr",                   { fg = C.blue } },
   -- { "CmpItemAbbrDeprecated",         { fg = C.norm_subtle } },
   -- { "CmpItemAbbrMatch",              { link = "Pmenu" } },
-  -- { "CmpItemAbbrMatchFuzzy",         { fg = C.purple } },
   -- { "CmpItemKindDefault",            { link = "Identifier" } },
   -- { "CmpItemKindText",               { fg = C.white } },
   -- { "CmpItemKindMethod",             { fg = C.red } },

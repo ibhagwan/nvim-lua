@@ -100,6 +100,10 @@ M.config = function()
           vim_item.kind = vim.lsp.protocol.CompletionItemKind[kind_idx]
         end
 
+        -- set max width of the LSP item or we can't see the docs
+        local max_width = math.floor(vim.o.columns * 0.40)
+        vim_item.abbr = vim_item.abbr:sub(1, max_width)
+
         return vim_item
       end,
     },
