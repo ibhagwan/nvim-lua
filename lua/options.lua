@@ -180,6 +180,8 @@ local disabled_built_ins     = {
 -- root since we will be using fzf-lua
 if not require "utils".is_root() then
   table.insert(disabled_built_ins, "fzf")
+elseif vim.loop.fs_stat("/usr/share/nvim/runtime/plugin/fzf.vim") then
+  vim.opt.runtimepath:append("/usr/share/nvim/runtime")
 end
 for _, plugin in pairs(disabled_built_ins) do
   vim.g["loaded_" .. plugin] = 1

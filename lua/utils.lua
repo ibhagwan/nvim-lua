@@ -303,6 +303,15 @@ M.sudo_write = function(tmpfile, filepath)
   vim.fn.delete(tmpfile)
 end
 
+M.osc52printf = function(...)
+  local str = string.format(...)
+  local base64 = vim.base64.encode(str)
+  local osc52str = string.format("\x1b]52;c;%s\x07", base64)
+  local bytes = vim.fn.chansend(vim.v.stderr, osc52str)
+  assert(bytes > 0)
+  M.info(string.format("[OSC52] %d chars copied (%d bytes)", #str, bytes))
+end
+
 M.unload_modules = function(patterns)
   for _, p in ipairs(patterns) do
     if not p.mod and type(p[1]) == "string" then

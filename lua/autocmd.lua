@@ -1,3 +1,4 @@
+local utils = require("utils")
 local aucmd = vim.api.nvim_create_autocmd
 
 local function augroup(name, fnc)
@@ -15,6 +16,40 @@ augroup("ibhagwan/FzfLuaCtrlC", function(g)
     })
 end)
 
+if utils.is_root() then
+  augroup("ibhagwan/SmartTextYankPost", function(g)
+    -- highlight yanked text and copy to system clipboard
+    -- TextYankPost is also called on deletion, limit to
+    -- yanks via v:operator
+    -- if we are connected over ssh also copy using OSC52
+    aucmd("TextYankPost", {
+      group = g,
+      pattern = "*",
+      -- command = "if has('clipboard') && v:operator=='y' && len(@0)>0 | "
+      --   .. "let @+=@0 | endif | "
+      --   .. "lua vim.highlight.on_yank{higroup='IncSearch', timeout=2000}"
+      desc = "Copy to clipboard/tmux/OSC52",
+      callback = function()
+        local ok, yank_data = pcall(vim.fn.getreg, "0")
+        local valid_yank = ok and #yank_data > 0 and vim.v.operator == "y"
+        if valid_yank and vim.fn.has("clipboard") == 1 then
+          pcall(vim.fn.setreg, "+", yank_data)
+        end
+        -- $SSH_CONNECTION doesn't pass over to
+        -- root when using `su -`, copy indiscriminately
+        if valid_yank and (vim.env.SSH_CONNECTION or utils.is_root()) then
+          utils.osc52printf(yank_data)
+        end
+        if valid_yank and vim.env.TMUX then
+          -- we use `-w` to also copy to client's clipboard
+          vim.fn.system({ "tmux", "set-buffer", "-w", yank_data })
+        end
+        vim.highlight.on_yank({ higroup = "IncSearch", timeout = 1000 })
+      end
+    })
+  end)
+end
+
 augroup("ibhagwan/StatusLineColors", function(g)
   aucmd("ColorScheme",
     {
@@ -27,9 +62,8 @@ augroup("ibhagwan/StatusLineColors", function(g)
         -- update heirline highlights, only do this after
         -- statusline is loaded or we lose the :intro screen
         if package.loaded.heirline then
-          local utils = require("heirline.utils")
           local get_colors = require("plugins.heirline")._get_colors
-          utils.on_colorscheme(get_colors)
+          require("heirline.utils").on_colorscheme(get_colors)
         end
       end,
     })
