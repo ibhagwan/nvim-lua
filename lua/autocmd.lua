@@ -132,9 +132,9 @@ end)
 augroup("ibhagwan/BufLastLocation", function(g)
   aucmd("BufReadPost", {
     group = g,
-    callback = function(args)
-      local mark = vim.api.nvim_buf_get_mark(args.buf, '"')
-      local line_count = vim.api.nvim_buf_line_count(args.buf)
+    callback = function(e)
+      local mark = vim.api.nvim_buf_get_mark(e.buf, '"')
+      local line_count = vim.api.nvim_buf_line_count(e.buf)
       if mark[1] > 0 and mark[1] <= line_count then
         vim.cmd 'normal! g`"zz'
       end

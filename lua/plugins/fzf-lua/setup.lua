@@ -72,10 +72,10 @@ local default_opts = {
       --   (or the original color of the text)
       ["fg"] = { "fg", "Comment" },
       ["bg"] = "-1",
-      ["hl"] = { "fg", { "NightflyViolet", "Directory" } },
+      ["hl"] = { "fg", { "NightflyPeach", "String" } },
       ["fg+"] = { "fg", "Normal" },
       ["bg+"] = { "bg", { "Visual" } },
-      ["hl+"] = { "fg", "CmpItemKindVariable" },
+      ["hl+"] = { "fg", { "NightflyPeach", "String" } },
       ["info"] = { "fg", { "NightflyPeach", "WarningMsg" } },
       -- ["prompt"] = { "fg", "SpecialKey" },
       ["pointer"] = { "fg", "DiagnosticError" },
