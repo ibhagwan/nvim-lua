@@ -1,6 +1,6 @@
 local M = {
   "hrsh7th/nvim-cmp",
-  event = "InsertEnter",
+  event = { "InsertEnter", "CmdLineEnter" },
   dependencies = {
     "hrsh7th/cmp-path",
     "hrsh7th/cmp-buffer",

@@ -133,6 +133,9 @@ augroup("ibhagwan/BufLastLocation", function(g)
   aucmd("BufReadPost", {
     group = g,
     callback = function(e)
+      -- skip fugitive commit message buffers
+      local bufname = vim.api.nvim_buf_get_name(e.buf)
+      if bufname:match("COMMIT_EDITMSG$") then return end
       local mark = vim.api.nvim_buf_get_mark(e.buf, '"')
       local line_count = vim.api.nvim_buf_line_count(e.buf)
       if mark[1] > 0 and mark[1] <= line_count then
