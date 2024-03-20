@@ -21,6 +21,8 @@ return {
         config = function()
           require("neodev").setup({
             library = {
+              types = true,
+              runtime = true,
               plugins = true,
               -- plugins = { "fzf-lua" },
             },

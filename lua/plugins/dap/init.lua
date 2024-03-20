@@ -2,7 +2,10 @@ local M = {
   "mfussenegger/nvim-dap",
   keys = { "<F5>", "<S-F5>", "<F8>", "<F9>" },
   dependencies = {
-    { "rcarriga/nvim-dap-ui" },
+    {
+      "rcarriga/nvim-dap-ui",
+      dependencies = { "nvim-neotest/nvim-nio" },
+    },
     { "theHamsta/nvim-dap-virtual-text" },
     { "jbyuki/one-small-step-for-vimkind" },
     { "mfussenegger/nvim-dap-python" },
