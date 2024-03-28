@@ -339,6 +339,7 @@ M.reload_config = function()
     { mod = "smartyank", fn = function() require("smartyank") end },
     { mod = "fzf%-lua",  fn = function() require("plugins.fzf-lua.setup").setup() end },
     { mod = "heirline",  fn = function() require("plugins.heirline").config() end },
+    { mod = "dap%.",     fn = function() require("plugins.dap").config() end },
   })
   -- re-source all language specific settings, scans all runtime files under
   -- '/usr/share/nvim/runtime/(indent|syntax)' and 'after/ftplugin'
@@ -420,6 +421,85 @@ M.tmux_unzoom = function()
   if M.tmux_is_zoomed() == 1 then
     return M.tmux_toggle_Z()
   end
+end
+
+M.dap_pick_exec = function()
+  local fzf = require("fzf-lua")
+  return coroutine.create(function(dap_co)
+    local dap_abort = function() coroutine.resume(dap_co, require("dap").ABORT) end
+    local dap_run = function(exec)
+      if type(exec) == "string" and vim.loop.fs_stat(exec) then
+        coroutine.resume(dap_co, exec)
+      else
+        if exec ~= "" then
+          M.warn(string.format("'%s' is not executable, aborting.", exec))
+        end
+        dap_abort()
+      end
+    end
+    fzf.files({
+      cwd = vim.loop.cwd(),
+      -- cwd_header = true,
+      -- cwd_prompt = false,
+      -- prompt = "DAP: Select Executable> ",
+      git_icons = false,
+      cmd = "fd --color=never --no-ignore --type x --hidden --follow --exclude .git",
+      header = (":: %s to execute prompt"):format(fzf.utils.ansi_codes["yellow"]("<Ctrl-e>")),
+      winopts = {
+        width = 0.65,
+        height = 0.45,
+        preview = { hidden = "hidden" },
+        title = { { " DAP: Select Executable to Debug ", "Cursor" } },
+        title_pos = "center",
+      },
+      actions = {
+        ["esc"] = dap_abort,
+        ["ctrl-c"] = dap_abort,
+        ["ctrl-g"] = false,
+        ["ctrl-e"] = function(_, opts) dap_run(opts.last_query) end,
+        ["default"] = function(sel)
+          if not sel[1] then
+            dap_abort()
+          else
+            dap_run(fzf.path.entry_to_file(sel[1]).path)
+          end
+        end,
+      },
+    })
+  end)
+end
+
+M.dap_pick_process = function(opts)
+  local fzf = require("fzf-lua")
+  return coroutine.create(function(dap_co)
+    local dap_abort = function() coroutine.resume(dap_co, require("dap").ABORT) end
+    local procs = require("dap.utils").get_processes(opts)
+    fzf.fzf_exec(
+      function(fzf_cb)
+        for _, p in pairs(procs) do
+          fzf_cb(string.format("[%d] %s", p.pid, p.name))
+        end
+      end,
+      {
+        winopts = {
+          preview = { hidden = "hidden" },
+          title = { { " DAP: Select Process to Debug ", "Cursor" } },
+          title_pos = "center",
+        },
+        actions = {
+          ["esc"] = dap_abort,
+          ["ctrl-c"] = dap_abort,
+          ["default"] = function(sel)
+            if not sel[1] then
+              dap_abort()
+            else
+              local pid = tonumber(sel[1]:match("^%[(%d+)%]"))
+              coroutine.resume(dap_co, pid)
+            end
+          end,
+        },
+      })
+  end)
 end
 
 return M
