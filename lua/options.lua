@@ -5,7 +5,7 @@ o.termguicolors = true   -- enable 24bit colors
 
 o.updatetime    = 250    -- decrease update time
 o.fileformat    = "unix" -- <nl> for EOL
-o.switchbuf     = "useopen"
+o.switchbuf     = "useopen,uselast"
 o.fileencoding  = "utf-8"
 o.matchpairs    = { "(:)", "{:}", "[:]", "<:>" }
 

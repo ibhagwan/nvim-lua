@@ -22,10 +22,10 @@ M.setup = function()
         position = "right",
         size = 0.40,
         elements = {
-          { id = "scopes",      size = 0.46, },
-          { id = "stacks",      size = 0.36 },
+          { id = "scopes",      size = 0.38, },
+          { id = "watches",     size = 0.12 },
+          { id = "stacks",      size = 0.32 },
           { id = "breakpoints", size = 0.18 },
-          -- { id = "watches", size = 00.25 },
         },
       },
     },

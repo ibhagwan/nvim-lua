@@ -469,18 +469,18 @@ M.dap_pick_exec = function()
   end)
 end
 
-M.dap_pick_process = function(opts)
+M.dap_pick_process = function(fzflua_opts, getproc_opts)
   local fzf = require("fzf-lua")
   return coroutine.create(function(dap_co)
     local dap_abort = function() coroutine.resume(dap_co, require("dap").ABORT) end
-    local procs = require("dap.utils").get_processes(opts)
+    local procs = require("dap.utils").get_processes(getproc_opts)
     fzf.fzf_exec(
       function(fzf_cb)
         for _, p in pairs(procs) do
           fzf_cb(string.format("[%d] %s", p.pid, p.name))
         end
       end,
-      {
+      vim.tbl_deep_extend("keep", fzflua_opts or {}, {
         winopts = {
           preview = { hidden = "hidden" },
           title = { { " DAP: Select Process to Debug ", "Cursor" } },
@@ -498,8 +498,24 @@ M.dap_pick_process = function(opts)
             end
           end,
         },
-      })
+      }))
   end)
+end
+
+function M.input(prompt)
+  local ok, res
+  if vim.ui then
+    ok, _ = pcall(vim.ui.input, { prompt = prompt },
+      function(input)
+        res = input
+      end)
+  else
+    ok, res = pcall(vim.fn.input, { prompt = prompt, cancelreturn = 3 })
+    if res == 3 then
+      ok, res = false, nil
+    end
+  end
+  return ok and res or nil
 end
 
 return M

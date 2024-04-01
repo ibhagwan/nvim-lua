@@ -15,6 +15,7 @@ local M = {
 M.config = function()
   local map = vim.keymap.set
   local dap = require "dap"
+  local utils = require "utils"
 
   map({ "n", "v" }, "<F5>", dap.continue, { silent = true, desc = "DAP launch or continue" })
   map({ "n", "v" }, "<S-F5>", function() require "osv".launch({ port = 8086 }) end,
@@ -29,16 +30,32 @@ M.config = function()
   map({ "n", "v" }, "<F11>", dap.step_into, { silent = true, desc = "DAP step into" })
   map({ "n", "v" }, "<F12>", dap.step_out, { silent = true, desc = "DAP step out" })
   map({ "n", "v" }, "<F6>", dap.terminate, { silent = true, desc = "DAP Terminate" })
-  map({ "n", "v" }, "<leader>dt", dap.terminate, { silent = true, desc = "terminate session" })
+  map({ "n", "v" }, "<leader>dt", dap.terminate, { silent = true, desc = "DAP terminate" })
+
+  -- Conditional breakpoints
   map({ "n", "v" }, "<leader>dc", function()
-    dap.set_breakpoint(vim.fn.input("Breakpoint condition: "))
-  end, { silent = true, desc = "set breakpoint with condition" })
-  map({ "n", "v" }, "<leader>dp", function()
-      dap.set_breakpoint(nil, nil, vim.fn.input("Log point message: "))
-    end,
-    { silent = true, desc = "set breakpoint with log point message" })
+    dap.set_breakpoint(utils.input("Breakpoint condition: "))
+  end, { silent = true, desc = "DAP: set breakpoint with condition" })
+  map({ "n", "v" }, "<leader>dl", function()
+    dap.set_breakpoint(nil, nil, utils.input("Log point message: "))
+  end, { silent = true, desc = "DAP: set breakpoint with log point message" })
+
   map({ "n", "v" }, "<leader>dr", dap.repl.toggle,
-    { silent = true, desc = "toggle debugger REPL" })
+    { silent = true, desc = "DAP toggle debugger REPL" })
+
+  -- DAP-UI widgets
+  map({ "n", "v" }, "<Leader>dk", require("dap.ui.widgets").hover,
+    { silent = true, desc = "DAP Hover" })
+  map({ "n", "v" }, "<Leader>dp", require("dap.ui.widgets").preview,
+    { silent = true, desc = "DAP Preview" })
+  map("n", "<Leader>df", function()
+    local widgets = require("dap.ui.widgets")
+    widgets.centered_float(widgets.frames)
+  end, { silent = true, desc = "DAP Frames" })
+  map("n", "<Leader>ds", function()
+    local widgets = require("dap.ui.widgets")
+    widgets.centered_float(widgets.scopes)
+  end, { silent = true, desc = "DAP Scopes" })
 
   -- launch fzf-lua
   local function fzf_lua(cmd)
@@ -46,15 +63,15 @@ M.config = function()
   end
 
   map({ "n", "v" }, "<leader>d?", fzf_lua("dap_commands"),
-    { silent = true, desc = "fzf nvim-dap builtin commands" })
+    { silent = true, desc = "DAP: fzf nvim-dap builtin commands" })
   map({ "n", "v" }, "<leader>db", fzf_lua("dap_breakpoints"),
-    { silent = true, desc = "fzf breakpoint list" })
-  map({ "n", "v" }, "<leader>df", fzf_lua("dap_frames"),
-    { silent = true, desc = "fzf frames" })
+    { silent = true, desc = "DAP: fzf breakpoint list" })
+  map({ "n", "v" }, "<leader>dF", fzf_lua("dap_frames"),
+    { silent = true, desc = "DAP: fzf frames" })
   map({ "n", "v" }, "<leader>dv", fzf_lua("dap_variables"),
-    { silent = true, desc = "fzf variables" })
+    { silent = true, desc = "DAP: fzf variables" })
   map({ "n", "v" }, "<leader>dx", fzf_lua("dap_configurations"),
-    { silent = true, desc = "fzf debugger configurations" })
+    { silent = true, desc = "DAP: fzf debugger configurations" })
 
   -- Lazy load fzf-lua to register_ui_select
   require("fzf-lua")
@@ -88,8 +105,19 @@ M.config = function()
   require("dap.ext.vscode").load_launchjs(".launch.json", {
     go     = { "go" },
     python = { "py" },
+    gdb    = { "c", "cpp", "rust" },
     lldb   = { "c", "cpp", "rust" },
+    cppdbg = { "c", "cpp", "rust" },
   })
+
+  -- Controls how stepping switches buffers
+  dap.defaults.fallback.switchbuf = "useopen,uselast"
+
+  -- Which terminal should be launched when `externalConsole = true`
+  dap.defaults.fallback.external_terminal = {
+    command = "/usr/bin/alacritty",
+    args = { "-e" },
+  }
 
   -- links by default to DiagnosticVirtualTextXXX which linkx to Comment in nightgly
   vim.api.nvim_set_hl(0, "NvimDapVirtualText", { link = "Comment" })
