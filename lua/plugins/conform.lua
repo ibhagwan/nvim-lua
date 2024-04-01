@@ -6,6 +6,7 @@ return {
       formatters_by_ft = {
         lua = { "stylua" },
         html = { { "prettier", "prettierd" } },
+        yaml = { { "prettier", "prettierd" } },
         jsonc = { { "prettier", "prettierd" } },
         javascript = { { "prettier", "prettierd" } },
         python = { "black" },

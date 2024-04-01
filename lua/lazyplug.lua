@@ -33,6 +33,7 @@ lazy.setup("plugins", {
   checker = { enabled = false },          -- don't auto-check for plugin updates
   change_detection = { enabled = false }, -- don't auto-check for config updates
   ui = {
+    backdrop = 101,
     border = "rounded",
     custom_keys = {
       ["<localleader>l"] = false,

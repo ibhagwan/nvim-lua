@@ -72,9 +72,10 @@ M.config = function()
       },
     },
     filters = {
+      enable = true,
       dotfiles = false,
       custom = {
-        "\\.git",
+        "^\\.git$",
         ".cache",
         "node_modules",
         "__pycache__",

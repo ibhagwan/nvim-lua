@@ -41,6 +41,9 @@ M.config = function()
       { name = "buffer" },
     },
 
+    ---@diagnostic disable-next-line: missing-fields
+    view = { entries = { follow_cursor = true } },
+
     -- we use 'comleteopt=...,noselect' but we still want cmp to autoselect
     -- an item if recommended by the LSP server (try with gopls, rust_analyzer)
     -- uncomment to disable

@@ -61,7 +61,7 @@ dap.configurations.c = {
     pid = require("utils").dap_pick_process,
     args = {},
   },
-  --[[ {
+  {
     name = "[GDB] Launch",
     type = "gdb",
     request = "launch",
@@ -84,7 +84,14 @@ dap.configurations.c = {
     -- end,
     cwd = "${workspaceFolder}",
     stopAtBeginningOfMainSubprogram = true,
-  }, ]]
+  },
+  {
+    name = "[GDB] Attach to process",
+    type = "gdb",
+    request = "attach",
+    pid = require("utils").dap_pick_process,
+    args = {},
+  },
 }
 
 dap.configurations.cpp = dap.configurations.c
