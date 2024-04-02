@@ -16,7 +16,7 @@ return {
   _set_gq_keymap = function(e)
     -- priortize LSP formatting as `gq`
     local lsp_has_formatting = false
-    local lsp_clients = vim.lsp.get_active_clients()
+    local lsp_clients = vim.lsp.get_active_clients({ bufnr = e.buf })
     local lsp_keymap_set = function(m, c)
       vim.keymap.set(m, "gq", function()
         vim.lsp.buf.format({ async = true, bufnr = e.buf })
