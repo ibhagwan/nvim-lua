@@ -182,6 +182,8 @@ local default_opts = {
     commits  = { winopts = { preview = { vertical = "down:60%", } } },
     bcommits = { winopts = { preview = { vertical = "down:60%", } } },
     branches = {
+      -- cmd_add = { "git", "checkout", "-b" },
+      cmd_del = { "git", "branch", "--delete", "--force" },
       winopts = {
         preview = { vertical = "down:75%", horizontal = "right:75%", }
       }
