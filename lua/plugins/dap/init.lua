@@ -52,6 +52,11 @@ M._load_bps = function()
       end
     end
   end
+  -- Load bps into active session (not just the UI)
+  local session = require("dap").session()
+  if session and bp_count > 0 then
+    session:set_breakpoints(require("dap.breakpoints").get())
+  end
   utils.info(string.format("Loaded %d breakpoints in %d bufers.",
     bp_count, vim.tbl_count(path2bufnr)))
 end
