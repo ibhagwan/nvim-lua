@@ -1,0 +1,151 @@
+/*!
+   highlight.js
+   https://highlightjs.readthedocs.io/en/latest/css-classes-reference.html
+   NOTE: we don't use '@import' as the css needs to be copied next to
+   the generated HTML, this css is already copied by previm
+*/
+
+/*!
+  Theme: Default
+  Description: Original highlight.js style
+  Author: (c) Ivan Sagalaev <maniac@softwaremaniacs.org>
+  Maintainer: @highlightjs/core-team
+  Website: https://highlightjs.org/
+  License: see project LICENSE
+  Touched: 2021
+*/
+ 
+pre code.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
+  -webkit-text-size-adjust: none;
+}
+
+code.hljs {
+  padding: 3px 5px;
+}
+
+.hljs {
+  background: #2D333B;
+  color: #ADBAC7;
+}
+
+.hljs-comment,
+.hljs-quote,
+.diff .hljs-header,
+.hljs-javadoc {
+  color: #768390;
+  font-style: italic;
+}
+
+.hljs-list,
+.hljs-subst,
+.hljs-operator,
+.hljs-keyword {
+  color: #F47067;
+}
+
+.hljs-number,
+.hljs-literal,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag .hljs-attr {
+  color: #6CB6FF;
+  /* color: #008080; */
+}
+
+.hljs-hexcolor,
+.hljs-number,
+.hljs-literal,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag .hljs-attr {
+  color: #6CB6FF;
+  /* color: #008080; */
+}
+
+.hljs-tag .hljs-value,
+.hljs-phpdoc,
+.hljs-dartdoc,
+.tex .hljs-formula {
+  color: #F48FB1;
+}
+.hljs-string,
+.hljs-doctag {
+  color: #96D0FF;
+  /* color: #7fdbca; */
+}
+
+.hljs-title,
+.hljs-section,
+.hljs-selector-id {
+  color: #fc514e;
+  font-weight: bold;
+}
+
+.hljs-subst {
+  font-weight: normal;
+}
+
+.hljs-type,
+.hljs-class .hljs-title {
+  color: #458;
+  font-weight: bold;
+}
+
+.hljs-tag,
+.hljs-name,
+.hljs-attribute {
+  color: #000080;
+  font-weight: normal;
+}
+
+.hljs-regexp,
+.hljs-link {
+  color: #009926;
+}
+
+.hljs-symbol,
+.hljs-bullet {
+  color: #990073;
+}
+
+.hljs-built_in,
+.hljs-builtin-name {
+  color: #6CB6FF;
+}
+
+.hljs-preprocessor,
+.hljs-pragma,
+.hljs-pi,
+.hljs-doctype,
+.hljs-shebang,
+.hljs-cdata {
+  color: #999;
+  font-weight: bold;
+}
+
+.hljs-meta {
+  color: #999;
+  font-weight: bold;
+}
+
+.hljs-deletion {
+  background: #fdd;
+}
+
+.hljs-addition {
+  background: #dfd;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+
+.hljs-chunk {
+  color: #aaa;
+}

@@ -64,6 +64,7 @@ local symbol_hl = function(s)
 end
 
 local default_opts = {
+  "default-title",
   -- fzf_opts = { ["--info"] = "default" },
   fzf_colors = function()
     return {

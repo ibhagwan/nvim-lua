@@ -52,7 +52,7 @@ o.showbreak        = "↪ "
 o.completeopt      = { "noinsert", "menuone", "noselect" }
 o.wildmode         = "longest:full,full"
 o.wildoptions      = "pum" -- Show completion items using the pop-up-menu (pum)
-o.pumblend         = 15    -- completion menu transparency
+-- o.pumblend         = 15    -- completion menu transparency
 
 o.joinspaces       = true  -- insert spaces after '.?!' when joining lines
 o.smartindent      = true  -- add <tab> depending on syntax (C/C++)

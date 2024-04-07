@@ -120,7 +120,8 @@ local HLS = {
   -- { "NormalFloat",                { link = "Pmenu" } },
   { "PmenuSel",                      { fg = C.purple, bg = C.bg } },
   { "PmenuSbar",                     { fg = C.norm, bg = C.bg_dark } },
-  { "PmenuThumb",                    { fg = C.norm, bg = C.bg_dark } },
+  -- { "PmenuThumb",                    { fg = C.norm, bg = C.bg_dark } },
+  { "PmenuThumb",                    { fg = C.norm, bg = C.statusline } },
   { "Question",                      { fg = C.green } },
   { "Search",                        { bg = C.dark_yellow, fg = C.bg } },
   -- { "Substitute",                 { link = "Search" } },
@@ -407,7 +408,9 @@ local HLS = {
   { "TelescopeResultsDiffUntracked", { link = "Title" } },
 
   -- fzf-lua
-  { "FzfLuaTitle",                   { fg = C.white } },
+  -- { "FzfLuaTitle",                   { fg = C.white } },
+  { "FzfLuaTitle",                   { fg = C.space0, bg = C.green } },
+  { "FzfLuaPreviewTitle",            { fg = C.space0, bg = C.purple } },
   { "FzfLuaScrollFloatFull",         { bg = C.dark_blue } },
   { "FzfLuaScrollFloatEmpty",        { bg = C.space4 } },
 

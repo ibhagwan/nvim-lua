@@ -82,8 +82,9 @@ map_fzf("n", [[<leader>f"]], "registers", { desc = "registers" })
 map_fzf("n", "<leader>fk", "keymaps", { desc = "keymaps" })
 map_fzf("n", "<leader>fz", "spell_suggest", {
   desc = "spell suggestions",
-  prompt = "Spell> ",
+  -- prompt = "Spell> ",
   winopts = {
+    title    = " Spell ",
     relative = "cursor",
     row      = 1.01,
     col      = 0,

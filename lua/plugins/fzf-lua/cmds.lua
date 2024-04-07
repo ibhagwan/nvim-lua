@@ -87,13 +87,19 @@ function M.workdirs(opts)
 
   opts.fzf_opts = {
     ["--no-multi"]       = "",
-    ["--prompt"]         = "Workdirs❯ ",
     ["--preview-window"] = "hidden:right:0",
     ["--header-lines"]   = "1",
+    -- ["--prompt"]         = "Workdirs❯ ",
   }
+
+  opts.winopts = vim.tbl_deep_extend("force", opts.winopts or {}, {
+    title = { { " Workdirs ", "Cursor" } },
+    title_pos = "center",
+  })
 
   opts.actions = {
     ["default"] = function(selected)
+      if not selected[1] then return end
       require("workdirs").PREV_CWD = vim.loop.cwd()
       local newcwd = vim.fs.normalize(selected[1]:match("[^ ]*$"))
       require("utils").set_cwd(newcwd)

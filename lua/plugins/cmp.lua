@@ -11,6 +11,13 @@ local M = {
   },
 }
 
+local winopts = {
+  -- NOT REQUIRED
+  -- Set left|right border chars to invisible spaces for scollbar
+  -- border = { "", "", "", "\xc2\xa0", "", "", "", "\xc2\xa0" },
+  winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,CursorLine:PmenuSel,Search:None",
+}
+
 M.config = function()
   local cmp = require("cmp")
   local luasnip = require("luasnip")
@@ -24,6 +31,8 @@ M.config = function()
     },
 
     window = {
+      completion = winopts,
+      documentation = winopts,
       -- completion = cmp.config.window.bordered(),
       -- documentation = cmp.config.window.bordered(),
     },
@@ -56,9 +65,19 @@ M.config = function()
       ["<Tab>"] = cmp.mapping(cmp.mapping.select_next_item(), { "i", "c" }),
       ["<C-p>"] = cmp.mapping(cmp.mapping.select_prev_item(), { "i", "c" }),
       ["<C-n>"] = cmp.mapping(cmp.mapping.select_next_item(), { "i", "c" }),
+      ["<C-k>"] = cmp.mapping(cmp.mapping.select_prev_item(), { "i", "c" }),
+      ["<C-j>"] = cmp.mapping(cmp.mapping.select_next_item(), { "i", "c" }),
       ["<S-up>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "c" }),
       ["<S-down>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
       ["<C-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i" }),
+      ["<C-b>"] = cmp.mapping(
+        cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select, count = 20 }),
+        { "i", "c" }
+      ),
+      ["<C-f>"] = cmp.mapping(
+        cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select, count = 20 }),
+        { "i", "c" }
+      ),
       ["<C-e>"] = cmp.mapping({
         i = cmp.mapping.abort(),
         c = cmp.mapping.close(),
