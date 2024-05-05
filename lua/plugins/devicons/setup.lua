@@ -1,5 +1,5 @@
 require("nvim-web-devicons").setup({
-  override = {
+  override_by_extension = {
     sol = {
       icon = "♦",
       color = "#a074c4",
@@ -10,6 +10,11 @@ require("nvim-web-devicons").setup({
       color = "#89e051",
       cterm_color = "113",
       name = "Sh",
-    }
+    },
+    norg = {
+      icon = "",
+      color = "#97eefc",
+      name = "Neorg",
+    },
   },
 })

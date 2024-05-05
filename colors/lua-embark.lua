@@ -393,7 +393,8 @@ local HLS = {
   { "NvimTreeRootFolder",            { fg = C.green } },
 
   -- Nvim-telescope
-  { "TelescopeNormal",               { fg = C.astral0 } },
+  -- Doesn't look good with `path_display.filename_first`
+  -- { "TelescopeNormal",               { fg = C.astral0 } },
   { "TelescopeBorder",               { link = "LineNr" } },
   { "TelescopeSelection",            { fg = C.astral1, bg = C.visual } },
   { "TelescopeMatching",             { link = "String" } },

@@ -65,13 +65,15 @@ end
 
 local default_opts = {
   "default-title",
+  -- nvim_freeze_workaround = 1,
+  -- debug_tracelog = "~/fzf-lua-trace.log",
   -- fzf_opts = { ["--info"] = "default" },
   fzf_colors = function()
     return {
       -- Set to `-1` to use neovim fg/bg, from `man fzf`:
       --   Default terminal foreground/background color
       --   (or the original color of the text)
-      ["fg"] = { "fg", "Comment" },
+      -- ["fg"] = { "fg", "Comment" },
       ["bg"] = "-1",
       ["hl"] = { "fg", { "NightflyPeach", "String" } },
       ["fg+"] = { "fg", "Normal" },
@@ -150,7 +152,7 @@ local default_opts = {
   },
   -- all providers inherit from defaults, easier than to set this individually
   -- for git diff, commits and bcommits (we have an override for lsp.code_actions)
-  defaults = {},
+  defaults = { formatter = "path.filename_first" },
   buffers = { no_action_zz = true },
   files = {
     -- uncomment to override .gitignore
@@ -170,9 +172,7 @@ local default_opts = {
       ["ctrl-g"] = { fzf_lua.actions.toggle_ignore }
     },
   },
-  tags = {
-    actions = { ["ctrl-g"] = false, ["ctrl-r"] = { fzf_lua.actions.grep_lgrep } }
-  },
+  tags = { actions = { ["ctrl-g"] = false, ["ctrl-r"] = { fzf_lua.actions.grep_lgrep } } },
   btags = { actions = { ["ctrl-g"] = false, ["ctrl-r"] = false } },
   git = {
     status   = {

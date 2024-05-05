@@ -57,7 +57,9 @@ return {
         layout_strategy = "flex",
         results_title = false,
         dynamic_preview_title = true,
-        path_display = { truncate = 0 },
+        -- path_display = { truncate = 0 },
+        -- https://github.com/nvim-telescope/telescope.nvim/pull/3010
+        path_display = { filename_first = { reverse_directories = false } },
         layout_config = {
           width = 0.95,
           height = 0.85,
