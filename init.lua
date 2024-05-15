@@ -16,8 +16,8 @@ require("keymaps")
 -- NOTE: embark colorscheme set transparent background for root in "options.lua"
 if not utils.is_root() then
   require("lazyplug")
-  -- vim.cmd.colorscheme("nightfly")
-  vim.cmd.colorscheme("lua-embark")
+  vim.cmd.colorscheme("nightfly")
+  -- vim.cmd.colorscheme("lua-embark")
 else
   vim.cmd.colorscheme("lua-embark")
 end
