@@ -2,6 +2,7 @@ local o         = vim.opt
 
 o.mouse         = ""     -- disable the mouse
 o.termguicolors = true   -- enable 24bit colors
+o.background    = "dark" -- use the dark version of colorschemes
 
 o.updatetime    = 250    -- decrease update time
 o.fileformat    = "unix" -- <nl> for EOL
@@ -207,8 +208,3 @@ vim.g.markdown_fenced_languages = {
 -- Map leader to <space>
 vim.g.mapleader                 = " "
 vim.g.maplocalleader            = " "
-
--- set transparent background for root
--- https://github.com/embark-theme/vim
--- vim.g.embark_transparent        = true
-vim.g.embark_transparent        = require("utils").is_root() and true or nil

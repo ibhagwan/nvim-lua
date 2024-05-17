@@ -47,6 +47,8 @@ function M.preview_location(loc, _, _)
   return buf, win
 end
 
+local _islist = vim.islist or vim.tbl_islist
+
 function M.preview_location_callback(err, res, ctx, cfg)
   if err then
     vim.notify(("Error running LSP query '%s'"):format(cfg.method), vim.log.levels.ERROR)
@@ -56,7 +58,7 @@ function M.preview_location_callback(err, res, ctx, cfg)
     vim.notify("Unable to find code location.", vim.log.levels.WARN)
     return nil
   end
-  _, _float_win = M.preview_location(vim.tbl_islist(res) and res[1] or res, ctx, cfg)
+  _, _float_win = M.preview_location(_islist(res) and res[1] or res, ctx, cfg)
 end
 
 function M.peek_definition()

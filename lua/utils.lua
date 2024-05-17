@@ -12,6 +12,7 @@ local M = {}
 
 M.__HAS_NVIM_08 = vim.fn.has("nvim-0.8") == 1
 M.__HAS_NVIM_010 = vim.fn.has("nvim-0.10") == 1
+M.__HAS_NVIM_011 = vim.fn.has("nvim-0.11") == 1
 M.IS_WINDOWS = vim.fn.has("win32") == 1 or vim.fn.has("win64") == 1
 
 -- muscle memory: switch Telescope<->fzf-lua binds
@@ -288,7 +289,7 @@ M.sudo_write = function(tmpfile, filepath)
     vim.fn.shellescape(tmpfile),
     vim.fn.shellescape(filepath))
   -- no need to check error as this fails the entire function
-  vim.api.nvim_exec(string.format("write! %s", tmpfile), true)
+  vim.api.nvim_exec2(string.format("write! %s", tmpfile), { output = true })
   if M.sudo_exec(cmd) then
     -- refreshes the buffer and prints the "written" message
     vim.cmd.checktime()
@@ -516,6 +517,10 @@ function M.input(prompt)
     end
   end
   return ok and res or nil
+end
+
+function M.lsp_get_clients(...)
+  return M.__HAS_NVIM_011 and vim.lsp.get_clients(...) or vim.lsp.get_active_clients(...)
 end
 
 return M

@@ -269,7 +269,7 @@ local LSPActive = {
     end),
   },
   condition = function(self)
-    self.clients = vim.lsp.get_active_clients({ bufnr = 0 })
+    self.clients = require("utils").lsp_get_clients({ bufnr = 0 })
     return next(self.clients) ~= nil
   end,
   -- hl = { bg = "statusline_bg" },
