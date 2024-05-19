@@ -19,6 +19,20 @@ vim.cmd [[set path=.,,,$PWD/**]]
 -- unnamedplus = use the + register (cmd-v paste in our term)
 -- o.clipboard         = 'unnamedplus'
 
+if vim.fn.has("nvim-0.10") == 1 and vim.env.SSH_TTY then
+  vim.g.clipboard = {
+    name = "OSC 52",
+    copy = {
+      ["+"] = require("vim.ui.clipboard.osc52").copy("+"),
+      ["*"] = require("vim.ui.clipboard.osc52").copy("*"),
+    },
+    paste = {
+      ["+"] = require("vim.ui.clipboard.osc52").paste("+"),
+      ["*"] = require("vim.ui.clipboard.osc52").paste("*"),
+    },
+  }
+end
+
 o.cmdheight        = 2                           -- cmdline height
 o.cmdwinheight     = math.floor(vim.o.lines / 2) -- 'q:' window height
 o.scrolloff        = 3                           -- min number of lines to keep between cursor and screen edge
