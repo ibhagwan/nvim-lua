@@ -64,7 +64,7 @@ map("t", "<C-w>", [[<C-\><C-n><C-w>]], {})
 map("t", "<M-r>", [['<C-\><C-N>"'.nr2char(getchar()).'pi']], { expr = true })
 
 -- TMUX aware navigation
-for _, k in ipairs({ "h", "j", "k", "l", "\\" }) do
+for _, k in ipairs({ "h", "j", "k", "l", "o" }) do
   map({ "n", "x", "t" }, string.format("<M-%s>", k), function()
     require("utils").tmux_aware_navigate(k, true)
   end, { silent = true })
