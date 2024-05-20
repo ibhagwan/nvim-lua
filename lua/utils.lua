@@ -144,7 +144,7 @@ end
 function M.toggle_colorcolumn()
   local wininfo = vim.fn.getwininfo()
   for _, win in pairs(wininfo) do
-    local ft = vim.api.nvim_buf_get_option(win["bufnr"], "filetype")
+    local ft = vim.bo[win["bufnr"]].filetype
     if ft == nil or ft == "TelescopePrompt" then return end
     local colorcolumn = ""
     if win["width"] >= vim.g._colorcolumn then
@@ -331,7 +331,17 @@ end
 
 M.reload_config = function()
   M.unload_modules({
-    { "^options$",       fn = function() require("options") end },
+    {
+      "^options$",
+      fn = function()
+        -- Ignore events or gitsigns croaks on "OptionSet"
+        --   OptionSet Autocommands for "fileformat": attempt to yield across C-call
+        local save_ei = vim.o.eventignore
+        vim.o.eventignore = "all"
+        require("options")
+        vim.o.eventignore = save_ei
+      end
+    },
     { "^autocmd$",       fn = function() require("autocmd") end },
     { "^keymaps$",       fn = function() require("keymaps") end },
     { "^utils$" },
@@ -354,7 +364,7 @@ M.reload_config = function()
         return s
       end
     end
-    return nil
+    return false
   end, vim.fn.split(vim.fn.execute("scriptnames"), "\n"))
   -- remove last search highlight
   vim.cmd("nohl")
@@ -520,6 +530,7 @@ function M.input(prompt)
 end
 
 function M.lsp_get_clients(...)
+  ---@diagnostic disable-next-line: deprecated
   return M.__HAS_NVIM_011 and vim.lsp.get_clients(...) or vim.lsp.get_active_clients(...)
 end
 

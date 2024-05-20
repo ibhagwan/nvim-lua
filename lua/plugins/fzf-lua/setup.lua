@@ -172,6 +172,18 @@ local default_opts = {
       ["ctrl-g"] = { fzf_lua.actions.toggle_ignore }
     },
   },
+  lines = {
+    actions = {
+      ["ctrl-q"] = fzf_lua.actions.buf_sel_to_qf,
+      ["alt-q"]  = fzf_lua.actions.buf_sel_to_ll
+    }
+  },
+  blines = {
+    actions = {
+      ["ctrl-q"] = fzf_lua.actions.buf_sel_to_qf,
+      ["alt-q"]  = fzf_lua.actions.buf_sel_to_ll
+    }
+  },
   tags = { actions = { ["ctrl-g"] = false, ["ctrl-r"] = { fzf_lua.actions.grep_lgrep } } },
   btags = { actions = { ["ctrl-g"] = false, ["ctrl-r"] = false } },
   git = {
