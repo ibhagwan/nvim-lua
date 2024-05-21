@@ -53,6 +53,9 @@ local on_attach = function(client, bufnr)
     { desc = "signature help [LSP]" })
   map("n", "<leader>k", [[<cmd>lua require("lsp.handlers").peek_definition()<CR>]],
     { desc = "peek definition [LSP]" })
+  map("n", "<leader>lh", function()
+    vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({}))
+  end, { desc = "toggle inlay hints [LSP]" })
 
   -- using fzf-lua instead
   --map('n', '<leader>ls', '<cmd>lua vim.lsp.buf.document_symbol()<CR>')
