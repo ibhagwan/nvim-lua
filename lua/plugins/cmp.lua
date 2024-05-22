@@ -7,7 +7,7 @@ local M = {
     "hrsh7th/cmp-cmdline",
     "hrsh7th/cmp-nvim-lsp",
     "hrsh7th/cmp-nvim-lua",
-    "saadparwaiz1/cmp_luasnip",
+    not vim.snippet and "saadparwaiz1/cmp_luasnip" or nil,
   },
 }
 
@@ -20,13 +20,17 @@ local winopts = {
 
 M.config = function()
   local cmp = require("cmp")
-  local luasnip = require("luasnip")
 
   cmp.setup {
     snippet = {
       -- must use a snippet engine
       expand = function(args)
-        luasnip.lsp_expand(args.body)
+        if vim.snippet then
+          vim.snippet.expand(args.body)
+        else
+          -- Only installed with neovim < 0.10
+          require("luasnip").lsp_expand(args.body)
+        end
       end,
     },
 
@@ -45,9 +49,9 @@ M.config = function()
     sources = {
       { name = "nvim_lsp" },
       { name = "nvim_lua" },
-      { name = "luasnip" },
       { name = "path" },
       { name = "buffer" },
+      not vim.snippet and { name = "luasnip" } or nil,
     },
 
     ---@diagnostic disable-next-line: missing-fields

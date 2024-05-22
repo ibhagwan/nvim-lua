@@ -1,4 +1,7 @@
-local M = { "L3MON4D3/LuaSnip" }
+local M = {
+  "L3MON4D3/LuaSnip",
+  enabled = not vim.snippet,
+}
 
 M.config = function()
   local luasnip = require("luasnip")
