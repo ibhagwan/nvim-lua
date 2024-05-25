@@ -32,11 +32,12 @@ return {
   },
   {
     "previm/previm",
-    commit = "86d4dc0d28e7fdc0685a7a6e37eb3811dcff93a1",
+    commit = "0a3eaad218bc58af867c1a7a71b1d8323a5a7039",
     config = function()
       -- vim.g.previm_open_cmd = 'firefox';
       vim.g.previm_open_cmd = "/shared/$USER/Applications/chromium/chrome";
       vim.g.previm_enable_realtime = 0
+      vim.g.previm_code_language_show = 1
       vim.g.previm_disable_default_css = 1
       vim.g.previm_custom_css_path = vim.fn.stdpath("config") .. "/css/previm-gh-dark.css"
       local hljs_ghdark_css = "highlight-gh-dark.css"
