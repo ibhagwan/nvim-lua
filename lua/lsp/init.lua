@@ -1,6 +1,8 @@
 local ok, lspconfig = pcall(require, "lspconfig")
 if not ok then return end
 
+local lsputil = require("lspconfig.util")
+
 -- Setup icons & handler helper functions
 require("lsp.diag")
 require("lsp.icons")
@@ -11,6 +13,35 @@ vim.lsp.handlers["textDocument/hover"] =
     vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
 vim.lsp.handlers["textDocument/signatureHelp"] =
     vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
+
+-- Custom root dir function that ignores "$HOME/.git" for lua files in $HOME
+-- which will then run the LSP in single file mdoe, otherwise will err with:
+--   LSP[lua_ls] Your workspace is set to `$HOME`.
+--   Lua language server refused to load this directory.
+--   Please check your configuration.
+--   [learn more here](https://luals.github.io/wiki/faq#why-is-the-server-scanning-the-wrong-folder)
+-- Modified from ".../nvim-lspconfig/lua/lspconfig/server_configurations"
+local lua_root_dir = function(fname)
+  local root_files = {
+    ".luarc.json",
+    ".luarc.jsonc",
+    ".luacheckrc",
+    ".stylua.toml",
+    "stylua.toml",
+    "selene.toml",
+    "selene.yml",
+  }
+  local root = lsputil.root_pattern(unpack(root_files))(fname)
+  if root and root ~= vim.env.HOME then
+    return root
+  end
+  root = lsputil.root_pattern "lua/" (fname)
+  if root then
+    return root
+  end
+  root = lsputil.find_git_ancestor(fname)
+  return root ~= vim.env.HOME and root or nil
+end
 
 local custom_settings = {
   ["lua_ls"] = {
@@ -91,7 +122,7 @@ local function is_installed(cfg)
   return cmd and cmd[1] and vim.fn.executable(cmd[1]) == 1
 end
 
-local function make_config()
+local function make_config(srv)
   local capabilities = vim.lsp.protocol.make_client_capabilities()
   -- enables snippet support
   capabilities.textDocument.completion.completionItem.snippetSupport = true
@@ -103,16 +134,21 @@ local function make_config()
   return {
     on_attach = require("lsp.on_attach").on_attach,
     capabilities = capabilities,
+    root_dir = srv == "lua_ls" and lua_root_dir or nil,
   }
 end
 
 for _, srv in ipairs(all_servers) do
-  local cfg = make_config()
+  local cfg = make_config(srv)
   if custom_settings[srv] then
     cfg = vim.tbl_deep_extend("force", custom_settings[srv], cfg)
   end
-  -- jdtls is configured via 'mfussenegger/nvim-jdtls'
-  if srv ~= "jdtls" and is_installed(lspconfig[srv]) then
+  if is_installed(lspconfig[srv])
+      -- uncomment when using "typescript-tools.nvim"
+      -- and srv ~= "tsserver"
+      -- jdtls is configured via 'mfussenegger/nvim-jdtls'
+      and srv ~= "jdtls"
+  then
     lspconfig[srv].setup(cfg)
   end
 end

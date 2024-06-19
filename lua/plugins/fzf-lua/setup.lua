@@ -69,7 +69,7 @@ local default_opts = {
   -- debug_tracelog = "~/fzf-lua-trace.log",
   -- fzf_opts = { ["--info"] = "default" },
   fzf_colors = function()
-    return {
+    return vim.g.colors_name == "nightfly" and {} or {
       -- Set to `-1` to use neovim fg/bg, from `man fzf`:
       --   Default terminal foreground/background color
       --   (or the original color of the text)
@@ -152,7 +152,7 @@ local default_opts = {
   },
   -- all providers inherit from defaults, easier than to set this individually
   -- for git diff, commits and bcommits (we have an override for lsp.code_actions)
-  defaults = { formatter = "path.filename_first" },
+  defaults = { formatter = { "path.dirname_first", v = 2 } },
   buffers = { no_action_zz = true },
   files = {
     -- uncomment to override .gitignore

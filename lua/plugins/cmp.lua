@@ -51,6 +51,10 @@ M.config = function()
       { name = "nvim_lua" },
       { name = "path" },
       { name = "buffer" },
+      {
+        name = "lazydev",
+        group_index = 0, -- set group index to 0 to skip loading LuaLS completions
+      },
       not vim.snippet and { name = "luasnip" } or nil,
     },
 
@@ -114,6 +118,7 @@ M.config = function()
           luasnip = "LuaSnip",
           nvim_lua = "Lua",
           nvim_lsp = "LSP",
+          lazydev = "LazyDev",
         }
 
         vim_item.menu = ("%-10s [%s]"):format(
