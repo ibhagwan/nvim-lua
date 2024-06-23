@@ -29,6 +29,7 @@ return {
   },
   {
     "folke/lazydev.nvim",
+    enabled = require("utils").__HAS_NVIM_010,
     ft = "lua",
     opts = {
       library = {
