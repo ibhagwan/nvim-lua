@@ -54,19 +54,19 @@ function M.err(msg)
 end
 
 function M.is_root()
-  return not M.IS_WINDOWS and vim.loop.getuid() == 0
+  return not M.IS_WINDOWS and uv.getuid() == 0
 end
 
 function M.is_darwin()
-  return vim.loop.os_uname().sysname == "Darwin"
+  return uv.os_uname().sysname == "Darwin"
 end
 
 function M.is_NetBSD()
-  return vim.loop.os_uname().sysname == "NetBSD"
+  return uv.os_uname().sysname == "NetBSD"
 end
 
 function M.is_dev(path)
-  return vim.loop.fs_stat(string.format("%s/%s", vim.fn.expand(DEV_DIR), path))
+  return uv.fs_stat(string.format("%s/%s", vim.fn.expand(DEV_DIR), path)) ~= nil
 end
 
 function M.shell_error()
@@ -102,7 +102,7 @@ function M.set_cwd(pwd)
     local parent = vim.fn.expand("%:h")
     pwd = M.git_root(parent, true) or parent
   end
-  if vim.loop.fs_stat(pwd) then
+  if uv.fs_stat(pwd) then
     vim.cmd("cd " .. pwd)
     M.info(("pwd set to %s"):format(vim.fn.shellescape(pwd)))
   else
@@ -439,7 +439,7 @@ M.dap_pick_exec = function()
   return coroutine.create(function(dap_co)
     local dap_abort = function() coroutine.resume(dap_co, require("dap").ABORT) end
     local dap_run = function(exec)
-      if type(exec) == "string" and vim.loop.fs_stat(exec) then
+      if type(exec) == "string" and uv.fs_stat(exec) then
         coroutine.resume(dap_co, exec)
       else
         if exec ~= "" then
@@ -449,7 +449,7 @@ M.dap_pick_exec = function()
       end
     end
     fzf.files({
-      cwd = vim.loop.cwd(),
+      cwd = uv.cwd(),
       -- cwd_header = true,
       -- cwd_prompt = false,
       -- prompt = "DAP: Select Executable> ",

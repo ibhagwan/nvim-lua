@@ -3,8 +3,6 @@ if not res then
   return
 end
 
-local uv = vim.loop
-
 local nvim_server
 local nvim_chanID
 
@@ -40,7 +38,7 @@ local function dap_server(opts)
   local plugin_name = "one-small-step-for-vimkind"
   local plugin_dir = vim.fn.stdpath("data") .. "/site/pack/dap"
   assert(vim.fn.mkdir(plugin_dir, "p"), "Unable to create plugin dir")
-  vim.loop.fs_symlink(vim.fn.stdpath("data") .. "/lazy", plugin_dir .. "/opt", { dir = true })
+  uv.fs_symlink(vim.fn.stdpath("data") .. "/lazy", plugin_dir .. "/opt", { dir = true })
 
   -- make sure OSV is loaded
   vim.fn.rpcrequest(nvim_chanID, "nvim_exec_lua",

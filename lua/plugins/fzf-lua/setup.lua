@@ -69,7 +69,11 @@ local default_opts = {
   -- debug_tracelog = "~/fzf-lua-trace.log",
   -- fzf_opts = { ["--info"] = "default" },
   fzf_colors = function()
-    return vim.g.colors_name == "nightfly" and {} or {
+    return vim.g.colors_name == "nightfly" and {
+      ["info"] = { "fg", { "NightflyPeach" } },
+      ["scrollbar"] = { "fg", { "NightflyPeach" } },
+      ["hl+"] = { "fg", { "NightflyPeach", "String" } },
+    } or {
       -- Set to `-1` to use neovim fg/bg, from `man fzf`:
       --   Default terminal foreground/background color
       --   (or the original color of the text)
@@ -97,6 +101,8 @@ local default_opts = {
   -- end,
   winopts = {
     -- split   = "belowright new",
+    -- split   = "belowright vnew",
+    -- split   = "aboveleft new",
     -- split   = "aboveleft vnew",
     height    = 0.85,
     width     = 0.80,
@@ -106,6 +112,10 @@ local default_opts = {
     -- {'╮', 'IncSearch'}, '│', '╯', '─', '╰', '│' },
     preview   = {
       layout       = "flex",
+      -- vertical     = "down:50%",
+      -- vertical     = "up:50%",
+      -- horizontal   = "right:55%",
+      -- horizontal   = "left:60%",
       flip_columns = 130,
       scrollbar    = "float",
       -- scrolloff        = '-1',

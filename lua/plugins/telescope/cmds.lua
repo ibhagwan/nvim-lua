@@ -102,7 +102,7 @@ function M.workdirs(opts)
         end
 
         actions.close(prompt_bufnr)
-        require("workdirs").PREV_CWD = vim.loop.cwd()
+        require("workdirs").PREV_CWD = uv.cwd()
         local newcwd = vim.fs.normalize(selection[1]:match("[^ ]*$"))
         require("utils").set_cwd(newcwd)
       end)

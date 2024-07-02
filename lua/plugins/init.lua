@@ -50,7 +50,7 @@ return {
         } },
       } }
       -- Copy our custom code highlight css to the jailbreak folder
-      if not vim.loop.fs_copyfile(vim.fn.stdpath("config") .. "/css/" .. hljs_ghdark_css,
+      if not uv.fs_copyfile(vim.fn.stdpath("config") .. "/css/" .. hljs_ghdark_css,
             vim.fn.stdpath("data") .. "/lazy/previm/preview/_/css/lib/" .. hljs_ghdark_css) then
         require("utils").warn(string.format(
           "Unable to copy '%s' to previm jail.", hljs_ghdark_css))

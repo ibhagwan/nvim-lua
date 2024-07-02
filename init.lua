@@ -7,6 +7,8 @@ if not utils.__HAS_NVIM_08 then
   return
 end
 
+uv = vim.loop or vim.uv
+
 require("options")
 require("autocmd")
 require("keymaps")

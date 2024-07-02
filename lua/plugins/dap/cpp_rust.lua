@@ -57,7 +57,7 @@ dap.configurations.c = {
     request = "launch",
     program = function()
       local nvim_bin = vim.fn.expand("$HOME/Sources/nvim/neovim/build/bin/nvim")
-      if not vim.loop.fs_stat(nvim_bin) then
+      if not uv.fs_stat(nvim_bin) then
         utils.warn(string.format("'%s' is not executable, aborting.", nvim_bin))
         return dap.ABORT
       end
@@ -122,7 +122,7 @@ dap.configurations.c = {
     request = "attach",
     program = function()
       local nvim_bin = vim.fn.expand("$HOME/Sources/nvim/neovim/build/bin/nvim")
-      if not vim.loop.fs_stat(nvim_bin) then
+      if not uv.fs_stat(nvim_bin) then
         utils.warn(string.format("'%s' is not executable, aborting.", nvim_bin))
         return dap.ABORT
       end
@@ -164,7 +164,7 @@ dap.configurations.c = {
     --     function(input)
     --       bin = vim.fn.expand(input)
     --     end)
-    --   if type(bin) == "string" and vim.loop.fs_stat(bin) then
+    --   if type(bin) == "string" and uv.fs_stat(bin) then
     --     return bin
     --   else
     --     -- ctrl-c'ing `vin.ui.input` returns "v:null"

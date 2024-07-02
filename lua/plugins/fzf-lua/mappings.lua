@@ -130,7 +130,7 @@ map_fzf("n", "<leader>fH", "oldfiles", { desc = "file history (all)" })
 map_fzf("n", "<leader>fh", "oldfiles", function()
   return {
     desc = "file history (cwd)",
-    cwd = vim.loop.cwd(),
+    cwd = uv.cwd(),
     cwd_header = true,
     cwd_only = true,
   }

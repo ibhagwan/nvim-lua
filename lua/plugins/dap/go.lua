@@ -4,7 +4,7 @@ if not res then
 end
 
 dap.adapters.go = function(callback, config)
-  local stdout = vim.loop.new_pipe(false)
+  local stdout = uv.new_pipe(false)
   local handle
   local pid_or_err
   local host = config.host or "127.0.0.1"
@@ -15,7 +15,7 @@ dap.adapters.go = function(callback, config)
     args = { "dap", "-l", addr },
     detached = true
   }
-  handle, pid_or_err = vim.loop.spawn("dlv", opts, function(code)
+  handle, pid_or_err = uv.spawn("dlv", opts, function(code)
     stdout:close()
     handle:close()
     if code ~= 0 then

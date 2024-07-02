@@ -4,7 +4,7 @@ M = {}
 
 M.DIRS = {
   -- cwd is always added so we can go back
-  utils._if_win_fs_norm(vim.loop.cwd()),
+  utils._if_win_fs_norm(uv.cwd()),
   -- runtime path
   utils._if_win_fs_norm(vim.opt.runtimepath._info.default:match(
     utils._if_win([[%u:\]], "/") .. "[^,]+runtime")),
@@ -44,14 +44,14 @@ M.get = function(noicons)
   local add_entry = function(path, icon)
     if not path then return end
     local expanded = vim.fn.expand(path)
-    if not vim.loop.fs_stat(expanded) then return end
+    if not uv.fs_stat(expanded) then return end
     if dedup[expanded] ~= nil then return end
     path = vim.fn.fnamemodify(expanded, ":~")
     table.insert(dirs, noicons and path or iconify(path, icon or ""))
     dedup[expanded] = true
   end
 
-  add_entry(vim.loop.cwd(), "")
+  add_entry(uv.cwd(), "")
   add_entry(M.PREV_CWD)
 
   for _, path in ipairs(M.DIRS) do
