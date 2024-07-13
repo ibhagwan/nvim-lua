@@ -6,12 +6,39 @@ return {
   --   enabled = false,
   -- },
   {
+    "nvim-treesitter/nvim-treesitter-context",
+    dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
+    cmd = { "TSContextEnable", "TSContextDisable", "TSContextToggle" },
+    keys = {
+      {
+        "[C",
+        function()
+          require("treesitter-context").go_to_context(vim.v.count1)
+        end,
+        silent = true,
+        desc = "Goto treesitter context"
+      },
+      {
+        "]C",
+        function() require("treesitter-context").toggle() end,
+        silent = true,
+        desc = "Toggle treesitter context"
+      },
+    },
+    opts = {},
+    config = function()
+      require("treesitter-context").setup({ enable = true })
+    end,
+    enabled = true
+  },
+  {
     "nvim-treesitter/nvim-treesitter",
     -- treesitter requires a C compiler
     cond = not require("utils").is_NetBSD() and require("utils").have_compiler,
     event = "BufReadPost",
     dependencies = {
       "nvim-treesitter/nvim-treesitter-textobjects",
+      "nvim-treesitter/nvim-treesitter-context",
     },
     build = function()
       -- build step is run independent of the condition

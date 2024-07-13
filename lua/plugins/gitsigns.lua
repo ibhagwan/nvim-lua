@@ -6,7 +6,7 @@ local M = {
 
 M.config = function()
   require("gitsigns").setup {
-    signs          = {
+    signs         = {
       add          = { text = "┃" },
       change       = { text = "┃" },
       delete       = { text = "_" },
@@ -14,21 +14,21 @@ M.config = function()
       changedelete = { text = "~" },
       untracked    = { text = "┆" },
     },
-    signcolumn     = true,  -- Toggle with `:Gitsigns toggle_signs`
-    numhl          = false, -- Toggle with `:Gitsigns toggle_numhl`
-    linehl         = false, -- Toggle with `:Gitsigns toggle_linehl`
-    word_diff      = false, -- Toggle with `:Gitsigns toggle_word_diff`
-    sign_priority  = 4,     -- Lower priorirty means diag signs supercede
+    signcolumn    = true,  -- Toggle with `:Gitsigns toggle_signs`
+    numhl         = false, -- Toggle with `:Gitsigns toggle_numhl`
+    linehl        = false, -- Toggle with `:Gitsigns toggle_linehl`
+    word_diff     = false, -- Toggle with `:Gitsigns toggle_word_diff`
+    sign_priority = 4,     -- Lower priorirty means diag signs supercede
     -- Use detached worktrees instead of `yadm`
     -- https://github.com/lewis6991/gitsigns.nvim/pull/600
     -- yadm           = { enable = not require("utils").IS_WINDOWS and true, },
-    worktrees      = not require("utils").IS_WINDOWS and {
+    worktrees     = not require("utils").IS_WINDOWS and {
       {
         toplevel = vim.env.HOME,
         gitdir   = vim.env.HOME .. "/dots/.git"
       }
     } or nil,
-    on_attach      = function(bufnr)
+    on_attach     = function(bufnr)
       local gs = package.loaded.gitsigns
 
       local function map(mode, l, r, opts)
@@ -38,16 +38,20 @@ M.config = function()
       end
 
       map("n", "]c", function()
-        if vim.wo.diff then return "]c" end
-        vim.schedule(function() gs.next_hunk() end)
-        return "<Ignore>"
-      end, { expr = true, desc = "Next hunk" })
+        if vim.wo.diff then
+          vim.cmd.normal({ "]c", bang = true })
+        else
+          gs.nav_hunk("next")
+        end
+      end, { desc = "Next hunk" })
 
       map("n", "[c", function()
-        if vim.wo.diff then return "[c" end
-        vim.schedule(function() gs.prev_hunk() end)
-        return "<Ignore>"
-      end, { expr = true, desc = "Previous hunk" })
+        if vim.wo.diff then
+          vim.cmd.normal({ "[c", bang = true })
+        else
+          gs.nav_hunk("prev")
+        end
+      end, { desc = "Previous hunk" })
 
       -- Actions
       map("n", "<leader>hs", gs.stage_hunk, { desc = "Stage hunk" })
@@ -74,6 +78,10 @@ M.config = function()
 
       -- Text object
       map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>")
+      map({ "n", "x" }, "[h", ":<C-U>Gitsigns select_hunk<CR>o^<Esc>",
+        { silent = true, desc = "Hunk top" })
+      map({ "n", "x" }, "]h", ":<C-U>Gitsigns select_hunk<CR>^g_<Esc>",
+        { silent = true, desc = "Hunk bottom" })
     end
   }
 end

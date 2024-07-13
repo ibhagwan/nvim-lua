@@ -65,6 +65,9 @@ augroup("ibhagwan/StatusLineColors", function(g)
           local get_colors = require("plugins.heirline")._get_colors
           require("heirline.utils").on_colorscheme(get_colors)
         end
+        -- treesitter context
+        vim.api.nvim_set_hl(0, "TreesitterContext", { default = false, link = "Visual" })
+        vim.api.nvim_set_hl(0, "TreesitterContextBottom", { default = false, underline = true })
       end,
     })
 end)
