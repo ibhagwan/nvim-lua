@@ -4,8 +4,10 @@ local M = {
 }
 
 M.init = function()
-  vim.keymap.set("", "<leader>ee", "<Esc>:NvimTreeToggle<CR>", { silent = true })
-  vim.keymap.set("", "<leader>ef", "<Esc>:NvimTreeFindFileToggle<CR>", { silent = true })
+  vim.keymap.set("", "<leader>ee", "<Esc>:NvimTreeToggle<CR>",
+    { silent = true, desc = "nvim-tree on/off" })
+  vim.keymap.set("", "<leader>ef", "<Esc>:NvimTreeFindFileToggle<CR>",
+    { silent = true, desc = "nvim-tree current file", })
 end
 
 M.config = function()

@@ -1,6 +1,5 @@
 local M = {
   "mfussenegger/nvim-dap",
-  keys = { "<F5>", "<S-F5>", "<F8>", "<F9>", "<leader>d-", "<leader>dc" },
   dependencies = {
     {
       "rcarriga/nvim-dap-ui",
@@ -71,7 +70,7 @@ M._store_bps = function()
   local bp_count = 0
   local breakpoints_by_buf = require("dap.breakpoints").get()
   for bufnr, buf_bps in pairs(breakpoints_by_buf) do
-    bp_count = bp_count + 1
+    bp_count = bp_count + #buf_bps
     bps[vim.api.nvim_buf_get_name(bufnr)] = buf_bps
   end
   -- If buffer has no breakpoints, remove from the db
@@ -90,70 +89,129 @@ M._store_bps = function()
   end
 end
 
-
-M.config = function()
-  local map = vim.keymap.set
-  local dap = require "dap"
-
-  map({ "n", "v" }, "<F5>", dap.continue, { silent = true, desc = "DAP launch or continue" })
-  map({ "n", "v" }, "<S-F5>", function() require "osv".launch({ port = 8086 }) end,
+M.init = function()
+  vim.keymap.set({ "n", "v" },
+    "<F5>",
+    function() require "dap".continue() end,
+    { silent = true, desc = "DAP launch or continue" })
+  vim.keymap.set({ "n", "v" },
+    "<S-F5>",
+    function() require "osv".launch({ port = 8086 }) end,
     { silent = true, desc = "Start OSV Lua Debug Server" })
-  map({ "n", "v" }, "<F8>", require "plugins.dap.ui".toggle,
+  vim.keymap.set({ "n", "v" },
+    "<F8>",
+    function()
+      -- lazy load nvim-dap so `dapui.setup()` is called
+      require "dap"; require "plugins.dap.ui".toggle()
+    end,
     { silent = true, desc = "DAP toggle UI" })
-  map({ "n", "v" }, "<S-F8>", function() require "plugins.dap.ui".toggle(true, true) end,
+  vim.keymap.set({ "n", "v" },
+    "<S-F8>",
+    function()
+      require "dap"; require "plugins.dap.ui".toggle(true, true)
+    end,
     { silent = true, desc = "DAP toggle UI" })
-  map({ "n", "v" }, "<F9>", require "dap".toggle_breakpoint,
+  vim.keymap.set({ "n", "v" },
+    "<F9>",
+    function() require "dap".toggle_breakpoint() end,
     { silent = true, desc = "DAP toggle breakpoint" })
-  map({ "n", "v" }, "<F10>", dap.step_over, { silent = true, desc = "DAP step over" })
-  map({ "n", "v" }, "<F11>", dap.step_into, { silent = true, desc = "DAP step into" })
-  map({ "n", "v" }, "<F12>", dap.step_out, { silent = true, desc = "DAP step out" })
-  map({ "n", "v" }, "<F6>", dap.terminate, { silent = true, desc = "DAP Terminate" })
-  map({ "n", "v" }, "<leader>dt", dap.terminate, { silent = true, desc = "DAP terminate" })
+  vim.keymap.set({ "n", "v" },
+    "<F10>",
+    function() require "dap".step_over() end,
+    { silent = true, desc = "DAP step over" })
+  vim.keymap.set({ "n", "v" },
+    "<F11>",
+    function() require "dap".step_into() end,
+    { silent = true, desc = "DAP step into" })
+  vim.keymap.set({ "n", "v" },
+    "<F12>",
+    function() require "dap".step_out() end,
+    { silent = true, desc = "DAP step out" })
+  vim.keymap.set({ "n", "v" },
+    "<F6>",
+    function() require "dap".terminate() end,
+    { silent = true, desc = "DAP Terminate" })
+  vim.keymap.set({ "n", "v" },
+    "<leader>dt",
+    function() require "dap".terminate() end,
+    { silent = true, desc = "DAP terminate" })
 
   -- Conditional breakpoints
-  map({ "n", "v" }, "<leader>dc", function()
-    dap.set_breakpoint(utils.input("Breakpoint condition: "))
-  end, { silent = true, desc = "DAP: set breakpoint with condition" })
-  map({ "n", "v" }, "<leader>dl", function()
-    dap.set_breakpoint(nil, nil, utils.input("Log point message: "))
-  end, { silent = true, desc = "DAP: set breakpoint with log point message" })
+  vim.keymap.set({ "n", "v" },
+    "<leader>dc",
+    function() require "dap".set_breakpoint(utils.input("Breakpoint condition: ")) end,
+    { silent = true, desc = "DAP: set breakpoint with condition" })
+  vim.keymap.set({ "n", "v" },
+    "<leader>dl",
+    function() require "dap".set_breakpoint(nil, nil, utils.input("Log point message: ")) end,
+    { silent = true, desc = "DAP: set breakpoint with log point message" })
 
   -- Load/Store breakpoint in a json-db
-  map({ "n", "v" }, "<leader>d-", M._load_bps, { silent = true, desc = "DAP load breakpoints" })
-  map({ "n", "v" }, "<leader>d+", M._store_bps, { silent = true, desc = "DAP store breakpoints" })
+  vim.keymap.set({ "n", "v" },
+    "<leader>d-",
+    M._load_bps,
+    { silent = true, desc = "DAP load breakpoints" })
+  vim.keymap.set({ "n", "v" },
+    "<leader>d+",
+    M._store_bps,
+    { silent = true, desc = "DAP store breakpoints" })
 
-  map({ "n", "v" }, "<leader>dr", dap.repl.toggle,
+  vim.keymap.set({ "n", "v" },
+    "<leader>dr",
+    function() require "dap".repl.toggle() end,
     { silent = true, desc = "DAP toggle debugger REPL" })
 
   -- DAP-UI widgets
-  map({ "n", "v" }, "<Leader>dk", require("dap.ui.widgets").hover,
+  vim.keymap.set({ "n", "v" },
+    "<Leader>dk",
+    function() require("dap.ui.widgets").hover() end,
     { silent = true, desc = "DAP Hover" })
-  map({ "n", "v" }, "<Leader>dp", require("dap.ui.widgets").preview,
+  vim.keymap.set({ "n", "v" },
+    "<Leader>dp",
+    function() require("dap.ui.widgets").preview() end,
     { silent = true, desc = "DAP Preview" })
-  map("n", "<Leader>df", function()
-    local widgets = require("dap.ui.widgets")
-    widgets.centered_float(widgets.frames)
-  end, { silent = true, desc = "DAP Frames" })
-  map("n", "<Leader>ds", function()
-    local widgets = require("dap.ui.widgets")
-    widgets.centered_float(widgets.scopes)
-  end, { silent = true, desc = "DAP Scopes" })
+  vim.keymap.set({ "n", "v" },
+    "<Leader>df",
+    function()
+      local widgets = require("dap.ui.widgets")
+      widgets.centered_float(widgets.frames)
+    end,
+    { silent = true, desc = "DAP Frames" })
+  vim.keymap.set({ "n", "v" },
+    "<Leader>ds",
+    function()
+      local widgets = require("dap.ui.widgets")
+      widgets.centered_float(widgets.scopes)
+    end,
+    { silent = true, desc = "DAP Scopes" })
 
-  -- launch fzf-lua
-  local function fzf_lua(cmd)
-    return require("fzf-lua")[cmd]
-  end
-
-  map({ "n", "v" }, "<leader>d?", fzf_lua("dap_commands"),
+  -- fzf-lua
+  vim.keymap.set({ "n", "v" },
+    "<leader>d?",
+    function() require "fzf-lua".dap_commands() end,
     { silent = true, desc = "DAP: fzf nvim-dap builtin commands" })
-  map({ "n", "v" }, "<leader>db", fzf_lua("dap_breakpoints"),
+  vim.keymap.set({ "n", "v" },
+    "<leader>db",
+    function() require "fzf-lua".dap_breakpoints() end,
     { silent = true, desc = "DAP: fzf breakpoint list" })
-  map({ "n", "v" }, "<leader>dF", fzf_lua("dap_frames"),
+  vim.keymap.set({ "n", "v" },
+    "<leader>dF",
+    function() require "fzf-lua".dap_frames() end,
     { silent = true, desc = "DAP: fzf frames" })
-  map({ "n", "v" }, "<leader>dv", fzf_lua("dap_variables"),
+  vim.keymap.set({ "n", "v" },
+    "<leader>dv",
+    function() require "fzf-lua".dap_variables() end,
     { silent = true, desc = "DAP: fzf variables" })
-  map({ "n", "v" }, "<leader>dx", fzf_lua("dap_configurations"),
-    { silent = true, desc = "DAP: fzf debugger configurations" })
+  vim.keymap.set({ "n", "v" },
+    "<leader>dx",
+    function() require "fzf-lua".dap_configurations() end,
+    { silent = true, desc = "DAP: fzf debugger configurations" }
+  )
+end
+
+
+M.config = function()
+  local dap = require "dap"
 
   -- Lazy load fzf-lua to register_ui_select
   require("fzf-lua")

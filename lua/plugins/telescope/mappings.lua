@@ -56,7 +56,7 @@ map_tele("n", "<leader><c-K>", "workdirs", {
 })
 
 map_tele("n", "<leader>Fp", "find_files", {
-  desc = "plugin files",
+  desc = "Telescope plugin files",
   prompt_title = "Plugins",
   cwd = vim.fn.stdpath "data" .. "/lazy"
 })
