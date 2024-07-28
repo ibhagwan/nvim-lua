@@ -58,6 +58,7 @@ augroup("ibhagwan/StatusLineColors", function(g)
         -- fix 'listchars' highlight on nightfly
         if vim.g.colors_name == "nightfly" then
           vim.api.nvim_set_hl(0, "Whitespace", { default = false, link = "NonText" })
+          vim.api.nvim_set_hl(0, "FzfLuaDirPart", { default = false, link = "NightFlyGreyBlue" })
         end
         -- update heirline highlights, only do this after
         -- statusline is loaded or we lose the :intro screen

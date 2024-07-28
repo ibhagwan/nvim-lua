@@ -1,6 +1,7 @@
 local M = {
   "ibhagwan/fzf-lua",
-  dev = require("utils").is_dev("fzf-lua")
+  dev = require("utils").is_dev("fzf-lua"),
+  cmd = "FzfLua",
 }
 
 function M.init()
