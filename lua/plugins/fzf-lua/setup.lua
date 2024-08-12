@@ -150,15 +150,7 @@ local default_opts = {
     },
   },
   actions = {
-    files = {
-      ["default"] = fzf_lua.actions.file_edit_or_qf,
-      ["ctrl-l"]  = fzf_lua.actions.arg_add,
-      ["ctrl-s"]  = fzf_lua.actions.file_split,
-      ["ctrl-v"]  = fzf_lua.actions.file_vsplit,
-      ["ctrl-t"]  = fzf_lua.actions.file_tabedit,
-      ["ctrl-q"]  = fzf_lua.actions.file_sel_to_qf,
-      ["alt-q"]   = fzf_lua.actions.file_sel_to_ll,
-    }
+    files = { true, ["ctrl-l"] = { fn = fzf_lua.actions.arg_add, exec_silent = true } },
   },
   -- all providers inherit from defaults, easier than to set this individually
   -- for git diff, commits and bcommits (we have an override for lsp.code_actions)
