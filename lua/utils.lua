@@ -490,6 +490,7 @@ M.dap_pick_process = function(fzflua_opts, getproc_opts)
         for _, p in pairs(procs) do
           fzf_cb(string.format("[%d] %s", p.pid, p.name))
         end
+        fzf_cb()
       end,
       vim.tbl_deep_extend("keep", fzflua_opts or {}, {
         winopts = {

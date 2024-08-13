@@ -95,7 +95,8 @@ M.init = function()
     function() require "dap".continue() end,
     { silent = true, desc = "DAP launch or continue" })
   vim.keymap.set({ "n", "v" },
-    "<S-F5>",
+    -- `<S-F5>`, test by pressing `<C-v><S-F5>` in INSERT mode
+    "<F17>",
     function() require "osv".launch({ port = 8086 }) end,
     { silent = true, desc = "Start OSV Lua Debug Server" })
   vim.keymap.set({ "n", "v" },
@@ -106,7 +107,8 @@ M.init = function()
     end,
     { silent = true, desc = "DAP toggle UI" })
   vim.keymap.set({ "n", "v" },
-    "<S-F8>",
+    -- `<S-F8>`, test by pressing `<C-v><S-F8>` in INSERT mode
+    "<F20>",
     function()
       require "dap"; require "plugins.dap.ui".toggle(true, true)
     end,
