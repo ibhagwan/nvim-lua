@@ -11,21 +11,21 @@ M.setup = function()
   dapui.setup({
     layouts = {
       {
+        position = "right",
+        size = 0.40,
+        elements = {
+          { id = "scopes",      size = 0.38, },
+          { id = "watches",     size = 0.16 },
+          { id = "stacks",      size = 0.28 },
+          { id = "breakpoints", size = 0.18 },
+        },
+      },
+      {
         position = "bottom",
         size = 0.30,
         elements = {
           { id = "repl",    size = 0.60, },
           { id = "console", size = 0.40 },
-        },
-      },
-      {
-        position = "right",
-        size = 0.40,
-        elements = {
-          { id = "scopes",      size = 0.38, },
-          { id = "watches",     size = 0.12 },
-          { id = "stacks",      size = 0.32 },
-          { id = "breakpoints", size = 0.18 },
         },
       },
     },
