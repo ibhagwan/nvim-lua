@@ -370,13 +370,23 @@ M.reload_config = function()
   vim.cmd("nohl")
 end
 
+M.win_is_float = function(winnr)
+  local wincfg = vim.api.nvim_win_get_config(winnr)
+  if wincfg and (wincfg.external or wincfg.relative and #wincfg.relative > 0) then
+    return true
+  end
+  return false
+end
+
 M.tmux_aware_navigate = function(direction, no_wrap)
   local curwin = vim.api.nvim_get_current_win()
-  -- First attempt to send a wincmd
-  vim.cmd.wincmd(direction == "o" and "w" or direction)
-  if not vim.env.TMUX or vim.api.nvim_get_current_win() ~= curwin then
-    -- Stop here if no TMUX or wincmd switched windows
-    return
+  -- First attempt to send a wincmd, skip if window is floating
+  if not M.win_is_float(curwin) then
+    vim.cmd.wincmd(direction == "o" and "w" or direction)
+    if not vim.env.TMUX or vim.api.nvim_get_current_win() ~= curwin then
+      -- Stop here if no TMUX or wincmd switched windows
+      return
+    end
   end
   -- tmux exists and window wasn't switche
   -- forward the command to tmux

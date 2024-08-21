@@ -252,14 +252,6 @@ end)
 
 -- https://vim.fandom.com/wiki/Avoid_scrolling_when_switch_buffers
 augroup("ibhagwan/DoNotAutoScroll", function(g)
-  local function is_float(winnr)
-    local wincfg = vim.api.nvim_win_get_config(winnr)
-    if wincfg and (wincfg.external or wincfg.relative and #wincfg.relative > 0) then
-      return true
-    end
-    return false
-  end
-
   aucmd("BufLeave", {
     group = g,
     desc = "Avoid autoscroll when switching buffers",
@@ -270,7 +262,7 @@ augroup("ibhagwan/DoNotAutoScroll", function(g)
       local from_buf = vim.api.nvim_get_current_buf()
       local from_win = vim.fn.bufwinid(from_buf)
       local to_win = vim.api.nvim_get_current_win()
-      if not is_float(to_win) and not is_float(from_win) then
+      if not utils.win_is_float(to_win) and not utils.win_is_float(from_win) then
         vim.b.__VIEWSTATE = vim.fn.winsaveview()
       end
     end
@@ -281,7 +273,7 @@ augroup("ibhagwan/DoNotAutoScroll", function(g)
     callback = function()
       if vim.b.__VIEWSTATE then
         local to_win = vim.api.nvim_get_current_win()
-        if not is_float(to_win) then
+        if not utils.win_is_float(to_win) then
           vim.fn.winrestview(vim.b.__VIEWSTATE)
         end
         vim.b.__VIEWSTATE = nil
