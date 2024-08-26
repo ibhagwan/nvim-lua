@@ -4,13 +4,13 @@ return {
   config = function()
     require("conform").setup({
       formatters_by_ft = {
-        lua = { "stylua" },
-        css = { { "prettier", "prettierd" } },
-        html = { { "prettier", "prettierd" } },
-        yaml = { { "prettier", "prettierd" } },
-        jsonc = { { "prettier", "prettierd" } },
-        javascript = { { "prettier", "prettierd" } },
-        python = { "black" },
+        lua        = { "stylua" },
+        python     = { "black" },
+        css        = { "prettier", "prettierd", stop_after_first = true },
+        html       = { "prettier", "prettierd", stop_after_first = true },
+        yaml       = { "prettier", "prettierd", stop_after_first = true },
+        jsonc      = { "prettier", "prettierd", stop_after_first = true },
+        javascript = { "prettier", "prettierd", stop_after_first = true },
       },
     })
   end,

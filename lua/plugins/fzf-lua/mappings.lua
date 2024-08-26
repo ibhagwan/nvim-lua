@@ -80,18 +80,7 @@ map_fzf("n", "<leader>f:", "command_history", { desc = "command history" })
 map_fzf("n", "<leader>f/", "search_history", { desc = "search history" })
 map_fzf("n", [[<leader>f"]], "registers", { desc = "registers" })
 map_fzf("n", "<leader>fk", "keymaps", { desc = "keymaps" })
-map_fzf("n", "<leader>fz", "spell_suggest", {
-  desc = "spell suggestions",
-  -- prompt = "Spell> ",
-  winopts = {
-    title    = " Spell ",
-    relative = "cursor",
-    row      = 1.01,
-    col      = 0,
-    height   = 0.30,
-    width    = 0.30,
-  }
-})
+map_fzf("n", "<leader>fz", "spell_suggest", { desc = "spell suggestions" })
 map_fzf("n", "<leader>fT", "tags", { desc = "tags (project)" })
 map_fzf("n", "<leader>ft", "btags", { desc = "tags (buffer)" })
 
