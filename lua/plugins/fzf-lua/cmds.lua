@@ -20,12 +20,22 @@ function M.git_bcommits(opts)
 end
 
 function M.git_status_tmuxZ(opts)
+  opts = opts or {}
+
+  -- Pre fzf v0.53: fzf-tmux script
   if fzf_lua.config.globals.fzf_bin == "fzf-tmux" then
     opts.fzf_tmux_opts = { ["-p"] = "100%,100%" }
     return fzf_lua.git_status(opts)
   end
 
-  opts = opts or {}
+  -- Post fzf v0.53: "--tmux" flag
+  print("tmux", fzf_lua.config.globals.fzf_opts["--tmux"])
+  if fzf_lua.config.globals.fzf_opts["--tmux"] then
+    opts.fzf_opts = opts.fzf_opts or {}
+    opts.fzf_opts["--tmux"] = "100%,100%"
+    return fzf_lua.git_status(opts)
+  end
+
   opts.fn_pre_win = function(_)
     if not opts.__want_resume then
       -- new fzf window, if unzoomed, toggle tmux zoom (-Z)

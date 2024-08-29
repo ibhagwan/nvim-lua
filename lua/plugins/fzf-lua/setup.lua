@@ -65,9 +65,9 @@ end
 
 local default_opts = {
   "default-title",
-  -- nvim_freeze_workaround = 1,
   -- debug_tracelog = "~/fzf-lua-trace.log",
   -- fzf_opts = { ["--info"] = "default" },
+  -- fzf_opts = { ["--tmux"] = "80%,60%", ["--border"] = "rounded" },
   fzf_colors = function()
     return vim.g.colors_name == "nightfly" and {
       ["info"] = { "fg", { "NightflyPeach" } },
