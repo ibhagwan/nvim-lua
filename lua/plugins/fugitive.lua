@@ -1,6 +1,6 @@
 local M = {
   "tpope/vim-fugitive",
-  cmd = { "Git", "Yit", "Gread", "Gwrite", "Gvdiffsplit", "Gdiffsplit" },
+  cmd = { "Git", "Dot", "Yit", "Gread", "Gwrite", "Gvdiffsplit", "Gdiffsplit" },
 }
 
 M.init = function()
@@ -39,8 +39,9 @@ M.config = function()
   ]]):format(yadm_repo))
 
   vim.cmd((
-    [[command! -bang -nargs=? -range=-1 -complete=customlist,YadmComplete Yadm exe fugitive#Command(<line1>, <count>, +"<range>", <bang>0, "<mods>", <q-args>, { 'git_dir': expand("%s") })]]
-  ):format(yadm_repo))
+    [[command! -bang -nargs=? -range=-1 -complete=customlist,YadmComplete Dot exe ]]
+    .. [[fugitive#Command(<line1>, <count>, +"<range>", <bang>0, "<mods>", <q-args>, ]]
+    .. [[{ 'git_dir': expand("%s") })]]):format(yadm_repo))
 
   local function fugitive_command(nargs, cmd_name, cmd_fugitive, cmd_comp)
     vim.api.nvim_create_user_command(cmd_name,
