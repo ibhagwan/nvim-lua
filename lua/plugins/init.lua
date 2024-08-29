@@ -61,13 +61,6 @@ return {
     ft = { "markdown" },
   },
   {
-    "nvchad/nvim-colorizer.lua",
-    config = function()
-      require("colorizer").setup({})
-    end,
-    cmd = { "ColorizerAttachToBuffer", "ColorizerDetachFromBuffer" },
-  },
-  {
     "junegunn/fzf.vim",
     enabled = true,
     lazy = false,
