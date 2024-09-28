@@ -134,6 +134,7 @@ map_fzf("n", "<leader>fo", "colorschemes", {
 })
 
 -- LSP
+map_fzf("n", "<leader>lt", "treesitter", { desc = "treesitter symbols (buffer)" })
 map_fzf("n", "<leader>ll", "lsp_finder", { desc = "location finder [LSP]" })
 map_fzf("n", "<leader>lr", "lsp_references", { desc = "references [LSP]" })
 map_fzf("n", "<leader>ld", "lsp_definitions",

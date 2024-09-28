@@ -106,6 +106,7 @@ map_tele("n", "<leader>FO", "highlights")
 -- map_tele("n", "<leader>FO", "vim_options")
 
 -- LSP
+map_tele("n", "<leader>Lt", "treesitter", { desc = "treesitter symbols (buffer)" })
 map_tele("n", "<leader>Lr", "lsp_references", { desc = "references [LSP]" })
 map_tele("n", "<leader>Ld", "lsp_definitions",
   { telec = "definitionS [LSP]", jump_to_single_result = false })
