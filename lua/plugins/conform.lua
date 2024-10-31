@@ -1,5 +1,6 @@
 return {
   "stevearc/conform.nvim",
+  enabled = vim.fn.has("nvim-0.10") == 1,
   event = "BufReadPost",
   config = function()
     require("conform").setup({
