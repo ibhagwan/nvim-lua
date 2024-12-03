@@ -68,30 +68,40 @@ local default_opts = {
   -- debug_tracelog = "~/fzf-lua-trace.log",
   -- fzf_opts = { ["--info"] = "default" },
   -- fzf_opts = { ["--tmux"] = "80%,60%", ["--border"] = "rounded" },
-  fzf_colors = function()
-    return vim.g.colors_name == "nightfly" and {
-      ["info"] = { "fg", { "NightflyPeach" } },
-      ["scrollbar"] = { "fg", { "NightflyPeach" } },
-      ["hl+"] = { "fg", { "NightflyPeach", "String" } },
-    } or {
-      -- Set to `-1` to use neovim fg/bg, from `man fzf`:
-      --   Default terminal foreground/background color
-      --   (or the original color of the text)
-      -- ["fg"] = { "fg", "Comment" },
-      ["bg"] = "-1",
-      ["hl"] = { "fg", { "NightflyPeach", "String" } },
-      ["fg+"] = { "fg", "Normal" },
-      ["bg+"] = { "bg", { "Visual" } },
-      ["hl+"] = { "fg", { "NightflyPeach", "String" } },
-      ["info"] = { "fg", { "NightflyPeach", "WarningMsg" } },
-      -- ["prompt"] = { "fg", "SpecialKey" },
-      ["pointer"] = { "fg", "DiagnosticError" },
-      ["marker"] = { "fg", "DiagnosticError" },
-      ["spinner"] = { "fg", "Label" },
-      ["header"] = { "fg", "Comment" },
-      ["gutter"] = "-1",
-      ["scrollbar"] = { "fg", { "NightflyPeach", "WarningMsg" } },
-    }
+  fzf_colors = function(o)
+    if vim.g.colors_name == "nightfly" then
+      -- Temp clear `fzf_colors` if using tmux
+      vim.g.fzf_colors = vim.g.fzf_colors or vim.g._fzf_colors
+      if o._is_fzf_tmux and vim.g.fzf_colors then
+        vim.g._fzf_colors = vim.g.fzf_colors
+        vim.g.fzf_colors = nil
+      end
+      return {
+        ["info"] = { "fg", { "NightflyPeach" } },
+        ["scrollbar"] = { "fg", { "NightflyPeach" } },
+        ["hl+"] = { "fg", { "NightflyPeach", "String" } },
+      }
+    else
+      return {
+        -- Set to `-1` to use neovim fg/bg, from `man fzf`:
+        --   Default terminal foreground/background color
+        --   (or the original color of the text)
+        -- ["fg"] = { "fg", "Comment" },
+        ["bg"] = "-1",
+        ["hl"] = { "fg", { "NightflyPeach", "String" } },
+        ["fg+"] = { "fg", "Normal" },
+        ["bg+"] = { "bg", { "Visual" } },
+        ["hl+"] = { "fg", { "NightflyPeach", "String" } },
+        ["info"] = { "fg", { "NightflyPeach", "WarningMsg" } },
+        -- ["prompt"] = { "fg", "SpecialKey" },
+        ["pointer"] = { "fg", "DiagnosticError" },
+        ["marker"] = { "fg", "DiagnosticError" },
+        ["spinner"] = { "fg", "Label" },
+        ["header"] = { "fg", "Comment" },
+        ["gutter"] = "-1",
+        ["scrollbar"] = { "fg", { "NightflyPeach", "WarningMsg" } },
+      }
+    end
   end,
   -- winopts_fn = function()
   --   -- local split = "botright new" -- use for split under **all** windows

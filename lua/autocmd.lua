@@ -69,6 +69,14 @@ augroup("ibhagwan/StatusLineColors", function(g)
         -- treesitter context
         vim.api.nvim_set_hl(0, "TreesitterContext", { default = false, link = "Visual" })
         vim.api.nvim_set_hl(0, "TreesitterContextBottom", { default = false, underline = true })
+        -- render-markdown
+        vim.api.nvim_set_hl(0, "RenderMarkdownCode", { default = false, link = "DiffChange" })
+        vim.api.nvim_set_hl(0, "RenderMarkdownH1Bg", { default = false, link = "Visual" })
+        vim.api.nvim_set_hl(0, "RenderMarkdownH2Bg", { default = false, link = "DiffText" })
+        vim.api.nvim_set_hl(0, "RenderMarkdownH3Bg", { default = false, link = "DiffAdd" })
+        vim.api.nvim_set_hl(0, "RenderMarkdownH4Bg", { default = false, link = "DiffAdd" })
+        vim.api.nvim_set_hl(0, "RenderMarkdownH5Bg", { default = false, link = "DiffAdd" })
+        vim.api.nvim_set_hl(0, "RenderMarkdownH6Bg", { default = false, link = "DiffAdd" })
       end,
     })
 end)

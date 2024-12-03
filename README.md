@@ -93,6 +93,9 @@
 - [previm](https://github.com/previm/previm): live preview markdown files in
   the browser with `<space>r`
 
+- [render-markdown.nvim](https://github.com/MeanderingProgrammer/render-markdown.nvim):
+  magical plugin rendering markdown files inside neovim
+
 ### Appearence
 
 - [heirline.nvim](https://github.com/rebelot/heirline.nvim):

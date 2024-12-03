@@ -1,10 +1,4 @@
 return {
-  -- not needed since neovim 0.9, use `:InspectTree` instead
-  -- {
-  --   "nvim-treesitter/playground",
-  --   cmd = "TSPlaygroundToggle",
-  --   enabled = false,
-  -- },
   {
     "nvim-treesitter/nvim-treesitter-context",
     dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
@@ -27,7 +21,7 @@ return {
     },
     opts = {},
     config = function()
-      require("treesitter-context").setup({ enable = true })
+      require("treesitter-context").setup({ enable = true, multiwindow = true })
     end,
     enabled = true
   },
@@ -49,7 +43,7 @@ return {
     end,
     config = function()
       require "nvim-treesitter.configs".setup {
-        ensure_installed      = {
+        ensure_installed = {
           "bash",
           "c",
           "cpp",
@@ -73,18 +67,7 @@ return {
           -- for `nvim-treesitter/playground` / `:InspectTree`
           "query",
         },
-        highlight             = {
-          enable = true,
-          disable = {
-            -- Slow on big C|CPP files
-            -- "c", "cpp",
-            -- Makes MD|inline highlights ugly
-            "md", "markdown",
-            -- Messes up vimdoc alignments
-            -- https://github.com/nvim-treesitter/nvim-treesitter/pull/3555
-            "help",
-          }
-        },
+        highlight = { enable = true },
         incremental_selection = {
           enable = true,
           keymaps = {
@@ -94,12 +77,12 @@ return {
             scope_incremental = "<Tab>",
           },
         },
-        textobjects           = {
+        textobjects = {
           select = {
-            enable          = true,
+            enable = true,
             -- Automatically jump forward to textobj, similar to targets.vim
-            lookahead       = true,
-            keymaps         = {
+            lookahead = true,
+            keymaps = {
               ["ac"] = { query = "@comment.outer", desc = "Select comment (outer)" },
               ["ic"] = { query = "@comment.inner", desc = "Select comment (inner)" },
               ["ao"] = { query = "@class.outer", desc = "Select class (outer)" },
@@ -142,25 +125,6 @@ return {
               ["[F"] = { query = "@function.outer", desc = "Previous function" },
               ["[p"] = { query = "@parameter.inner", desc = "Previous parameter" },
             },
-          },
-        },
-        playground            = {
-          enable = true,
-          disable = {},
-          -- Debounced time for highlighting nodes in the playground from source code
-          updatetime = 25,
-          persist_queries = false, -- Whether the query persists across vim sessions
-          keybindings = {
-            toggle_query_editor = "o",
-            toggle_hl_groups = "i",
-            toggle_injected_languages = "t",
-            toggle_anonymous_nodes = "a",
-            toggle_language_display = "I",
-            focus_language = "f",
-            unfocus_language = "F",
-            update = "R",
-            goto_node = "<cr>",
-            show_help = "?",
           },
         },
       }
