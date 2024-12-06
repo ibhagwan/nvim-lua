@@ -114,13 +114,14 @@ local default_opts = {
     -- split   = "belowright vnew",
     -- split   = "aboveleft new",
     -- split   = "aboveleft vnew",
-    height    = 0.85,
-    width     = 0.80,
-    row       = 0.35,
-    col       = 0.55,
+    height     = 0.85,
+    width      = 0.80,
+    row        = 0.35,
+    col        = 0.55,
     -- border = { {'╭', 'IncSearch'}, {'─', 'IncSearch'},
     -- {'╮', 'IncSearch'}, '│', '╯', '─', '╰', '│' },
-    preview   = {
+    treesitter = true,
+    preview    = {
       layout       = "flex",
       -- vertical     = "down:50%",
       -- vertical     = "up:50%",
@@ -131,7 +132,7 @@ local default_opts = {
       -- scrolloff        = '-1',
       -- scrollchars      = {'█', '░' },
     },
-    on_create = function()
+    on_create  = function()
       -- disable miniindentscope
       vim.b.miniindentscope_disable = true
     end,

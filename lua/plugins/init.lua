@@ -64,18 +64,9 @@ return {
     "junegunn/fzf.vim",
     enabled = true,
     lazy = false,
-    dev = true,
+    dev = require("utils").is_dev("fzf.vim"),
     -- windows doesn't have fzf runtime plugin
     dependencies = require("utils")._if_win({ "junegunn/fzf" }, nil),
-  },
-  {
-    "pwntester/octo.nvim",
-    enabled = false,
-    lazy = false,
-    dev = true,
-    config = function()
-      require "octo".setup({ picker = "fzf-lua" })
-    end
   },
   {
     "MeanderingProgrammer/render-markdown.nvim",
@@ -96,5 +87,12 @@ return {
         },
       })
     end,
+  },
+  {
+    "OXY2DEV/markview.nvim",
+    enabled = false,
+    branch = "dev",
+    ft = "markdown",
+    opts = { hybrid_modes = { "n" } },
   }
 }
