@@ -1,3 +1,4 @@
+local utils     = require "utils"
 local o         = vim.opt
 
 o.mouse         = ""     -- disable the mouse
@@ -19,7 +20,22 @@ vim.cmd [[set path=.,,,$PWD/**]]
 -- unnamedplus = use the + register (cmd-v paste in our term)
 -- o.clipboard         = 'unnamedplus'
 
-if vim.fn.has("nvim-0.10") == 1 and vim.env.SSH_TTY then
+-- MacOS clipboard
+if utils.is_darwin() then
+  vim.g.clipboard = {
+    name = "macOS-clipboard",
+    copy = {
+      ["+"] = "pbcopy",
+      ["*"] = "pbcopy",
+    },
+    paste = {
+      ["+"] = "pbpaste",
+      ["*"] = "pbpaste",
+    },
+  }
+end
+
+if utils.__HAS_NVIM_010 and vim.env.SSH_TTY then
   vim.g.clipboard = {
     name = "OSC 52",
     copy = {
@@ -32,6 +48,12 @@ if vim.fn.has("nvim-0.10") == 1 and vim.env.SSH_TTY then
     },
   }
 end
+
+-- This featire isn't fully baked yet, `wait:0` causes
+-- even the `:messaeges` output to not show up at all
+-- if utils.__HAS_NVIM_011 then
+--   o.mopt = "wait:0,history:1000"
+-- end
 
 o.cmdheight        = 2                           -- cmdline height
 o.cmdwinheight     = math.floor(vim.o.lines / 2) -- 'q:' window height
@@ -141,21 +163,6 @@ o.shada          = [[!,'100,<0,s100,h]]
 o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize"
 o.diffopt        = "internal,filler,algorithm:histogram,indent-heuristic"
 
--- MacOS clipboard
-if require "utils".is_darwin() then
-  vim.g.clipboard = {
-    name = "macOS-clipboard",
-    copy = {
-      ["+"] = "pbcopy",
-      ["*"] = "pbcopy",
-    },
-    paste = {
-      ["+"] = "pbpaste",
-      ["*"] = "pbpaste",
-    },
-  }
-end
-
 -- use ':grep' to send resulsts to quickfix
 -- use ':lgrep' to send resulsts to loclist
 if vim.fn.executable("rg") == 1 then
@@ -193,7 +200,7 @@ local disabled_built_ins     = {
 }
 -- disable default fzf plugin if not
 -- root since we will be using fzf-lua
-if require "utils".is_root()
+if utils.is_root()
     and uv.fs_stat("/usr/share/nvim/runtime/plugin/fzf.vim") then
   vim.opt.runtimepath:append("/usr/share/nvim/runtime")
 else

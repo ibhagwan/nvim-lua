@@ -21,7 +21,7 @@ return {
     },
     opts = {},
     config = function()
-      require("treesitter-context").setup({ enable = true, multiwindow = true })
+      require("treesitter-context").setup({ enable = true })
     end,
     enabled = true
   },
