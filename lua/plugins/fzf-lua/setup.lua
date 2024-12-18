@@ -69,38 +69,19 @@ local default_opts = {
   -- fzf_opts = { ["--info"] = "default" },
   -- fzf_opts = { ["--tmux"] = "80%,60%", ["--border"] = "rounded" },
   fzf_colors = function(o)
-    if vim.g.colors_name == "nightfly" then
-      -- Temp clear `fzf_colors` if using tmux
-      vim.g.fzf_colors = vim.g.fzf_colors or vim.g._fzf_colors
-      if o._is_fzf_tmux and vim.g.fzf_colors then
-        vim.g._fzf_colors = vim.g.fzf_colors
-        vim.g.fzf_colors = nil
-      end
+    local is_tmux = o.fzf_bin and o.fzf_bin:match("tmux") or o.fzf_opts["--tmux"]
+    if is_tmux then
       return {
-        ["info"] = { "fg", { "NightflyPeach" } },
-        ["scrollbar"] = { "fg", { "NightflyPeach" } },
-        ["hl+"] = { "fg", { "NightflyPeach", "String" } },
+        true,
+        bg = "-1",
+        gutter = "-1",
+        border = { "fg", "Comment" },
+        header = { "fg", "Comment" },
+        separator = { "fg", "Comment" },
+        -- scrollbar = { "fg", "WarningMsg" },
       }
     else
-      return {
-        -- Set to `-1` to use neovim fg/bg, from `man fzf`:
-        --   Default terminal foreground/background color
-        --   (or the original color of the text)
-        -- ["fg"] = { "fg", "Comment" },
-        ["bg"] = "-1",
-        ["hl"] = { "fg", { "NightflyPeach", "String" } },
-        ["fg+"] = { "fg", "Normal" },
-        ["bg+"] = { "bg", { "Visual" } },
-        ["hl+"] = { "fg", { "NightflyPeach", "String" } },
-        ["info"] = { "fg", { "NightflyPeach", "WarningMsg" } },
-        -- ["prompt"] = { "fg", "SpecialKey" },
-        ["pointer"] = { "fg", "DiagnosticError" },
-        ["marker"] = { "fg", "DiagnosticError" },
-        ["spinner"] = { "fg", "Label" },
-        ["header"] = { "fg", "Comment" },
-        ["gutter"] = "-1",
-        ["scrollbar"] = { "fg", { "NightflyPeach", "WarningMsg" } },
-      }
+      return true
     end
   end,
   -- winopts_fn = function()
@@ -184,18 +165,6 @@ local default_opts = {
       ["ctrl-r"] = { fzf_lua.actions.grep_lgrep },
       ["ctrl-g"] = { fzf_lua.actions.toggle_ignore }
     },
-  },
-  lines = {
-    actions = {
-      ["ctrl-q"] = fzf_lua.actions.buf_sel_to_qf,
-      ["alt-q"]  = fzf_lua.actions.buf_sel_to_ll
-    }
-  },
-  blines = {
-    actions = {
-      ["ctrl-q"] = fzf_lua.actions.buf_sel_to_qf,
-      ["alt-q"]  = fzf_lua.actions.buf_sel_to_ll
-    }
   },
   tags = { actions = { ["ctrl-g"] = false, ["ctrl-r"] = { fzf_lua.actions.grep_lgrep } } },
   btags = { actions = { ["ctrl-g"] = false, ["ctrl-r"] = false } },

@@ -1,5 +1,6 @@
 local M = {
   "hrsh7th/nvim-cmp",
+  enabled = not require("utils").USE_BLINK_CMP,
   event = { "InsertEnter", "CmdLineEnter" },
   dependencies = {
     "hrsh7th/cmp-path",

@@ -1,3 +1,5 @@
+uv = vim.loop or vim.uv
+
 local utils = require("utils")
 
 if not utils.__HAS_NVIM_08 then
@@ -6,8 +8,6 @@ if not utils.__HAS_NVIM_08 then
   vim.o.termguicolors = true
   return
 end
-
-uv = vim.loop or vim.uv
 
 require("options")
 require("autocmd")

@@ -51,34 +51,42 @@ if utils.is_root() then
 end
 
 augroup("ibhagwan/StatusLineColors", function(g)
-  aucmd("ColorScheme",
-    {
-      group = g,
-      callback = function(_)
-        -- fix 'listchars' highlight on nightfly
-        if vim.g.colors_name == "nightfly" then
-          vim.api.nvim_set_hl(0, "Whitespace", { default = false, link = "NonText" })
-          vim.api.nvim_set_hl(0, "FzfLuaDirPart", { default = false, link = "NightFlyGreyBlue" })
-        end
-        -- update heirline highlights, only do this after
-        -- statusline is loaded or we lose the :intro screen
-        if package.loaded.heirline then
-          local get_colors = require("plugins.heirline")._get_colors
-          require("heirline.utils").on_colorscheme(get_colors)
-        end
-        -- treesitter context
-        vim.api.nvim_set_hl(0, "TreesitterContext", { default = false, link = "Visual" })
-        vim.api.nvim_set_hl(0, "TreesitterContextBottom", { default = false, underline = true })
-        -- render-markdown
-        vim.api.nvim_set_hl(0, "RenderMarkdownCode", { default = false, link = "DiffChange" })
-        vim.api.nvim_set_hl(0, "RenderMarkdownH1Bg", { default = false, link = "Visual" })
-        vim.api.nvim_set_hl(0, "RenderMarkdownH2Bg", { default = false, link = "DiffText" })
-        vim.api.nvim_set_hl(0, "RenderMarkdownH3Bg", { default = false, link = "DiffAdd" })
-        vim.api.nvim_set_hl(0, "RenderMarkdownH4Bg", { default = false, link = "DiffAdd" })
-        vim.api.nvim_set_hl(0, "RenderMarkdownH5Bg", { default = false, link = "DiffAdd" })
-        vim.api.nvim_set_hl(0, "RenderMarkdownH6Bg", { default = false, link = "DiffAdd" })
-      end,
-    })
+  aucmd("ColorSchemePre", {
+    group = g,
+    callback = function(_)
+      vim.g.fzf_colors = nil
+    end
+  })
+  aucmd("ColorScheme", {
+    group = g,
+    callback = function(_)
+      -- fix 'listchars' highlight on nightfly
+      if vim.g.colors_name == "nightfly" then
+        vim.api.nvim_set_hl(0, "Whitespace", { default = false, link = "NonText" })
+      end
+      -- update heirline highlights, only do this after
+      -- statusline is loaded or we lose the :intro screen
+      if package.loaded.heirline then
+        local get_colors = require("plugins.heirline")._get_colors
+        require("heirline.utils").on_colorscheme(get_colors)
+      end
+      -- fzf-lua
+      vim.api.nvim_set_hl(0, "FzfLuaFzfInfo", { default = false, link = "String" })
+      vim.api.nvim_set_hl(0, "FzfLuaFzfPrompt", { default = false, link = "SpecialKey" })
+      vim.api.nvim_set_hl(0, "FzfLuaFzfScrollbar", { default = false, link = "String" })
+      -- treesitter context
+      vim.api.nvim_set_hl(0, "TreesitterContext", { default = false, link = "Visual" })
+      vim.api.nvim_set_hl(0, "TreesitterContextBottom", { default = false, underline = true })
+      -- render-markdown
+      vim.api.nvim_set_hl(0, "RenderMarkdownCode", { default = false, link = "DiffChange" })
+      vim.api.nvim_set_hl(0, "RenderMarkdownH1Bg", { default = false, link = "Visual" })
+      vim.api.nvim_set_hl(0, "RenderMarkdownH2Bg", { default = false, link = "DiffText" })
+      vim.api.nvim_set_hl(0, "RenderMarkdownH3Bg", { default = false, link = "DiffAdd" })
+      vim.api.nvim_set_hl(0, "RenderMarkdownH4Bg", { default = false, link = "DiffAdd" })
+      vim.api.nvim_set_hl(0, "RenderMarkdownH5Bg", { default = false, link = "DiffAdd" })
+      vim.api.nvim_set_hl(0, "RenderMarkdownH6Bg", { default = false, link = "DiffAdd" })
+    end,
+  })
 end)
 
 -- disable mini.indentscope for certain filetype|buftype

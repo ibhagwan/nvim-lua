@@ -65,6 +65,8 @@ function M.is_NetBSD()
   return uv.os_uname().sysname == "NetBSD"
 end
 
+M.USE_BLINK_CMP = vim.fn.executable("cargo") == 1 and not M.is_NetBSD()
+
 function M.is_dev(path)
   return uv.fs_stat(string.format("%s/%s", vim.fn.expand(DEV_DIR), path)) ~= nil
 end

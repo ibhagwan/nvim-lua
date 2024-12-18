@@ -126,10 +126,15 @@ local function make_config(srv)
   local capabilities = vim.lsp.protocol.make_client_capabilities()
   -- enables snippet support
   capabilities.textDocument.completion.completionItem.snippetSupport = true
-  -- enables LSP autocomplete
-  local cmp_loaded, cmp_lsp = pcall(require, "cmp_nvim_lsp")
-  if cmp_loaded then
-    capabilities = cmp_lsp.default_capabilities()
+  -- enables LSP autocomplete, prioritize blink over cmp
+  local blink_loaded, blink = pcall(require, "blink.cmp")
+  if blink_loaded then
+    capabilities = blink.get_lsp_capabilities()
+  else
+    local cmp_loaded, cmp_lsp = pcall(require, "cmp_nvim_lsp")
+    if cmp_loaded then
+      capabilities = cmp_lsp.default_capabilities()
+    end
   end
   return {
     on_attach = require("lsp.on_attach").on_attach,

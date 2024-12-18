@@ -91,7 +91,7 @@ map_fzf("n", "<leader>fW", "grep_cWORD", { desc = "grep <WORD> (project)" })
 map_fzf("n", "<leader>fv", "grep_visual", { desc = "grep visual selection" })
 map_fzf("v", "<leader>fv", "grep_visual", { desc = "grep visual selection" })
 map_fzf("n", "<leader>fb", "blines", { desc = "fuzzy buffer lines" })
-map_fzf("n", "<leader>fB", "lgrep_curbuf", { desc = "live grep (buffer)", prompt = "Buffer❯ " })
+map_fzf("n", "<leader>fB", "lgrep_curbuf", { desc = "live grep (buffer)" })
 map_fzf("n", "<leader>fl", "live_grep", { desc = "live grep (project)" })
 map_fzf("n", "<leader>fL", "live_grep", { desc = "live grep resume", resume = true })
 
@@ -104,14 +104,12 @@ end)
 map_fzf("n", "<leader>f8", "grep_curbuf", function()
   return {
     desc = "grep <word> (buffer)",
-    prompt = "Buffer❯ ",
     search = vim.fn.expand("<cword>"),
   }
 end)
 map_fzf("n", "<leader>f*", "grep_curbuf", function()
   return {
     desc = "grep <WORD> (buffer)",
-    prompt = "Buffer❯ ",
     search = vim.fn.expand("<cWORD>")
   }
 end)

@@ -21,7 +21,10 @@ return {
           require("fidget").setup({})
         end,
       },
-      { "hrsh7th/cmp-nvim-lsp" },
+      {
+        "hrsh7th/cmp-nvim-lsp",
+        enabled = not require("utils").USE_BLINK_CMP,
+      },
     },
     config = function()
       require("lsp")
