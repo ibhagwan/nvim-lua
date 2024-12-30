@@ -32,7 +32,7 @@ return {
   },
   {
     "previm/previm",
-    commit = "0a3eaad218bc58af867c1a7a71b1d8323a5a7039",
+    commit = "8d414bf9b38d2a7c65a313775e26c03a0169f67f",
     config = function()
       -- vim.g.previm_open_cmd = 'firefox';
       vim.g.previm_open_cmd = "/shared/$USER/Applications/chromium/chrome";

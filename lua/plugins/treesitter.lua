@@ -30,6 +30,7 @@ return {
     -- treesitter requires a C compiler
     cond = not require("utils").is_NetBSD() and require("utils").have_compiler,
     event = "BufReadPost",
+    cmd = { "TSUpdate", "TSUpdateSync" },
     dependencies = {
       "nvim-treesitter/nvim-treesitter-textobjects",
       "nvim-treesitter/nvim-treesitter-context",
