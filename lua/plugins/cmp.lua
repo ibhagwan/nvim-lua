@@ -8,7 +8,6 @@ local M = {
     "hrsh7th/cmp-cmdline",
     "hrsh7th/cmp-nvim-lsp",
     "hrsh7th/cmp-nvim-lua",
-    not vim.snippet and "saadparwaiz1/cmp_luasnip" or nil,
   },
 }
 
@@ -26,12 +25,7 @@ M.config = function()
     snippet = {
       -- must use a snippet engine
       expand = function(args)
-        if vim.snippet then
-          vim.snippet.expand(args.body)
-        else
-          -- Only installed with neovim < 0.10
-          require("luasnip").lsp_expand(args.body)
-        end
+        vim.snippet.expand(args.body)
       end,
     },
 
@@ -56,7 +50,6 @@ M.config = function()
         name = "lazydev",
         group_index = 0, -- set group index to 0 to skip loading LuaLS completions
       },
-      not vim.snippet and { name = "luasnip" } or nil,
     },
 
     ---@diagnostic disable-next-line: missing-fields
@@ -116,7 +109,6 @@ M.config = function()
           path = "Path",
           buffer = "Buffer",
           cmdline = "Cmdline",
-          luasnip = "LuaSnip",
           nvim_lua = "Lua",
           nvim_lsp = "LSP",
           lazydev = "LazyDev",

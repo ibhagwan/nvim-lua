@@ -88,11 +88,4 @@ return {
       })
     end,
   },
-  {
-    "OXY2DEV/markview.nvim",
-    enabled = false,
-    branch = "dev",
-    ft = "markdown",
-    opts = { hybrid_modes = { "n" } },
-  }
 }

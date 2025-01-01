@@ -78,7 +78,8 @@
 - [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim): fuzzy
   search framework for searching project files, buffers, ripgrep and much more
 
-- [nvim-tree](https://github.com/nvim-tree/nvim-tree.lua): file-explorer tree
+- [oil.nvim](https://github.com/stevearc/oil.nvim): file explorer as a neovim
+  buffer which also replaces netrw
 
 ### Misc
 
