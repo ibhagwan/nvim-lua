@@ -20,7 +20,7 @@ local config = {
     "-jar", vim.fn.glob(vim.fn.stdpath("data") ..
     "/mason/packages/jdtls/plugins/org.eclipse.equinox.launcher_*.jar"),
     "-configuration", vim.fn.stdpath("data") .. "/mason/packages/jdtls/config_linux",
-    "-data", (root_dir or uv.cwd()) .. "/.jdtls",
+    "-data", (root_dir or vim.uv.cwd()) .. "/.jdtls",
   },
   root_dir = root_dir
 }

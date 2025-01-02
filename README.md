@@ -1,4 +1,8 @@
-# My nvim-lua setup
+<div align="center">
+
+![Neovim version](https://img.shields.io/badge/Neovim-0.10-57A143?style=flat-square&logo=neovim)
+
+</div>
 
 ![screenshot](https://github.com/ibhagwan/nvim-lua/raw/main/screenshot.png)
 
@@ -23,7 +27,7 @@
 ### Basics
 
 - [smartyank.nvim](https://github.com/ibhagwan/smartyank.nvim): only pollute
-  the clipboard when you really mean it!
+  the clipboard when you really mean it (written by me)!
 
 - [mini.surround](https://github.com/echasnovski/mini.nvim): adds the missing
   operators (`ds`, `cs`, `ys`) for dealing with pairs of "surroundings"
@@ -94,14 +98,11 @@
 - [previm](https://github.com/previm/previm): live preview markdown files in
   the browser with `<space>r`
 
-- [render-markdown.nvim](https://github.com/MeanderingProgrammer/render-markdown.nvim):
-  magical plugin rendering markdown files inside neovim
-
 ### Appearence
 
 - [heirline.nvim](https://github.com/rebelot/heirline.nvim):
   DIY status line plugin, semi-minimalistic setup.
 
-- [nvim-colorizer.lua](https://github.com/nvchad/nvim-colorizer.lua): color
-  code highlighter, use `ColorizerAttachToBuffer` to provide a live preview of
-  color codes in your buffer (e.g. `#d4bfff`)
+- [render-markdown.nvim](https://github.com/MeanderingProgrammer/render-markdown.nvim):
+  magical plugin rendering markdown files inside neovim
+

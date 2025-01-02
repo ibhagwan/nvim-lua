@@ -35,7 +35,7 @@ if utils.is_darwin() then
   }
 end
 
-if utils.__HAS_NVIM_010 and vim.env.SSH_TTY then
+if vim.env.SSH_TTY then
   vim.g.clipboard = {
     name = "OSC 52",
     copy = {
@@ -201,7 +201,7 @@ local disabled_built_ins     = {
 -- disable default fzf plugin if not
 -- root since we will be using fzf-lua
 if utils.is_root()
-    and uv.fs_stat("/usr/share/nvim/runtime/plugin/fzf.vim") then
+    and vim.uv.fs_stat("/usr/share/nvim/runtime/plugin/fzf.vim") then
   vim.opt.runtimepath:append("/usr/share/nvim/runtime")
 else
   -- table.insert(disabled_built_ins, "fzf")

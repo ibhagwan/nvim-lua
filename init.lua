@@ -1,9 +1,7 @@
-uv = vim.loop or vim.uv
-
 local utils = require("utils")
 
-if not utils.__HAS_NVIM_08 then
-  utils.warn("nvim-lua requires neovim > 0.8")
+if not utils.__HAS_NVIM_010 then
+  utils.warn("This config requires neovim 0.10 and above")
   vim.o.loadplugins = false
   vim.o.termguicolors = true
   return

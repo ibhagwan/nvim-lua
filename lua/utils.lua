@@ -6,11 +6,12 @@ function _G.dump(...)
   print(unpack(objects))
 end
 
+local uv = vim.uv or vim.loop
+
 local DEV_DIR = "$HOME/Sources/nvim"
 
 local M = {}
 
-M.__HAS_NVIM_08 = vim.fn.has("nvim-0.8") == 1
 M.__HAS_NVIM_010 = vim.fn.has("nvim-0.10") == 1
 M.__HAS_NVIM_011 = vim.fn.has("nvim-0.11") == 1
 M.IS_WINDOWS = vim.fn.has("win32") == 1 or vim.fn.has("win64") == 1
@@ -62,7 +63,7 @@ function M.is_darwin()
 end
 
 function M.is_NetBSD()
-  return uv.os_uname().sysname == "NetBSD"
+  return uv and uv.os_uname().sysname == "NetBSD"
 end
 
 M.USE_BLINK_CMP = vim.fn.executable("cargo") == 1 and not M.is_NetBSD()

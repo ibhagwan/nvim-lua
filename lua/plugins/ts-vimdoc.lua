@@ -1,22 +1,22 @@
 local M = {
   "ibhagwan/ts-vimdoc.nvim",
   dev = require("utils").is_dev("ts-vimdoc.nvim"),
-  dependencies = { "nvim-treesitter" },
+  dependencies = { "nvim-treesitter/nvim-treesitter" },
 }
 
 M.init = function()
   local function docgen(opts)
     local vimdoc = require("ts-vimdoc")
-    opts.project_name = opts.project_name or vim.fn.fnamemodify(uv.cwd(), ":t:r")
+    opts.project_name = opts.project_name or vim.fn.fnamemodify(vim.uv.cwd(), ":t:r")
     opts.input_file = vim.fn.fnamemodify(opts.input_file, ":p")
     opts.output_file = opts.outpt_file or
         vim.fn.fnamemodify(string.format("doc/%s.txt", opts.project_name), ":p")
-    if not uv.fs_stat(opts.input_file) then
+    if not vim.uv.fs_stat(opts.input_file) then
       require("utils").warn(("'%s' is inaccessible")
         :format(vim.fn.fnamemodify(opts.input_file, ":.")))
       return
     end
-    if not uv.fs_stat("doc") then
+    if not vim.uv.fs_stat("doc") then
       vim.fn.mkdir("doc", "p")
     end
     vimdoc.docgen(vim.tbl_extend("keep", opts, { version = "For Neovim >= 0.8.0" }))

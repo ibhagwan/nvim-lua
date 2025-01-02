@@ -96,7 +96,7 @@ map_tele("n", "<leader>F3", "current_buffer_fuzzy_find")
 map_tele("n", "<leader>FH", "oldfiles", { prompt_title = "History (all)" })
 map_tele("n", "<leader>Fh", "oldfiles", {
   prompt_title = "History (cwd)",
-  cwd = uv.cwd(),
+  cwd = vim.uv.cwd(),
   cwd_only = true
 })
 map_tele("n", "<leader>Fq", "quickfix")

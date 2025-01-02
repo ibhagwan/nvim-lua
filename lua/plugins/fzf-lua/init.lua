@@ -1,5 +1,6 @@
 local M = {
   "ibhagwan/fzf-lua",
+  dependencies = { "nvim-tree/nvim-web-devicons" },
   dev = require("utils").is_dev("fzf-lua"),
   cmd = "FzfLua",
 }

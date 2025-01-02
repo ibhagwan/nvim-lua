@@ -108,7 +108,7 @@ function M.workdirs(opts)
   opts.actions = {
     ["default"] = function(selected)
       if not selected[1] then return end
-      require("workdirs").PREV_CWD = uv.cwd()
+      require("workdirs").PREV_CWD = vim.uv.cwd()
       local newcwd = vim.fs.normalize(selected[1]:match("[^ ]*$"))
       require("utils").set_cwd(newcwd)
     end

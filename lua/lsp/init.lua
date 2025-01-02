@@ -1,8 +1,6 @@
 local ok, lspconfig = pcall(require, "lspconfig")
 if not ok then return end
 
-local lsputil = require("lspconfig.util")
-
 -- Setup icons & handler helper functions
 require("lsp.diag")
 require("lsp.icons")
@@ -20,33 +18,21 @@ vim.lsp.handlers["textDocument/signatureHelp"] =
 --   Lua language server refused to load this directory.
 --   Please check your configuration.
 --   [learn more here](https://luals.github.io/wiki/faq#why-is-the-server-scanning-the-wrong-folder)
--- Modified from ".../nvim-lspconfig/lua/lspconfig/server_configurations"
+-- Reuse ".../nvim-lspconfig/lua/lspconfig/configs/lua_ls"
 local lua_root_dir = function(fname)
-  local root_files = {
-    ".luarc.json",
-    ".luarc.jsonc",
-    ".luacheckrc",
-    ".stylua.toml",
-    "stylua.toml",
-    "selene.toml",
-    "selene.yml",
-  }
-  local root = lsputil.root_pattern(unpack(root_files))(fname)
-  if root and root ~= vim.env.HOME then
-    return root
-  end
-  root = lsputil.root_pattern "lua/" (fname)
-  if root then
-    return root
-  end
-  root = lsputil.find_git_ancestor(fname)
-  return root ~= vim.env.HOME and root or nil
+  local lua_ls = require "lspconfig.configs.lua_ls".default_config
+  local root = lua_ls.root_dir(fname)
+  -- NOTE: although returning `nil` here does nullify the "rootUri" property lua_ls still
+  -- displays the error, I'm not sure if returning an empty string is the correct move as
+  -- it generates "rootUri = "file://" but it does seem to quiet lua_ls and make it work
+  -- as if it was started in single file mode
+  return root and root ~= vim.env.HOME and root or ""
 end
 
 local custom_settings = {
   ["lua_ls"] = {
     -- uncomment to enable trace logging into:
-    -- '~/.local/share/nvim/mason/packages/lua-language-server/log'
+    -- "~/.local/share/nvim/mason/packages/lua-language-server/libexec/log/service.log"
     -- cmd = { "lua-language-server", "--loglevel=trace" },
     settings = {
       Lua = {

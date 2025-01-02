@@ -15,12 +15,12 @@
 -- end
 
 local map = function(mode, lhs, rhs, opts)
-  opts = vim.tbl_extend("keep", opts, { silent = true, buffer = true })
+  opts = vim.tbl_extend("keep", opts, { silent = true, buffer = 0 })
   vim.keymap.set(mode, lhs, rhs, opts)
 end
 
 local on_attach = function(client, bufnr)
-  vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
+  vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
 
   if client.config.flags then
     client.config.flags.allow_incremental_sync = true
@@ -63,6 +63,19 @@ local on_attach = function(client, bufnr)
 
   map("n", "<leader>lv", "<cmd>lua require'lsp.diag'.toggle()<CR>",
     { desc = "toggle virtual text [LSP]" })
+
+  local wk = package.loaded["which-key"]
+  if wk then
+    wk.add({
+      "<leader>lv",
+      desc = function()
+        return string.format("%s virtual text [LSP]", vim.b._diag_is_hidden and "show" or "hide")
+      end,
+      buffer = 0,
+      nowait = false,
+      remap = false
+    })
+  end
 
   -- neovim PR #16057
   -- https://github.com/neovim/neovim/pull/16057

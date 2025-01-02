@@ -1,3 +1,4 @@
+local uv = vim.uv
 local utils = require("utils")
 
 M = {}
@@ -29,6 +30,9 @@ M.DIRS = {
   utils._if_win_fs_norm("~/Sources/nvim/plenary.nvim"),
   utils._if_win_fs_norm("~/Sources/nvim/telescope.nvim"),
   utils._if_win_fs_norm("~/Sources/reveal.js"),
+  utils._if_win_fs_norm("~/Sources/Crypto/ERC20"),
+  utils._if_win_fs_norm("~/Sources/Crypto/ibhagwan/pancakeswap-sdk-v2"),
+  utils._if_win_fs_norm("~/Sources/Crypto/ibhagwan/pancake-swap-interface-v1"),
 }
 
 M.PREV_CWD = nil

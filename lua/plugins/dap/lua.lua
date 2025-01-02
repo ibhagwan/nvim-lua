@@ -22,8 +22,8 @@ local function dap_server(opts)
     local pid = vim.fn.jobpid(nvim_chanID)
     vim.fn.rpcnotify(nvim_chanID, "nvim_exec_lua", [[return require"osv".stop()]])
     vim.fn.jobstop(nvim_chanID)
-    if type(uv.os_getpriority(pid)) == "number" then
-      uv.kill(pid, 9)
+    if type(vim.uv.os_getpriority(pid)) == "number" then
+      vim.uv.kill(pid, 9)
     end
     nvim_chanID = nil
   end
@@ -38,7 +38,7 @@ local function dap_server(opts)
   local plugin_name = "one-small-step-for-vimkind"
   local plugin_dir = vim.fn.stdpath("data") .. "/site/pack/dap"
   assert(vim.fn.mkdir(plugin_dir, "p"), "Unable to create plugin dir")
-  uv.fs_symlink(vim.fn.stdpath("data") .. "/lazy", plugin_dir .. "/opt", { dir = true })
+  vim.uv.fs_symlink(vim.fn.stdpath("data") .. "/lazy", plugin_dir .. "/opt", { dir = true })
 
   -- make sure OSV is loaded
   vim.fn.rpcrequest(nvim_chanID, "nvim_exec_lua",

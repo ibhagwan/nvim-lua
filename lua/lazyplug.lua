@@ -1,6 +1,6 @@
 -- bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not uv.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
   print("Downloading folke/lazy.nvim...")
   vim.fn.system({
     "git",
