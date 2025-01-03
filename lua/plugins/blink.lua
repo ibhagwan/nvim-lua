@@ -1,7 +1,7 @@
 local M = {
   "saghen/blink.cmp",
-  enabled = require("utils").USE_BLINK_CMP,
-  build = "cargo build --release",
+  enabled = require("utils").USE_BLINK_CMP ~= nil,
+  build = "cargo +nightly build --release",
   event = { "InsertEnter", "CmdLineEnter" },
   opts = {
     keymap = {
