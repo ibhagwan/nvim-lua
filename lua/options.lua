@@ -132,6 +132,7 @@ o.foldmethod       = "indent"               -- fold based on indent level
 
 o.undofile         = false                  -- no undo file
 o.hidden           = true                   -- do not unload buffer when abandoned
+o.confirm          = true                   -- confirm before loss of data with `:q`
 
 o.ignorecase       = true                   -- ignore case on search
 o.smartcase        = true                   -- case sensitive when search includes uppercase

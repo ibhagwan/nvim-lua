@@ -1,7 +1,7 @@
 local fzf_lua = require("fzf-lua")
 
 local img_prev_bin = vim.fn.executable("ueberzug") == 1 and { "ueberzug" }
-    or vim.fn.executable("chafa") == 1 and { "chafa" }
+    or vim.fn.executable("chafa") == 1 and { "chafa", "--format=symbols" }
     or vim.fn.executable("viu") == 1 and { "viu", "-b" }
     or nil
 
@@ -64,7 +64,7 @@ local symbol_hl = function(s)
 end
 
 local default_opts = {
-  "default-title",
+  "border-fused",
   -- debug_tracelog = "~/fzf-lua-trace.log",
   -- fzf_opts = { ["--info"] = "default" },
   -- fzf_opts = { ["--tmux"] = "80%,60%", ["--border"] = "rounded" },
@@ -84,12 +84,6 @@ local default_opts = {
       return true
     end
   end,
-  -- winopts_fn = function()
-  --   -- local split = "botright new" -- use for split under **all** windows
-  --   local split = "belowright new"  -- use for split under current windows
-  --   local height = math.floor(vim.o.lines * 0.3)
-  --   return { split = split .. " | resize " .. tostring(height) }
-  -- end,
   winopts = {
     -- split   = "belowright new",
     -- split   = "belowright vnew",
@@ -103,7 +97,9 @@ local default_opts = {
     -- {'╮', 'IncSearch'}, '│', '╯', '─', '╰', '│' },
     treesitter = true,
     preview    = {
-      layout       = "flex",
+      -- layout       = "flex",
+      -- layout       = "vertical",
+      -- layout       = "horizontal",
       -- vertical     = "down:50%",
       -- vertical     = "up:50%",
       -- horizontal   = "right:55%",
@@ -118,6 +114,13 @@ local default_opts = {
       vim.b.miniindentscope_disable = true
     end,
   },
+  -- winopts = function()
+  --   -- local split = "botright new" -- use for split under **all** windows
+  --   -- local split = "belowright new" -- use for split under current windows
+  --   -- local height = math.floor(vim.o.lines * 0.3)
+  --   -- return { split = split .. " | resize " .. tostring(height) }
+  --   return { split = "belowright new", preview = { flip_columns = 120 } }
+  -- end,
   hls = function()
     return {
       border = hl_match({ "FloatBorder", "LineNr" }),
@@ -154,8 +157,6 @@ local default_opts = {
     fzf_opts = { ["--tiebreak"] = "end" },
   },
   grep = {
-    debug = false,
-    rg_glob = true,
     rg_opts = [[--hidden --column --line-number --no-heading]]
         .. [[ --color=always --smart-case -g "!.git" -e]],
     fzf_opts = {

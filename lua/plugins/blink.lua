@@ -1,6 +1,6 @@
 local M = {
   "saghen/blink.cmp",
-  enabled = require("utils").USE_BLINK_CMP ~= nil,
+  enabled = require("utils").USE_BLINK_CMP,
   build = "cargo +nightly build --release",
   event = { "InsertEnter", "CmdLineEnter" },
   opts = {
@@ -28,10 +28,8 @@ local M = {
         ["<C-y>"] = { "select_and_accept" },
       }
     },
-    -- sources = { cmdline = {} }, -- Disable cmdline for now (buggy)
     completion = {
-      -- list = { selection = "manual" },
-      list = { selection = "auto_insert" },
+      list = { selection = { preselect = false, auto_insert = true } },
       accept = {
         create_undo_point = true,
         auto_brackets = { enabled = true },
