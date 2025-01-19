@@ -37,10 +37,15 @@ return {
     opts = {
       library = {
         -- Load luvit types when the `vim.uv` word is found
-        { path = "luvit-meta/library", words = { "vim%.uv" } },
+        { path = "$(3rd)/luv/library", words = { "vim%.uv" } },
+        -- Always luad fzf-lua
+        "fzf-lua",
       },
+      -- uncomment to disable when a .luarc.json file is found
+      -- enabled = function(root_dir)
+      --   return not vim.uv.fs_stat(root_dir .. "/.luarc.json")
+      --       and not vim.uv.fs_stat(root_dir .. "/.luarc.jsonc")
+      -- end,
     },
-    -- optional `vim.uv` typings
-    dependencies = { "Bilal2453/luvit-meta", lazy = true },
   },
 }

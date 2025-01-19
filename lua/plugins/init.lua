@@ -1,8 +1,23 @@
 return {
   {
-    "bluz71/vim-nightfly-guicolors",
+    -- "bluz71/vim-nightfly-guicolors",
+    "bluz71/vim-moonfly-colors",
+    enabled = true,
     lazy = false,
     priority = 1000,
+    config = function()
+      vim.cmd.colorscheme("moonfly")
+      -- vim.cmd.colorscheme("nightfly")
+    end
+  },
+  {
+    "folke/tokyonight.nvim",
+    enabled = false,
+    lazy = false,
+    priority = 1000,
+    config = function()
+      vim.cmd.colorscheme("tokyonight")
+    end
   },
   {
     "dstein64/vim-startuptime",
@@ -16,19 +31,6 @@ return {
     end,
     event = "VeryLazy",
     dev = require("utils").is_dev("smartyank.nvim")
-  },
-  -- plenary is required by gitsigns and telescope
-  {
-    "nvim-lua/plenary.nvim",
-    keys = { "<leader>tt", "<leader>td" },
-    config = function()
-      vim.keymap.set({ "n", "v" }, "<leader>tt",
-        function() require("plenary.test_harness").test_file(vim.fn.expand("%")) end,
-        { silent = true, desc = "Run tests in current file" })
-      vim.keymap.set({ "n", "v" }, "<leader>td",
-        function() require("plenary.test_harness").test_directory_command("tests") end,
-        { silent = true, desc = "Run tests in 'tests' directory" })
-    end,
   },
   {
     "previm/previm",

@@ -7,10 +7,29 @@ local M = {
   event = { "BufReadPost", "InsertEnter" }
 }
 
+function M.init()
+  vim.keymap.set({ "n", "v" }, "<leader>tt",
+    function() require("mini.test").run_file() end,
+    { silent = true, desc = "Run tests in current file" })
+  vim.keymap.set({ "n", "v" }, "<leader>tl",
+    function() require("mini.test").run_at_location() end,
+    { silent = true, desc = "Run test at cursor" })
+  vim.keymap.set({ "n", "v" }, "<leader>ta",
+    function() require("mini.test").run() end,
+    { silent = true, desc = "Run all tests" })
+end
+
 function M.config()
   require("plugins.mini.surround")
   require("plugins.mini.indentscope")
   require("mini.ai").setup()
+  require("mini.test").setup({
+    collect = {
+      find_files = function()
+        return vim.fn.globpath("tests", "**/*_spec.lua", true, true)
+      end,
+    },
+  })
   vim.api.nvim_create_user_command("MiniHipatternsToggle", function()
     local hipatterns = require("mini.hipatterns")
     local hex_from_colormap = function()
@@ -35,7 +54,6 @@ function M.config()
       vim.b.minihipatterns_disable = true
     end
   end, {})
-  -- require("mini.pairs").setup()
 end
 
 return M

@@ -144,23 +144,6 @@ function M.get_visual_selection(nl_literal)
   return table.concat(lines, nl_literal and "\\n" or "\n")
 end
 
-function M.toggle_colorcolumn()
-  local wininfo = vim.fn.getwininfo()
-  for _, win in pairs(wininfo) do
-    local ft = vim.bo[win["bufnr"]].filetype
-    if ft == nil or ft == "TelescopePrompt" then return end
-    local colorcolumn = ""
-    if win["width"] >= vim.g._colorcolumn then
-      colorcolumn = tostring(vim.g._colorcolumn)
-    end
-    -- TOOD: messes up tab highlighting, why?
-    -- vim.api.nvim_win_set_option(win['winid'], 'colorcolumn', colorcolumn)
-    vim.api.nvim_win_call(win["winid"], function()
-      vim.wo.colorcolumn = colorcolumn
-    end)
-  end
-end
-
 -- 'q': find the quickfix window
 -- 'l': find all loclist windows
 function M.find_qf(type)
@@ -333,6 +316,7 @@ M.unload_modules = function(patterns)
 end
 
 M.reload_config = function()
+  require("fzf-lua").deregister_ui_select()
   M.unload_modules({
     {
       "^options$",
@@ -348,12 +332,19 @@ M.reload_config = function()
     { "^autocmd$",       fn = function() require("autocmd") end },
     { "^keymaps$",       fn = function() require("keymaps") end },
     { "^utils$" },
-    { "^workdirs$" },
+    { "^term$" },
     { mod = "ts%-vimdoc" },
     { mod = "smartyank", fn = function() require("smartyank") end },
     { mod = "fzf%-lua",  fn = function() require("plugins.fzf-lua.setup").setup() end },
     { mod = "heirline",  fn = function() require("plugins.heirline").config() end },
     { mod = "dap%.",     fn = function() require("plugins.dap").config() end },
+    -- {
+    --   mod = "snacks",
+    --   fn = function()
+    --     require("plugins.snacks").init()
+    --     require("plugins.snacks").config()
+    --   end
+    -- },
   })
   -- re-source all language specific settings, scans all runtime files under
   -- '/usr/share/nvim/runtime/(indent|syntax)' and 'after/ftplugin'
@@ -384,7 +375,8 @@ end
 M.tmux_aware_navigate = function(direction, no_wrap)
   local curwin = vim.api.nvim_get_current_win()
   -- First attempt to send a wincmd, skip if window is floating
-  if not M.win_is_float(curwin) then
+  -- Do not skip "alt-h" due to fzf-lua's toggle_hidden default
+  if not M.win_is_float(curwin) or direction == "h" then
     vim.cmd.wincmd(direction == "o" and "w" or direction)
     if not vim.env.TMUX or vim.api.nvim_get_current_win() ~= curwin then
       -- Stop here if no TMUX or wincmd switched windows

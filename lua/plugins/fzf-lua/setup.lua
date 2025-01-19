@@ -64,7 +64,7 @@ local symbol_hl = function(s)
 end
 
 local default_opts = {
-  "border-fused",
+  { "border-fused", "hide" },
   -- debug_tracelog = "~/fzf-lua-trace.log",
   -- fzf_opts = { ["--info"] = "default" },
   -- fzf_opts = { ["--tmux"] = "80%,60%", ["--border"] = "rounded" },
@@ -89,14 +89,14 @@ local default_opts = {
     -- split   = "belowright vnew",
     -- split   = "aboveleft new",
     -- split   = "aboveleft vnew",
-    height     = 0.85,
-    width      = 0.80,
-    row        = 0.35,
-    col        = 0.55,
+    -- height     = 0.85,
+    -- width      = 0.80,
+    -- row        = 0.35,
+    -- col        = 0.55,
     -- border = { {'╭', 'IncSearch'}, {'─', 'IncSearch'},
     -- {'╮', 'IncSearch'}, '│', '╯', '─', '╰', '│' },
-    treesitter = true,
-    preview    = {
+    -- treesitter = false,
+    preview   = {
       -- layout       = "flex",
       -- layout       = "vertical",
       -- layout       = "horizontal",
@@ -104,14 +104,16 @@ local default_opts = {
       -- vertical     = "up:50%",
       -- horizontal   = "right:55%",
       -- horizontal   = "left:60%",
+      -- scrollbar    = "float",
+      -- scrolloff    = -1,
       flip_columns = 120,
-      scrollbar    = "float",
-      -- scrolloff        = '-1',
-      -- scrollchars      = {'█', '░' },
     },
-    on_create  = function()
+    on_create = function(e)
       -- disable miniindentscope
       vim.b.miniindentscope_disable = true
+      vim.keymap.set("t", "<M-h>", "<M-h>", { buffer = e.bufnr, nowait = true })
+      vim.keymap.set("t", "<C-r>", [['<C-\><C-N>"'.nr2char(getchar()).'pi']],
+        { buffer = e.bufnr, expr = true })
     end,
   },
   -- winopts = function()
@@ -121,15 +123,15 @@ local default_opts = {
   --   -- return { split = split .. " | resize " .. tostring(height) }
   --   return { split = "belowright new", preview = { flip_columns = 120 } }
   -- end,
-  hls = function()
-    return {
-      border = hl_match({ "FloatBorder", "LineNr" }),
-      preview_border = hl_match({ "FloatBorder", "LineNr" }),
-      cursorline = "Visual",
-      cursorlinenr = "Visual",
-      dir_icon = hl_match({ "NightflyGreyBlue", "Directory" }),
-    }
-  end,
+  -- hls = function()
+  --   return {
+  --     border = hl_match({ "FloatBorder", "LineNr" }),
+  --     preview_border = hl_match({ "FloatBorder", "LineNr" }),
+  --     cursorline = "Visual",
+  --     -- cursorlinenr = "Visual",
+  --     dir_icon = hl_match({ "NightflyGreyBlue", "Directory" }),
+  --   }
+  -- end,
   previewers = {
     bat = { theme = "Coldark-Dark", args = "--color=always --style=default" },
     builtin = {
@@ -145,43 +147,29 @@ local default_opts = {
     },
   },
   actions = {
-    files = { true, ["ctrl-l"] = { fn = fzf_lua.actions.arg_add, exec_silent = true } },
+    files = {
+      true,
+      ["ctrl-l"] = { fn = fzf_lua.actions.arg_add, exec_silent = true },
+    },
   },
   -- all providers inherit from defaults, easier than to set this individually
   -- for git diff, commits and bcommits (we have an override for lsp.code_actions)
   defaults = { formatter = { "path.dirname_first", v = 2 } },
   buffers = { no_action_zz = true },
-  files = {
-    -- uncomment to override .gitignore
-    -- fd_opts  = "--no-ignore --color=never --type f --hidden --follow --exclude .git",
-    fzf_opts = { ["--tiebreak"] = "end" },
-  },
+  files = { fzf_opts = { ["--tiebreak"] = "end" } },
   grep = {
-    rg_opts = [[--hidden --column --line-number --no-heading]]
-        .. [[ --color=always --smart-case -g "!.git" -e]],
-    fzf_opts = {
-      ["--history"] = fzf_lua.path.join({ vim.fn.stdpath("data"), "fzf_search_hist" }),
-    },
-    actions = {
-      ["ctrl-r"] = { fzf_lua.actions.grep_lgrep },
-      ["ctrl-g"] = { fzf_lua.actions.toggle_ignore }
-    },
+    fzf_opts = { ["--history"] = vim.fs.joinpath(vim.fn.stdpath("data"), "fzf_search_hist") },
+    -- actions = { ["ctrl-g"] = false, ["ctrl-r"] = { fzf_lua.actions.grep_lgrep } },
   },
-  tags = { actions = { ["ctrl-g"] = false, ["ctrl-r"] = { fzf_lua.actions.grep_lgrep } } },
-  btags = { actions = { ["ctrl-g"] = false, ["ctrl-r"] = false } },
+  -- tags = { actions = { ["ctrl-g"] = false, ["ctrl-r"] = { fzf_lua.actions.grep_lgrep } } },
   git = {
-    status   = {
-      winopts = {
-        preview = { vertical = "down:70%", horizontal = "right:70%" }
-      },
-    },
+    status   = { winopts = { preview = { vertical = "down:70%", horizontal = "right:70%" } } },
     commits  = { winopts = { preview = { vertical = "down:60%", } } },
     bcommits = { winopts = { preview = { vertical = "down:60%", } } },
     branches = {
       -- cmd_add = { "git", "checkout", "-b" },
       cmd_del = { "git", "branch", "--delete", "--force" },
-      winopts = {
-        preview = { vertical = "down:75%", horizontal = "right:75%", }
+      winopts = { preview = { vertical = "down:75%", horizontal = "right:75%" }
       }
     },
   },
@@ -201,7 +189,7 @@ local default_opts = {
       path_shorten = 1,
       symbol_icons = symbol_icons,
       symbol_hl = symbol_hl,
-      actions = { ["ctrl-g"] = false, ["ctrl-r"] = { fzf_lua.actions.sym_lsym } },
+      -- actions = { ["ctrl-g"] = false, ["ctrl-r"] = { fzf_lua.actions.sym_lsym } },
     },
     code_actions = {
       winopts = {
@@ -227,12 +215,22 @@ return {
 
     fzf_lua.setup(default_opts)
 
-    vim.api.nvim_create_augroup("FzfLuaColor", { clear = true })
+    -- register fzf-lua as vim.ui.select interface
+    fzf_lua.register_ui_select(function(o, items)
+      local min_h, max_h = 0.15, 0.70
+      local preview = o.kind == "codeaction" and 0.20 or 0
+      local h = (#items + 4) / vim.o.lines + preview
+      if h < min_h then
+        h = min_h
+      elseif h > max_h then
+        h = max_h
+      end
+      return { winopts = { height = h, width = 0.60, row = 0.40 } }
+    end)
+
     vim.api.nvim_create_autocmd("ColorScheme", {
-      callback = function()
-        symbol_hls = nil
-      end,
-      group = "FzfLuaColor",
+      callback = function() symbol_hls = nil end,
+      group = vim.api.nvim_create_augroup("FzfLuaColor", { clear = true })
     })
   end
 }

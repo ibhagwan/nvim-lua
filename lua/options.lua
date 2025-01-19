@@ -55,25 +55,24 @@ end
 --   o.mopt = "wait:0,history:1000"
 -- end
 
-o.cmdheight        = 2                           -- cmdline height
-o.cmdwinheight     = math.floor(vim.o.lines / 2) -- 'q:' window height
-o.scrolloff        = 3                           -- min number of lines to keep between cursor and screen edge
-o.sidescrolloff    = 5                           -- min number of cols to keep between cursor and screen edge
-o.textwidth        = 99                          -- max inserted text width for paste operations
-o.number           = true                        -- show absolute line no. at the cursor pos
-o.relativenumber   = true                        -- otherwise, show relative numbers in the ruler
-o.cursorline       = true                        -- Show a line where the current cursor is
-o.signcolumn       = "yes"                       -- Show sign column as first column
-vim.g._colorcolumn = 100                         -- global var, mark column 100
-o.colorcolumn      = tostring(vim.g._colorcolumn)
-o.breakindent      = true                        -- start wrapped lines indented
-o.linebreak        = true                        -- do not break words on line wrap
+o.cmdheight      = 2                             -- cmdline height
+o.cmdwinheight   = math.floor(vim.o.lines / 2)   -- 'q:' window height
+o.scrolloff      = 3                             -- min number of lines to keep between cursor and screen edge
+o.sidescrolloff  = 5                             -- min number of cols to keep between cursor and screen edge
+o.textwidth      = 99                            -- max inserted text width for paste operations
+o.number         = true                          -- show absolute line no. at the cursor pos
+o.relativenumber = true                          -- otherwise, show relative numbers in the ruler
+o.cursorline     = true                          -- Show a line where the current cursor is
+o.signcolumn     = "yes"                         -- Show sign column as first column
+o.colorcolumn    = "100"                         -- mark column 100
+o.breakindent    = true                          -- start wrapped lines indented
+o.linebreak      = true                          -- do not break words on line wrap
 
 -- Characters to display on ':set list',explore glyphs using:
 -- `xfd -fa "InputMonoNerdFont:style:Regular"` or
 -- `xfd -fn "-misc-fixed-medium-r-semicondensed-*-13-*-*-*-*-*-iso10646-1"`
 -- input special chars with the sequence <C-v-u> followed by the hex code
-o.listchars        = {
+o.listchars      = {
   tab      = "→ ",
   eol      = "↲",
   nbsp     = "␣",
@@ -83,23 +82,23 @@ o.listchars        = {
   extends  = "⟩",
   precedes = "⟨",
 }
-o.showbreak        = "↪ "
+o.showbreak      = "↪ "
 
 -- show menu even for one item do not auto select/insert
-o.completeopt      = { "noinsert", "menuone", "noselect" }
-o.wildmode         = "longest:full,full"
-o.wildoptions      = "pum" -- Show completion items using the pop-up-menu (pum)
+o.completeopt    = { "noinsert", "menuone", "noselect" }
+o.wildmode       = "longest:full,full"
+o.wildoptions    = "pum"   -- Show completion items using the pop-up-menu (pum)
 -- o.pumblend         = 15    -- completion menu transparency
 
-o.joinspaces       = true  -- insert spaces after '.?!' when joining lines
-o.smartindent      = true  -- add <tab> depending on syntax (C/C++)
-o.startofline      = false -- keep cursor column on navigation
+o.joinspaces     = true    -- insert spaces after '.?!' when joining lines
+o.smartindent    = true    -- add <tab> depending on syntax (C/C++)
+o.startofline    = false   -- keep cursor column on navigation
 
-o.tabstop          = 4     -- Tab indentation levels every two columns
-o.softtabstop      = 4     -- Tab indentation when mixing tabs & spaces
-o.shiftwidth       = 4     -- Indent/outdent by two columns
-o.shiftround       = true  -- Always indent/outdent to nearest tabstop
-o.expandtab        = true  -- Convert all tabs that are typed into spaces
+o.tabstop        = 4       -- Tab indentation levels every two columns
+o.softtabstop    = 4       -- Tab indentation when mixing tabs & spaces
+o.shiftwidth     = 4       -- Indent/outdent by two columns
+o.shiftround     = true    -- Always indent/outdent to nearest tabstop
+o.expandtab      = true    -- Convert all tabs that are typed into spaces
 
 -- c: auto-wrap comments using textwidth
 -- r: auto-insert the current comment leader after hitting <Enter>
@@ -111,7 +110,7 @@ o.expandtab        = true  -- Convert all tabs that are typed into spaces
 -- this gets overwritten by ftplugins (:verb set fo)
 -- we use autocmd to remove 'o' in '/lua/autocmd.lua'
 -- borrowed from tjdevries
-o.formatoptions    = o.formatoptions
+o.formatoptions  = o.formatoptions
     - "a"                                   -- Auto formatting is BAD.
     - "t"                                   -- Don't auto format my code. I got linters for that.
     + "c"                                   -- In general, I like it when comments respect textwidth
@@ -122,25 +121,25 @@ o.formatoptions    = o.formatoptions
     + "j"                                   -- Auto-remove comments if possible.
     - "2"                                   -- I'm not in gradeschool anymore
 
-o.splitbelow       = true                   -- ':new' ':split' below current
-o.splitright       = true                   -- ':vnew' ':vsplit' right of current
+o.splitbelow     = true                     -- ':new' ':split' below current
+o.splitright     = true                     -- ':vnew' ':vsplit' right of current
 
-o.foldenable       = true                   -- enable folding
-o.foldlevelstart   = 10                     -- open most folds by default
-o.foldnestmax      = 10                     -- 10 nested fold max
-o.foldmethod       = "indent"               -- fold based on indent level
+o.foldenable     = true                     -- enable folding
+o.foldlevelstart = 10                       -- open most folds by default
+o.foldnestmax    = 10                       -- 10 nested fold max
+o.foldmethod     = "indent"                 -- fold based on indent level
 
-o.undofile         = false                  -- no undo file
-o.hidden           = true                   -- do not unload buffer when abandoned
-o.confirm          = true                   -- confirm before loss of data with `:q`
+o.undofile       = false                    -- no undo file
+o.hidden         = true                     -- do not unload buffer when abandoned
+o.confirm        = true                     -- confirm before loss of data with `:q`
 
-o.ignorecase       = true                   -- ignore case on search
-o.smartcase        = true                   -- case sensitive when search includes uppercase
-o.showmatch        = true                   -- highlight matching [{()}]
-vim.o.cpoptions    = vim.o.cpoptions .. "x" -- stay on search item when <esc>
+o.ignorecase     = true                     -- ignore case on search
+o.smartcase      = true                     -- case sensitive when search includes uppercase
+o.showmatch      = true                     -- highlight matching [{()}]
+vim.o.cpoptions  = vim.o.cpoptions .. "x"   -- stay on search item when <esc>
 
-o.writebackup      = false                  -- do not backup file before write
-o.swapfile         = false                  -- no swap file
+o.writebackup    = false                    -- do not backup file before write
+o.swapfile       = false                    -- no swap file
 
 --[[
   ShDa (viminfo for vim): session data history

@@ -59,7 +59,6 @@ map("c", "<C-a>", "<home>", {})
 map("c", "<C-e>", "<end>", {})
 
 -- Terminal mappings
-map("t", "<M-[>", [[<C-\><C-n>]], {})
 map("t", "<C-w>", [[<C-\><C-n><C-w>]], {})
 map("t", "<M-r>", [['<C-\><C-N>"'.nr2char(getchar()).'pi']], { expr = true })
 
@@ -102,8 +101,7 @@ map("n", "<leader>Q", "<cmd>lua require'utils'.toggle_qf('l')<CR>",
   { desc = "toggle location list" })
 
 -- shortcut to view :messages
-map({ "n", "v" }, "<leader>m", "<cmd>messages<CR>",
-  { desc = "open :messages" })
+map({ "n", "v" }, "<leader>m", "<cmd>messages<CR>", { desc = "open :messages" })
 map({ "n", "v" }, "<leader>M", [[<cmd>mes clear|echo "cleared :messages"<CR>]],
   { desc = "clear :messages" })
 
@@ -117,9 +115,9 @@ map({ "n", "v" }, "<leader>p", [["0p]], { desc = "paste AFTER  from yank (reg:0)
 map({ "n", "v" }, "<leader>P", [["0P]], { desc = "paste BEFORE from yank (reg:0)" })
 
 -- Overloads for 'd|c' that don't pollute the unnamed registers
-map("n", "<leader>D", [["_D]], { desc = "blackhole 'D'" })
-map("n", "<leader>C", [["_C]], { desc = "blackhole 'C'" })
-map({ "n", "v" }, "<leader>c", [["_c]], { desc = "blackhole 'c'" })
+-- map("n", "<leader>D", [["_D]], { desc = "blackhole 'D'" })
+-- map("n", "<leader>C", [["_C]], { desc = "blackhole 'C'" })
+-- map({ "n", "v" }, "<leader>c", [["_c]], { desc = "blackhole 'c'" })
 
 -- keep visual selection when (de)indenting
 map("v", "<", "<gv", {})
@@ -172,15 +170,18 @@ map("x", "c.",
 map("n", "<Esc><Esc>", "<Esc>:nohlsearch<CR>", { silent = true })
 
 -- Toggle display of `listchars`
-map("n", "<leader>'", "<Esc>:set list!<CR>",
-  { silent = true, desc = "toggle 'listchars' on/off" })
+map("n", "<leader>'", "<Esc>:set list!<CR>", { silent = true, desc = "toggle 'listchars' on/off" })
 
 -- Toggle colored column at 81
 map("n", "<leader>|", function()
-    vim.opt.colorcolumn = #vim.o.colorcolumn > 0 and ""
-        or tostring(vim.g._colorcolumn)
-  end,
-  { silent = true, desc = "toggle color column on/off" })
+  if tonumber(vim.wo.colorcolumn) then
+    vim.g._colorcolumn = vim.wo.colorcolumn
+    vim.wo.colorcolumn = ""
+  else
+    assert(tonumber(vim.g._colorcolumn))
+    vim.wo.colorcolumn = vim.g._colorcolumn
+  end
+end, { silent = true, desc = "toggle color column on/off" })
 
 -- Change current working dir (:pwd) to curent file's folder
 map("n", "<leader>%", [[<Esc>:lua require"utils".set_cwd()<CR>]],

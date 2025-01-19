@@ -4,9 +4,20 @@ local M = {
   build = "cargo +nightly build --release",
   event = { "InsertEnter", "CmdLineEnter" },
   opts = {
+    sources = {
+      default = { "lazydev", "lsp", "path", "snippets", "buffer" },
+      providers = {
+        lazydev = {
+          name = "LazyDev",
+          module = "lazydev.integrations.blink",
+          -- make lazydev completions top priority (see `:h blink.cmp`)
+          score_offset = 100,
+        },
+      },
+    },
     keymap = {
       ["<CR>"] = { "accept", "fallback" },
-      ["<Esc>"] = { "hide", "fallback" },
+      -- ["<Esc>"] = { "hide", "fallback" },
       -- ["<C-c>"] = { "cancel", "fallback" },
       ["<Up>"] = { "select_prev", "fallback" },
       ["<Down>"] = { "select_next", "fallback" },
@@ -37,6 +48,14 @@ local M = {
       menu = {
         draw = {
           treesitter = { "lsp" },
+          columns = function(ctx)
+            local ret = { { "kind_icon" }, { "label", "label_description", gap = 1 } } -- default
+            -- Add kind, source to INSERT mode
+            if ctx.mode ~= "cmdline" then
+              table.insert(ret, { "kind", "source_name", gap = 1 })
+            end
+            return ret
+          end,
         }
       },
       documentation = {

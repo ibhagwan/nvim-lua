@@ -50,14 +50,7 @@ end
 map_fzf("n", "<leader>,", "buffers", { desc = "Fzf buffers" })
 map_fzf("n", "<F1>", "help_tags", { desc = "help tags" })
 map_fzf("n", "<c-P>", "files", { desc = "find files" })
-map_fzf("n", "<c-K>", "workdirs", {
-  desc = "cwd workdirs",
-  winopts = {
-    height = 0.40,
-    width  = 0.60,
-    row    = 0.40,
-  }
-})
+map_fzf("n", "<c-K>", "zoxide", { desc = "zoxide" })
 
 map_fzf("n", "<leader>fp", "files", {
   desc = "plugin files",

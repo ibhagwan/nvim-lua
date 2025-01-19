@@ -5,17 +5,6 @@ local function augroup(name, fnc)
   fnc(vim.api.nvim_create_augroup(name, { clear = true }))
 end
 
-augroup("ibhagwan/FzfLuaCtrlC", function(g)
-  aucmd("FileType",
-    {
-      group = g,
-      pattern = "fzf",
-      callback = function(e)
-        vim.keymap.set("t", "<C-c>", "<C-c>", { buffer = e.buf, silent = true })
-      end,
-    })
-end)
-
 if utils.is_root() then
   augroup("ibhagwan/SmartTextYankPost", function(g)
     -- highlight yanked text and copy to system clipboard
@@ -61,8 +50,12 @@ augroup("ibhagwan/StatusLineColors", function(g)
     group = g,
     callback = function(_)
       -- fix 'listchars' highlight on nightfly
-      if vim.g.colors_name == "nightfly" then
+      if vim.g.colors_name == "nightfly" or vim.cmd.colorscheme("moonfly") then
         vim.api.nvim_set_hl(0, "Whitespace", { default = false, link = "NonText" })
+        vim.api.nvim_set_hl(0, "FloatBorder", { default = false, link = "LineNr" })
+        vim.api.nvim_set_hl(0, "WinSeparator", { default = false, link = "FloatBorder" })
+      elseif vim.g.colors_name:match("tokyonight") then
+        vim.api.nvim_set_hl(0, "WinSeparator", { default = false, link = "FloatBorder" })
       end
       -- update heirline highlights, only do this after
       -- statusline is loaded or we lose the :intro screen
@@ -71,9 +64,12 @@ augroup("ibhagwan/StatusLineColors", function(g)
         require("heirline.utils").on_colorscheme(get_colors)
       end
       -- fzf-lua
-      vim.api.nvim_set_hl(0, "FzfLuaFzfInfo", { default = false, link = "String" })
-      vim.api.nvim_set_hl(0, "FzfLuaFzfPrompt", { default = false, link = "SpecialKey" })
-      vim.api.nvim_set_hl(0, "FzfLuaFzfScrollbar", { default = false, link = "String" })
+      if type(vim.g.fzf_colors) == "table" then
+        vim.g.fzf_colors = vim.tbl_deep_extend("keep",
+          { ["bg+"] = { "bg", "Visual" } }, vim.g.fzf_colors)
+      end
+      vim.api.nvim_set_hl(0, "FzfLuaCursorLine", { default = false, link = "Visual" })
+      vim.api.nvim_set_hl(0, "FzfLuaFzfCursorLine", { default = false, link = "Visual" })
       -- treesitter context
       vim.api.nvim_set_hl(0, "TreesitterContext", { default = false, link = "Visual" })
       vim.api.nvim_set_hl(0, "TreesitterContextBottom", { default = false, underline = true })
@@ -121,13 +117,6 @@ augroup("ibhagwan/ResizeWindows", function(g)
     })
 end)
 
-augroup("ibhagwan/ToggleColorcolumn", function(g)
-  aucmd({ "VimResized", "WinEnter", "BufWinEnter" }, {
-    group = g,
-    callback = require("utils").toggle_colorcolumn
-  })
-end)
-
 augroup("ibhagwan/ToggleSearchHL", function(g)
   aucmd("InsertEnter", {
     group = g,
@@ -168,14 +157,14 @@ end)
 
 augroup("ibhagwan/ActiveWinCursorLine", function(g)
   -- Highlight current line only on focused window
-  aucmd({ "WinEnter", "BufEnter", "InsertLeave" }, {
-    group = g,
-    command = "if ! &cursorline && ! &pvw | setlocal cursorline | endif"
-  })
-  aucmd({ "WinLeave", "BufLeave", "InsertEnter" }, {
-    group = g,
-    command = "if &cursorline && ! &pvw | setlocal nocursorline | endif"
-  })
+  local callback = function()
+    local curwin = vim.api.nvim_get_current_win()
+    for _, w in ipairs(vim.api.nvim_list_wins()) do
+      vim.wo[w].cursorline = w == curwin
+    end
+  end
+  aucmd({ "WinEnter", "BufEnter", "InsertLeave" }, { group = g, callback = callback })
+  aucmd({ "WinLeave", "BufLeave", "InsertEnter" }, { group = g, callback = callback })
 end)
 
 -- goto last location when opening a buffer

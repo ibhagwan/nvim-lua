@@ -55,7 +55,6 @@ M.config = function()
     { "<leader>f", group = "Fzf",                             unpack(opts) },
     { "<leader>F", group = "Telescope",                       unpack(opts) },
     { "<leader>h", group = "Gitsigns",                        unpack(opts) },
-    { "<leader>t", group = "Plenary testing",                 unpack(opts) },
     { "<C-\\>",    desc = "Launch scratch terminal",          unpack(opts) },
     { "<A-h>",     desc = "Tmux-aware win left",              unpack(opts) },
     { "<A-l>",     desc = "Tmux-aware win right",             unpack(opts) },

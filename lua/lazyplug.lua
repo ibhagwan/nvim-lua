@@ -29,7 +29,7 @@ lazy.setup("plugins", {
     -- use the 'dev' property individually instead
     -- patterns = { "ibhagwan" },
   },
-  install = { colorscheme = { "nightfly", "lua-embark" } },
+  install = { colorscheme = { "default" } },
   checker = { enabled = false },          -- don't auto-check for plugin updates
   change_detection = { enabled = false }, -- don't auto-check for config updates
   ui = {
