@@ -128,8 +128,7 @@ map_fzf("n", "<leader>fo", "colorschemes", {
 map_fzf("n", "<leader>lt", "treesitter", { desc = "treesitter symbols (buffer)" })
 map_fzf("n", "<leader>ll", "lsp_finder", { desc = "location finder [LSP]" })
 map_fzf("n", "<leader>lr", "lsp_references", { desc = "references [LSP]" })
-map_fzf("n", "<leader>ld", "lsp_definitions",
-  { desc = "definitions [LSP]", jump_to_single_result = false })
+map_fzf("n", "<leader>ld", "lsp_definitions", { desc = "definitions [LSP]" })
 map_fzf("n", "<leader>lD", "lsp_declarations", { desc = "declarations [LSP]" })
 map_fzf("n", "<leader>ly", "lsp_typedefs", { desc = "type definitions [LSP]" })
 map_fzf("n", "<leader>lm", "lsp_implementations", { desc = "implementations [LSP]" })
