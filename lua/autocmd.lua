@@ -49,6 +49,8 @@ augroup("ibhagwan/StatusLineColors", function(g)
   aucmd("ColorScheme", {
     group = g,
     callback = function(_)
+      -- workaround for messed up block cursor on blink.sh
+      vim.api.nvim_set_hl(0, "TermCursor", { default = false, reverse = true })
       -- fix 'listchars' highlight on nightfly
       if vim.g.colors_name == "nightfly" or vim.cmd.colorscheme("moonfly") then
         vim.api.nvim_set_hl(0, "Whitespace", { default = false, link = "NonText" })

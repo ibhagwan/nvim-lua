@@ -30,7 +30,9 @@ local M = {
       ["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback" },
       ["<S-up>"] = { "scroll_documentation_up", "fallback" },
       ["<S-down>"] = { "scroll_documentation_down", "fallback" },
-      cmdline = {
+    },
+    cmdline = {
+      keymap = {
         ["<CR>"] = { "accept", "fallback" },
         ["<Esc>"] = { "hide", "fallback" },
         ["<Tab>"] = { "select_next", "fallback" },

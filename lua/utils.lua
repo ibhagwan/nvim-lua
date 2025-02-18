@@ -6,31 +6,12 @@ function _G.dump(...)
   print(unpack(objects))
 end
 
-local uv = vim.uv or vim.loop
-
 local DEV_DIR = "$HOME/Sources/nvim"
 
 local M = {}
 
-M.__HAS_NVIM_010 = vim.fn.has("nvim-0.10") == 1
 M.__HAS_NVIM_011 = vim.fn.has("nvim-0.11") == 1
-M.IS_WINDOWS = vim.fn.has("win32") == 1 or vim.fn.has("win64") == 1
-
--- muscle memory: switch Telescope<->fzf-lua binds
--- while I'm actively developing fzf-lua for windows
-M.SWITCH_TELE = M.IS_WINDOWS
-
-M._if_win = function(a, b)
-  if M.IS_WINDOWS then
-    return a
-  else
-    return b
-  end
-end
-
-M._if_win_fs_norm = function(a, b)
-  return M._if_win(vim.fs.normalize(a), b or a)
-end
+M.__IS_WIN = vim.fn.has("win32") == 1 or vim.fn.has("win64") == 1
 
 local fast_event_aware_notify = function(msg, level, opts)
   if vim.in_fast_event() then
@@ -55,21 +36,26 @@ function M.err(msg)
 end
 
 function M.is_root()
-  return not M.IS_WINDOWS and uv.getuid() == 0
+  return not M.__IS_WIN and vim.uv.getuid() == 0
 end
 
 function M.is_darwin()
-  return uv.os_uname().sysname == "Darwin"
+  return vim.uv.os_uname().sysname == "Darwin"
 end
 
 function M.is_NetBSD()
-  return uv and uv.os_uname().sysname == "NetBSD"
+  return vim.uv.os_uname().sysname == "NetBSD"
 end
 
+function M.is_iSH()
+  return vim.uv.os_uname().release:match("%-ish$") ~= nil
+end
+
+M.USE_SNACKS = M.__IS_WIN or M.is_iSH()
 M.USE_BLINK_CMP = vim.fn.executable("cargo") == 1 and not M.is_NetBSD()
 
 function M.is_dev(path)
-  return uv.fs_stat(string.format("%s/%s", vim.fn.expand(DEV_DIR), path)) ~= nil
+  return vim.uv.fs_stat(string.format("%s/%s", vim.fn.expand(DEV_DIR), path)) ~= nil
 end
 
 function M.shell_error()
@@ -105,7 +91,7 @@ function M.set_cwd(pwd)
     local parent = vim.fn.expand("%:h")
     pwd = M.git_root(parent, true) or parent
   end
-  if uv.fs_stat(pwd) then
+  if vim.uv.fs_stat(pwd) then
     vim.cmd("cd " .. pwd)
     M.info(("pwd set to %s"):format(vim.fn.shellescape(pwd)))
   else
@@ -351,9 +337,9 @@ M.reload_config = function()
   local ft = vim.bo.filetype
   vim.tbl_filter(function(s)
     for _, e in ipairs({ "vim", "lua" }) do
-      if ft and #ft > 0 and M._if_win_fs_norm(s):match(("/%s.%s"):format(ft, e)) then
+      if ft and #ft > 0 and vim.fs.normalize(s):match(("/%s.%s"):format(ft, e)) then
         local file = vim.fn.expand(s:match("[^: ]*$"))
-        vim.cmd("source " .. M._if_win(vim.fn.shellescape(file), file))
+        vim.cmd.source(file)
         M.warn("RESOURCED " .. vim.fn.fnamemodify(file, ":."))
         return s
       end
@@ -444,7 +430,7 @@ M.dap_pick_exec = function()
   return coroutine.create(function(dap_co)
     local dap_abort = function() coroutine.resume(dap_co, require("dap").ABORT) end
     local dap_run = function(exec)
-      if type(exec) == "string" and uv.fs_stat(exec) then
+      if type(exec) == "string" and vim.uv.fs_stat(exec) then
         coroutine.resume(dap_co, exec)
       else
         if exec ~= "" then
@@ -454,7 +440,7 @@ M.dap_pick_exec = function()
       end
     end
     fzf.files({
-      cwd = uv.cwd(),
+      cwd = vim.uv.cwd(),
       -- cwd_header = true,
       -- cwd_prompt = false,
       -- prompt = "DAP: Select Executable> ",

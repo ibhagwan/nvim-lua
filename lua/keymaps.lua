@@ -1,7 +1,13 @@
 local map = vim.keymap.set
+local utils = require("utils")
 
-map("", "<leader>R", require("utils").reload_config,
-  { silent = true, desc = "reload nvim configuration" })
+map("", "<leader>R", utils.reload_config, { silent = true, desc = "reload nvim configuration" })
+
+map("", "<leader>r", function()
+  vim.api.nvim_exec2("update", {})
+  vim.api.nvim_exec2("so %", {})
+  utils.info(string.format("Sourced '%s'", vim.fn.expand("%")))
+end, { silent = true, desc = "source current file" })
 
 -- Use ':Grep' or ':LGrep' to grep into quickfix|loclist
 -- without output or jumping to first match
@@ -36,7 +42,7 @@ vim.cmd([[
 
 -- root doesn't use plugins, use builtin FZF
 if require "utils".is_root() then
-  vim.g.fzf_layout = { window = { ["width"] = 0.9, height = 0.9 } }
+  -- vim.g.fzf_layout = { window = { ["width"] = 0.9, height = 0.6 } }
   map("n", "<C-p>", "<cmd>FZF<CR>", { desc = "FZF" })
 end
 

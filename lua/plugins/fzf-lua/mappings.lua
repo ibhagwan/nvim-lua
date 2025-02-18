@@ -1,162 +1,3 @@
-local utils = require("utils")
-
-local map_fzf = function(mode, key, f, options, buffer)
-  local desc = nil
-  if type(options) == "table" then
-    desc = options.desc
-    options.desc = nil
-  elseif type(options) == "function" then
-    desc = options().desc
-  end
-
-  if utils.SWITCH_TELE then
-    for _, k in ipairs({ "f", "l", "g" }) do
-      key = key:gsub("<leader>" .. k, "<leader>" .. string.upper(k))
-    end
-    for _, k in ipairs({ "<F1>", "<c-P>", "<c-K>" }) do
-      if key == k then
-        key = "<leader>" .. k
-      end
-    end
-    -- remap buffers
-    if key == "<leader>," then
-      key = "<leader>;"
-    end
-  end
-
-  local rhs = function()
-    local fzf_lua = require("fzf-lua")
-    local custom = require("plugins.fzf-lua.cmds")
-    -- use deepcopy so options ref isn't saved in the mapping
-    -- as this can create weird issues, for example, `lgrep_curbuf`
-    -- saving the filename in between executions
-    if custom[f] then
-      custom[f](options and vim.deepcopy(options) or {})
-    else
-      fzf_lua[f](options and vim.deepcopy(options) or {})
-    end
-  end
-
-  local map_options = {
-    silent = true,
-    buffer = buffer,
-    desc   = desc or string.format("FzfLua %s", f),
-  }
-
-  vim.keymap.set(mode, key, rhs, map_options)
-end
-
--- non "<leader>f" keys
-map_fzf("n", "<leader>,", "buffers", { desc = "Fzf buffers" })
-map_fzf("n", "<F1>", "help_tags", { desc = "help tags" })
-map_fzf("n", "<c-P>", "files", { desc = "find files" })
-map_fzf("n", "<c-K>", "zoxide", { desc = "zoxide" })
-
-map_fzf("n", "<leader>fp", "files", {
-  desc = "plugin files",
-  prompt = "Plugins❯ ",
-  cwd = vim.fn.stdpath "data" .. "/lazy"
-})
-
--- only fzf
-map_fzf("n", "<leader>fP", "profiles", { desc = "fzf-lua profiles" })
-map_fzf("n", "<leader>f0", "tmux_buffers", { desc = "tmux paste buffers" })
-
--- same as tele
-map_fzf("n", "<leader>f?", "builtin", { desc = "builtin commands" })
-map_fzf("n", "<leader>ff", "resume", { desc = "resume" })
-map_fzf("n", "<leader>fF", "resume", { desc = "resume" })
-map_fzf("n", "<leader>fm", "marks", { desc = "marks" })
-map_fzf("n", "<leader>fM", "man_pages", { desc = "man pages" })
-map_fzf("n", "<leader>fx", "commands", { desc = "commands" })
-map_fzf("n", "<leader>f:", "command_history", { desc = "command history" })
-map_fzf("n", "<leader>f/", "search_history", { desc = "search history" })
-map_fzf("n", [[<leader>f"]], "registers", { desc = "registers" })
-map_fzf("n", "<leader>fk", "keymaps", { desc = "keymaps" })
-map_fzf("n", "<leader>fz", "spell_suggest", { desc = "spell suggestions" })
-map_fzf("n", "<leader>fT", "tags", { desc = "tags (project)" })
-map_fzf("n", "<leader>ft", "btags", { desc = "tags (buffer)" })
-
-map_fzf("n", "<leader>fr", "grep", { desc = "grep string (prompt)" })
-map_fzf("n", "<leader>fR", "grep", { desc = "grep string resume", resume = true })
-map_fzf("n", "<leader>fw", "grep_cword", { desc = "grep <word> (project)" })
-map_fzf("n", "<leader>fW", "grep_cWORD", { desc = "grep <WORD> (project)" })
-map_fzf("n", "<leader>fv", "grep_visual", { desc = "grep visual selection" })
-map_fzf("v", "<leader>fv", "grep_visual", { desc = "grep visual selection" })
-map_fzf("n", "<leader>fb", "blines", { desc = "fuzzy buffer lines" })
-map_fzf("n", "<leader>fB", "lgrep_curbuf", { desc = "live grep (buffer)" })
-map_fzf("n", "<leader>fl", "live_grep", { desc = "live grep (project)" })
-map_fzf("n", "<leader>fL", "live_grep", { desc = "live grep resume", resume = true })
-
-map_fzf("n", "<leader>f3", "blines", function()
-  return {
-    desc     = "blines <word>",
-    fzf_opts = { ["--query"] = vim.fn.expand("<cword>") }
-  }
-end)
-map_fzf("n", "<leader>f8", "grep_curbuf", function()
-  return {
-    desc = "grep <word> (buffer)",
-    search = vim.fn.expand("<cword>"),
-  }
-end)
-map_fzf("n", "<leader>f*", "grep_curbuf", function()
-  return {
-    desc = "grep <WORD> (buffer)",
-    search = vim.fn.expand("<cWORD>")
-  }
-end)
-map_fzf("n", "<leader>fH", "oldfiles", { desc = "file history (all)" })
-map_fzf("n", "<leader>fh", "oldfiles", function()
-  return {
-    desc = "file history (cwd)",
-    cwd = vim.uv.cwd(),
-    cwd_header = true,
-    cwd_only = true,
-  }
-end)
-
-map_fzf("n", "<leader>fq", "quickfix", { desc = "quickfix list" })
-map_fzf("n", "<leader>fQ", "loclist", { desc = "location list" })
-map_fzf("n", "<leader>fO", "highlights", { desc = "colorscheme highlights" })
-map_fzf("n", "<leader>fo", "colorschemes", {
-  desc = "colorschemes",
-  winopts = { height = 0.45, width = 0.30 },
-})
-
--- LSP
-map_fzf("n", "<leader>lt", "treesitter", { desc = "treesitter symbols (buffer)" })
-map_fzf("n", "<leader>ll", "lsp_finder", { desc = "location finder [LSP]" })
-map_fzf("n", "<leader>lr", "lsp_references", { desc = "references [LSP]" })
-map_fzf("n", "<leader>ld", "lsp_definitions", { desc = "definitions [LSP]" })
-map_fzf("n", "<leader>lD", "lsp_declarations", { desc = "declarations [LSP]" })
-map_fzf("n", "<leader>ly", "lsp_typedefs", { desc = "type definitions [LSP]" })
-map_fzf("n", "<leader>lm", "lsp_implementations", { desc = "implementations [LSP]" })
-map_fzf("n", "<leader>ls", "lsp_document_symbols", { desc = "document symbols [LSP]" })
-map_fzf("n", "<leader>lS", "lsp_workspace_symbols", { desc = "workspace symbols [LSP]" })
-map_fzf("n", "<leader>la", "lsp_code_actions", { desc = "code actions [LSP]" })
-map_fzf("n", "<leader>lg", "diagnostics_document", { desc = "document diagnostics [LSP]" })
-map_fzf("n", "<leader>lG", "diagnostics_workspace", { desc = "workspace diagnostics [LSP]" })
-
--- Git
-map_fzf("n", "<leader>gf", "git_files", { desc = "git ls-files" })
-map_fzf("n", "<leader>gs", "git_status", { desc = "git status" })
-map_fzf("n", "<leader>gB", "git_branches", { desc = "git branches" })
-map_fzf("n", "<leader>gt", "git_tags", { desc = "git tags" })
-map_fzf("n", "<leader>gC", "git_commits", { desc = "git commits (project)" })
-map_fzf({ "n", "v" }, "<leader>gc", "git_bcommits", { desc = "git commits (buffer)" })
--- Full screen git status
-map_fzf("n", "<leader>gS", "git_status_tmuxZ", {
-  desc = "git status (fullscreen)",
-  winopts = {
-    fullscreen = true,
-    preview = {
-      vertical = "down:70%",
-      horizontal = "right:70%",
-    }
-  }
-})
-
 -- yadm repo
 local yadm_git_opts = {
   cwd_header = false,
@@ -173,31 +14,84 @@ local yadm_grep_opts = {
   rg_glob = false, -- this isn't `rg`
 }
 
-map_fzf("n", "<leader>yf", "git_files",
-  vim.tbl_extend("force", yadm_git_opts,
-    { desc = "yadm ls-files", prompt = "YadmFiles> " }))
-map_fzf("n", "<leader>yg", "grep_project",
-  vim.tbl_extend("force", yadm_grep_opts, { desc = "yadm grep" }))
-map_fzf("n", "<leader>yl", "live_grep",
-  vim.tbl_extend("force", yadm_grep_opts, { desc = "yadm live grep" }))
-map_fzf("n", "<leader>yB", "git_branches",
-  vim.tbl_extend("force", yadm_git_opts,
-    { desc = "yadm branches", prompt = "YadmBranches> " }))
-map_fzf("n", "<leader>yC", "git_commits",
-  vim.tbl_extend("force", yadm_git_opts,
-    { desc = "yadm commits (project)", prompt = "YadmCommits> " }))
-map_fzf({ "n", "v" }, "<leader>yc", "git_bcommits",
-  vim.tbl_extend("force", yadm_git_opts,
-    { desc = "yadm commits (buffer)", prompt = "YadmBCommits> " }))
-
-map_fzf("n", "<leader>ys", "git_status",
-  vim.tbl_extend("force", yadm_git_opts,
-    { desc = "yadm status", cmd = "git status -s", prompt = "YadmStatus> " }))
-
-map_fzf("n", "<leader>yS", "git_status_tmuxZ",
-  vim.tbl_extend("force", yadm_git_opts,
-    {
-      desc = "yadm status (fullscreen)",
+local keys = {
+  ---@format disable
+  { "<leader>,", function() require "fzf-lua".buffers() end, desc = "Buffers" },
+  { "<leader>f?", function() require "fzf-lua".builtin() end, desc = "FzfLua Builtins" },
+  { "<leader>fP", function() require "fzf-lua".profiles() end, desc = "FzfLua Profiles" },
+  { "<leader>f/", function() require "fzf-lua".search_history() end, desc = "Command History" },
+  { "<leader>f:", function() require "fzf-lua".command_history() end, desc = "Command History" },
+  { "<leader>fx", function() require "fzf-lua".commands() end, desc = "Commands" },
+  { "<leader>f0", function() require "fzf-lua".tmux_buffers() end, desc = "Tmux Buffers" },
+  { "<F1>", function() require "fzf-lua".helptags() end, desc = "Help Pages" },
+  -- find
+  { "<C-p>", function() require "fzf-lua".files() end, desc = "Find Files" },
+  { "<C-k>", function() require "fzf-lua".zoxide() end, desc = "Zoxide" },
+  { "<leader>fp", function() require "fzf-lua".files({ cwd = vim.fn.stdpath("data") .. "/lazy" }) end, desc = "Find Plugin File" },
+  { "<leader>ff", function() require "fzf-lua".resume() end, desc = "Resume" },
+  { "<leader>fF", function() require "fzf-lua".resume() end, desc = "Resume" },
+  { "<leader>fH", function() require "fzf-lua".oldfiles() end, desc = "Oldfiles (All)" },
+  { "<leader>fh", function() require "fzf-lua".oldfiles({ cwd = vim.uv.cwd(), cwd_header = true, cwd_only = true }) end, desc = "Oldfiles (cwd)" },
+  -- git
+  { "<leader>gf", function() require "fzf-lua".git_files() end, desc = "Find Git Files" },
+  { "<leader>gB", function() require "fzf-lua".git_branches() end, desc = "Git Branches" },
+  { "<leader>gc", function() require "fzf-lua".git_bcommits() end, desc = "Git Log" },
+  { "<leader>gC", function() require "fzf-lua".git_commits() end, desc = "Git Log" },
+  { "<leader>gs", function() require "fzf-lua".git_status() end, desc = "Git Status" },
+  { "<leader>gt", function() require "fzf-lua".git_tags() end, desc = "Git Tags" },
+  { "<leader>gS", function() require "plugins.fzf-lua.cmds".git_status_tmuxZ({
+    winopts = {
+        fullscreen = true,
+        preview = { vertical = "down:70%", horizontal = "right:70%" }
+    }
+  }) end, desc = "Git Status" },
+  -- Grep
+  { "<leader>fl", function() require "fzf-lua".live_grep() end, desc = "Grep" },
+  { "<leader>fB", function() require "fzf-lua".lgrep_curbuf() end, desc = "Buffers Grep" },
+  { "<leader>fw", function() require "fzf-lua".grep_cword() end, desc = "Grep word", mode = { "n", "v" } },
+  { "<leader>fW", function() require "fzf-lua".grep_cWORD() end, desc = "Grep WORD", mode = { "n", "v" } },
+  { "<leader>fv", function() require "fzf-lua".grep_visual() end, desc = "Grep Visual selection", mode = { "n", "v" } },
+  { "<leader>ft", function() require "fzf-lua".btags() end, desc = "Buffer Tags" },
+  { "<leader>fT", function() require "fzf-lua".tags() end, desc = "Tags" },
+  { "<leader>fb", function() require "fzf-lua".blines() end, desc = "Buffer Lines" },
+  { "<leader>f3", function() require "fzf-lua".blines({ fzf_opts = { ["--query"] = vim.fn.expand("<cword>") } }) end, desc = "Buffer Lines (word)" },
+  { "<leader>f8", function() require "fzf-lua".grep_curbuf({ search = vim.fn.expand("<cword>") }) end, desc = "Buffer Grep (word)" },
+  { "<leader>f*", function() require "fzf-lua".grep_curbuf({ search = vim.fn.expand("<cWORD>") }) end, desc = "Buffer Grep (WORD)" },
+  -- search
+  { '<leader>f"', function() require "fzf-lua".registers() end, desc = "Registers" },
+  { "<leader>fa", function() require "fzf-lua".autocmds() end, desc = "Autocmds" },
+  { "<leader>fO", function() require "fzf-lua".highlights() end, desc = "Highlights" },
+  { "<leader>fj", function() require "fzf-lua".jumps() end, desc = "Jumps" },
+  { "<leader>fk", function() require "fzf-lua".keymaps() end, desc = "Keymaps" },
+  { "<leader>fq", function() require "fzf-lua".quickfix() end, desc = "Quickfix List" },
+  { "<leader>fQ", function() require "fzf-lua".loclist() end, desc = "Location List" },
+  { "<leader>fm", function() require "fzf-lua".marks() end, desc = "Marks" },
+  { "<leader>fM", function() require "fzf-lua".manpages() end, desc = "Man Pages" },
+  { "<leader>fo", function() require "fzf-lua".colorschemes({ winopts = { height = 0.45, width = 0.30 } }) end, desc = "Colorschemes" },
+  { "<leader>fz", function() require "fzf-lua".spell_suggest() end, desc = "Zoxide" },
+  -- LSP
+  { "<leader>ll", function() require "fzf-lua".lsp_finder() end, desc = "LSP Finder" },
+  { "<leader>ld", function() require "fzf-lua".lsp_definitions() end, desc = "Goto Definition" },
+  { "<leader>lD", function() require "fzf-lua".lsp_declarations() end, desc = "Goto Declaration" },
+  { "<leader>lr", function() require "fzf-lua".lsp_references() end, nowait = true, desc = "References" },
+  { "<leader>lm", function() require "fzf-lua".lsp_implementations() end, desc = "Goto Implementation" },
+  { "<leader>ly", function() require "fzf-lua".lsp_type_definitions() end, desc = "Goto T[y]pe Definition" },
+  { "<leader>ls", function() require "fzf-lua".lsp_document_symbols() end, desc = "LSP Symbols (buffer)" },
+  { "<leader>lS", function() require "fzf-lua".lsp_workspace_symbols() end, desc = "LSP Symbols (workspace)" },
+  { "<leader>la", function() require "fzf-lua".lsp_code_actions() end, desc = "Code Actions" },
+  { "<leader>lg", function() require "fzf-lua".diagnostics_document() end, desc = "Buffer Diagnostics" },
+  { "<leader>lG", function() require "fzf-lua".diagnostics_workspace() end, desc = "Workspace Diagnostics" },
+  { "<leader>lt", function() require "fzf-lua".treesitter() end, desc = "Treesitter" },
+  -- yadm
+  { "<leader>yf", function() require "fzf-lua".git_files(vim.tbl_extend("force", yadm_git_opts, { prompt = "YadmFiles> " })) end, desc = "Yadm Files" },
+  { "<leader>yb", function() require "fzf-lua".git_branches(vim.tbl_extend("force", yadm_git_opts, { prompt = "YadmBranches> " })) end, desc = "Yadm Branches" },
+  { "<leader>yc", function() require "fzf-lua".git_bcommits(vim.tbl_extend("force", yadm_git_opts, { prompt = "YadmBCommits> " })) end, desc = "Yadm Log" },
+  { "<leader>yC", function() require "fzf-lua".git_commits(vim.tbl_extend("force", yadm_git_opts, { prompt = "YadmCommits> " })) end, desc = "Yadm Log" },
+  { "<leader>yl", function() require "fzf-lua".live_grep(vim.tbl_extend("force", yadm_grep_opts, { prompt = "YadmGrep> " })) end, desc = "Yadm Grep" },
+  { "<leader>ys", function() require "fzf-lua".git_status(vim.tbl_extend("force", yadm_git_opts, {
+    prompt = "YadmStatus> ", cmd = "git status -s"
+  })) end, desc = "Yadm Status" },
+  { "<leader>yS", function() require "plugins.fzf-lua.cmds".git_status_tmuxZ(vim.tbl_extend("force", yadm_git_opts, {
       prompt = "YadmStatus> ",
       cmd = "git -c color.status=false --no-optional-locks status --porcelain=v1",
       winopts = {
@@ -206,5 +100,25 @@ map_fzf("n", "<leader>yS", "git_status_tmuxZ",
           vertical = "down:70%",
           horizontal = "right:70%",
         }
-      }
-    }))
+      } })) end, desc = "Yadm Status" },
+}
+
+return {
+  map = function()
+    for _, m in ipairs(keys) do
+      local key = m[1]
+      if require "utils".USE_SNACKS then
+        key = key:gsub("<leader>,", "<leader>;")
+        for _, k in ipairs({ "<F1>", "<C-p>", "<C-k>" }) do
+          if key == k then key = "<leader>" .. k end
+        end
+        key = key:gsub("<leader>%l", function(x)
+          return x:sub(1, -2) .. x:sub(-1):upper()
+        end)
+      end
+      local opts = vim.deepcopy(m)
+      opts[1], opts[2], opts.mode = nil, nil, nil
+      vim.keymap.set(m.mode or "n", key, m[2], opts)
+    end
+  end
+}

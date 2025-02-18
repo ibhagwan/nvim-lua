@@ -1,4 +1,5 @@
 local keys = {
+  ---@format disable
   { "<leader>;", function() require "snacks".picker.buffers() end, desc = "Buffers" },
   { "<leader>F?", function() require "snacks".picker.pickers() end, desc = "Snacks Pickers" },
   { "<leader>F/", function() require "snacks".picker.search_history() end, desc = "Command History" },
@@ -14,6 +15,7 @@ local keys = {
   { "<leader>Fh", function() require "snacks".picker.recent() end, desc = "Recent" },
   -- git
   { "<leader>Gf", function() require "snacks".picker.git_files() end, desc = "Find Git Files" },
+  { "<leader>GB", function() require "snacks".picker.git_branches() end, desc = "Git Branches" },
   { "<leader>Gc", function() require "snacks".picker.git_log_file() end, desc = "Git Log" },
   { "<leader>GC", function() require "snacks".picker.git_log() end, desc = "Git Log" },
   { "<leader>Gs", function() require "snacks".picker.git_status() end, desc = "Git Status" },
@@ -37,15 +39,32 @@ local keys = {
   { "<leader>Fz", function() require "snacks".picker.spelling() end, desc = "Zoxide" },
   -- LSP
   { "<leader>Ld", function() require "snacks".picker.lsp_definitions() end, desc = "Goto Definition" },
+  { "<leader>LD", function() require "snacks".picker.lsp_declarations() end, desc = "Goto Declaration" },
   { "<leader>Lr", function() require "snacks".picker.lsp_references() end, nowait = true, desc = "References" },
   { "<leader>Lm", function() require "snacks".picker.lsp_implementations() end, desc = "Goto Implementation" },
   { "<leader>Ly", function() require "snacks".picker.lsp_type_definitions() end, desc = "Goto T[y]pe Definition" },
-  { "<leader>Ls", function() require "snacks".picker.lsp_symbols() end, desc = "LSP Symbols" },
-  { "<leader>Lg", function() require "snacks".picker.diagnostics() end, desc = "Diagnostics" },
+  { "<leader>Ls", function() require "snacks".picker.lsp_symbols() end, desc = "LSP Symbols (buffer)" },
+  { "<leader>LS", function() require "snacks".picker.lsp_workspace_symbols() end, desc = "LSP Symbols (workspace)" },
+  { "<leader>Lg", function() require "snacks".picker.diagnostics_buffer() end, desc = "Buffer Diagnostics" },
+  { "<leader>LG", function() require "snacks".picker.diagnostics() end, desc = "Workspace Diagnostics" },
 }
 
-for _, m in ipairs(keys) do
-  local opts = vim.deepcopy(m)
-  opts[1], opts[2], opts.mode = nil, nil, nil
-  vim.keymap.set(m.mode or "n", m[1], m[2], opts)
-end
+return {
+  map = function()
+    for _, m in ipairs(keys) do
+      local key = m[1]
+      if require "utils".USE_SNACKS then
+        key = key:gsub("<leader>;", "<leader>,")
+        for _, k in ipairs({ "<F1>", "<C-p>", "<C-k>" }) do
+          if key:match(k:gsub("%-", "%%-") .. "$") then key = k end
+        end
+        key = key:gsub("<leader>%u", function(x)
+          return x:sub(1, -2) .. x:sub(-1):lower()
+        end)
+      end
+      local opts = vim.deepcopy(m)
+      opts[1], opts[2], opts.mode = nil, nil, nil
+      vim.keymap.set(m.mode or "n", key, m[2], opts)
+    end
+  end
+}

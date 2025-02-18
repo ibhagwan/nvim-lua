@@ -68,7 +68,7 @@ return {
     lazy = false,
     dev = require("utils").is_dev("fzf.vim"),
     -- windows doesn't have fzf runtime plugin
-    dependencies = require("utils")._if_win({ "junegunn/fzf" }, nil),
+    dependencies = require("utils").__IS_WIN and { "junegunn/fzf" } or nil,
   },
   {
     "MeanderingProgrammer/render-markdown.nvim",

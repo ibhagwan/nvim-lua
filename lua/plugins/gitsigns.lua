@@ -21,8 +21,7 @@ M.config = function()
     sign_priority = 4,     -- Lower priorirty means diag signs supercede
     -- Use detached worktrees instead of `yadm`
     -- https://github.com/lewis6991/gitsigns.nvim/pull/600
-    -- yadm           = { enable = not require("utils").IS_WINDOWS and true, },
-    worktrees     = not require("utils").IS_WINDOWS and {
+    worktrees     = not require("utils").__IS_WIN and {
       {
         toplevel = vim.env.HOME,
         gitdir   = vim.env.HOME .. "/dots/.git"

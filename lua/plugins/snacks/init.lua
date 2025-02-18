@@ -4,7 +4,7 @@ local M = {
 }
 
 function M.init()
-  require("plugins.snacks.mappings")
+  require("plugins.snacks.mappings").map()
 end
 
 function M.config()
