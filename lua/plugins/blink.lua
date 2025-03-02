@@ -32,6 +32,11 @@ local M = {
       ["<S-down>"] = { "scroll_documentation_down", "fallback" },
     },
     cmdline = {
+      enabled = true,
+      completion = {
+        menu = { auto_show = true },
+        list = { selection = { preselect = false, auto_insert = true } },
+      },
       keymap = {
         ["<CR>"] = { "accept", "fallback" },
         ["<Esc>"] = { "hide", "fallback" },
