@@ -49,6 +49,8 @@ local custom_settings = {
     -- https://github.com/rust-lang/rust-analyzer/blob/master/docs/user/generated_config.adoc
     settings = {
       ["rust-analyzer"] = {
+        -- Enable all features of a crate
+        cargo = { features = "all" },
         rustfmt = {
           extraArgs = { "+nightly", },
           -- overrideCommand = {
