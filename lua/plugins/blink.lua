@@ -48,6 +48,7 @@ local M = {
     },
     completion = {
       list = { selection = { preselect = false, auto_insert = true } },
+      trigger = { show_in_snippet = false },
       accept = {
         create_undo_point = true,
         auto_brackets = { enabled = true },

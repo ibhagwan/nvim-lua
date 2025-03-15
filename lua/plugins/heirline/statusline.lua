@@ -30,12 +30,13 @@ local ViMode = {
       ["r?"] = { "Cnfirm", "Cn", },
       ["!"]  = { "Shell ", "S", { "DiffAdd", "diffAdded" } },
       nt     = { "Term  ", "T", { "Visual" } },
-      t      = { "Term  ", "T", { "Visual" } },
-      -- t      = { "Term  ", "T", { "DiffAdd", "diffAdded" } },
+      t      = { "Term  ", "T", { "DiffAdd", "diffAdded" } },
+      -- HACK: we add our own "snippet" mode
+      sn     = { "Snip  ", "Sn", { "WildMenu" } },
     },
   },
   init = function(self)
-    self.mode = vim.api.nvim_get_mode().mode
+    self.mode = vim.snippet.active() and "sn" or vim.api.nvim_get_mode().mode
   end,
   provider = function(self)
     return " %5(" .. string.upper(self.modes[self.mode][1]) .. " %)"

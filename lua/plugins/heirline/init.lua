@@ -1,19 +1,11 @@
 local get_colors = function()
   local utils = require("heirline.utils")
-  local is_nightfly = vim.g.colors_name == "nightfly"
   return {
     -- statusline_bg = utils.get_highlight("StatusLine").bg,
     red_fg = utils.get_highlight("ErrorMsg").fg,
-    green_fg = is_nightfly
-        and utils.get_highlight("NightflyTurquoise").fg
-        or utils.get_highlight("diffAdded").fg
-        or utils.get_highlight("Added").fg,
-    yellow_fg = is_nightfly
-        and utils.get_highlight("NightflyYellow").fg
-        or utils.get_highlight("WarningMsg").fg,
-    magenta_fg = is_nightfly
-        and utils.get_highlight("NightflyViolet").fg
-        or utils.get_highlight("WarningMsg").fg,
+    green_fg = utils.get_highlight("diffAdded").fg or utils.get_highlight("Added").fg,
+    yellow_fg = utils.get_highlight("NightflyYellow").fg or utils.get_highlight("WarningMsg").fg,
+    magenta_fg = utils.get_highlight("NightflyViolet").fg or utils.get_highlight("WarningMsg").fg,
   }
 end
 return {
