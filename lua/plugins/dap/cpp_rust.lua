@@ -47,8 +47,8 @@ dap.configurations.c = {
     name = "[CPPDBG] Attach to process",
     type = "cppdbg",
     request = "attach",
-    program = utils.dap_pick_exec,
     processId = utils.dap_pick_process,
+    program = utils.dap_pick_exec,
     args = {},
   },
   {

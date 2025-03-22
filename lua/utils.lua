@@ -431,6 +431,8 @@ M.dap_pick_exec = function()
     local dap_abort = function() coroutine.resume(dap_co, require("dap").ABORT) end
     local dap_run = function(exec)
       if type(exec) == "string" and vim.uv.fs_stat(exec) then
+        -- Make full path
+        exec = vim.fn.fnamemodify(exec, ":p")
         coroutine.resume(dap_co, exec)
       else
         if exec ~= "" then

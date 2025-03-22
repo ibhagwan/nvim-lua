@@ -1,5 +1,8 @@
 local keys = {
   ---@format disable
+  -- Image
+  { "K", function() require "snacks".image.hover() end, desc = "Image Hover" },
+  -- Picker
   { "<leader>;", function() require "snacks".picker.buffers() end, desc = "Buffers" },
   { "<leader>F?", function() require "snacks".picker.pickers() end, desc = "Snacks Pickers" },
   { "<leader>F/", function() require "snacks".picker.search_history() end, desc = "Command History" },

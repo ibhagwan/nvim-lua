@@ -1,6 +1,7 @@
 local M = {
   "folke/snacks.nvim",
   enabled = true,
+  event = "VeryLazy",
 }
 
 function M.init()
@@ -16,6 +17,10 @@ function M.config()
   -- layouts.default.layout[1].width = 0.40    -- main win width
   -- layouts.vertical.layout[3].height = 0.45  -- prev win height
   require("snacks").setup({
+    ---@type snacks.image.Config
+    image = {
+      enabled = true,
+    },
     ---@type snacks.picker.Config
     picker = {
       ui_select = false,

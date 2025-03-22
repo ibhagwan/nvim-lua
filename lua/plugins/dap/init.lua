@@ -107,8 +107,9 @@ M.init = function()
     end,
     { silent = true, desc = "DAP toggle UI" })
   vim.keymap.set({ "n", "v" },
-    -- `<S-F8>`, test by pressing `<C-v><S-F8>` in INSERT mode
-    "<F20>",
+    -- Test by pressing `<C-v><S-F8>` in INSERT mode
+    -- "<F20>",
+    "<S-F8>",
     function()
       require "dap"; require "plugins.dap.ui".toggle(true, true)
     end,

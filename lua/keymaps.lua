@@ -100,6 +100,10 @@ for k, v in pairs({
   map("n", "]" .. k:upper(), "<cmd>" .. v.cmd .. "last<CR>", { desc = "Last " .. v.desc })
 end
 
+-- Tab split acts similar to tmux <prefix-z>
+map({ "n", "v" }, "<leader>ts", [[<cmd>tab split<CR>]], { desc = "tab split" })
+map({ "n", "v" }, "<leader>tz", [[<cmd>tab split<CR>]], { desc = "tab split" })
+
 -- Quickfix|loclist toggles
 map("n", "<leader>q", "<cmd>lua require'utils'.toggle_qf('q')<CR>",
   { desc = "toggle quickfix list" })
