@@ -29,11 +29,11 @@ return {
       })
     end
     vim.tbl_map(function(c)
-      if c.supports_method("textDocument/rangeFormatting", { bufnr = e.buf }) then
+      if c:supports_method("textDocument/rangeFormatting", { bufnr = e.buf }) then
         lsp_keymap_set("x", c)
         lsp_has_formatting = true
       end
-      if c.supports_method("textDocument/formatting", { bufnr = e.buf }) then
+      if c:supports_method("textDocument/formatting", { bufnr = e.buf }) then
         lsp_keymap_set("n", c)
         lsp_has_formatting = true
       end

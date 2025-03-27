@@ -523,9 +523,22 @@ function M.input(prompt)
   return ok and res or nil
 end
 
-function M.lsp_get_clients(...)
+function M.lsp_get_clients(opts)
   ---@diagnostic disable-next-line: deprecated
-  return M.__HAS_NVIM_011 and vim.lsp.get_clients(...) or vim.lsp.get_active_clients(...)
+  if M.__HAS_NVIM_011 then
+    return vim.lsp.get_clients(opts)
+  end
+  ---@diagnostic disable-next-line: deprecated
+  local clients = opts.bufnr and vim.lsp.buf_get_clients(opts.bufnr)
+      or opts.id and { vim.lsp.get_client_by_id(opts.id) }
+      or vim.lsp.get_clients(opts)
+  return vim.tbl_map(function(client)
+    return setmetatable({
+      supports_method = function(_, ...) return client.supports_method(...) end,
+      request = function(_, ...) return client.request(...) end,
+      request_sync = function(_, ...) return client.request_sync(...) end,
+    }, { __index = client })
+  end, clients)
 end
 
 return M
