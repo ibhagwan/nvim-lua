@@ -16,12 +16,29 @@ M._close = function()
   end
 end
 
-M._toggle = function(open_args)
+M._toggle = function(git_args)
   if M._is_open() then
     return M._close()
   else
-    open_args = open_args or ""
-    vim.cmd("DiffviewOpen" .. open_args)
+    git_args = git_args or {}
+    local git_cmd = { "git" }
+    for _, arg in ipairs(git_args) do
+      table.insert(git_cmd, arg:match("%$") and vim.fn.expand(arg) or arg)
+    end
+    table.insert(git_cmd, "status")
+    local ret = vim.system(git_cmd):wait()
+    if #ret.stderr > 0 then
+      utils.warn(ret.stderr)
+      return
+    end
+    local no_changes = ret.stdout:match("nothing to commit")
+    local diffview_cmd = { "DiffviewOpen" }
+    -- DiffviewOpen needs the args to be in the format of key=val
+    for i = 1, #git_args, 2 do
+      table.insert(diffview_cmd, string.format("%s=%s", git_args[i], git_args[i + 1]))
+    end
+    table.insert(diffview_cmd, no_changes and "HEAD~" or "HEAD")
+    vim.cmd(table.concat(diffview_cmd, " "))
     return 1
   end
 end
@@ -38,7 +55,11 @@ M.init = function()
   vim.keymap.set({ "n", "x" }, "<leader>yd",
     function()
       if
-          M._toggle(" -c=status.showUntrackedFiles=no --git-dir=$HOME/dots/.git -C=$HOME") == 1
+          M._toggle({
+            "-c", "status.showUntrackedFiles=no",
+            "--git-dir", "$HOME/dots/.git",
+            "-C", "$HOME",
+          }) == 1
       then
         M._tmux_was_unzoomed = utils.tmux_zoom()
       end

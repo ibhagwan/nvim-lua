@@ -85,7 +85,7 @@ o.listchars      = {
 o.showbreak      = "↪ "
 
 -- show menu even for one item do not auto select/insert
-o.completeopt    = { "noinsert", "menuone", "noselect" }
+o.completeopt    = { "noinsert", "menuone", "noselect", utils.__HAS_NVIM_011 and "fuzzy" or nil }
 o.wildmode       = "longest:full,full"
 o.wildoptions    = "pum"   -- Show completion items using the pop-up-menu (pum)
 -- o.pumblend         = 15    -- completion menu transparency

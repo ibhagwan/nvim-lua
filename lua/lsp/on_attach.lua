@@ -79,11 +79,13 @@ local on_attach = function(client, bufnr)
 
   -- neovim PR #16057
   -- https://github.com/neovim/neovim/pull/16057
-  local winopts = "{ float =  { border = 'rounded' } }"
-  map("n", "[d", ("<cmd>lua vim.diagnostic.goto_prev(%s)<CR>"):format(winopts),
-    { desc = "previous diagnostic [LSP]" })
-  map("n", "]d", ("<cmd>lua vim.diagnostic.goto_next(%s)<CR>"):format(winopts),
-    { desc = "next diagnostic [LSP]" })
+  if not require("utils").__HAS_NVIM_011 then
+    local winopts = "{ float =  { border = 'rounded' } }"
+    map("n", "[d", ("<cmd>lua vim.diagnostic.goto_prev(%s)<CR>"):format(winopts),
+      { desc = "previous diagnostic [LSP]" })
+    map("n", "]d", ("<cmd>lua vim.diagnostic.goto_next(%s)<CR>"):format(winopts),
+      { desc = "next diagnostic [LSP]" })
+  end
   map("n", "<leader>lc", "<cmd>lua vim.diagnostic.reset()<CR>",
     { desc = "clear diagnostics [LSP]" })
   map("n", "<leader>l?",

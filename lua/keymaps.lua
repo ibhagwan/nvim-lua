@@ -89,10 +89,10 @@ map("n", "<leader><Right>", "<cmd>lua require'utils'.resize(true,   5)<CR>",
 
 -- Navigate buffers|tabs|quickfix|loclist
 for k, v in pairs({
-  b = { cmd = "b", desc = "buffer" },
   t = { cmd = "tab", desc = "tab" },
-  q = { cmd = "c", desc = "quickfix" },
-  l = { cmd = "l", desc = "location" },
+  b = not utils.__HAS_NVIM_011 and { cmd = "b", desc = "buffer" } or nil,
+  q = not utils.__HAS_NVIM_011 and { cmd = "c", desc = "quickfix" } or nil,
+  l = not utils.__HAS_NVIM_011 and { cmd = "l", desc = "location" } or nil,
 }) do
   map("n", "[" .. k:lower(), "<cmd>" .. v.cmd .. "previous<CR>", { desc = "Previous " .. v.desc })
   map("n", "]" .. k:lower(), "<cmd>" .. v.cmd .. "next<CR>", { desc = "Next " .. v.desc })
