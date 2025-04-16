@@ -39,7 +39,7 @@ if utils.is_root() then
   end)
 end
 
-augroup("ibhagwan/StatusLineColors", function(g)
+augroup("ibhagwan/ColorScheme", function(g)
   aucmd("ColorSchemePre", {
     group = g,
     callback = function(_)
@@ -58,12 +58,6 @@ augroup("ibhagwan/StatusLineColors", function(g)
         vim.api.nvim_set_hl(0, "WinSeparator", { default = false, link = "FloatBorder" })
       elseif vim.g.colors_name:match("tokyonight") then
         vim.api.nvim_set_hl(0, "WinSeparator", { default = false, link = "FloatBorder" })
-      end
-      -- update heirline highlights, only do this after
-      -- statusline is loaded or we lose the :intro screen
-      if package.loaded.heirline then
-        local get_colors = require("plugins.heirline")._get_colors
-        require("heirline.utils").on_colorscheme(get_colors)
       end
       -- fzf-lua
       if type(vim.g.fzf_colors) == "table" then

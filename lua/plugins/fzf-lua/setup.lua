@@ -200,7 +200,7 @@ local default_opts = {
         preview  = { vertical = "down:70%" }
       },
       previewer = vim.fn.executable("delta") == 1 and "codeaction_native" or nil,
-      preview_pager = "delta --width=$COLUMNS --hunk-header-style='omit' --file-style='omit'",
+      preview_pager = "delta --width=$COLUMNS --hunk-header-style=omit --file-style=omit",
     },
   },
   diagnostics = { file_icons = false, path_shorten = 1 },

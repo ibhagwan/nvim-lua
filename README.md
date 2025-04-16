@@ -79,29 +79,25 @@
   tested fuzzy finder, lua plugin that does pretty much everything, written by
   yours truly
 
-- [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim): fuzzy
-  search framework for searching project files, buffers, ripgrep and much more
+- [snacks.nvim](https://github.com/folke/snacks.nvim): amazing set of plugins
+  from the great @folke, image previews using the kitty protocol, picker to rival
+  no less than our own fzf-lua :-)
 
 - [oil.nvim](https://github.com/stevearc/oil.nvim): file explorer as a neovim
   buffer which also replaces netrw
 
 ### Misc
 
+- [mini.nvim](https://github.com/echasnovski/mini.nvim): a must have plugin from
+  the great @echasnovski, used for statusline, indent lines, surround and much more
+
 - [which-key](https://github.com/folke/which-key.nvim): a must plugin in every
   setup, when leader key (and some built-ins) sequence is pressed and times out
   which-key will generate a help window with your keybinds and also let you
   continue the sequence at your own pace
 
-- [toggleterm.nvim](https://github.com/akinsho/toggleterm.nvim): better term and
-  REPLs (use `gx` and `gxx` to send REPLs to an interpreter)
-
 - [previm](https://github.com/previm/previm): live preview markdown files in
   the browser with `<space>r`
-
-### Appearence
-
-- [heirline.nvim](https://github.com/rebelot/heirline.nvim):
-  DIY status line plugin, semi-minimalistic setup.
 
 - [render-markdown.nvim](https://github.com/MeanderingProgrammer/render-markdown.nvim):
   magical plugin rendering markdown files inside neovim

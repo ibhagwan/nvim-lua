@@ -315,15 +315,15 @@ M.reload_config = function()
         vim.o.eventignore = save_ei
       end
     },
-    { "^autocmd$",       fn = function() require("autocmd") end },
-    { "^keymaps$",       fn = function() require("keymaps") end },
+    { "^autocmd$",             fn = function() require("autocmd") end },
+    { "^keymaps$",             fn = function() require("keymaps") end },
     { "^utils$" },
     { "^term$" },
     { mod = "ts%-vimdoc" },
-    { mod = "smartyank", fn = function() require("smartyank") end },
-    { mod = "fzf%-lua",  fn = function() require("plugins.fzf-lua.setup").setup() end },
-    { mod = "heirline",  fn = function() require("plugins.heirline").config() end },
-    { mod = "dap%.",     fn = function() require("plugins.dap").config() end },
+    { mod = "smartyank",       fn = function() require("smartyank") end },
+    { mod = "fzf%-lua",        fn = function() require("plugins.fzf-lua.setup").setup() end },
+    { mod = "mini.statusline", fn = function() require("plugins.mini.statusline").setup() end },
+    { mod = "dap%.",           fn = function() require("plugins.dap").config() end },
     -- {
     --   mod = "snacks",
     --   fn = function()

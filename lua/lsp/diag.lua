@@ -2,7 +2,7 @@
 vim.diagnostic.config({
   underline = true,
   update_in_insert = false,
-  virtual_lines = require("utils").__HAS_NVIM_011 and { current_line = true } or nil,
+  -- virtual_lines = require("utils").__HAS_NVIM_011 and { current_line = true } or nil,
   virtual_text = {
     spacing = 4,
     source = "if_many",

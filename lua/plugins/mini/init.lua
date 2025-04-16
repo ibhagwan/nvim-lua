@@ -22,6 +22,7 @@ end
 function M.config()
   require("plugins.mini.surround")
   require("plugins.mini.indentscope")
+  require("plugins.mini.statusline").setup()
   require("mini.ai").setup()
   require("mini.test").setup({
     collect = {

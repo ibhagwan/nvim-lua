@@ -35,7 +35,7 @@ local keys = {
   -- git
   { "<leader>gf", function() require "fzf-lua".git_files() end, desc = "Find Git Files" },
   { "<leader>gB", function() require "fzf-lua".git_branches() end, desc = "Git Branches" },
-  { "<leader>gc", function() require "fzf-lua".git_bcommits() end, desc = "Git Log" },
+  { "<leader>gc", function() require "fzf-lua".git_bcommits() end, desc = "Git Log", mode = { "n",  "v" } },
   { "<leader>gC", function() require "fzf-lua".git_commits() end, desc = "Git Log" },
   { "<leader>gs", function() require "fzf-lua".git_status() end, desc = "Git Status" },
   { "<leader>gt", function() require "fzf-lua".git_tags() end, desc = "Git Tags" },
@@ -70,7 +70,7 @@ local keys = {
   { "<leader>fo", function() require "fzf-lua".colorschemes({ winopts = { height = 0.45, width = 0.30 } }) end, desc = "Colorschemes" },
   { "<leader>fz", function() require "fzf-lua".spell_suggest() end, desc = "Zoxide" },
   -- LSP
-  { "<leader>ll", function() require "fzf-lua".lsp_finder() end, desc = "LSP Finder" },
+  { "<leader>lf", function() require "fzf-lua".lsp_finder() end, desc = "LSP Finder" },
   { "<leader>ld", function() require "fzf-lua".lsp_definitions() end, desc = "Goto Definition" },
   { "<leader>lD", function() require "fzf-lua".lsp_declarations() end, desc = "Goto Declaration" },
   { "<leader>lr", function() require "fzf-lua".lsp_references() end, nowait = true, desc = "References" },
@@ -85,7 +85,7 @@ local keys = {
   -- yadm
   { "<leader>yf", function() require "fzf-lua".git_files(vim.tbl_extend("force", yadm_git_opts, { prompt = "YadmFiles> " })) end, desc = "Yadm Files" },
   { "<leader>yb", function() require "fzf-lua".git_branches(vim.tbl_extend("force", yadm_git_opts, { prompt = "YadmBranches> " })) end, desc = "Yadm Branches" },
-  { "<leader>yc", function() require "fzf-lua".git_bcommits(vim.tbl_extend("force", yadm_git_opts, { prompt = "YadmBCommits> " })) end, desc = "Yadm Log" },
+  { "<leader>yc", function() require "fzf-lua".git_bcommits(vim.tbl_extend("force", yadm_git_opts, { prompt = "YadmBCommits> " })) end, desc = "Yadm Log", mode = { "n",  "v" } },
   { "<leader>yC", function() require "fzf-lua".git_commits(vim.tbl_extend("force", yadm_git_opts, { prompt = "YadmCommits> " })) end, desc = "Yadm Log" },
   { "<leader>yl", function() require "fzf-lua".live_grep(vim.tbl_extend("force", yadm_grep_opts, { prompt = "YadmGrep> " })) end, desc = "Yadm Grep" },
   { "<leader>ys", function() require "fzf-lua".git_status(vim.tbl_extend("force", yadm_git_opts, {
