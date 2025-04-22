@@ -1,9 +1,19 @@
 local fzf_lua = require("fzf-lua")
 
-local img_prev_bin = vim.fn.executable("ueberzug") == 1 and { "ueberzug" }
-    or vim.fn.executable("chafa") == 1 and { "chafa", "--format=symbols" }
-    or vim.fn.executable("viu") == 1 and { "viu", "-b" }
-    or nil
+local img_prev_bin = (function()
+  -- (1) Load the snacks image package directly so we don't have to wait for
+  -- a file with images for fzf-lua snacks.image preview integration to work
+  -- (2) If our terminal supports the kitty protocol set our image previewer
+  -- to `nil` as it would be prioritized by fzf-lua over snacks.image
+  if require("snacks.image").supports_terminal() then
+    return nil
+  else
+    return vim.fn.executable("ueberzug") == 1 and { "ueberzug" }
+        or vim.fn.executable("chafa") == 1 and { "chafa", "--format=symbols" }
+        or vim.fn.executable("viu") == 1 and { "viu", "-b" }
+        or nil
+  end
+end)()
 
 -- return first matching highlight or nil
 local function hl_match(t)
