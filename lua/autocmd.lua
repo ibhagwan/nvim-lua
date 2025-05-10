@@ -298,3 +298,13 @@ augroup("ibhagwan/GQFormatter", function(g)
       end,
     })
 end)
+
+augroup("ibhagwan/LspAttach", function(g)
+  aucmd({ "LspAttach" },
+    {
+      group = g,
+      callback = function(_)
+        require("lsp.keymaps").setup()
+      end,
+    })
+end)

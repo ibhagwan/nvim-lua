@@ -1,34 +1,36 @@
+local utils = require("utils")
+
 return {
   {
     "williamboman/mason-lspconfig.nvim",
+    enabled = utils.__HAS_NVIM_011,
+    event = { "VeryLazy", "BufReadPre" },
+    dependencies = {
+      { "neovim/nvim-lspconfig" },
+      { "mason-org/mason.nvim" },
+      { "j-hui/fidget.nvim" },
+    },
     config = function()
+      -- Add the same capabilities to ALL server configurations.
+      -- Refer to :h vim.lsp.config() for more information.
+      vim.lsp.config("*", {
+        capabilities = vim.lsp.protocol.make_client_capabilities()
+      })
+      require("lsp.diag")
+      require("lsp.icons")
+      require("fidget").setup({})
+      require("mason").setup()
       require("mason-lspconfig").setup({
-        ensure_installed = not require("utils").is_NetBSD() and { "lua_ls" } or nil,
+        ensure_installed = not utils.is_NetBSD()
+            and not utils.is_iSH()
+            and { "lua_ls" }
+            or nil,
       })
     end,
   },
   {
     "mfussenegger/nvim-jdtls",
     ft = "java",
-  },
-  {
-    "neovim/nvim-lspconfig",
-    event = "BufReadPre",
-    dependencies = {
-      {
-        "j-hui/fidget.nvim",
-        config = function()
-          require("fidget").setup({})
-        end,
-      },
-      {
-        "hrsh7th/cmp-nvim-lsp",
-        enabled = not require("utils").USE_BLINK_CMP,
-      },
-    },
-    config = function()
-      require("lsp")
-    end,
   },
   {
     "folke/lazydev.nvim",

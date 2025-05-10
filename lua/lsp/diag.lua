@@ -32,18 +32,3 @@ vim.diagnostic.config({
     border = "rounded",
   },
 })
-
-return {
-  toggle = function()
-    if not vim.b._diag_is_hidden then
-      require "utils".info("Diagnostic virtual text is now hidden.")
-      vim.diagnostic.hide()
-      -- vim.diagnostic.disable()
-    else
-      require "utils".info("Diagnostic virtual text is now visible.")
-      vim.diagnostic.show()
-      -- vim.diagnostic.enable()
-    end
-    vim.b._diag_is_hidden = not vim.b._diag_is_hidden
-  end
-}

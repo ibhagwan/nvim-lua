@@ -1,6 +1,6 @@
 <div align="center">
 
-![Neovim version](https://img.shields.io/badge/Neovim-0.10-57A143?style=flat-square&logo=neovim)
+![Neovim version](https://img.shields.io/badge/Neovim-0.11-57A143?style=flat-square&logo=neovim)
 
 </div>
 
@@ -8,7 +8,7 @@
 
 ## What's in this repo?
 
-**My personal neovim lua config (requires neovim >= `0.8`)**
+**My personal neovim lua config (requires neovim >= `0.11`)**
 
 - Minimum changes to default key mapping
 - A good selection of carefully hand-picked plugins
@@ -46,22 +46,13 @@
 
 ### Coding, completion & LSP
 
-- [Comment.nvim](https://github.com/numToStr/Comment.nvim): use `gc` and
-  `gcc` to comment visual-blocks and lines
-
-- [mini.indentscope](https://github.com/echasnovski/mini.nvim):
-  add indentation markers based on `tabstop | shiftwidth`
-
-- [nvim-cmp](https://github.com/hrsh7th/nvim-cmp): autocompletion framework
+- [blink.cmp](https://github.com/Saghen/blink.cmp): autocompletion framework
 
 - [treesitter](https://github.com/nvim-treesitter/nvim-treesitter): text
   parsing library, provides better syntax highlighting and text-objects for
   different coding languages (e.g. `yaf` yank-a-function), see
   [treesitter.lua](https://github.com/ibhagwan/nvim-lua/blob/main/lua/plugins/treesitter.lua)
   for defined text objects
-
-- [lspconfig](https://github.com/neovim/nvim-lspconfig): configuration
-  quickstart for nvim's built in LSP
 
 - [conform.nvim](https://github.com/stevearc/conform.nvim): formatter
   plugin where LSP formatting isn't what you need, format `js|json|html`
