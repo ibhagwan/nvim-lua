@@ -56,6 +56,7 @@ augroup("ibhagwan/ColorScheme", function(g)
         vim.api.nvim_set_hl(0, "Whitespace", { default = false, link = "NonText" })
         vim.api.nvim_set_hl(0, "FloatBorder", { default = false, link = "LineNr" })
         vim.api.nvim_set_hl(0, "WinSeparator", { default = false, link = "FloatBorder" })
+        vim.api.nvim_set_hl(0, "ColorColumn", { default = false, link = "PmenuSbar" })
       elseif vim.g.colors_name:match("tokyonight") then
         vim.api.nvim_set_hl(0, "WinSeparator", { default = false, link = "FloatBorder" })
       end

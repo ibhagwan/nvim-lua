@@ -1,145 +1,107 @@
-local utils     = require "utils"
-local o         = vim.opt
+local utils = require("utils")
 
-o.mouse         = ""     -- disable the mouse
-o.termguicolors = true   -- enable 24bit colors
-o.background    = "dark" -- use the dark version of colorschemes
+vim.o.mouse = ""                    -- disable the mouse
+vim.o.termguicolors = true          -- enable 24bit colors
 
-o.updatetime    = 250    -- decrease update time
-o.fileformat    = "unix" -- <nl> for EOL
-o.switchbuf     = "useopen,uselast"
-o.fileencoding  = "utf-8"
-o.matchpairs    = { "(:)", "{:}", "[:]", "<:>" }
+vim.o.updatetime = 250              -- decrease update time for CursorHold
+vim.o.fileformat = "unix"           -- <nl> for EOL
+vim.o.switchbuf = "useopen,uselast" -- jump to already open buffers on `:cn|:cp`
+vim.o.fileencoding = "utf-8"
+
+vim.opt.matchpairs:append("<:>") -- add "<>" to '%'
 
 -- recursive :find in current dir
-vim.cmd [[set path=.,,,$PWD/**]]
+vim.cmd([[set path=.,,,$PWD/**]])
 
 -- DO NOT NEED ANY OF THIS, CRUTCH THAT POULLUTES REGISTERS
 -- vim clipboard copies to system clipboard
 -- unnamed     = use the * register (cmd-s paste in our term)
 -- unnamedplus = use the + register (cmd-v paste in our term)
--- o.clipboard         = 'unnamedplus'
-
--- MacOS clipboard
-if utils.is_darwin() then
-  vim.g.clipboard = {
-    name = "macOS-clipboard",
-    copy = {
-      ["+"] = "pbcopy",
-      ["*"] = "pbcopy",
-    },
-    paste = {
-      ["+"] = "pbpaste",
-      ["*"] = "pbpaste",
-    },
-  }
-end
-
-if vim.env.SSH_TTY then
-  vim.g.clipboard = {
-    name = "OSC 52",
-    copy = {
-      ["+"] = require("vim.ui.clipboard.osc52").copy("+"),
-      ["*"] = require("vim.ui.clipboard.osc52").copy("*"),
-    },
-    paste = {
-      ["+"] = require("vim.ui.clipboard.osc52").paste("+"),
-      ["*"] = require("vim.ui.clipboard.osc52").paste("*"),
-    },
-  }
-end
+-- vim.o.clipboard         = 'unnamedplus'
 
 -- This featire isn't fully baked yet, `wait:0` causes
 -- even the `:messaeges` output to not show up at all
 -- if utils.__HAS_NVIM_011 then
---   o.mopt = "wait:0,history:1000"
+--   vim.o.mopt = "wait:0,history:1000"
 -- end
 
-o.cmdheight      = 2                             -- cmdline height
-o.cmdwinheight   = math.floor(vim.o.lines / 2)   -- 'q:' window height
-o.scrolloff      = 3                             -- min number of lines to keep between cursor and screen edge
-o.sidescrolloff  = 5                             -- min number of cols to keep between cursor and screen edge
-o.textwidth      = 99                            -- max inserted text width for paste operations
-o.number         = true                          -- show absolute line no. at the cursor pos
-o.relativenumber = true                          -- otherwise, show relative numbers in the ruler
-o.cursorline     = true                          -- Show a line where the current cursor is
-o.signcolumn     = "yes"                         -- Show sign column as first column
-o.colorcolumn    = "100"                         -- mark column 100
-o.breakindent    = true                          -- start wrapped lines indented
-o.linebreak      = true                          -- do not break words on line wrap
+vim.o.cmdheight = 2                              -- cmdline heirequire('gitsigns.config').config.baseght
+vim.o.cmdwinheight = math.floor(vim.o.lines / 2) -- 'q:' window height
+vim.o.scrolloff = 3                              -- min number of lines to keep between cursor and screen edge
+vim.o.sidescrolloff = 5                          -- min number of cols to keep between cursor and screen edge
+vim.o.textwidth = 99                             -- max inserted text width for paste operations
+vim.o.number = true                              -- show absolute line nvim.o. at the cursor pos
+vim.o.relativenumber = true                      -- otherwise, show relative numbers in the ruler
+vim.o.cursorline = true                          -- Show a line where the current cursor is
+vim.o.signcolumn = "yes"                         -- Show sign column as first column
+vim.o.colorcolumn = "100"                        -- mark column 100
+vim.o.breakindent = true                         -- start wrapped lines indented
+vim.o.linebreak = true                           -- do not break words on line wrap
 
 -- Characters to display on ':set list',explore glyphs using:
 -- `xfd -fa "InputMonoNerdFont:style:Regular"` or
 -- `xfd -fn "-misc-fixed-medium-r-semicondensed-*-13-*-*-*-*-*-iso10646-1"`
 -- input special chars with the sequence <C-v-u> followed by the hex code
-o.listchars      = {
-  tab      = "→ ",
-  eol      = "↲",
-  nbsp     = "␣",
-  lead     = "␣",
-  space    = "␣",
-  trail    = "•",
-  extends  = "⟩",
-  precedes = "⟨",
+vim.opt.listchars = {
+  tab = "▏ ",
+  trail = "·",
+  extends = "»",
+  precedes = "«",
 }
-o.showbreak      = "↪ "
+vim.o.list = true
+vim.o.showbreak = "↪ "
+
+vim.opt.diffopt:append("linematch:60") -- As suggested by `:help diffopt`
 
 -- show menu even for one item do not auto select/insert
-o.completeopt    = { "noinsert", "menuone", "noselect", utils.__HAS_NVIM_011 and "fuzzy" or nil }
-o.wildmode       = "longest:full,full"
-o.wildoptions    = "pum"   -- Show completion items using the pop-up-menu (pum)
--- o.pumblend         = 15    -- completion menu transparency
+vim.opt.completeopt = {
+  "noselect",
+  "menu",
+  "menuone",
+  "popup",
+  utils.__HAS_NVIM_011 and "fuzzy" or nil,
+}
 
-o.joinspaces     = true    -- insert spaces after '.?!' when joining lines
-o.smartindent    = true    -- add <tab> depending on syntax (C/C++)
-o.startofline    = false   -- keep cursor column on navigation
+vim.o.pumheight = 10     -- completion menu max height
 
-o.tabstop        = 4       -- Tab indentation levels every two columns
-o.softtabstop    = 4       -- Tab indentation when mixing tabs & spaces
-o.shiftwidth     = 4       -- Indent/outdent by two columns
-o.shiftround     = true    -- Always indent/outdent to nearest tabstop
-o.expandtab      = true    -- Convert all tabs that are typed into spaces
+vim.o.joinspaces = true  -- insert spaces after '.?!' when joining lines
+vim.o.smartindent = true -- add <tab> depending on syntax (C/C++)
 
--- c: auto-wrap comments using textwidth
--- r: auto-insert the current comment leader after hitting <Enter>
--- o: auto-insert the current comment leader after hitting 'o' or 'O'
--- q: allow formatting comments with 'gq'
--- n: recognize numbered lists
--- 1: don't break a line after a one-letter word
--- j: remove comment leader when it makes sense
--- this gets overwritten by ftplugins (:verb set fo)
--- we use autocmd to remove 'o' in '/lua/autocmd.lua'
--- borrowed from tjdevries
-o.formatoptions  = o.formatoptions
-    - "a"                                   -- Auto formatting is BAD.
-    - "t"                                   -- Don't auto format my code. I got linters for that.
-    + "c"                                   -- In general, I like it when comments respect textwidth
-    + "q"                                   -- Allow formatting comments w/ gq
-    - "o"                                   -- O and o, don't continue comments
-    + "r"                                   -- But do continue when pressing enter.
-    + "n"                                   -- Indent past the formatlistpat, not underneath it.
-    + "j"                                   -- Auto-remove comments if possible.
-    - "2"                                   -- I'm not in gradeschool anymore
+vim.o.tabstop = 4        -- Tab indentation levels every two columns
+vim.o.shiftwidth = 0     -- Use `tabstop` value for auto-indent
+vim.o.shiftround = true  -- Always indent/outdent to nearest tabstop
+vim.o.expandtab = true   -- Convert all tabs that are typed into spaces
 
-o.splitbelow     = true                     -- ':new' ':split' below current
-o.splitright     = true                     -- ':vnew' ':vsplit' right of current
+vim.opt.formatoptions = vim.opt.formatoptions
+    - "a"                 -- auto-formatting
+    - "t"                 -- auto-wrap text using 'textwidth'
+    + "c"                 -- auto-wrap comments using 'textwidth'
+    + "q"                 -- allow formatting comments w/ `gq`
+    - "o"                 -- auto-continue comments on pressing `o|O`
+    + "r"                 -- auto-continue comments on pressing `enter`
+    + "n"                 -- recognize 'formatlistpat' while formatting
+    + "j"                 -- auto-remove comments when joining lines
+    - "2"                 -- disable heuristics in paragraph formatting
 
-o.foldenable     = true                     -- enable folding
-o.foldlevelstart = 10                       -- open most folds by default
-o.foldnestmax    = 10                       -- 10 nested fold max
-o.foldmethod     = "indent"                 -- fold based on indent level
+vim.o.splitbelow = true   -- ':new' ':split' below current
+vim.o.splitright = true   -- ':vnew' ':vsplit' right of current
 
-o.undofile       = false                    -- no undo file
-o.hidden         = true                     -- do not unload buffer when abandoned
-o.confirm        = true                     -- confirm before loss of data with `:q`
+vim.o.foldenable = true   -- enable folding
+vim.o.foldlevelstart = 99 -- open all folds by default
+vim.o.foldmethod = "expr" -- use treesitter for folding
+vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 
-o.ignorecase     = true                     -- ignore case on search
-o.smartcase      = true                     -- case sensitive when search includes uppercase
-o.showmatch      = true                     -- highlight matching [{()}]
-vim.o.cpoptions  = vim.o.cpoptions .. "x"   -- stay on search item when <esc>
+vim.o.undofile = false                   -- no undo file
+vim.o.hidden = true                      -- do not unload buffer when abandoned
+vim.o.confirm = true                     -- confirm before loss of data with `:q`
 
-o.writebackup    = false                    -- do not backup file before write
-o.swapfile       = false                    -- no swap file
+vim.o.ignorecase = true                  -- ignore case on search
+vim.o.smartcase = true                   -- case sensitive when search includes uppercase
+vim.o.showmatch = true                   -- highlight matching [{()}]
+vim.o.cpoptions = vim.o.cpoptions .. "x" -- stay on search item when <esc>
+
+vim.o.writebackup = false                -- do not backup file before write
+vim.o.swapfile = false                   -- no swap file
 
 --[[
   ShDa (viminfo for vim): session data history
@@ -148,7 +110,7 @@ o.swapfile       = false                    -- no swap file
   ' - Specify the maximum number of marked files remembered. It also saves the jump list and the change list.
   < - Maximum of lines saved for each register. All the lines are saved if this is not included, <0 to disable pessistent registers.
   % - Save and restore the buffer list. You can specify the maximum number of buffer stored with a number.
-  / or : - Number of search patterns and entries from the command-line history saved. o.history is used if it’s not specified.
+  / or : - Number of search patterns and entries from the command-line history saved. vim.o.history is used if it’s not specified.
   f - Store file (uppercase) marks, use 'f0' to disable.
   s - Specify the maximum size of an item’s content in KiB (kilobyte).
       For the viminfo file, it only applies to register.
@@ -159,25 +121,24 @@ o.swapfile       = false                    -- no swap file
   :rshada   - read the shada file (:rviminfo for vim)
   :wshada   - write the shada file (:wrviminfo for vim)
 ]]
-o.shada          = [[!,'100,<0,s100,h]]
-o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize"
-o.diffopt        = "internal,filler,algorithm:histogram,indent-heuristic"
+vim.o.shada = [[!,'100,<0,s100,h]]
+vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize"
 
 -- use ':grep' to send resulsts to quickfix
 -- use ':lgrep' to send resulsts to loclist
 if vim.fn.executable("rg") == 1 then
-  o.grepprg = "rg --vimgrep --no-heading --smart-case --hidden"
-  o.grepformat = "%f:%l:%c:%m"
+  vim.o.grepprg = "rg --vimgrep --no-heading --smart-case --hidden"
+  vim.o.grepformat = "%f:%l:%c:%m"
 end
 
 -- Disable providers we do not care a about
 vim.g.loaded_python_provider = 0
-vim.g.loaded_ruby_provider   = 0
-vim.g.loaded_perl_provider   = 0
-vim.g.loaded_node_provider   = 0
+vim.g.loaded_ruby_provider = 0
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_node_provider = 0
 
 -- Disable some in built plugins completely
-local disabled_built_ins     = {
+local disabled_built_ins = {
   "netrw",
   "netrwPlugin",
   "netrwSettings",
@@ -200,8 +161,7 @@ local disabled_built_ins     = {
 }
 -- disable default fzf plugin if not
 -- root since we will be using fzf-lua
-if utils.is_root()
-    and vim.uv.fs_stat("/usr/share/nvim/runtime/plugin/fzf.vim") then
+if utils.is_root() and vim.uv.fs_stat("/usr/share/nvim/runtime/plugin/fzf.vim") then
   vim.opt.runtimepath:append("/usr/share/nvim/runtime")
 else
   -- table.insert(disabled_built_ins, "fzf")
@@ -227,5 +187,35 @@ vim.g.markdown_fenced_languages = {
 }
 
 -- Map leader to <space>
-vim.g.mapleader                 = " "
-vim.g.maplocalleader            = " "
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+
+-- MacOS clipboard
+if utils.is_darwin() then
+  vim.g.clipboard = {
+    name = "macOS-clipboard",
+    copy = {
+      ["+"] = "pbcopy",
+      ["*"] = "pbcopy",
+    },
+    paste = {
+      ["+"] = "pbpaste",
+      ["*"] = "pbpaste",
+    },
+  }
+end
+
+-- OSC52 clipboard over ssh
+if vim.env.SSH_TTY then
+  vim.g.clipboard = {
+    name = "OSC 52",
+    copy = {
+      ["+"] = require("vim.ui.clipboard.osc52").copy("+"),
+      ["*"] = require("vim.ui.clipboard.osc52").copy("*"),
+    },
+    paste = {
+      ["+"] = require("vim.ui.clipboard.osc52").paste("+"),
+      ["*"] = require("vim.ui.clipboard.osc52").paste("*"),
+    },
+  }
+end

@@ -75,7 +75,7 @@ local keys = {
   { "<leader>lD", function() require "fzf-lua".lsp_declarations() end, desc = "Goto Declaration" },
   { "<leader>lr", function() require "fzf-lua".lsp_references() end, nowait = true, desc = "References" },
   { "<leader>lm", function() require "fzf-lua".lsp_implementations() end, desc = "Goto Implementation" },
-  { "<leader>ly", function() require "fzf-lua".lsp_type_definitions() end, desc = "Goto T[y]pe Definition" },
+  { "<leader>ly", function() require "fzf-lua".lsp_typedefs() end, desc = "Goto T[y]pe Definition" },
   { "<leader>ls", function() require "fzf-lua".lsp_document_symbols() end, desc = "LSP Symbols (buffer)" },
   { "<leader>lS", function() require "fzf-lua".lsp_workspace_symbols() end, desc = "LSP Symbols (workspace)" },
   { "<leader>la", function() require "fzf-lua".lsp_code_actions() end, desc = "Code Actions" },

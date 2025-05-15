@@ -183,8 +183,25 @@ map("x", "c.",
 -- Turn off search matches with double-<Esc>
 map("n", "<Esc><Esc>", "<Esc>:nohlsearch<CR>", { silent = true })
 
--- Toggle display of `listchars`
-map("n", "<leader>'", "<Esc>:set list!<CR>", { silent = true, desc = "toggle 'listchars' on/off" })
+-- Toggle display of richer `listchars`
+map("n", "<leader>'", function()
+  if not _G._listchars then
+    _G._listchars = vim.o.listchars
+    vim.opt.listchars = {
+      tab = "→ ",
+      eol = "↲",
+      nbsp = "␣",
+      lead = "␣",
+      space = "␣",
+      trail = "•",
+      extends = "⟩", -- »
+      precedes = "⟨", -- «
+    }
+  else
+    vim.o.listchars = _G._listchars
+    _G._listchars = nil
+  end
+end, { silent = true, desc = "toggle rich 'listchars' on/off" })
 
 -- Toggle colored column at 81
 map("n", "<leader>|", function()

@@ -1,3 +1,5 @@
+vim.bo.tabstop = 4
+
 if not pcall(require, "jdtls") then
   return
 end

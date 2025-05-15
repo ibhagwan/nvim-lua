@@ -1,3 +1,4 @@
+vim.bo.tabstop = 4
 vim.wo.spell = true
 
 -- Previm plugin
