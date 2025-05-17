@@ -17,7 +17,7 @@ local yadm_grep_opts = {
 local keys = {
   ---@format disable
   { "<leader>,", function() require "fzf-lua".buffers() end, desc = "Buffers" },
-  { "<leader>f?", function() require "fzf-lua".builtin() end, desc = "FzfLua Builtins" },
+  { "<leader>f?", function() require "fzf-lua".builtin() end, desc = "FzfLua Builtins", mode = { "n", "v" } },
   { "<leader>fP", function() require "fzf-lua".profiles() end, desc = "FzfLua Profiles" },
   { "<leader>f/", function() require "fzf-lua".search_history() end, desc = "Command History" },
   { "<leader>f:", function() require "fzf-lua".command_history() end, desc = "Command History" },
@@ -33,7 +33,8 @@ local keys = {
   { "<leader>fH", function() require "fzf-lua".oldfiles() end, desc = "Oldfiles (All)" },
   { "<leader>fh", function() require "fzf-lua".oldfiles({ cwd = vim.uv.cwd(), cwd_header = true, cwd_only = true }) end, desc = "Oldfiles (cwd)" },
   -- git
-  { "<leader>gf", function() require "fzf-lua".git_files() end, desc = "Find Git Files" },
+  { "<leader>gb", function() require "fzf-lua".git_blame() end, desc = "Git Blame", mode = { "n", "v" } },
+  { "<leader>gB", function() require "fzf-lua".git_branches() end, desc = "Git Branches" },
   { "<leader>gB", function() require "fzf-lua".git_branches() end, desc = "Git Branches" },
   { "<leader>gc", function() require "fzf-lua".git_bcommits() end, desc = "Git Log", mode = { "n",  "v" } },
   { "<leader>gC", function() require "fzf-lua".git_commits() end, desc = "Git Log" },
@@ -53,8 +54,9 @@ local keys = {
   { "<leader>fv", function() require "fzf-lua".grep_visual() end, desc = "Grep Visual selection", mode = { "n", "v" } },
   { "<leader>ft", function() require "fzf-lua".btags() end, desc = "Buffer Tags" },
   { "<leader>fT", function() require "fzf-lua".tags() end, desc = "Tags" },
-  { "<leader>fb", function() require "fzf-lua".blines() end, desc = "Buffer Lines" },
-  { "<leader>f3", function() require "fzf-lua".blines({ fzf_opts = { ["--query"] = vim.fn.expand("<cword>") } }) end, desc = "Buffer Lines (word)" },
+  { "<leader>fb", function() require "fzf-lua".blines() end, desc = "Buffer Lines", mode = { "n", "v" } },
+  { "<leader>f3", function() require "fzf-lua".blines({ query = vim.fn.expand("<cword>") }) end, desc = "Buffer Lines (word)", mode = { "n", "v" } },
+  { "<leader>/", function() require "fzf-lua".blines({ start = "cursor" }) end, desc = "Buffer Lines", mode = { "n", "v" } },
   { "<leader>f8", function() require "fzf-lua".grep_curbuf({ search = vim.fn.expand("<cword>") }) end, desc = "Buffer Grep (word)" },
   { "<leader>f*", function() require "fzf-lua".grep_curbuf({ search = vim.fn.expand("<cWORD>") }) end, desc = "Buffer Grep (WORD)" },
   -- search
