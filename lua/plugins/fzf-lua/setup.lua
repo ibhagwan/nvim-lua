@@ -213,7 +213,7 @@ local default_opts = {
       preview_pager = "delta --width=$COLUMNS --hunk-header-style=omit --file-style=omit",
     },
   },
-  diagnostics = { file_icons = false, path_shorten = 1 },
+  diagnostics = { file_icons = false, path_shorten = 1, diag_source = true },
   dir_icon = "",
 }
 

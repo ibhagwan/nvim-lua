@@ -6,9 +6,11 @@ local map = function(mode, lhs, rhs, opts)
 end
 
 local setup = function()
-  map("n", "<leader>ll", function()
-    vim.diagnostic.open_float({ buffer = 0, scope = "line", border = "rounded" })
-  end, { desc = "show line diagnostic [LSP]" })
+  for _, k in ipairs({ "<leader>l?", "<leader>k" }) do
+    map("n", k, function()
+      vim.diagnostic.open_float({ buffer = 0, scope = "line", border = "rounded" })
+    end, { desc = "show line diagnostic [LSP]" })
+  end
 
   map("n", "<leader>lh", function()
     local enabled = not vim.lsp.inlay_hint.is_enabled({})

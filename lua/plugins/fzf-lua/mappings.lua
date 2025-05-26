@@ -55,9 +55,16 @@ local keys = {
   { "<leader>ft", function() require "fzf-lua".btags() end, desc = "Buffer Tags" },
   { "<leader>fT", function() require "fzf-lua".tags() end, desc = "Tags" },
   { "<leader>fb", function() require "fzf-lua".blines() end, desc = "Buffer Lines", mode = { "n", "v" } },
-  { "<leader>f3", function() require "fzf-lua".blines({ query = vim.fn.expand("<cword>") }) end, desc = "Buffer Lines (word)", mode = { "n", "v" } },
+  { "<leader>f3", function() require "fzf-lua".blines({ query = vim.fn.expand("<cword>") }) end, desc = "Buffer Lines (word)", mode = { "n" } },
+  { "<leader>f3", function()
+    vim.cmd("visual")
+    require "fzf-lua".blines({ query = require("utils").get_visual_selection() })
+  end, desc = "Buffer Lines (word)", mode = { "x" } },
   { "<leader>/", function() require "fzf-lua".blines({ start = "cursor" }) end, desc = "Buffer Lines", mode = { "n", "v" } },
   { "<leader>f8", function() require "fzf-lua".grep_curbuf({ search = vim.fn.expand("<cword>") }) end, desc = "Buffer Grep (word)" },
+  { "<leader>f8", function()
+    require "fzf-lua".grep_curbuf({ search = require("utils").get_visual_selection() })
+  end, desc = "Buffer Grep (word)", mode = { "x" } },
   { "<leader>f*", function() require "fzf-lua".grep_curbuf({ search = vim.fn.expand("<cWORD>") }) end, desc = "Buffer Grep (WORD)" },
   -- search
   { '<leader>f"', function() require "fzf-lua".registers() end, desc = "Registers" },
@@ -72,7 +79,7 @@ local keys = {
   { "<leader>fo", function() require "fzf-lua".colorschemes({ winopts = { height = 0.45, width = 0.30 } }) end, desc = "Colorschemes" },
   { "<leader>fz", function() require "fzf-lua".spell_suggest() end, desc = "Zoxide" },
   -- LSP
-  { "<leader>lf", function() require "fzf-lua".lsp_finder() end, desc = "LSP Finder" },
+  { "<leader>ll", function() require "fzf-lua".lsp_finder() end, desc = "LSP Finder" },
   { "<leader>ld", function() require "fzf-lua".lsp_definitions() end, desc = "Goto Definition" },
   { "<leader>lD", function() require "fzf-lua".lsp_declarations() end, desc = "Goto Declaration" },
   { "<leader>lr", function() require "fzf-lua".lsp_references() end, nowait = true, desc = "References" },
