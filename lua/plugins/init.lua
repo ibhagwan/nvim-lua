@@ -10,15 +10,15 @@ return {
       -- vim.cmd.colorscheme("nightfly")
     end
   },
-  {
-    "folke/tokyonight.nvim",
-    enabled = false,
-    lazy = false,
-    priority = 1000,
-    config = function()
-      vim.cmd.colorscheme("tokyonight")
-    end
-  },
+  -- {
+  --   "folke/tokyonight.nvim",
+  --   enabled = false,
+  --   lazy = false,
+  --   priority = 1000,
+  --   config = function()
+  --     vim.cmd.colorscheme("tokyonight")
+  --   end
+  -- },
   {
     "dstein64/vim-startuptime",
     cmd = "StartupTime",

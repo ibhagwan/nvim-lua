@@ -31,7 +31,7 @@ if utils.is_root() then
         end
         if valid_yank and vim.env.TMUX then
           -- we use `-w` to also copy to client's clipboard
-          vim.fn.system({ "tmux", "set-buffer", "-w", yank_data })
+          vim.system({ "tmux", "set-buffer", "-w", yank_data }):wait()
         end
         vim.highlight.on_yank({ higroup = "IncSearch", timeout = 1000 })
       end

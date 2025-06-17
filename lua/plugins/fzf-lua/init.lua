@@ -19,8 +19,8 @@ function M.config()
 
   vim.api.nvim_create_user_command("TogglePickers", function()
     local utils = require("utils")
-    utils.USE_SNACKS = not utils.USE_SNACKS
-    utils.info(string.format("Main picker set to %s", utils.USE_SNACKS and "Snacks" or "FzfLua"))
+    utils.__USE_SNACKS = not utils.__USE_SNACKS
+    utils.info(string.format("Main picker set to %s", utils.__USE_SNACKS and "Snacks" or "FzfLua"))
     require("plugins.fzf-lua.mappings").map()
     require("plugins.snacks.mappings").map()
   end, {})

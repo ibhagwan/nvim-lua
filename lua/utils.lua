@@ -12,6 +12,7 @@ local M = {}
 
 M.__HAS_NVIM_011 = vim.fn.has("nvim-0.11") == 1
 M.__IS_WIN = vim.fn.has("win32") == 1 or vim.fn.has("win64") == 1
+M.__USE_SNACKS = M.__IS_WIN
 
 local fast_event_aware_notify = function(msg, level, opts)
   if vim.in_fast_event() then
@@ -51,18 +52,11 @@ function M.is_iSH()
   return vim.uv.os_uname().release:match("%-ish$") ~= nil
 end
 
-M.USE_SNACKS = M.__IS_WIN or M.is_iSH()
-M.USE_BLINK_CMP = vim.fn.executable("cargo") == 1 and not M.is_NetBSD()
-
 function M.is_dev(path)
   return vim.uv.fs_stat(string.format("%s/%s", vim.fn.expand(DEV_DIR), path)) ~= nil
 end
 
-function M.shell_error()
-  return vim.v.shell_error ~= 0
-end
-
-function M.have_compiler()
+function M.has_compiler()
   if vim.fn.executable("cc") == 1 or
       vim.fn.executable("gcc") == 1 or
       vim.fn.executable("clang") == 1 or
@@ -72,26 +66,42 @@ function M.have_compiler()
   return false
 end
 
+function M.cargo_has_nightly()
+  local ok, res = pcall(function()
+    return vim.system({ "cargo", "+nightly" }):wait()
+  end)
+  return ok and res.code == 0
+end
+
 function M.git_root(cwd, noerr)
   local cmd = { "git", "rev-parse", "--show-toplevel" }
   if cwd then
     table.insert(cmd, 2, "-C")
     table.insert(cmd, 3, vim.fn.expand(cwd))
   end
-  local output = vim.fn.systemlist(cmd)
-  if M.shell_error() then
-    if not noerr then M.info(unpack(output)) end
+  local ok, res = pcall(function() return vim.system(cmd):wait() end)
+  if not ok or not res then
+    if not noerr then M.info(res) end
     return nil
   end
-  return output[1]
+  return res.stdout:gsub("\n$", "")
 end
 
 function M.set_cwd(pwd)
   if not pwd then
     local parent = vim.fn.expand("%:h")
-    pwd = M.git_root(parent, true) or parent
+    -- pwd = M.git_root(parent, true) or parent
+    local lsp_util = require("lspconfig.util")
+    pwd = lsp_util.root_pattern({
+      ".luarc.json",
+      ".luarc.jsonc",
+      ".luacheckrc",
+      ".stylua.toml",
+      "stylua.toml",
+      ".git",
+    })(parent) or parent
   end
-  if vim.uv.fs_stat(pwd) then
+  if pwd and vim.uv.fs_stat(pwd) then
     vim.cmd("cd " .. pwd)
     M.info(("pwd set to %s"):format(vim.fn.shellescape(pwd)))
   else
@@ -230,6 +240,24 @@ M.resize = function(vertical, margin)
   vim.cmd(cmd)
 end
 
+-- M.sudo_exec = function(cmd, print_output)
+--   vim.fn.inputsave()
+--   local password = vim.fn.inputsecret("Password: ")
+--   vim.fn.inputrestore()
+--   if not password or #password == 0 then
+--     M.warn("Invalid password, sudo aborted")
+--     return false
+--   end
+--   local out = vim.fn.system(string.format("sudo -p '' -S %s", cmd), password)
+--   if vim.v.shell_error ~= 0 then
+--     print("\r\n")
+--     M.err(out)
+--     return false
+--   end
+--   if print_output then print("\r\n", out) end
+--   return true
+-- end
+
 M.sudo_exec = function(cmd, print_output)
   vim.fn.inputsave()
   local password = vim.fn.inputsecret("Password: ")
@@ -238,13 +266,16 @@ M.sudo_exec = function(cmd, print_output)
     M.warn("Invalid password, sudo aborted")
     return false
   end
-  local out = vim.fn.system(string.format("sudo -p '' -S %s", cmd), password)
-  if vim.v.shell_error ~= 0 then
+  local ok, res = pcall(function()
+    return vim.system({ "sh", "-c",
+      string.format("echo '%s' | sudo -p '' -S %s", password, cmd) }):wait()
+  end)
+  if not ok or res.code ~= 0 then
     print("\r\n")
-    M.err(out)
+    M.err(not ok and res or res.stderr)
     return false
   end
-  if print_output then print("\r\n", out) end
+  if print_output then print("\r\n", res.stderr) end
   return true
 end
 
@@ -398,18 +429,18 @@ M.tmux_aware_navigate = function(direction, no_wrap)
     table.insert(args, vim.env.TMUX_PANE)
     table.insert(args, tmux_pane_flag[direction])
   end
-  vim.fn.system(args)
+  vim.system(args):wait()
 end
 
 M.tmux_is_zoomed = function()
   if not vim.env.TMUX then return end
-  local out = vim.fn.system({ "tmux", "display-message", "-p", "#{window_flags}" })
+  local out = vim.system({ "tmux", "display-message", "-p", "#{window_flags}" }):wait().stdout
   return type(out) == "string" and out:match("Z") and 1 or 0
 end
 
 M.tmux_toggle_Z = function()
   if not vim.env.TMUX then return end
-  vim.fn.system({ "tmux", "resize-pane", "-Z" })
+  vim.system({ "tmux", "resize-pane", "-Z" }):wait()
   return true
 end
 

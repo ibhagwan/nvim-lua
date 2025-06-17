@@ -28,7 +28,7 @@ return {
   {
     "nvim-treesitter/nvim-treesitter",
     -- treesitter requires a C compiler
-    cond = not require("utils").is_NetBSD() and require("utils").have_compiler,
+    cond = not require("utils").is_NetBSD() and require("utils").has_compiler,
     event = "BufReadPost",
     cmd = { "TSUpdate", "TSUpdateSync" },
     dependencies = {
@@ -38,7 +38,7 @@ return {
     build = function()
       -- build step is run independent of the condition
       -- make sure we have treesitter before running ':TSUpdate'
-      if require("utils").have_compiler() then
+      if require("utils").has_compiler() then
         vim.cmd("TSUpdate")
       end
     end,

@@ -2,14 +2,14 @@
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.uv.fs_stat(lazypath) then
   print("Downloading folke/lazy.nvim...")
-  vim.fn.system({
+  vim.system({
     "git",
     "clone",
     "--filter=blob:none",
     "--single-branch",
     "https://github.com/folke/lazy.nvim.git",
     lazypath,
-  })
+  }):wait()
   print("Succesfully downloaded lazy.nvim.")
 end
 vim.opt.runtimepath:prepend(lazypath)

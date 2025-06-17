@@ -14,5 +14,5 @@ require("term")
 
 -- Don't load plugins as root and use a different colorscheme
 if not utils.is_root() then
-  require("lazyplug")
+  require("lazy_nvim")
 end

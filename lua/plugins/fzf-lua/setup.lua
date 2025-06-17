@@ -75,6 +75,7 @@ end
 
 local default_opts = {
   { "border-fused", "hide" },
+  fzf_bin = require("utils").is_iSH() and "sk" or nil,
   -- debug_tracelog = "~/fzf-lua-trace.log",
   -- fzf_opts = { ["--info"] = "default" },
   -- fzf_opts = { ["--tmux"] = "80%,60%", ["--border"] = "rounded" },

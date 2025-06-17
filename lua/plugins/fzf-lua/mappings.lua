@@ -116,7 +116,7 @@ return {
   map = function()
     for _, m in ipairs(keys) do
       local key = m[1]
-      if require "utils".USE_SNACKS then
+      if require "utils".__USE_SNACKS then
         key = key:gsub("<leader>,", "<leader>;")
         for _, k in ipairs({ "<F1>", "<C-p>", "<C-k>" }) do
           if key == k then key = "<leader>" .. k end
