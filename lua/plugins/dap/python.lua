@@ -19,7 +19,7 @@ else
     return require("mason-registry").get_package("debugpy")
   end)
   if ok and pkg and pkg:is_installed() then
-    prefix = pkg:get_install_path() .. "/venv"
+    prefix = vim.fs.joinpath(vim.env.MASON, "packages", "debugpy", "venv")
   end
 end
 
