@@ -1,14 +1,13 @@
-local _use_lua = not require("utils").cargo_has_nightly()
-    or require "utils".is_NetBSD()
-    or require "utils".is_iSH()
-
 local M = {
   "saghen/blink.cmp",
   enabled = true,
-  build = not _use_lua and "cargo +nightly build --release",
+  build = "cargo +nightly build --release",
   event = { "InsertEnter", "CmdLineEnter" },
   opts = {
-    fuzzy = { implementation = _use_lua and "lua" or nil },
+    fuzzy = {
+      implementation = "prefer_rust",
+      prebuilt_binaries = { download = false }
+    },
     sources = {
       default = { "lazydev", "lsp", "path", "snippets", "buffer" },
       providers = {
