@@ -67,6 +67,7 @@ return {
           "vimdoc",
           -- for `nvim-treesitter/playground` / `:InspectTree`
           "query",
+          "regex",
         },
         highlight = { enable = true },
         incremental_selection = {

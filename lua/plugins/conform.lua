@@ -44,13 +44,15 @@ return {
     local ok, conform = pcall(require, "conform")
     local formatters = ok and conform.list_formatters(e.buf) or {}
     if #formatters > 0 then
-      vim.keymap.set("n", lsp_has_formatting and "gQ" or "gq", function()
-        require("conform").format({ async = true, buffer = e.buf, lsp_fallback = false })
-      end, {
-        silent = true,
-        buffer = e.buf,
-        desc = string.format("format document [%s]", formatters[1].name)
-      })
+      for _, lhs in ipairs({ "gQ", not lsp_has_formatting and "gq" or nil }) do
+        vim.keymap.set("n", lhs, function()
+          require("conform").format({ async = true, buffer = e.buf, lsp_fallback = false })
+        end, {
+          silent = true,
+          buffer = e.buf,
+          desc = string.format("format document [%s]", formatters[1].name)
+        })
+      end
     end
   end
 }
