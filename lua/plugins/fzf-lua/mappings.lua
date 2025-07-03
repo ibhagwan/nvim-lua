@@ -77,7 +77,8 @@ local keys = {
   { "<leader>fm", function() require "fzf-lua".marks() end, desc = "Marks" },
   { "<leader>fM", function() require "fzf-lua".manpages() end, desc = "Man Pages" },
   { "<leader>fo", function() require "fzf-lua".colorschemes({ winopts = { height = 0.45, width = 0.30 } }) end, desc = "Colorschemes" },
-  { "<leader>fz", function() require "fzf-lua".spell_suggest() end, desc = "Zoxide" },
+  { "<leader>fz", function() require "fzf-lua".spell_suggest() end, desc = "Spell suggest" },
+  { "<leader>fs", function() require "fzf-lua".spellcheck() end, desc = "Spellcheck buffer", mode = { "n", "v" } },
   -- LSP
   { "<leader>ll", function() require "fzf-lua".lsp_finder() end, desc = "LSP Finder" },
   { "<leader>ld", function() require "fzf-lua".lsp_definitions() end, desc = "Goto Definition" },
