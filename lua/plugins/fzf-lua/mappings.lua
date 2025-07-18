@@ -25,7 +25,7 @@ local keys = {
   { "<leader>f0", function() require "fzf-lua".tmux_buffers() end, desc = "Tmux Buffers" },
   { "<F1>", function() require "fzf-lua".helptags() end, desc = "Help Pages" },
   -- find
-  { "<C-p>", function() require "fzf-lua".files() end, desc = "Find Files" },
+  { "<C-p>", function() require "fzf-lua".global() end, desc = "Find Files" },
   { "<C-k>", function() require "fzf-lua".zoxide() end, desc = "Zoxide" },
   { "<leader>fp", function() require "fzf-lua".files({ cwd = vim.fn.stdpath("data") .. "/lazy" }) end, desc = "Find Plugin File" },
   { "<leader>ff", function() require "fzf-lua".resume() end, desc = "Resume" },
@@ -39,6 +39,7 @@ local keys = {
   { "<leader>gc", function() require "fzf-lua".git_bcommits() end, desc = "Git Log", mode = { "n",  "v" } },
   { "<leader>gC", function() require "fzf-lua".git_commits() end, desc = "Git Log" },
   { "<leader>gs", function() require "fzf-lua".git_status() end, desc = "Git Status" },
+  { "<leader>gh", function() require "fzf-lua".git_hunks({ path_shorten = true }) end, desc = "Git Diff (hunks)" },
   { "<leader>gt", function() require "fzf-lua".git_tags() end, desc = "Git Tags" },
   { "<leader>gS", function() require "plugins.fzf-lua.cmds".git_status_tmuxZ({
     winopts = {
@@ -101,6 +102,8 @@ local keys = {
   { "<leader>ys", function() require "fzf-lua".git_status(vim.tbl_extend("force", yadm_git_opts, {
     prompt = "YadmStatus> ", cmd = "git status -s"
   })) end, desc = "Yadm Status" },
+  { "<leader>yh", function() require "fzf-lua".git_hunks(vim.tbl_extend("force", yadm_git_opts, {
+    prompt = "YadmDiff> ", path_shorten = true })) end, desc = "Yadm Diff (hunks)" },
   { "<leader>yS", function() require "plugins.fzf-lua.cmds".git_status_tmuxZ(vim.tbl_extend("force", yadm_git_opts, {
       prompt = "YadmStatus> ",
       cmd = "git -c color.status=false --no-optional-locks status --porcelain=v1",

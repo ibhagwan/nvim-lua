@@ -122,6 +122,7 @@ local default_opts = {
     on_create = function(e)
       -- disable miniindentscope
       vim.b.miniindentscope_disable = true
+      vim.keymap.set("t", "<C-\\>", "<C-\\>", { buffer = e.bufnr, nowait = true })
       vim.keymap.set("t", "<M-h>", "<M-h>", { buffer = e.bufnr, nowait = true })
       vim.keymap.set("t", "<C-r>", [['<C-\><C-N>"'.nr2char(getchar()).'pi']],
         { buffer = e.bufnr, expr = true })
@@ -214,7 +215,11 @@ local default_opts = {
       preview_pager = "delta --width=$COLUMNS --hunk-header-style=omit --file-style=omit",
     },
   },
-  diagnostics = { file_icons = false, path_shorten = 1, diag_source = true },
+  diagnostics = { file_icons = false, diag_source = true },
+  awesome_colorschemes = {
+    actions = { ["ctrl-r"] = false, ["ctrl-d"] = { fn = fzf_lua.actions.cs_update, reload = true }
+    }
+  },
   dir_icon = "",
 }
 
