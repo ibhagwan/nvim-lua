@@ -173,6 +173,9 @@ local default_opts = {
     fzf_opts = { ["--history"] = vim.fs.joinpath(vim.fn.stdpath("data"), "fzf_search_hist") },
     -- actions = { ["ctrl-g"] = false, ["ctrl-r"] = { fzf_lua.actions.grep_lgrep } },
   },
+  blines = {
+    fzf_opts = { ["--history"] = vim.fs.joinpath(vim.fn.stdpath("data"), "fzf_blines_hist") },
+  },
   -- tags = { actions = { ["ctrl-g"] = false, ["ctrl-r"] = { fzf_lua.actions.grep_lgrep } } },
   git = {
     status   = { winopts = { preview = { vertical = "down:70%", horizontal = "right:70%" } } },
@@ -198,6 +201,7 @@ local default_opts = {
       },
     },
     symbols = {
+      locate = true,
       path_shorten = 1,
       symbol_icons = symbol_icons,
       symbol_hl = symbol_hl,
