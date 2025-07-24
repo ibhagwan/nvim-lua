@@ -9,15 +9,16 @@ local M = {
       prebuilt_binaries = { download = false }
     },
     sources = {
-      default = { "lazydev", "lsp", "path", "snippets", "buffer" },
-      providers = {
-        lazydev = {
-          name = "LazyDev",
-          module = "lazydev.integrations.blink",
-          -- make lazydev completions top priority (see `:h blink.cmp`)
-          score_offset = 100,
-        },
-      },
+      default = { "lsp", "path", "snippets", "buffer" },
+      -- default = { "lazydev", "lsp", "path", "snippets", "buffer" },
+      -- providers = {
+      --   lazydev = {
+      --     name = "LazyDev",
+      --     module = "lazydev.integrations.blink",
+      --     -- make lazydev completions top priority (see `:h blink.cmp`)
+      --     score_offset = 100,
+      --   },
+      -- },
     },
     keymap = {
       ["<CR>"] = { "accept", "fallback" },
@@ -28,6 +29,8 @@ local M = {
       ["<C-e>"] = { "cancel", "show", "fallback" },
       ["<C-p>"] = { "select_prev", "fallback" },
       ["<C-n>"] = { "select_next", "fallback" },
+      ["<C-f>"] = { function(cmp) cmp.select_next({ count = 5 }) end, "fallback" },
+      ["<C-b>"] = { function(cmp) cmp.select_prev({ count = 5 }) end, "fallback" },
       ["<C-y>"] = { "select_and_accept" },
       ["<C-k>"] = { "show", "show_documentation", "hide_documentation" },
       ["<Tab>"] = { "select_next", "snippet_forward", "fallback" },

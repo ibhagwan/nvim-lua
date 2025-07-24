@@ -34,7 +34,7 @@ return {
   },
   {
     "folke/lazydev.nvim",
-    enabled = true,
+    enabled = false,
     ft = "lua",
     opts = {
       library = {
