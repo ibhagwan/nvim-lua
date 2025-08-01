@@ -1,6 +1,12 @@
 local M = {
   "ibhagwan/fzf-lua",
-  dependencies = { "nvim-tree/nvim-web-devicons" },
+  dependencies = {
+    "nvim-tree/nvim-web-devicons",
+    {
+      "elanmed/fzf-lua-frecency.nvim",
+      dev = require("utils").is_dev("fzf-lua-frecency.nvim"),
+    },
+  },
   dev = require("utils").is_dev("fzf-lua"),
   cmd = { "FzfLua", "TogglePickers" },
 }
@@ -16,6 +22,7 @@ function M.config()
   -- before nvim-treesitter is loaded
   pcall(require, "nvim-treesitter")
   require("plugins.fzf-lua.setup").setup()
+  require("fzf-lua-frecency").setup()
 
   vim.api.nvim_create_user_command("TogglePickers", function()
     local utils = require("utils")
