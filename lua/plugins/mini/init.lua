@@ -27,7 +27,10 @@ function M.config()
   require("mini.test").setup({
     collect = {
       find_files = function()
-        return vim.fn.globpath("tests", "**/*_spec.lua", true, true)
+        local test_files = vim.fn.globpath("tests", "**/*_spec.lua", true, true)
+        vim.tbl_map(function(f) table.insert(test_files, f) end,
+          vim.fn.globpath('tests', '**/test_*.lua', true, true))
+        return test_files
       end,
     },
   })

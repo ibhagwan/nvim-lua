@@ -56,11 +56,13 @@ function M.is_dev(path)
   return vim.uv.fs_stat(string.format("%s/%s", vim.fn.expand(DEV_DIR), path)) ~= nil
 end
 
-function M.has_compiler()
-  if vim.fn.executable("cc") == 1 or
-      vim.fn.executable("gcc") == 1 or
-      vim.fn.executable("clang") == 1 or
-      vim.fn.executable("cl") == 1 then
+function M.have_compiler()
+  if vim.fn.executable("cc") == 1
+      or vim.fn.executable("gcc") == 1
+      or vim.fn.executable("clang") == 1
+      or vim.fn.executable("cl") == 1
+      or vim.fn.executable("zig") == 1
+  then
     return true
   end
   return false

@@ -32,22 +32,22 @@ return {
     "mfussenegger/nvim-jdtls",
     ft = "java",
   },
-  {
-    "folke/lazydev.nvim",
-    enabled = false,
-    ft = "lua",
-    opts = {
-      library = {
-        -- Load luvit types when the `vim.uv` word is found
-        { path = "$(3rd)/luv/library", words = { "vim%.uv" } },
-        -- Always luad fzf-lua
-        "fzf-lua",
-      },
-      -- uncomment to disable when a .luarc.json file is found
-      -- enabled = function(root_dir)
-      --   return not vim.uv.fs_stat(root_dir .. "/.luarc.json")
-      --       and not vim.uv.fs_stat(root_dir .. "/.luarc.jsonc")
-      -- end,
-    },
-  },
+  -- {
+  --   "folke/lazydev.nvim",
+  --   enabled = false,
+  --   ft = "lua",
+  --   opts = {
+  --     library = {
+  --       -- Load luvit types when the `vim.uv` word is found
+  --       { path = "$(3rd)/luv/library", words = { "vim%.uv" } },
+  --       -- Always luad fzf-lua
+  --       "fzf-lua",
+  --     },
+  --     -- uncomment to disable when a .luarc.json file is found
+  --     -- enabled = function(root_dir)
+  --     --   return not vim.uv.fs_stat(root_dir .. "/.luarc.json")
+  --     --       and not vim.uv.fs_stat(root_dir .. "/.luarc.jsonc")
+  --     -- end,
+  --   },
+  -- },
 }
