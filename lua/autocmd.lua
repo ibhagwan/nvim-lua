@@ -63,7 +63,8 @@ augroup("ibhagwan/ColorScheme", function(g)
       -- fzf-lua
       if type(vim.g.fzf_colors) == "table" then
         vim.g.fzf_colors = vim.tbl_deep_extend("keep",
-          { ["bg+"] = { "bg", "Visual" } }, vim.g.fzf_colors)
+          { ["bg+"] = { "bg", "Visual" }, ["border"] = { "fg", "FzfLuaFzfBorder" } },
+          vim.g.fzf_colors)
       end
       vim.api.nvim_set_hl(0, "FzfLuaCursorLine", { default = false, link = "Visual" })
       vim.api.nvim_set_hl(0, "FzfLuaFzfCursorLine", { default = false, link = "Visual" })
@@ -78,6 +79,11 @@ augroup("ibhagwan/ColorScheme", function(g)
       vim.api.nvim_set_hl(0, "RenderMarkdownH4Bg", { default = false, link = "DiffAdd" })
       vim.api.nvim_set_hl(0, "RenderMarkdownH5Bg", { default = false, link = "DiffAdd" })
       vim.api.nvim_set_hl(0, "RenderMarkdownH6Bg", { default = false, link = "DiffAdd" })
+      -- Create a "block" hl where both fg|bg are the same as the status line for extui
+      local hldef = vim.api.nvim_get_hl(0, { link = false, name = "StatusLine" })
+      if hldef and hldef.bg then
+        vim.api.nvim_set_hl(0, "MsgSeparator", { default = false, fg = hldef.bg, bg = hldef.bg })
+      end
     end,
   })
 end)

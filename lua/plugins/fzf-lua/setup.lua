@@ -74,11 +74,9 @@ local symbol_hl = function(s)
 end
 
 local default_opts = {
-  { "border-fused", "hide" },
-  fzf_bin = require("utils").is_iSH() and "sk" or nil,
-  -- debug_tracelog = "~/fzf-lua-trace.log",
-  -- fzf_opts = { ["--info"] = "default" },
+  { "hide" },
   -- fzf_opts = { ["--tmux"] = "80%,60%", ["--border"] = "rounded" },
+  fzf_bin = require("utils").is_iSH() and "sk" or nil,
   fzf_colors = function(o)
     local is_tmux = o.fzf_bin and o.fzf_bin:match("tmux") or o.fzf_opts["--tmux"]
     if is_tmux then
@@ -95,46 +93,45 @@ local default_opts = {
       return true
     end
   end,
-  winopts = {
-    -- split   = "belowright new",
-    -- split   = "belowright vnew",
-    -- split   = "aboveleft new",
-    -- split   = "aboveleft vnew",
-    -- height     = 0.85,
-    -- width      = 0.80,
-    -- row        = 0.35,
-    -- col        = 0.55,
-    -- border = { {'╭', 'IncSearch'}, {'─', 'IncSearch'},
-    -- {'╮', 'IncSearch'}, '│', '╯', '─', '╰', '│' },
-    -- treesitter = false,
-    preview   = {
-      -- layout       = "flex",
-      -- layout       = "vertical",
-      -- layout       = "horizontal",
-      -- vertical     = "down:50%",
-      -- vertical     = "up:50%",
-      -- horizontal   = "right:55%",
-      -- horizontal   = "left:60%",
-      -- scrollbar    = "float",
-      -- scrolloff    = -1,
-      flip_columns = 120,
-    },
-    on_create = function(e)
-      -- disable miniindentscope
-      vim.b.miniindentscope_disable = true
-      vim.keymap.set("t", "<C-\\>", "<C-\\>", { buffer = e.bufnr, nowait = true })
-      vim.keymap.set("t", "<M-h>", "<M-h>", { buffer = e.bufnr, nowait = true })
-      vim.keymap.set("t", "<C-r>", [['<C-\><C-N>"'.nr2char(getchar()).'pi']],
-        { buffer = e.bufnr, expr = true })
-    end,
-  },
-  -- winopts = function()
-  --   -- local split = "botright new" -- use for split under **all** windows
-  --   -- local split = "belowright new" -- use for split under current windows
-  --   -- local height = math.floor(vim.o.lines * 0.3)
-  --   -- return { split = split .. " | resize " .. tostring(height) }
-  --   return { split = "belowright new", preview = { flip_columns = 120 } }
-  -- end,
+  winopts = function()
+    return
+    {
+      -- border = { {'╭', 'IncSearch'}, {'─', 'IncSearch'}, {'╮', 'IncSearch'}, '│', '╯', '─', '╰', '│' },
+      split     = "enew",
+      preview   = {
+        layout       = "flex",
+        vertical     = "up:60%",
+        scrollbar    = "float",
+        scrolloff    = -1,
+        flip_columns = 120,
+        winopts      = { signcolumn = "yes" },
+        border       = function(_, m)
+          if m.type == "fzf" then
+            return "border-line"
+          else
+            if m.layout == "down" then
+              return { "", "─", "", "", "", "", "", "" }
+            elseif m.layout == "up" then
+              return { "", "", "", "", "", "─", "", "" }
+            elseif m.layout == "left" then
+              return { "│", "", "│", "│", "", "", "", "" }
+            else
+              return { "", "", "", "", "│", "", "│", "│" }
+            end
+          end
+        end,
+      },
+      on_create = function(e)
+        -- disable miniindentscope
+        vim.b.miniindentscope_disable = true
+        vim.keymap.set("t", "<C-\\>", "<C-\\>", { buffer = e.bufnr, nowait = true })
+        vim.keymap.set("t", "<M-h>", "<M-h>", { buffer = e.bufnr, nowait = true })
+        vim.keymap.set("t", "<C-r>", [['<C-\><C-N>"'.nr2char(getchar()).'pi']],
+          { buffer = e.bufnr, expr = true })
+      end,
+    }
+  end,
+  hls = { title = "PmenuSel", title_flags = "MiniStatusLineModeOther" },
   -- hls = function()
   --   return {
   --     border = hl_match({ "FloatBorder", "LineNr" }),
@@ -147,6 +144,7 @@ local default_opts = {
   previewers = {
     bat = { theme = "Coldark-Dark", args = "--color=always --style=default" },
     builtin = {
+      -- toggle_behavior   = "extend",
       title_fnamemodify = function(s) return s end,
       ueberzug_scaler   = "cover",
       extensions        = {
@@ -171,25 +169,22 @@ local default_opts = {
   files = { fzf_opts = { ["--tiebreak"] = "end" } },
   grep = {
     fzf_opts = { ["--history"] = vim.fs.joinpath(vim.fn.stdpath("data"), "fzf_search_hist") },
-    -- actions = { ["ctrl-g"] = false, ["ctrl-r"] = { fzf_lua.actions.grep_lgrep } },
   },
   blines = {
+    { "ivy", "hide" },
     fzf_opts = { ["--history"] = vim.fs.joinpath(vim.fn.stdpath("data"), "fzf_blines_hist") },
   },
-  -- tags = { actions = { ["ctrl-g"] = false, ["ctrl-r"] = { fzf_lua.actions.grep_lgrep } } },
   git = {
-    status   = { winopts = { preview = { vertical = "down:70%", horizontal = "right:70%" } } },
-    commits  = { winopts = { preview = { vertical = "down:60%", } } },
-    bcommits = { winopts = { preview = { vertical = "down:60%", } } },
+    blame = { { "ivy", "hide" } },
     branches = {
       -- cmd_add = { "git", "checkout", "-b" },
       cmd_del = { "git", "branch", "--delete", "--force" },
-      winopts = { preview = { vertical = "down:75%", horizontal = "right:75%" }
-      }
     },
   },
+  treesitter = { { "ivy", "hide" } },
   lsp = {
     finder = {
+      { "ivy", "hide" },
       providers = {
         { "definitions",     prefix = fzf_lua.utils.ansi_codes.green("def ") },
         { "declarations",    prefix = fzf_lua.utils.ansi_codes.magenta("decl") },
@@ -200,14 +195,20 @@ local default_opts = {
         { "outgoing_calls",  prefix = fzf_lua.utils.ansi_codes.yellow("out ") },
       },
     },
-    symbols = {
-      locate = true,
+    document_symbols = {
+      { "ivy", "hide" },
+      -- locate = true,
       path_shorten = 1,
       symbol_icons = symbol_icons,
       symbol_hl = symbol_hl,
-      -- actions = { ["ctrl-g"] = false, ["ctrl-r"] = { fzf_lua.actions.sym_lsym } },
+    },
+    workspace_symbols = {
+      path_shorten = 1,
+      symbol_icons = symbol_icons,
+      symbol_hl = symbol_hl,
     },
     code_actions = {
+      { "border-fused" },
       winopts = {
         relative = "cursor",
         row      = 1,
@@ -224,6 +225,8 @@ local default_opts = {
     actions = { ["ctrl-r"] = false, ["ctrl-d"] = { fn = fzf_lua.actions.cs_update, reload = true }
     }
   },
+  builtin = { { "border-fused" } },
+  spell_suggest = { { "default" } },
   dir_icon = "",
 }
 

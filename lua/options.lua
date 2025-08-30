@@ -219,3 +219,19 @@ if vim.env.SSH_TTY then
     },
   }
 end
+
+local ok, extui = pcall(require, "vim._extui")
+if ok then
+  extui.enable({
+    enable = true,
+    msg = {
+      ---@type "cmd"|"msg" Where to place regular messages, either in the
+      ---cmdline or in a separate ephemeral message window.
+      target = "cmd",
+      timeout = 4000,
+    },
+  })
+end
+
+-- default fzf plugin layout
+vim.g.fzf_layout = { window = "enew" }
