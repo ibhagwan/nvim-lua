@@ -29,7 +29,7 @@
 - [smartyank.nvim](https://github.com/ibhagwan/smartyank.nvim): only pollute
   the clipboard when you really mean it (written by me)!
 
-- [mini.surround](https://github.com/echasnovski/mini.nvim): adds the missing
+- [mini.surround](https://github.com/nvim-mini/mini.nvim): adds the missing
   operators (`ds`, `cs`, `ys`) for dealing with pairs of "surroundings"
   (quotes, tags, etc)
 
@@ -79,7 +79,7 @@
 
 ### Misc
 
-- [mini.nvim](https://github.com/echasnovski/mini.nvim): a must have plugin from
+- [mini.nvim](https://github.com/nvim-mini/mini.nvim): a must have plugin from
   the great @echasnovski, used for statusline, indent lines, surround and much more
 
 - [which-key](https://github.com/folke/which-key.nvim): a must plugin in every

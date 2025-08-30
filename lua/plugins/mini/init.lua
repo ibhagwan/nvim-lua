@@ -1,7 +1,7 @@
 local M = {
   -- vim-surround/sandwich, lua version
   -- mini also has an indent highlighter
-  "echasnovski/mini.nvim",
+  "nvim-mini/mini.nvim",
   -- not using "VeryLazy" event as it bugs out the splashscreen
   -- https://github.com/echasnovski/mini.nvim/issues/238
   event = { "BufReadPost", "InsertEnter" }
