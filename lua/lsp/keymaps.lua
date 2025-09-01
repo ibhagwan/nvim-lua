@@ -28,29 +28,6 @@ local setup = function()
     end
     vim.b._diag_is_hidden = not vim.b._diag_is_hidden
   end, { desc = "toggle virtual text [LSP]" })
-
-  local wk = package.loaded["which-key"]
-  if wk then
-    wk.add({
-      "<leader>lh",
-      desc = function()
-        local enabled = vim.lsp.inlay_hint.is_enabled({})
-        return string.format("%s inlay hints [LSP]", enabled and "hide" or "show")
-      end,
-      buffer = 0,
-      nowait = false,
-      remap = false
-    })
-    wk.add({
-      "<leader>lv",
-      desc = function()
-        return string.format("%s virtual text [LSP]", vim.b._diag_is_hidden and "show" or "hide")
-      end,
-      buffer = 0,
-      nowait = false,
-      remap = false
-    })
-  end
 end
 
 return { setup = setup }

@@ -13,7 +13,6 @@
 - Minimum changes to default key mapping
 - A good selection of carefully hand-picked plugins
 - Lazy load plugins where possible
-- Which-key to rule them all
 - Misc utilities and goodies
 
 ## Plugins & Packages
@@ -81,11 +80,6 @@
 
 - [mini.nvim](https://github.com/nvim-mini/mini.nvim): a must have plugin from
   the great @echasnovski, used for statusline, indent lines, surround and much more
-
-- [which-key](https://github.com/folke/which-key.nvim): a must plugin in every
-  setup, when leader key (and some built-ins) sequence is pressed and times out
-  which-key will generate a help window with your keybinds and also let you
-  continue the sequence at your own pace
 
 - [previm](https://github.com/previm/previm): live preview markdown files in
   the browser with `<space>r`

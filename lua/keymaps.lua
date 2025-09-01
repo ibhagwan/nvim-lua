@@ -55,7 +55,7 @@ map({ "n", "v", "i" }, "<C-x><C-l>",
 
 map({ "n", "v", "i" }, "<C-x><C-s>",
   function() require("fzf-lua").spell_suggest() end,
-  { silent = true, desc = "Fuzzy complete path" })
+  { silent = true, desc = "Fuzzy complete spelling" })
 
 -- <ctrl-s> to Save
 map({ "n", "v", "i" }, "<C-S>", "<C-c>:update<cr>", { silent = true, desc = "Save" })
