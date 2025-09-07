@@ -12,7 +12,7 @@ local M = {}
 
 M.__HAS_NVIM_011 = vim.fn.has("nvim-0.11") == 1
 M.__IS_WIN = vim.fn.has("win32") == 1 or vim.fn.has("win64") == 1
-M.__USE_SNACKS = M.__IS_WIN
+-- M.__USE_SNACKS = M.__IS_WIN
 
 local fast_event_aware_notify = function(msg, level, opts)
   if vim.in_fast_event() then
