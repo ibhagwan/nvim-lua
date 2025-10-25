@@ -7,7 +7,7 @@ local M = {
     },
     { "theHamsta/nvim-dap-virtual-text" },
     { "jbyuki/one-small-step-for-vimkind" },
-    { "mfussenegger/nvim-dap-python" },
+    -- { "mfussenegger/nvim-dap-python" },
   },
 }
 

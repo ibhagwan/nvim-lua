@@ -137,6 +137,11 @@ vim.g.loaded_ruby_provider = 0
 vim.g.loaded_perl_provider = 0
 vim.g.loaded_node_provider = 0
 
+-- Load `Undotree` plugin
+package.path = ("%s/%s/?.lua;"):format(vim.env.VIMRUNTIME, "pack/dist/opt/nvim.undotree/lua")
+    .. package.path
+pcall(vim.cmd, "packadd nvim.undotree")
+
 -- Disable some in built plugins completely
 local disabled_built_ins = {
   "netrw",

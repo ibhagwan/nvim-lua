@@ -103,7 +103,7 @@ local default_opts = {
         vertical     = "up:60%",
         scrollbar    = "float",
         scrolloff    = -1,
-        flip_columns = 120,
+        flip_columns = 140,
         winopts      = { signcolumn = "yes" },
         border       = function(_, m)
           if m.type == "fzf" then
@@ -193,6 +193,8 @@ local default_opts = {
         { "references",      prefix = fzf_lua.utils.ansi_codes.blue("ref ") },
         { "incoming_calls",  prefix = fzf_lua.utils.ansi_codes.cyan("in  ") },
         { "outgoing_calls",  prefix = fzf_lua.utils.ansi_codes.yellow("out ") },
+        { "type_sub",        prefix = fzf_lua.utils.ansi_codes.cyan("sub ") },
+        { "type_super",      prefix = fzf_lua.utils.ansi_codes.yellow("supr") },
       },
     },
     document_symbols = {
