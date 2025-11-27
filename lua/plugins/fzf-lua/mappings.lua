@@ -33,17 +33,19 @@ local keys = {
   { "<leader>fF", function() require "fzf-lua".resume() end, desc = "Resume" },
   { "<leader>fH", function() require "fzf-lua".oldfiles({ include_current_session = true }) end, desc = "Oldfiles (All)" },
   { "<leader>fh", function() require "fzf-lua".oldfiles({ cwd = vim.uv.cwd(), cwd_header = true, cwd_only = true, include_current_session = true }) end, desc = "Oldfiles (cwd)" },
+  { "<leader>fu", function() require "fzf-lua".undotree() end, desc = "Undotree" },
   -- { "<leader>fH", function() require("fzf-lua-frecency").frecency({ display_score = true }) end, desc = "Frecency (All)" },
   -- { "<leader>fh", function() require("fzf-lua-frecency").frecency({ display_score = true, cwd_only = vim.fn.expand("$HOME") ~= vim.uv.cwd() and true }) end, desc = "Frecency (cwd)" },
   -- git
   { "<leader>gb", function() require "fzf-lua".git_blame() end, desc = "Git Blame", mode = { "n", "v" } },
   { "<leader>gB", function() require "fzf-lua".git_branches() end, desc = "Git Branches" },
   { "<leader>gB", function() require "fzf-lua".git_branches() end, desc = "Git Branches" },
+  { "<leader>gt", function() require "fzf-lua".git_worktrees() end, desc = "Git Worktrees" },
   { "<leader>gc", function() require "fzf-lua".git_bcommits() end, desc = "Git Log", mode = { "n",  "v" } },
   { "<leader>gC", function() require "fzf-lua".git_commits() end, desc = "Git Log" },
   { "<leader>gs", function() require "fzf-lua".git_status() end, desc = "Git Status" },
   { "<leader>gh", function() require "fzf-lua".git_hunks({ path_shorten = true }) end, desc = "Git Diff (hunks)" },
-  { "<leader>gt", function() require "fzf-lua".git_tags() end, desc = "Git Tags" },
+  -- { "<leader>gt", function() require "fzf-lua".git_tags() end, desc = "Git Tags" },
   { "<leader>gS", function() require "plugins.fzf-lua.cmds".git_status_tmuxZ({
     winopts = {
         fullscreen = true,

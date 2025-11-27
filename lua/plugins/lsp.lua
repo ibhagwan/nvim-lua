@@ -23,7 +23,7 @@ return {
       require("mason-lspconfig").setup({
         ensure_installed = not utils.is_NetBSD()
             and not utils.is_iSH()
-            and { "lua_ls" }
+            and { "emmylua_ls" }
             or nil,
       })
     end,

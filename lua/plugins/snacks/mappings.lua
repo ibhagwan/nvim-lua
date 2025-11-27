@@ -16,6 +16,7 @@ local keys = {
   { "<leader>Ff", function() require "snacks".picker.resume() end, desc = "Resume" },
   { "<leader>FF", function() require "snacks".picker.resume() end, desc = "Resume" },
   { "<leader>Fh", function() require "snacks".picker.recent() end, desc = "Recent" },
+  { "<leader>Fu", function() require "snacks".picker.undo() end, desc = "Undo" },
   -- git
   { "<leader>Gf", function() require "snacks".picker.git_files() end, desc = "Find Git Files" },
   { "<leader>GB", function() require "snacks".picker.git_branches() end, desc = "Git Branches" },

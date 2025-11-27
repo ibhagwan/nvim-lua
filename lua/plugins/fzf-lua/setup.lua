@@ -179,6 +179,13 @@ local default_opts = {
     branches = {
       -- cmd_add = { "git", "checkout", "-b" },
       cmd_del = { "git", "branch", "--delete", "--force" },
+      actions = {
+        ["ctrl-t"] = {
+          fn = FzfLua.actions.git_worktree_add,
+          header = "add worktree",
+          reload = true,
+        }
+      },
     },
   },
   treesitter = { { "ivy", "hide" } },
@@ -210,7 +217,7 @@ local default_opts = {
       symbol_hl = symbol_hl,
     },
     code_actions = {
-      { "border-fused" },
+      { "default" },
       winopts = {
         relative = "cursor",
         row      = 1,

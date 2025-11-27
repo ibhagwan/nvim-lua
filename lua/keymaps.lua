@@ -224,3 +224,9 @@ map("n", "<leader>o",
 map("n", "<leader>O",
   [[:<C-u>call append(line(".")-1, repeat([""], v:count1))<CR>]],
   { silent = true, desc = "newline above (no insert-mode)" })
+
+-- git merge conflicts > qflist
+map("n", "<leader>gx", function()
+  vim.cmd [[cexpr system("git diff --check --relative")]]
+  vim.cmd "copen"
+end, { desc = "Git conflicts to quickfix" })
