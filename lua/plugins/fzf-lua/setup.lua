@@ -97,7 +97,10 @@ local default_opts = {
     return
     {
       -- border = { {'╭', 'IncSearch'}, {'─', 'IncSearch'}, {'╮', 'IncSearch'}, '│', '╯', '─', '╰', '│' },
-      split     = "enew",
+      split     = (function()
+        -- do not use split from float wins
+        return #vim.api.nvim_win_get_config(0).relative == 0 and "enew" or nil
+      end)(),
       preview   = {
         layout       = "flex",
         vertical     = "up:60%",
@@ -257,7 +260,7 @@ return {
       elseif h > max_h then
         h = max_h
       end
-      return { winopts = { height = h, width = 0.60, row = 0.40 } }
+      return { "default", winopts = { height = h, width = 0.60, row = 0.40 } }
     end)
 
     vim.api.nvim_create_autocmd("ColorScheme", {
