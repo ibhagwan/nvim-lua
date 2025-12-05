@@ -20,7 +20,9 @@
       "$VIMRUNTIME",
       "$XDG_DATA_HOME/nvim/lazy/mini.nvim",
       "$XDG_DATA_HOME/nvim/lazy/nvim-web-devicons",
-      "$XDG_DATA_HOME/nvim/lazy/nvim-dap"
+      "$XDG_DATA_HOME/nvim/lazy/nvim-dap",
+      "$XDG_DATA_HOME/nvim/lazy/fzf-lua",
+      "$HOME/Sources/nvim/fzf-lua"
     ],
     "preloadFileSize": 1000
   },
