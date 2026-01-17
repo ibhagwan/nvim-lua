@@ -217,13 +217,17 @@ end, { silent = true, desc = "toggle color column on/off" })
 map("n", "<leader>%", [[<Esc>:lua require"utils".set_cwd()<CR>]],
   { silent = true, desc = "smart set cwd (git|file parent)" })
 
+--
+-- NOTE: no longer in use, neovim 0.11 added '[]<SPC>'
+-- https://github.com/neovim/neovim/pull/30984
+--
 -- Map <leader>o & <leader>O to newline without insert mode
-map("n", "<leader>o",
-  [[:<C-u>call append(line("."), repeat([""], v:count1))<CR>]],
-  { silent = true, desc = "newline below (no insert-mode)" })
-map("n", "<leader>O",
-  [[:<C-u>call append(line(".")-1, repeat([""], v:count1))<CR>]],
-  { silent = true, desc = "newline above (no insert-mode)" })
+-- map("n", "<leader>o",
+--   [[:<C-u>call append(line("."), repeat([""], v:count1))<CR>]],
+--   { silent = true, desc = "newline below (no insert-mode)" })
+-- map("n", "<leader>O",
+--   [[:<C-u>call append(line(".")-1, repeat([""], v:count1))<CR>]],
+--   { silent = true, desc = "newline above (no insert-mode)" })
 
 -- git merge conflicts > qflist
 map("n", "<leader>gx", function()

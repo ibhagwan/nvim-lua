@@ -77,6 +77,22 @@ local default_opts = {
   { "hide" },
   -- fzf_opts = { ["--tmux"] = "80%,60%", ["--border"] = "rounded" },
   fzf_bin = require("utils").is_iSH() and "sk" or nil,
+  keymap = {
+    builtin = {
+      true,
+      ["<C-A-j>"] = "preview-page-down",
+      ["<C-A-k>"] = "preview-page-up",
+      ["<A-S-j>"] = "preview-down",
+      ["<A-S-k>"] = "preview-up",
+    },
+    fzf = {
+      true,
+      ["ctrl-alt-j"] = "preview-page-down",
+      ["ctrl-alt-k"] = "preview-page-up",
+      ["alt-J"] = "preview-down",
+      ["alt-K"] = "preview-up",
+    },
+  },
   fzf_colors = function(o)
     local is_tmux = o.fzf_bin and o.fzf_bin:match("tmux") or o.fzf_opts["--tmux"]
     if is_tmux then
@@ -178,6 +194,14 @@ local default_opts = {
     fzf_opts = { ["--history"] = vim.fs.joinpath(vim.fn.stdpath("data"), "fzf_blines_hist") },
   },
   git = {
+    status = {
+      actions = {
+        ["right"]  = { fn = FzfLua.actions.git_unstage, reload = true, header = false },
+        ["left"]   = { fn = FzfLua.actions.git_stage, reload = true, header = false },
+        ["ctrl-l"] = { fn = FzfLua.actions.git_unstage, reload = true },
+        ["ctrl-h"] = { fn = FzfLua.actions.git_stage, reload = true },
+      },
+    },
     blame = { { "ivy", "hide" } },
     branches = {
       -- cmd_add = { "git", "checkout", "-b" },
@@ -240,6 +264,18 @@ local default_opts = {
   builtin = { { "border-fused" } },
   spell_suggest = { { "default" } },
   dir_icon = "",
+  -- register fzf-lua as vim.ui.select interface
+  ui_select = function(o, items)
+    local min_h, max_h = 0.15, 0.70
+    local preview = o.kind == "codeaction" and 0.20 or 0
+    local h = (#items + 6) / vim.o.lines + preview
+    if h < min_h then
+      h = min_h
+    elseif h > max_h then
+      h = max_h
+    end
+    return { "default", winopts = { height = h, width = 0.60, row = 0.40 } }
+  end,
 }
 
 return {
@@ -249,19 +285,6 @@ return {
     -- fzf_lua.config._devicons_setup = "~/.config/nvim/lua/plugins/devicons/setup.lua"
 
     fzf_lua.setup(default_opts)
-
-    -- register fzf-lua as vim.ui.select interface
-    fzf_lua.register_ui_select(function(o, items)
-      local min_h, max_h = 0.15, 0.70
-      local preview = o.kind == "codeaction" and 0.20 or 0
-      local h = (#items + 4) / vim.o.lines + preview
-      if h < min_h then
-        h = min_h
-      elseif h > max_h then
-        h = max_h
-      end
-      return { "default", winopts = { height = h, width = 0.60, row = 0.40 } }
-    end)
 
     vim.api.nvim_create_autocmd("ColorScheme", {
       callback = function() symbol_hls = nil end,

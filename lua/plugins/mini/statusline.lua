@@ -42,6 +42,33 @@ local section_lsp = function(args)
   return table.concat(names, " ")
 end
 
+local section_opencode = function(args)
+  if MiniStatusline.is_truncated(args.trunc_width) then return "" end
+  if not package.loaded["opencode"] then return "" end
+  local i = (function()
+    local status = require("opencode.status").status
+    if status == "idle" then
+      return 1
+    elseif status == "responding" then
+      return 2
+    elseif status == "requesting_permission" then
+      return 3
+    elseif status == "error" then
+      return 4
+    else
+      return 5
+    end
+  end)()
+  local s = assert(({
+    { "i", "MiniStatusLineModeInsert" },
+    { "r", "MiniStatusLineModeVisual" },
+    { "p", "MiniStatusLineModeCommand" },
+    { "e", "MiniStatusLineModeReplace" },
+    { "d", "MiniStatuslineDevinfo" }
+  })[i])
+  return string.format("oc[%s]", s[1]), s[2]
+end
+
 local section_diagnostics = function(args)
   if MiniStatusline.is_truncated(args.trunc_width) then return "" end
   local diags = {
@@ -67,6 +94,7 @@ local active_content = function()
   local fileinfo      = section_fileinfo({ trunc_width = 140 })
   local filename      = MiniStatusline.section_filename({ trunc_width = 140 })
   local lsp           = section_lsp({ trunc_width = 75 })
+  local oc, oc_hl     = section_opencode({ trunc_width = 75 })
   -- local diagnostics   = MiniStatusline.section_diagnostics({ trunc_width = 75 })
   local diag_e        = section_diagnostics({ trunc_width = 75, severity = "E" })
   local diag_w        = section_diagnostics({ trunc_width = 75, severity = "W" })
@@ -85,6 +113,7 @@ local active_content = function()
     { hl = "MiniStatuslineFilename",    strings = { "%=" } }, -- Left align
     { hl = "MiniStatuslineFileinfo",    strings = { fileinfo } },
     { hl = "MiniStatusLineModeOther",   strings = { lsp } },
+    { hl = oc_hl,                       strings = { oc } },
     -- { hl = "MiniStatusLineModeReplace", strings = { diagnostics } },
     { hl = "MiniStatusLineModeReplace", strings = { diag_e } },
     { hl = "MiniStatusLineModeCommand", strings = { diag_w } },
