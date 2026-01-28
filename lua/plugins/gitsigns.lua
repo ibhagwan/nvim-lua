@@ -59,7 +59,7 @@ M.config = function()
       map("n", "<leader>hp", gs.preview_hunk_inline, { desc = "preview hunk (inline)" })
       map("n", "<leader>hP", gs.preview_hunk, { desc = "preview hunk (float)" })
       -- map "{h|y}b" to git blame
-      for _, c in ipairs({ "h", "y" }) do
+      for _, c in ipairs({ "h", --[["y"]] }) do
         map("n", string.format("<leader>%sb", c),
           function() gs.blame_line({ full = true }) end, { desc = "Line blame (float)" })
       end

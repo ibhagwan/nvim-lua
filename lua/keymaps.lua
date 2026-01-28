@@ -43,6 +43,8 @@ vim.cmd([[
 -- root doesn't use plugins, use builtin FZF
 if require "utils".is_root() then
   map("n", "<C-p>", "<cmd>FZF<CR>", { desc = "FZF" })
+else
+  map("n", "<C-z>", "<cmd>detach<CR>", { desc = "Detach current neovim instance" })
 end
 
 map({ "n", "v", "i" }, "<C-x><C-f>",

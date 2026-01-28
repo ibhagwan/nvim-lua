@@ -75,8 +75,16 @@ end
 
 local default_opts = {
   { "hide" },
+  -- { "ivy" },
   -- fzf_opts = { ["--tmux"] = "80%,60%", ["--border"] = "rounded" },
-  fzf_bin = require("utils").is_iSH() and "sk" or nil,
+  fzf_opts = function(o)
+    return FzfLua.utils.has(o, "sk", { 1, 5, 3 }) and {
+      ["--algo"] = "frizbee",
+      -- ["--border"] = "plain",
+    } or {}
+  end,
+  -- fzf_bin = require("utils").is_iSH() and "sk" or nil,
+  fzf_bin = jit.os == "Linux" and "~/Sources/nvim/skim/target/release/sk" or nil,
   keymap = {
     builtin = {
       true,
@@ -106,7 +114,14 @@ local default_opts = {
         -- scrollbar = { "fg", "WarningMsg" },
       }
     else
-      return true
+      return {
+        true,
+        -- from `man sk`
+        -- Adding `-fg`, `_fg`, `-bg`, `_bg`, `-underline`, `_underline` sets the corresponding
+        -- part of the color. For instance, `normal-fg` (or simply `fg`) will set the foreground
+        -- normal color.
+        ["hl_bg"] = FzfLua.utils.has(o, "sk", { 1, 5, 3 }) and { "bg", "Normal" } or nil,
+      }
     end
   end,
   winopts = function()
@@ -150,6 +165,16 @@ local default_opts = {
       end,
     }
   end,
+  -- winopts = {
+  --   on_create = function(e)
+  --     -- disable miniindentscope
+  --     vim.b.miniindentscope_disable = true
+  --     vim.keymap.set("t", "<C-\\>", "<C-\\>", { buffer = e.bufnr, nowait = true })
+  --     vim.keymap.set("t", "<M-h>", "<M-h>", { buffer = e.bufnr, nowait = true })
+  --     vim.keymap.set("t", "<C-r>", [['<C-\><C-N>"'.nr2char(getchar()).'pi']],
+  --       { buffer = e.bufnr, expr = true })
+  --   end,
+  -- },
   hls = { title = "PmenuSel", title_flags = "MiniStatusLineModeOther" },
   -- hls = function()
   --   return {
@@ -190,7 +215,7 @@ local default_opts = {
     fzf_opts = { ["--history"] = vim.fs.joinpath(vim.fn.stdpath("data"), "fzf_search_hist") },
   },
   blines = {
-    { "ivy", "hide" },
+    { "ivy" },
     fzf_opts = { ["--history"] = vim.fs.joinpath(vim.fn.stdpath("data"), "fzf_blines_hist") },
   },
   git = {
@@ -202,7 +227,7 @@ local default_opts = {
         ["ctrl-h"] = { fn = FzfLua.actions.git_stage, reload = true },
       },
     },
-    blame = { { "ivy", "hide" } },
+    blame = { { "ivy" } },
     branches = {
       -- cmd_add = { "git", "checkout", "-b" },
       cmd_del = { "git", "branch", "--delete", "--force" },
@@ -215,10 +240,10 @@ local default_opts = {
       },
     },
   },
-  treesitter = { { "ivy", "hide" } },
+  treesitter = { { "ivy" } },
   lsp = {
     finder = {
-      { "ivy", "hide" },
+      { "ivy" },
       providers = {
         { "definitions",     prefix = fzf_lua.utils.ansi_codes.green("def ") },
         { "declarations",    prefix = fzf_lua.utils.ansi_codes.magenta("decl") },
@@ -232,7 +257,7 @@ local default_opts = {
       },
     },
     document_symbols = {
-      { "ivy", "hide" },
+      { "ivy" },
       -- locate = true,
       path_shorten = 1,
       symbol_icons = symbol_icons,

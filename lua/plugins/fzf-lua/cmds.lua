@@ -29,11 +29,11 @@ function M.git_status_tmuxZ(opts)
   end
 
   -- Post fzf v0.53: "--tmux" flag
-  if fzf_lua.config.globals.fzf_opts["--tmux"] then
-    opts.fzf_opts = opts.fzf_opts or {}
-    opts.fzf_opts["--tmux"] = "100%,100%"
-    return fzf_lua.git_status(opts)
-  end
+  -- if fzf_lua.config.globals.fzf_opts["--tmux"] then
+  --   opts.fzf_opts = opts.fzf_opts or {}
+  --   opts.fzf_opts["--tmux"] = "100%,100%"
+  --   return fzf_lua.git_status(opts)
+  -- end
 
   opts.winopts = opts.winopts or {}
   opts.winopts.on_create = function(_)

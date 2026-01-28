@@ -25,7 +25,7 @@ local keys = {
   { "<leader>f0", function() require "fzf-lua".tmux_buffers() end, desc = "Tmux Buffers" },
   { "<F1>", function() require "fzf-lua".helptags() end, desc = "Help Pages" },
   -- find
-  { "<C-p>", function() require "fzf-lua".global() end, desc = "Find Files" },
+  { "<C-p>", function() require "fzf-lua".files() end, desc = "Find Files" },
   -- { "<C-p>", function() require("fzf-lua-frecency").frecency({ display_score = true, cwd_only = true, fzf_opts = { ["--no-sort"] = false } }) end, desc = "Frecency (project)" },
   { "<C-k>", function() require "fzf-lua".zoxide() end, desc = "Zoxide" },
   { "<leader>fp", function() require "fzf-lua".files({ cwd = vim.fn.stdpath("data") .. "/lazy" }) end, desc = "Find Plugin File" },
@@ -37,12 +37,14 @@ local keys = {
   -- { "<leader>fH", function() require("fzf-lua-frecency").frecency({ display_score = true }) end, desc = "Frecency (All)" },
   -- { "<leader>fh", function() require("fzf-lua-frecency").frecency({ display_score = true, cwd_only = vim.fn.expand("$HOME") ~= vim.uv.cwd() and true }) end, desc = "Frecency (cwd)" },
   -- git
-  { "<leader>gb", function() require "fzf-lua".git_blame() end, desc = "Git Blame", mode = { "n", "v" } },
-  { "<leader>gB", function() require "fzf-lua".git_branches() end, desc = "Git Branches" },
-  { "<leader>gB", function() require "fzf-lua".git_branches() end, desc = "Git Branches" },
+  { "<leader>gg", function() require "fzf-lua".live_grep({ cmd = "git grep -i --line-number --column --color=always" }) end, desc = "Git Grep" },
+  { "<leader>gf", function() require "fzf-lua".git_files() end, desc = "Git Files" },
+  { "<leader>gb", function() require "fzf-lua".git_branches() end, desc = "Git Branches" },
+  { "<leader>gB", function() require "fzf-lua".git_blame() end, desc = "Git Blame", mode = { "n", "v" } },
   { "<leader>gt", function() require "fzf-lua".git_worktrees() end, desc = "Git Worktrees" },
   { "<leader>gc", function() require "fzf-lua".git_bcommits() end, desc = "Git Log", mode = { "n",  "v" } },
   { "<leader>gC", function() require "fzf-lua".git_commits() end, desc = "Git Log" },
+  { "<leader>gl", function() require "fzf-lua".git_commits() end, desc = "Git Log" },
   { "<leader>gs", function() require "fzf-lua".git_status() end, desc = "Git Status" },
   { "<leader>gh", function() require "fzf-lua".git_hunks({ path_shorten = true }) end, desc = "Git Diff (hunks)" },
   -- { "<leader>gt", function() require "fzf-lua".git_tags() end, desc = "Git Tags" },
@@ -103,7 +105,8 @@ local keys = {
   { "<leader>yb", function() require "fzf-lua".git_branches(vim.tbl_extend("force", yadm_git_opts, { prompt = "YadmBranches> " })) end, desc = "Yadm Branches" },
   { "<leader>yc", function() require "fzf-lua".git_bcommits(vim.tbl_extend("force", yadm_git_opts, { prompt = "YadmBCommits> " })) end, desc = "Yadm Log", mode = { "n",  "v" } },
   { "<leader>yC", function() require "fzf-lua".git_commits(vim.tbl_extend("force", yadm_git_opts, { prompt = "YadmCommits> " })) end, desc = "Yadm Log" },
-  { "<leader>yl", function() require "fzf-lua".live_grep(vim.tbl_extend("force", yadm_grep_opts, { prompt = "YadmGrep> " })) end, desc = "Yadm Grep" },
+  { "<leader>yl", function() require "fzf-lua".git_commits(vim.tbl_extend("force", yadm_git_opts, { prompt = "YadmCommits> " })) end, desc = "Yadm Log" },
+  { "<leader>yg", function() require "fzf-lua".live_grep(vim.tbl_extend("force", yadm_grep_opts, { prompt = "YadmGrep> " })) end, desc = "Yadm Grep" },
   { "<leader>ys", function() require "fzf-lua".git_status(vim.tbl_extend("force", yadm_git_opts, {
     prompt = "YadmStatus> ", cmd = "git status -s"
   })) end, desc = "Yadm Status" },

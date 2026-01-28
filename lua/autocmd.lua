@@ -61,11 +61,12 @@ augroup("ibhagwan/ColorScheme", function(g)
         vim.api.nvim_set_hl(0, "WinSeparator", { default = false, link = "FloatBorder" })
       end
       -- fzf-lua
-      if type(vim.g.fzf_colors) == "table" then
-        vim.g.fzf_colors = vim.tbl_deep_extend("keep",
-          { ["bg+"] = { "bg", "Visual" }, ["border"] = { "fg", "FzfLuaFzfBorder" } },
-          vim.g.fzf_colors)
-      end
+      -- if type(vim.g.fzf_colors) == "table" then
+      --   vim.g.fzf_colors = vim.tbl_deep_extend("keep",
+      --     { ["bg+"] = { "bg", "Visual" }, ["border"] = { "fg", "FzfLuaFzfBorder" } },
+      --     vim.g.fzf_colors)
+      -- end
+      vim.g.fzf_colors = nil
       vim.api.nvim_set_hl(0, "FzfLuaCursorLine", { default = false, link = "Visual" })
       vim.api.nvim_set_hl(0, "FzfLuaFzfCursorLine", { default = false, link = "Visual" })
       -- treesitter context
@@ -253,38 +254,6 @@ augroup("ibhagwan/Help", function(g)
             vim.api.nvim_buf_delete(bufnr, { force = true })
           end
         end, 0)
-      end
-    end
-  })
-end)
-
--- https://vim.fandom.com/wiki/Avoid_scrolling_when_switch_buffers
-augroup("ibhagwan/DoNotAutoScroll", function(g)
-  aucmd("BufLeave", {
-    group = g,
-    desc = "Avoid autoscroll when switching buffers",
-    callback = function()
-      -- at this stage, current buffer is the buffer we leave
-      -- but the current window already changed, verify neither
-      -- source nor destination are floating windows
-      local from_buf = vim.api.nvim_get_current_buf()
-      local from_win = vim.fn.bufwinid(from_buf)
-      local to_win = vim.api.nvim_get_current_win()
-      if not utils.win_is_float(to_win) and not utils.win_is_float(from_win) then
-        vim.b.__VIEWSTATE = vim.fn.winsaveview()
-      end
-    end
-  })
-  aucmd("BufEnter", {
-    group = g,
-    desc = "Avoid autoscroll when switching buffers",
-    callback = function()
-      if vim.b.__VIEWSTATE then
-        local to_win = vim.api.nvim_get_current_win()
-        if not utils.win_is_float(to_win) then
-          vim.fn.winrestview(vim.b.__VIEWSTATE)
-        end
-        vim.b.__VIEWSTATE = nil
       end
     end
   })

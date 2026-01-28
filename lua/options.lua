@@ -6,6 +6,7 @@ vim.o.termguicolors = true          -- enable 24bit colors
 vim.o.updatetime = 250              -- decrease update time for CursorHold
 vim.o.fileformat = "unix"           -- <nl> for EOL
 vim.o.switchbuf = "useopen,uselast" -- jump to already open buffers on `:cn|:cp`
+vim.o.jumpoptions = "view"          -- do not auto-center zz when switching bufs
 vim.o.fileencoding = "utf-8"
 
 vim.opt.matchpairs:append("<:>") -- add "<>" to '%'
