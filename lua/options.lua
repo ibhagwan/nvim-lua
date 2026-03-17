@@ -226,9 +226,9 @@ if vim.env.SSH_TTY then
   }
 end
 
-local ok, extui = pcall(require, "vim._extui")
+local ok, ui2 = pcall(require, "vim._core.ui2")
 if ok then
-  extui.enable({
+  ui2.enable({
     enable = true,
     msg = {
       ---@type "cmd"|"msg" Where to place regular messages, either in the

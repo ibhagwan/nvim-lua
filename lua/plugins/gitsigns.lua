@@ -4,6 +4,33 @@ local M = {
   event = "BufReadPre",
 }
 
+M.set_hunk_navigation_keymaps = function(bufnr)
+  local gs = package.loaded.gitsigns
+  if not gs then return end
+  -- prioritze native fugitive diff navigation
+  -- and codediff.nvim if in session
+  local codediff = package.loaded.codediff
+  local lifecycle = codediff and assert(require("codediff.ui.lifecycle"))
+  vim.keymap.set("n", "]c", function()
+    if vim.wo.diff then
+      vim.cmd.normal({ "]c", bang = true })
+    elseif codediff and lifecycle.get_session(vim.api.nvim_get_current_tabpage()) then
+      codediff.next_hunk()
+    else
+      gs.nav_hunk("next")
+    end
+  end, { buffer = bufnr, desc = "Next hunk" })
+  vim.keymap.set("n", "[c", function()
+    if vim.wo.diff then
+      vim.cmd.normal({ "[c", bang = true })
+    elseif codediff and lifecycle.get_session(vim.api.nvim_get_current_tabpage()) then
+      codediff.prev_hunk()
+    else
+      gs.nav_hunk("prev")
+    end
+  end, { buffer = bufnr, desc = "Previous hunk" })
+end
+
 M.config = function()
   require("gitsigns").setup {
     signs         = { change = { text = "┋" } },
@@ -22,7 +49,7 @@ M.config = function()
       }
     } or nil,
     on_attach     = function(bufnr)
-      local gs = package.loaded.gitsigns
+      local gs = assert(package.loaded.gitsigns)
 
       local function map(mode, l, r, opts)
         opts = opts or {}
@@ -30,21 +57,8 @@ M.config = function()
         vim.keymap.set(mode, l, r, opts)
       end
 
-      map("n", "]c", function()
-        if vim.wo.diff then
-          vim.cmd.normal({ "]c", bang = true })
-        else
-          gs.nav_hunk("next")
-        end
-      end, { desc = "Next hunk" })
-
-      map("n", "[c", function()
-        if vim.wo.diff then
-          vim.cmd.normal({ "[c", bang = true })
-        else
-          gs.nav_hunk("prev")
-        end
-      end, { desc = "Previous hunk" })
+      -- set `]c|c` hunk for hunk navigation
+      M.set_hunk_navigation_keymaps(bufnr)
 
       -- Actions
       map("n", "<leader>hs", gs.stage_hunk, { desc = "Stage hunk" })

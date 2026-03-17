@@ -10,7 +10,9 @@ return {
         css        = { "prettier", "prettierd", stop_after_first = true },
         html       = { "prettier", "prettierd", stop_after_first = true },
         yaml       = { "prettier", "prettierd", stop_after_first = true },
+        json       = { "prettier", "prettierd", stop_after_first = true },
         jsonc      = { "prettier", "prettierd", stop_after_first = true },
+        json5      = { "prettier", "prettierd", stop_after_first = true },
         javascript = { "prettier", "prettierd", stop_after_first = true },
       },
     })

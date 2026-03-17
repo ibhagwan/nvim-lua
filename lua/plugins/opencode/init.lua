@@ -8,7 +8,7 @@ M.init = function()
     function() require("opencode").ask("@this: ", { submit = true }) end, { desc = "Ask opencode" })
   vim.keymap.set({ "n", "x" }, "<leader>o?", function() require("opencode").select() end,
     { desc = "Execute opencode action…" })
-  vim.keymap.set({ "n", "x" }, "<leader>ox", function() require("opencode").select() end,
+  vim.keymap.set({ "n", "x" }, "<leader>ox", function() require("opencode").stop() end,
     { desc = "Execute opencode action…" })
   vim.keymap.set({ "n", "t" }, "<leader>op", function() require("opencode").prompt() end,
     { desc = "Prompt opencode" })
@@ -48,20 +48,15 @@ M.init = function()
   vim.keymap.set({ "n", "x" }, "<leader>or",
     function() require("opencode").command("session.redo") end,
     { desc = "opencode session redo" })
+  vim.keymap.set({ "n", "x" }, "<leader>oc",
+    function() require("opencode").command("session.compact") end,
+    { desc = "opencode session compact" })
 end
 
 M.config = function()
   ---@type opencode.Opts
   vim.g.opencode_opts = {
-    provider = {
-      -- enabled = "tmux",
-      -- enabled = "snacks",
-      enabled = "terminal",
-      terminal = {
-        split = "right",
-        width = math.floor(vim.o.columns * 0.5),
-      },
-    }
+    server = require("plugins.opencode.tmux"),
   }
 
   -- required for `opts.events.reload`.

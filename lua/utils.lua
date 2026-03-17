@@ -357,6 +357,13 @@ M.reload_config = function()
     { mod = "fzf%-lua",        fn = function() require("plugins.fzf-lua.setup").setup() end },
     { mod = "mini.statusline", fn = function() require("plugins.mini.statusline").setup() end },
     { mod = "dap%.",           fn = function() require("plugins.dap").config() end },
+    {
+      mod = "opencode",
+      fn = function()
+        require("plugins.opencode").init()
+        require("plugins.opencode").config()
+      end
+    },
     -- {
     --   mod = "snacks",
     --   fn = function()

@@ -80,11 +80,12 @@ local default_opts = {
   fzf_opts = function(o)
     return FzfLua.utils.has(o, "sk", { 1, 5, 3 }) and {
       ["--algo"] = "frizbee",
+      ["--tiebreak"] = "score",
       -- ["--border"] = "plain",
     } or {}
   end,
-  -- fzf_bin = require("utils").is_iSH() and "sk" or nil,
-  fzf_bin = jit.os == "Linux" and "~/Sources/nvim/skim/target/release/sk" or nil,
+  fzf_bin = require("utils").is_iSH() and "sk" or nil,
+  -- fzf_bin = jit.os == "Linux" and "~/Sources/nvim/skim/target/release/sk" or nil,
   keymap = {
     builtin = {
       true,
@@ -210,7 +211,7 @@ local default_opts = {
   -- for git diff, commits and bcommits (we have an override for lsp.code_actions)
   defaults = { formatter = { "path.dirname_first", v = 2 } },
   buffers = { no_action_zz = true },
-  files = { fzf_opts = { ["--tiebreak"] = "end" } },
+  files = {},
   grep = {
     fzf_opts = { ["--history"] = vim.fs.joinpath(vim.fn.stdpath("data"), "fzf_search_hist") },
   },

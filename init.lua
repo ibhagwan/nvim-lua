@@ -16,3 +16,14 @@ require("term")
 if not utils.is_root() then
   require("lazy_nvim")
 end
+
+-- Neovim from source is run with "VIMRUNTIME=... .../bin/build/nvim"
+-- we aren't using "VIMRUNTIME=.../build/runtime" as it's missing "lua" folder
+-- instead we use the source folder directly but since it's missing "doc/tasg"
+-- we can't use `:help`, this restores the help tags
+if vim.v.progpath:match("Sources") then
+  local rtp = vim.fs.joinpath(vim.fn.fnamemodify(vim.v.progpath, ":h:h"), "runtime")
+  vim.opt.runtimepath:append(rtp)
+  vim.env.FZF_LUA_NVIM_BIN=vim.v.progpath
+  vim.env.FZF_LUA_NVIM_RUNTIME=assert(vim.env.VIMRUNTIME)
+end

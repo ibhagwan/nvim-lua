@@ -30,7 +30,7 @@ return {
     -- treesitter requires a C compiler
     cond = require("utils").have_compiler,
     event = "BufReadPost",
-    cmd = { "TSUpdate", "TSUpdateSync" },
+    cmd = { "TSUpdate" },
     dependencies = {
       { "nvim-treesitter/nvim-treesitter-textobjects", branch = "main" },
       { "nvim-treesitter/nvim-treesitter-context" },
@@ -47,9 +47,10 @@ return {
         "javascript",
         "typescript",
         "json",
-        "jsonc",
+        "json5",
         "jsdoc",
         "lua",
+        "zig",
         "python",
         "rust",
         "html",
@@ -64,7 +65,7 @@ return {
         "query",
         "regex",
       })
-      vim.cmd("TSUpdate")
+      if vim.cmd.TSUpdate then pcall(vim.cmd.TSUpdate) end
     end,
     config = function()
       require "nvim-treesitter".setup {}
