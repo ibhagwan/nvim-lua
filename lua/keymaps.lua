@@ -1,12 +1,17 @@
 local map = vim.keymap.set
 local utils = require("utils")
 
-map("", "<leader>R", utils.reload_config, { silent = true, desc = "reload nvim configuration" })
+vim.api.nvim_create_user_command("R", function()
+  vim.cmd.restart(
+    [[lua vim.defer_fn(function() vim.opt_local.bufhidden="wipe"; vim.cmd("norm! g`0 | zz") end, 50)]])
+end, {})
+
+map("", "<leader>R", "<cmd>R<CR>", { silent = true, desc = "restart nvim" })
 
 map("", "<leader>r", function()
   vim.api.nvim_exec2("update", {})
   vim.api.nvim_exec2("so %", {})
-  utils.info(string.format("Sourced '%s'", vim.fn.expand("%")))
+  utils.info("Sourced '%s'", vim.fn.expand("%"))
 end, { silent = true, desc = "source current file" })
 
 -- Use ':Grep' or ':LGrep' to grep into quickfix|loclist
@@ -17,53 +22,56 @@ vim.cmd("command! -nargs=+ -complete=file Grep noautocmd grep! <args> | redraw! 
 vim.cmd("command! -nargs=+ -complete=file LGrep noautocmd lgrep! <args> | redraw! | lopen")
 
 -- Fix common typos
-vim.cmd([[
-    cnoreabbrev W! w!
-    cnoreabbrev W1 w!
-    cnoreabbrev w1 w!
-    cnoreabbrev Q! q!
-    cnoreabbrev Q1 q!
-    cnoreabbrev q1 q!
-    cnoreabbrev Qa! qa!
-    cnoreabbrev Qall! qall!
-    cnoreabbrev Wa wa
-    cnoreabbrev Wq wq
-    cnoreabbrev wQ wq
-    cnoreabbrev WQ wq
-    cnoreabbrev wq1 wq!
-    cnoreabbrev Wq1 wq!
-    cnoreabbrev wQ1 wq!
-    cnoreabbrev WQ1 wq!
-    cnoreabbrev W w
-    cnoreabbrev Q q
-    cnoreabbrev Qa qa
-    cnoreabbrev Qall qall
-]])
-
--- root doesn't use plugins, use builtin FZF
-if require "utils".is_root() then
-  map("n", "<C-p>", "<cmd>FZF<CR>", { desc = "FZF" })
-else
-  map("n", "<C-z>", "<cmd>detach<CR>", { desc = "Detach current neovim instance" })
+do
+  local abbrevs = {
+    ["W"]   = "w",
+    ["Q"]   = "q",
+    ["W1"]  = "w!",
+    ["w1"]  = "w!",
+    ["Q1"]  = "q!",
+    ["q1"]  = "q!",
+    ["Qa"]  = "qa",
+    ["Qa1"] = "qa!",
+    ["Wq"]  = "wq",
+    ["Wa"]  = "wa",
+    ["wq1"] = "wq!",
+    ["Wq1"] = "wq!",
+    ["wa1"] = "wa!",
+    ["Wa1"] = "wa!",
+  }
+  for k, v in pairs(abbrevs) do map("ca", k, v) end
+  -- auto expand abbrevations on enter
+  map({ "c" }, "<CR>", "<C-]><CR>")
 end
 
-map({ "n", "v", "i" }, "<C-x><C-f>",
-  function() require("fzf-lua").complete_path({ file_icons = true }) end,
-  { silent = true, desc = "Fuzzy complete path" })
+if utils.is_root() then
+  -- root doesn't use plugins, use builtin FZF
+  map("n", "<C-p>", "<cmd>FZF<CR>", { desc = "FZF" })
+else
+  -- replace common actions with fzf-lua
+  map("n", "<C-z>", "<cmd>detach<CR>", { desc = "Detach current neovim instance" })
+  map({ "n", "v", "i" }, "<C-x><C-f>",
+    function() require("fzf-lua").complete_path({ file_icons = true }) end,
+    { silent = true, desc = "Fuzzy complete path" })
 
-map({ "n", "v", "i" }, "<C-x><C-l>",
-  function() require("fzf-lua").complete_line() end,
-  { silent = true, desc = "Fuzzy complete line" })
+  map({ "n", "v", "i" }, "<C-x><C-l>",
+    function() require("fzf-lua").complete_line() end,
+    { silent = true, desc = "Fuzzy complete line" })
 
-map({ "n", "v", "i" }, "<C-x><C-s>",
-  function() require("fzf-lua").spell_suggest() end,
-  { silent = true, desc = "Fuzzy complete spelling" })
+  map({ "n", "v", "i" }, "<C-x><C-s>",
+    function() require("fzf-lua").spell_suggest() end,
+    { silent = true, desc = "Fuzzy complete spelling" })
+end
 
 -- <ctrl-s> to Save
 map({ "n", "v", "i" }, "<C-S>", "<C-c>:update<cr>", { silent = true, desc = "Save" })
 
 -- w!! to save with sudo
-map("c", "w!!", require("utils").sudo_write, { silent = true })
+map("c", "w!!", function()
+  utils.sudo_write()
+  -- exit command mode
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", true)
+end, { silent = true })
 
 -- Beginning and end of line in `:` command mode
 map("c", "<C-a>", "<home>", {})
@@ -76,28 +84,28 @@ map("t", "<M-r>", [['<C-\><C-N>"'.nr2char(getchar()).'pi']], { expr = true })
 -- TMUX aware navigation
 for _, k in ipairs({ "h", "j", "k", "l", "o" }) do
   map({ "n", "x", "t" }, string.format("<M-%s>", k), function()
-    require("utils").tmux_aware_navigate(k, true)
+    utils.tmux_aware_navigate(k, true)
   end, { silent = true })
 end
 
 -- tmux like directional window resizes
 map("n", "<leader>=", "<C-w>=",
   { silent = true, desc = "normalize split layout" })
-map("n", "<leader><Up>", "<cmd>lua require'utils'.resize(false, -5)<CR>",
+map("n", "<leader><Up>", function() utils.resize(false, -5) end,
   { silent = true, desc = "horizontal split increase" })
-map("n", "<leader><Down>", "<cmd>lua require'utils'.resize(false,  5)<CR>",
+map("n", "<leader><Down>", function() utils.resize(false, 5) end,
   { silent = true, desc = "horizontal split decrease" })
-map("n", "<leader><Left>", "<cmd>lua require'utils'.resize(true,  -5)<CR>",
+map("n", "<leader><Left>", function() utils.resize(true, -5) end,
   { silent = true, desc = "vertical split decrease" })
-map("n", "<leader><Right>", "<cmd>lua require'utils'.resize(true,   5)<CR>",
+map("n", "<leader><Right>", function() utils.resize(true, 5) end,
   { silent = true, desc = "vertical split increase" })
 
 -- Navigate buffers|tabs|quickfix|loclist
 for k, v in pairs({
   t = { cmd = "tab", desc = "tab" },
-  b = not utils.__HAS_NVIM_011 and { cmd = "b", desc = "buffer" } or nil,
-  q = not utils.__HAS_NVIM_011 and { cmd = "c", desc = "quickfix" } or nil,
-  l = not utils.__HAS_NVIM_011 and { cmd = "l", desc = "location" } or nil,
+  -- b = not utils.__HAS_NVIM_011 and { cmd = "b", desc = "buffer" } or nil,
+  -- q = not utils.__HAS_NVIM_011 and { cmd = "c", desc = "quickfix" } or nil,
+  -- l = not utils.__HAS_NVIM_011 and { cmd = "l", desc = "location" } or nil,
 }) do
   map("n", "[" .. k:lower(), "<cmd>" .. v.cmd .. "previous<CR>", { desc = "Previous " .. v.desc })
   map("n", "]" .. k:lower(), "<cmd>" .. v.cmd .. "next<CR>", { desc = "Next " .. v.desc })
@@ -110,10 +118,8 @@ map({ "n", "v" }, "<leader>ts", [[<cmd>tab split<CR>]], { desc = "tab split" })
 map({ "n", "v" }, "<leader>tz", [[<cmd>tab split<CR>]], { desc = "tab split" })
 
 -- Quickfix|loclist toggles
-map("n", "<leader>q", "<cmd>lua require'utils'.toggle_qf('q')<CR>",
-  { desc = "toggle quickfix list" })
-map("n", "<leader>Q", "<cmd>lua require'utils'.toggle_qf('l')<CR>",
-  { desc = "toggle location list" })
+map("n", "<leader>q", function() utils.toggle_qf("q") end, { desc = "toggle quickfix list" })
+map("n", "<leader>Q", function() utils.toggle_qf("l") end, { desc = "toggle location list" })
 
 -- shortcut to view :messages
 map({ "n", "v" }, "<leader>m", "<cmd>messages<CR>", { desc = "open :messages" })
@@ -216,8 +222,7 @@ map("n", "<leader>|", function()
 end, { silent = true, desc = "toggle color column on/off" })
 
 -- Change current working dir (:pwd) to curent file's folder
-map("n", "<leader>%", [[<Esc>:lua require"utils".set_cwd()<CR>]],
-  { silent = true, desc = "smart set cwd (git|file parent)" })
+map("n", "<leader>%", utils.set_cwd, { silent = true, desc = "smart set cwd (git|file parent)" })
 
 --
 -- NOTE: no longer in use, neovim 0.11 added '[]<SPC>'

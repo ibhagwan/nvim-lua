@@ -28,7 +28,9 @@ local keys = {
   { "<C-p>", function() require "fzf-lua".files() end, desc = "Find Files" },
   -- { "<C-p>", function() require("fzf-lua-frecency").frecency({ display_score = true, cwd_only = true, fzf_opts = { ["--no-sort"] = false } }) end, desc = "Frecency (project)" },
   { "<C-k>", function() require "fzf-lua".zoxide() end, desc = "Zoxide" },
-  { "<leader>fp", function() require "fzf-lua".files({ cwd = vim.fn.stdpath("data") .. "/lazy" }) end, desc = "Find Plugin File" },
+  { "<leader>fp", function() require "fzf-lua".files({
+    cwd = vim.fs.joinpath(vim.fn.stdpath("data") --[[@as string]], "site", "pack", "core", "opt")
+  }) end, desc = "Find Plugin File" },
   { "<leader>ff", function() require "fzf-lua".resume() end, desc = "Resume" },
   { "<leader>fF", function() require "fzf-lua".resume() end, desc = "Resume" },
   { "<leader>fH", function() require "fzf-lua".history({ include_current_session = true }) end, desc = "Oldfiles (All)" },
@@ -142,7 +144,10 @@ return {
       end
       local opts = vim.deepcopy(m)
       opts[1], opts[2], opts.mode = nil, nil, nil
-      vim.keymap.set(m.mode or "n", key, m[2], opts)
+      vim.keymap.set(m.mode or "n", key, function()
+        require("lz.n").trigger_load({ "fzf-lua" })
+        m[2]()
+      end, opts)
     end
   end
 }

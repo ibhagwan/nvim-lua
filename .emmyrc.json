@@ -18,10 +18,11 @@
   "workspace": {
     "library": [
       "$VIMRUNTIME",
-      "$XDG_DATA_HOME/nvim/lazy/mini.nvim",
-      "$XDG_DATA_HOME/nvim/lazy/nvim-web-devicons",
-      "$XDG_DATA_HOME/nvim/lazy/nvim-dap",
-      "$XDG_DATA_HOME/nvim/lazy/fzf-lua",
+      "$XDG_DATA_HOME/nvim/site/pack/core/opt/lz.n",
+      "$XDG_DATA_HOME/nvim/site/pack/core/opt/mini.nvim",
+      "$XDG_DATA_HOME/nvim/site/pack/core/opt/nvim-web-devicons",
+      "$XDG_DATA_HOME/nvim/site/pack/core/opt/nvim-dap",
+      "$XDG_DATA_HOME/nvim/site/pack/core/opt/fzf-lua",
       "$HOME/Sources/nvim/fzf-lua"
     ],
     "preloadFileSize": 1000

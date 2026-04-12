@@ -12,7 +12,9 @@ local keys = {
   -- find
   { "<leader><C-p>", function() require "snacks".picker.files() end, desc = "Find Files" },
   { "<leader><C-k>", function() require "snacks".picker.zoxide() end, desc = "Zoxide" },
-  { "<leader>Fp", function() require "snacks".picker.files({ cwd = vim.fn.stdpath("data") .. "/lazy" }) end, desc = "Find Plugin File" },
+  { "<leader>Fp", function() require "snacks".picker.files({
+    cwd = vim.fs.joinpath(vim.fn.stdpath("data") --[[@as string]], "site", "pack", "core", "opt")
+  }) end, desc = "Find Plugin File" },
   { "<leader>Ff", function() require "snacks".picker.resume() end, desc = "Resume" },
   { "<leader>FF", function() require "snacks".picker.resume() end, desc = "Resume" },
   { "<leader>Fh", function() require "snacks".picker.recent() end, desc = "Recent" },
@@ -56,7 +58,7 @@ local keys = {
 return {
   map = function()
     for _, m in ipairs(keys) do
-      local key = m[1]
+      local key = assert(m[1])
       if require "utils".__USE_SNACKS then
         key = key:gsub("<leader>;", "<leader>,")
         for _, k in ipairs({ "<F1>", "<C-p>", "<C-k>" }) do
@@ -68,7 +70,10 @@ return {
       end
       local opts = vim.deepcopy(m)
       opts[1], opts[2], opts.mode = nil, nil, nil
-      vim.keymap.set(m.mode or "n", key, m[2], opts)
+      vim.keymap.set(m.mode or "n", key, function()
+        require("lz.n").trigger_load({ "snacks.nvim" })
+        m[2]()
+      end, opts)
     end
   end
 }

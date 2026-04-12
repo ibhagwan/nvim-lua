@@ -6,34 +6,82 @@ function _G.dump(...)
   print(unpack(objects))
 end
 
-local DEV_DIR = "$HOME/Sources/nvim"
-
 local M = {}
 
-M.__HAS_NVIM_011 = vim.fn.has("nvim-0.11") == 1
-M.__IS_WIN = vim.fn.has("win32") == 1 or vim.fn.has("win64") == 1
+M.__IS_WIN = jit.os == "Windows"
+-- M.__IS_WIN = vim.fn.has("win32") == 1 or vim.fn.has("win64") == 1
 -- M.__USE_SNACKS = M.__IS_WIN
 
-local fast_event_aware_notify = function(msg, level, opts)
+M._notify_header = "LineNr"
+
+--- Fancy notification wrapper, idea borrowed from blink.nvim
+--- @param lvl? number
+--- @param ... any
+function M.notify(lvl, ...)
+  -- Message can be specified directly as table with highlights, i.e. { "foo", "Error" }
+  -- or as a vararg of strings/numbers to be sent to string.format
+  local arg1 = (...)
+  local msg = type(arg1) == "table" and arg1 or string.format(...)
+
+  local header_hl, chunks = (function()
+    local hl = (function()
+      if lvl == vim.log.levels.ERROR then
+        return "DiagnosticVirtualLinesError"
+      elseif lvl == vim.log.levels.WARN then
+        return "DiagnosticVirtualLinesWarn"
+      elseif lvl == vim.log.levels.INFO then
+        return "DiagnosticVirtualLinesInfo"
+      else
+        return "DiagnosticVirtualLinesHint"
+      end
+    end)()
+    -- When using vararg for msg (i.e. only text) we color the text based on the
+    -- requested log level, when msg is already highlighted (i.e. table) we leave
+    -- the msg highlights as requested by the caller and color the header (plugin
+    -- name) instead
+    if type(msg) == "table" then
+      for i, v in ipairs(msg) do
+        if type(v) ~= "table" or not v[2] then
+          msg[i] = { type(v) ~= "table" and tostring(v) or v[1], "" }
+        end
+      end
+      return hl, msg
+    else
+      return M._notify_header, { { msg, hl } }
+    end
+  end)()
+
+  assert(type(chunks) == "table")
+
+  table.insert(chunks, 1, { "[Nvim]", header_hl })
+  table.insert(chunks, 2, { " " })
+
+  local function nvim_echo()
+    local echo_opts = { verbose = false, err = lvl == vim.log.levels.ERROR }
+    if echo_opts.err and _G.fzf_jobstart and #vim.api.nvim_list_uis() == 0 then
+      local output = vim.tbl_map(function(chunk) return chunk[1] end, chunks)
+      error(table.concat(output, ""))
+    else
+      vim.api.nvim_echo(chunks, true, echo_opts)
+    end
+  end
   if vim.in_fast_event() then
-    vim.schedule(function()
-      vim.notify(msg, level, opts)
-    end)
+    vim.schedule(nvim_echo)
   else
-    vim.notify(msg, level, opts)
+    nvim_echo()
   end
 end
 
-function M.info(msg)
-  fast_event_aware_notify(msg, vim.log.levels.INFO, {})
+function M.info(...)
+  M.notify(vim.log.levels.INFO, ...)
 end
 
-function M.warn(msg)
-  fast_event_aware_notify(msg, vim.log.levels.WARN, {})
+function M.warn(...)
+  M.notify(vim.log.levels.WARN, ...)
 end
 
-function M.err(msg)
-  fast_event_aware_notify(msg, vim.log.levels.ERROR, {})
+function M.error(...)
+  M.notify(vim.log.levels.ERROR, ...)
 end
 
 function M.is_root()
@@ -41,19 +89,27 @@ function M.is_root()
 end
 
 function M.is_darwin()
-  return vim.uv.os_uname().sysname == "Darwin"
+  -- return vim.uv.os_uname().sysname == "Darwin"
+  return jit.os == "OSX"
 end
 
 function M.is_NetBSD()
-  return vim.uv.os_uname().sysname == "NetBSD"
+  -- return vim.uv.os_uname().sysname == "NetBSD"
+  return jit.os == "BSD"
 end
 
 function M.is_iSH()
   return vim.uv.os_uname().release:match("%-ish$") ~= nil
 end
 
-function M.is_dev(path)
-  return vim.uv.fs_stat(string.format("%s/%s", vim.fn.expand(DEV_DIR), path)) ~= nil
+--- @param path string
+--- @return string?
+function M.exists(path)
+  local normalized = vim.fs.normalize(path)
+  local exists = vim.uv.fs_stat(normalized) ~= nil
+  -- NOTE: isdirectory seems slower
+  -- local exists = vim.fn.isdirectory(normalized) == 1
+  return exists and normalized or nil
 end
 
 function M.have_compiler()
@@ -86,7 +142,7 @@ function M.git_root(cwd, noerr)
     if not noerr then M.info(res) end
     return nil
   end
-  return res.stdout:gsub("\n$", "")
+  return assert(res.stdout):gsub("\n$", "")
 end
 
 function M.set_cwd(pwd)
@@ -105,7 +161,7 @@ function M.set_cwd(pwd)
   end
   if pwd and vim.uv.fs_stat(pwd) then
     vim.cmd("cd " .. pwd)
-    M.info(("pwd set to %s"):format(vim.fn.shellescape(pwd)))
+    M.info("pwd set to %s", vim.fn.shellescape(pwd))
   else
     M.warn(("Unable to set pwd to %s, directory is not accessible")
       :format(vim.fn.shellescape(pwd)))
@@ -133,12 +189,12 @@ function M.get_visual_selection(nl_literal)
   -- swap vars if needed
   if cerow < csrow then csrow, cerow = cerow, csrow end
   if cecol < cscol then cscol, cecol = cecol, cscol end
-  local lines = vim.fn.getline(csrow, cerow)
+  local lines = vim.fn.getline(csrow, cerow) ---@cast lines string[]
   -- local n = cerow-csrow+1
   local n = #lines
   if n <= 0 then return "" end
-  lines[n] = string.sub(lines[n], 1, cecol)
-  lines[1] = string.sub(lines[1], cscol)
+  lines[n] = string.sub(lines[n] --[[@as string]], 1, cecol)
+  lines[1] = string.sub(lines[1] --[[@as string]], cscol)
   return table.concat(lines, nl_literal and "\\n" or "\n")
 end
 
@@ -242,25 +298,7 @@ M.resize = function(vertical, margin)
   vim.cmd(cmd)
 end
 
--- M.sudo_exec = function(cmd, print_output)
---   vim.fn.inputsave()
---   local password = vim.fn.inputsecret("Password: ")
---   vim.fn.inputrestore()
---   if not password or #password == 0 then
---     M.warn("Invalid password, sudo aborted")
---     return false
---   end
---   local out = vim.fn.system(string.format("sudo -p '' -S %s", cmd), password)
---   if vim.v.shell_error ~= 0 then
---     print("\r\n")
---     M.err(out)
---     return false
---   end
---   if print_output then print("\r\n", out) end
---   return true
--- end
-
-M.sudo_exec = function(cmd, print_output)
+M.sudo_exec = function(cmd, filepath, print_output)
   vim.fn.inputsave()
   local password = vim.fn.inputsecret("Password: ")
   vim.fn.inputrestore()
@@ -273,21 +311,23 @@ M.sudo_exec = function(cmd, print_output)
       string.format("echo '%s' | sudo -p '' -S %s", password, cmd) }):wait()
   end)
   if not ok or res.code ~= 0 then
-    print("\r\n")
-    M.err(not ok and res or res.stderr)
+    M.warn(not ok and res or assert(res).stderr)
     return false
+  else
+    if print_output then M.info('"%s" written\r\n%s', filepath, res.stderr) end
+    return true
   end
-  if print_output then print("\r\n", res.stderr) end
-  return true
 end
 
 M.sudo_write = function(tmpfile, filepath)
   if not tmpfile then tmpfile = vim.fn.tempname() end
   if not filepath then filepath = vim.fn.expand("%") end
   if not filepath or #filepath == 0 then
-    M.err("E32: No file name")
+    M.warn("E32: No file name")
     return
   end
+  -- store alt buffer
+  local alt_buf = vim.fn.bufnr("#")
   -- `bs=1048576` is equivalent to `bs=1M` for GNU dd or `bs=1m` for BSD dd
   -- Both `bs=1M` and `bs=1m` are non-POSIX
   local cmd = string.format("dd if=%s of=%s bs=1048576",
@@ -295,12 +335,21 @@ M.sudo_write = function(tmpfile, filepath)
     vim.fn.shellescape(filepath))
   -- no need to check error as this fails the entire function
   vim.api.nvim_exec2(string.format("write! %s", tmpfile), { output = true })
-  if M.sudo_exec(cmd) then
-    -- refreshes the buffer and prints the "written" message
-    vim.cmd.checktime()
-    -- exit command mode
-    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(
-      "<Esc>", true, false, true), "n", true)
+  if M.sudo_exec(cmd, filepath, true) then
+    -- TODO: triggers unsaved warning on exit, use e! instead
+    -- ignore W12 triggered by checktime
+    -- vim.api.nvim_create_autocmd("FileChangedShell", {
+    --   buffer = 0,
+    --   once = true,
+    --   callback = function(_) M.info('"%s" reloaded', filepath) end,
+    -- })
+    -- reload the buffer
+    -- vim.cmd.checktime()
+    vim.cmd("e!")
+  end
+  -- restore alt buf
+  if alt_buf and vim.api.nvim_buf_is_valid(alt_buf) then
+    vim.fn.setreg("#", alt_buf)
   end
   vim.fn.delete(tmpfile)
 end
@@ -311,83 +360,7 @@ M.osc52printf = function(...)
   local osc52str = string.format("\x1b]52;c;%s\x07", base64)
   local bytes = vim.fn.chansend(vim.v.stderr, osc52str)
   assert(bytes > 0)
-  M.info(string.format("[OSC52] %d chars copied (%d bytes)", #str, bytes))
-end
-
-M.unload_modules = function(patterns)
-  for _, p in ipairs(patterns) do
-    if not p.mod and type(p[1]) == "string" then
-      p = { mod = p[1], fn = p.fn }
-    end
-    local unloaded = false
-    for m, _ in pairs(package.loaded) do
-      if m:match(p.mod) then
-        unloaded = true
-        package.loaded[m] = nil
-        M.info(string.format("UNLOADED module '%s'", m))
-      end
-    end
-    if unloaded and p.fn then
-      p.fn()
-      M.warn(string.format("RELOADED module '%s'", p.mod))
-    end
-  end
-end
-
-M.reload_config = function()
-  require("fzf-lua").deregister_ui_select()
-  M.unload_modules({
-    {
-      "^options$",
-      fn = function()
-        -- Ignore events or gitsigns croaks on "OptionSet"
-        --   OptionSet Autocommands for "fileformat": attempt to yield across C-call
-        local save_ei = vim.o.eventignore
-        vim.o.eventignore = "all"
-        require("options")
-        vim.o.eventignore = save_ei
-      end
-    },
-    { "^autocmd$",             fn = function() require("autocmd") end },
-    { "^keymaps$",             fn = function() require("keymaps") end },
-    { "^utils$" },
-    { "^term$" },
-    { mod = "ts%-vimdoc" },
-    { mod = "smartyank",       fn = function() require("smartyank") end },
-    { mod = "fzf%-lua",        fn = function() require("plugins.fzf-lua.setup").setup() end },
-    { mod = "mini.statusline", fn = function() require("plugins.mini.statusline").setup() end },
-    { mod = "dap%.",           fn = function() require("plugins.dap").config() end },
-    {
-      mod = "opencode",
-      fn = function()
-        require("plugins.opencode").init()
-        require("plugins.opencode").config()
-      end
-    },
-    -- {
-    --   mod = "snacks",
-    --   fn = function()
-    --     require("plugins.snacks").init()
-    --     require("plugins.snacks").config()
-    --   end
-    -- },
-  })
-  -- re-source all language specific settings, scans all runtime files under
-  -- '/usr/share/nvim/runtime/(indent|syntax)' and 'after/ftplugin'
-  local ft = vim.bo.filetype
-  vim.tbl_filter(function(s)
-    for _, e in ipairs({ "vim", "lua" }) do
-      if ft and #ft > 0 and vim.fs.normalize(s):match(("/%s.%s"):format(ft, e)) then
-        local file = vim.fn.expand(s:match("[^: ]*$"))
-        vim.cmd.source(file)
-        M.warn("RESOURCED " .. vim.fn.fnamemodify(file, ":."))
-        return s
-      end
-    end
-    return false
-  end, vim.fn.split(vim.fn.execute("scriptnames"), "\n"))
-  -- remove last search highlight
-  vim.cmd("nohl")
+  M.info("[OSC52] %d chars copied (%d bytes)", #str, bytes)
 end
 
 M.win_is_float = function(winnr)
@@ -465,120 +438,10 @@ M.tmux_unzoom = function()
   end
 end
 
-M.dap_pick_exec = function()
-  local fzf = require("fzf-lua")
-  return coroutine.create(function(dap_co)
-    local dap_abort = function() coroutine.resume(dap_co, require("dap").ABORT) end
-    local dap_run = function(exec)
-      if type(exec) == "string" and vim.uv.fs_stat(exec) then
-        -- Make full path
-        exec = vim.fn.fnamemodify(exec, ":p")
-        coroutine.resume(dap_co, exec)
-      else
-        if exec ~= "" then
-          M.warn(string.format("'%s' is not executable, aborting.", exec))
-        end
-        dap_abort()
-      end
-    end
-    fzf.files({
-      cwd = vim.uv.cwd(),
-      -- cwd_header = true,
-      -- cwd_prompt = false,
-      -- prompt = "DAP: Select Executable> ",
-      git_icons = false,
-      cmd = "fd --color=never --no-ignore --type x --hidden --follow --exclude .git",
-      header = (":: %s to execute prompt"):format(fzf.utils.ansi_codes["yellow"]("<Ctrl-e>")),
-      winopts = {
-        width = 0.65,
-        height = 0.45,
-        preview = { hidden = "hidden" },
-        title = { { " DAP: Select Executable to Debug ", "Cursor" } },
-        title_pos = "center",
-      },
-      actions = {
-        ["esc"] = dap_abort,
-        ["ctrl-c"] = dap_abort,
-        ["ctrl-g"] = false,
-        ["ctrl-e"] = function(_, opts) dap_run(opts.last_query) end,
-        ["default"] = function(sel)
-          if not sel[1] then
-            dap_abort()
-          else
-            dap_run(fzf.path.entry_to_file(sel[1]).path)
-          end
-        end,
-      },
-    })
-  end)
-end
-
-M.dap_pick_process = function(fzflua_opts, getproc_opts)
-  local fzf = require("fzf-lua")
-  return coroutine.create(function(dap_co)
-    local dap_abort = function() coroutine.resume(dap_co, require("dap").ABORT) end
-    local procs = require("dap.utils").get_processes(getproc_opts)
-    fzf.fzf_exec(
-      function(fzf_cb)
-        for _, p in pairs(procs) do
-          fzf_cb(string.format("[%d] %s", p.pid, p.name))
-        end
-        fzf_cb()
-      end,
-      vim.tbl_deep_extend("keep", fzflua_opts or {}, {
-        winopts = {
-          preview = { hidden = "hidden" },
-          title = { { " DAP: Select Process to Debug ", "Cursor" } },
-          title_pos = "center",
-        },
-        actions = {
-          ["esc"] = dap_abort,
-          ["ctrl-c"] = dap_abort,
-          ["default"] = function(sel)
-            if not sel[1] then
-              dap_abort()
-            else
-              local pid = tonumber(sel[1]:match("^%[(%d+)%]"))
-              coroutine.resume(dap_co, pid)
-            end
-          end,
-        },
-      }))
-  end)
-end
-
 function M.input(prompt)
-  local ok, res
-  if vim.ui then
-    ok, _ = pcall(vim.ui.input, { prompt = prompt },
-      function(input)
-        res = input
-      end)
-  else
-    ok, res = pcall(vim.fn.input, { prompt = prompt, cancelreturn = 3 })
-    if res == 3 then
-      ok, res = false, nil
-    end
-  end
+  local res
+  local ok, _ = pcall(vim.ui.input, { prompt = prompt }, function(input) res = input end)
   return ok and res or nil
-end
-
-function M.lsp_get_clients(opts)
-  ---@diagnostic disable-next-line: deprecated
-  if M.__HAS_NVIM_011 then
-    return vim.lsp.get_clients(opts)
-  end
-  ---@diagnostic disable-next-line: deprecated
-  local clients = opts.bufnr and vim.lsp.buf_get_clients(opts.bufnr)
-      or opts.id and { vim.lsp.get_client_by_id(opts.id) }
-      or vim.lsp.get_clients(opts)
-  return vim.tbl_map(function(client)
-    return setmetatable({
-      supports_method = function(_, ...) return client.supports_method(...) end,
-      request = function(_, ...) return client.request(...) end,
-      request_sync = function(_, ...) return client.request_sync(...) end,
-    }, { __index = client })
-  end, clients)
 end
 
 return M

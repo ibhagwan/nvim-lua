@@ -12,7 +12,7 @@ vim.o.fileencoding = "utf-8"
 vim.opt.matchpairs:append("<:>") -- add "<>" to '%'
 
 -- recursive :find in current dir
-vim.cmd([[set path=.,,,$PWD/**]])
+-- vim.cmd([[set path=.,,,$PWD/**]])
 
 -- DO NOT NEED ANY OF THIS, CRUTCH THAT POULLUTES REGISTERS
 -- vim clipboard copies to system clipboard
@@ -60,7 +60,7 @@ vim.opt.completeopt = {
   "menu",
   "menuone",
   "popup",
-  utils.__HAS_NVIM_011 and "fuzzy" or nil,
+  "fuzzy", -- nvim 0.11
 }
 
 vim.o.pumheight = 10     -- completion menu max height
@@ -127,10 +127,8 @@ vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize"
 
 -- use ':grep' to send resulsts to quickfix
 -- use ':lgrep' to send resulsts to loclist
-if vim.fn.executable("rg") == 1 then
-  vim.o.grepprg = "rg --vimgrep --no-heading --smart-case --hidden"
-  vim.o.grepformat = "%f:%l:%c:%m"
-end
+vim.o.grepprg = "rg --vimgrep --no-heading --smart-case --hidden"
+vim.o.grepformat = "%f:%l:%c:%m"
 
 -- Disable providers we do not care a about
 vim.g.loaded_python_provider = 0
@@ -139,9 +137,9 @@ vim.g.loaded_perl_provider = 0
 vim.g.loaded_node_provider = 0
 
 -- Load `Undotree` plugin
-package.path = ("%s/%s/?.lua;"):format(vim.env.VIMRUNTIME, "pack/dist/opt/nvim.undotree/lua")
-    .. package.path
-pcall(vim.cmd, "packadd nvim.undotree")
+-- package.path = ("%s/%s/?.lua;"):format(vim.env.VIMRUNTIME, "pack/dist/opt/nvim.undotree/lua")
+--     .. package.path
+-- pcall(vim.cmd, "packadd nvim.undotree")
 
 -- Disable some in built plugins completely
 local disabled_built_ins = {
@@ -165,16 +163,12 @@ local disabled_built_ins = {
   -- 'matchit',
   -- 'matchparen',
 }
--- disable default fzf plugin if not
--- root since we will be using fzf-lua
-if utils.is_root() and vim.uv.fs_stat("/usr/share/nvim/runtime/plugin/fzf.vim") then
-  vim.opt.runtimepath:append("/usr/share/nvim/runtime")
-else
-  -- table.insert(disabled_built_ins, "fzf")
-end
-for _, plugin in pairs(disabled_built_ins) do
+for _, plugin in ipairs(disabled_built_ins) do
   vim.g["loaded_" .. plugin] = 1
 end
+
+-- default fzf plugin layout
+vim.g.fzf_layout = { window = "enew" }
 
 vim.g.markdown_fenced_languages = {
   "vim",
@@ -228,16 +222,51 @@ end
 
 local ok, ui2 = pcall(require, "vim._core.ui2")
 if ok then
+  vim.o.cmdheight = 1
   ui2.enable({
     enable = true,
     msg = {
-      ---@type "cmd"|"msg" Where to place regular messages, either in the
-      ---cmdline or in a separate ephemeral message window.
-      target = "cmd",
-      timeout = 4000,
+      targets = {
+        [""] = "msg",
+        empty = "cmd",
+        bufwrite = "msg",
+        confirm = "cmd",
+        emsg = "pager",
+        echo = "msg",
+        echomsg = "msg",
+        echoerr = "pager",
+        completion = "cmd",
+        list_cmd = "pager",
+        lua_error = "pager",
+        lua_print = "msg",
+        progress = "pager",
+        rpc_error = "pager",
+        quickfix = "msg",
+        search_cmd = "cmd",
+        search_count = "cmd",
+        shell_cmd = "pager",
+        shell_err = "pager",
+        shell_out = "pager",
+        shell_ret = "msg",
+        undo = "msg",
+        verbose = "pager",
+        wildlist = "cmd",
+        wmsg = "msg",
+        typed_cmd = "cmd",
+      },
+      cmd = {
+        height = 0.5,
+      },
+      dialog = {
+        height = 0.5,
+      },
+      msg = {
+        height = 0.3,
+        timeout = 5000,
+      },
+      pager = {
+        height = 0.8,
+      },
     },
   })
 end
-
--- default fzf plugin layout
-vim.g.fzf_layout = { window = "enew" }

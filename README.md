@@ -17,9 +17,6 @@
 
 ## Plugins & Packages
 
-- [lazy.nvim](https://github.com/folke/lazy.nvim): lua plugin
-  manager to auto-install and update our plugins
-
 - [mason.nvim](https://github.com/williamboman/mason.nvim):
   automatic installation of LSP servers using the `:Mason` command
 

@@ -5,7 +5,7 @@ local function augroup(name, fnc)
   fnc(vim.api.nvim_create_augroup(name, { clear = true }))
 end
 
-if utils.is_root() then
+if not package.loaded["smartyank"] then
   augroup("ibhagwan/SmartTextYankPost", function(g)
     -- highlight yanked text and copy to system clipboard
     -- TextYankPost is also called on deletion, limit to
@@ -27,7 +27,7 @@ if utils.is_root() then
         -- $SSH_CONNECTION doesn't pass over to
         -- root when using `su -`, copy indiscriminately
         if valid_yank and (vim.env.SSH_CONNECTION or utils.is_root()) then
-          utils.osc52printf(yank_data)
+          utils.osc52printf((yank_data:gsub("%%", "%%%%")))
         end
         if valid_yank and vim.env.TMUX then
           -- we use `-w` to also copy to client's clipboard
@@ -106,19 +106,17 @@ augroup("ibhagwan/MiniIndentscopeDisable", function(g)
 end)
 
 augroup("ibhagwan/TermOptions", function(g)
-  aucmd("TermOpen",
-    {
-      group = g,
-      command = "setlocal listchars= nonumber norelativenumber"
-    })
+  aucmd("TermOpen", {
+    group = g,
+    command = "setlocal listchars= nonumber norelativenumber"
+  })
 end)
 
 augroup("ibhagwan/ResizeWindows", function(g)
-  aucmd("VimResized",
-    {
-      group = g,
-      command = "tabdo wincmd ="
-    })
+  aucmd("VimResized", {
+    group = g,
+    command = "tabdo wincmd ="
+  })
 end)
 
 augroup("ibhagwan/ToggleSearchHL", function(g)
@@ -169,6 +167,57 @@ augroup("ibhagwan/ActiveWinCursorLine", function(g)
   end
   aucmd({ "WinEnter", "BufEnter", "InsertLeave" }, { group = g, callback = callback })
   aucmd({ "WinLeave", "BufLeave", "InsertEnter" }, { group = g, callback = callback })
+end)
+
+augroup("ibhagwan/ui2.pager", function(g)
+  aucmd("WinEnter", {
+    group = g,
+    callback = function(e)
+      if e.file and e.file:match("%[Pager%]") then
+        vim.cmd.normal("G")
+      end
+    end
+  })
+end)
+
+augroup("ibhagwan/nvim-pack", function(g)
+  aucmd("FileType", {
+    group = g,
+    pattern = "nvim-pack",
+    callback = function(_)
+      vim.keymap.set("n", "q", "<CMD>q<CR>", { buffer = true })
+    end
+  })
+  aucmd("PackChanged", {
+    group = g,
+    callback = function(e)
+      local name, _kind = e.data.spec.name, e.data.kind
+      if name == "blink.cmp" then
+        if vim.fn.executable("cargo") ~= 1 then return end
+        local plugin_dir = vim.fs.joinpath(vim.fn.stdpath("data") --[[@as string]],
+          "site", "pack", "core", "opt", "blink.cmp")
+        vim.fn.jobstart({ "cargo", "+nightly", "build", "--release" }, {
+          cwd = plugin_dir,
+          on_stdout = function(_, data)
+            vim.iter(data):each(function(s)
+              if #s > 0 then utils.info(s) end
+            end)
+          end,
+          on_stderr = function(_, data)
+            vim.iter(data):each(function(s)
+              if #s > 0 then utils.warn(s) end
+            end)
+          end,
+          on_exit = function(_, rc, _)
+            local lvl = rc == 0 and "info" or "warn"
+            utils[lvl]("cargo finished with exit code %d", rc)
+          end
+        })
+      elseif name == "nvim-treesitter" then
+        vim.defer_fn(vim.cmd.TSUpdate, 100)
+      end
+    end
+  })
 end)
 
 -- goto last location when opening a buffer
@@ -267,20 +316,21 @@ augroup("ibhagwan/GQFormatter", function(g)
         -- execlude diffview and vim-fugitive
         if vim.bo.filetype == "fugitive"
             or e.file:match("^fugitive:")
-            or require("plugins.diffview")._is_open() then
+            or e.file:match("^diffview:")
+            or e.file:match("^DiffViewFiles")
+        then
           return
         end
-        require("plugins.conform")._set_gq_keymap(e)
+        require("lsp.keymaps").setup_gq(e)
       end,
     })
 end)
 
 augroup("ibhagwan/LspAttach", function(g)
-  aucmd({ "LspAttach" },
-    {
-      group = g,
-      callback = function(_)
-        require("lsp.keymaps").setup()
-      end,
-    })
+  aucmd({ "LspAttach" }, {
+    group = g,
+    callback = function(_)
+      require("lsp.keymaps").setup()
+    end,
+  })
 end)

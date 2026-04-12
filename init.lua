@@ -1,7 +1,7 @@
 local utils = require("utils")
 
-if vim.fn.has("nvim-0.10") ~= 1 then
-  utils.warn("This config requires neovim 0.10 and above")
+if vim.fn.has("nvim-0.11") ~= 1 then
+  utils.warn("This config requires neovim 0.11 and above")
   vim.o.loadplugins = false
   vim.o.termguicolors = true
   return
@@ -13,8 +13,8 @@ require("keymaps")
 require("term")
 
 -- Don't load plugins as root and use a different colorscheme
-if not utils.is_root() then
-  require("lazy_nvim")
+if not utils.is_root() or vim.fn.has("nvim-0.12") ~= 1 then
+  require("nvim_pack")
 end
 
 -- Neovim from source is run with "VIMRUNTIME=... .../bin/build/nvim"
@@ -24,6 +24,6 @@ end
 if vim.v.progpath:match("Sources") then
   local rtp = vim.fs.joinpath(vim.fn.fnamemodify(vim.v.progpath, ":h:h"), "runtime")
   vim.opt.runtimepath:append(rtp)
-  vim.env.FZF_LUA_NVIM_BIN=vim.v.progpath
-  vim.env.FZF_LUA_NVIM_RUNTIME=assert(vim.env.VIMRUNTIME)
+  vim.env.FZF_LUA_NVIM_BIN = vim.v.progpath
+  vim.env.FZF_LUA_NVIM_RUNTIME = vim.env.VIMRUNTIME
 end

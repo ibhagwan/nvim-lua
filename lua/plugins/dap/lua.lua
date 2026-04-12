@@ -34,25 +34,17 @@ local function dap_server(opts)
   local mode = vim.fn.rpcrequest(nvim_chanID, "nvim_get_mode")
   assert(not mode.blocking, "Neovim is waiting for input at startup. Aborting.")
 
-  -- create the symlink from lazy
-  local plugin_name = "one-small-step-for-vimkind"
-  local plugin_dir = vim.fn.stdpath("data") .. "/site/pack/dap"
-  assert(vim.fn.mkdir(plugin_dir, "p"), "Unable to create plugin dir")
-  vim.uv.fs_symlink(vim.fn.stdpath("data") .. "/lazy", plugin_dir .. "/opt", { dir = true })
-
   -- make sure OSV is loaded
   vim.fn.rpcrequest(nvim_chanID, "nvim_exec_lua",
     [[vim.opt.packpath:append({ vim.fn.stdpath("data") .. "/site" })]], {})
-  vim.fn.rpcrequest(nvim_chanID, "nvim_command", "packadd " .. plugin_name)
+  vim.fn.rpcrequest(nvim_chanID, "nvim_command", "packadd one-small-step-for-vimkind")
 
-  nvim_server = vim.fn.rpcrequest(nvim_chanID,
-    "nvim_exec_lua",
-    [[return require"osv".launch(...)]],
-    { opts })
+  nvim_server = vim.fn.rpcrequest(nvim_chanID, "nvim_exec_lua",
+    [[return require"osv".launch(...)]], { opts })
 
   vim.wait(100)
 
-  -- print(("Server started on port %d, channel-id %d"):format(nvim_server.port, nvim_chanID))
+  require("utils").info("Server started on port %d, channel-id %d", nvim_server.port, nvim_chanID)
   return nvim_server
 end
 
@@ -73,9 +65,9 @@ dap.configurations.lua = {
   {
     type = "nlua",
     request = "attach",
-    name = "Attach to running Neovim instance (localhost:8086)",
+    name = "Attach to running Neovim instance (localhost:9090)",
     host = "127.0.0.1",
-    port = 8086,
+    port = 9090,
   },
   {
     type = "nlua",
@@ -86,8 +78,8 @@ dap.configurations.lua = {
       return #val > 0 and val or "127.0.0.1"
     end,
     port = function()
-      local val = vim.fn.input("Port [8086]: ")
-      return #val > 0 and tonumber(val) or 8086
+      local val = vim.fn.input("Port [9090]: ")
+      return #val > 0 and tonumber(val) or 9090
     end,
   },
   {

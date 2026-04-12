@@ -1,53 +1,41 @@
-local utils = require("utils")
-
 return {
+  -- nvim-lspconfig (base LSP configuration)
+  { src = "https://github.com/neovim/nvim-lspconfig",   data = { lazy = true } },
+
+  -- mason.nvim (LSP installer)
+  { src = "https://github.com/mason-org/mason.nvim",    data = { lazy = true } },
+
+  -- fidget.nvim (LSP progress indicator)
+  { src = "https://github.com/j-hui/fidget.nvim",       data = { lazy = true } },
+
+  -- nvim-jdtls (Java LSP)
+  { src = "https://github.com/mfussenegger/nvim-jdtls", data = { ft = "java" } },
+
+  -- mason-lspconfig.nvim (bridge between mason and lspconfig)
   {
-    "williamboman/mason-lspconfig.nvim",
-    enabled = utils.__HAS_NVIM_011,
-    event = { "VeryLazy", "BufReadPre" },
-    dependencies = {
-      { "neovim/nvim-lspconfig" },
-      { "mason-org/mason.nvim" },
-      { "j-hui/fidget.nvim" },
+    src = "https://github.com/williamboman/mason-lspconfig.nvim",
+    data = {
+      cmd = { "Mason" },
+      event = { "BufReadPre" },
+      before = function()
+        ---@diagnostic disable-next-line: missing-fields
+        require("lz.n").trigger_load({ "nvim-lspconfig", "mason.nvim", "fidget.nvim" })
+      end,
+      after = function()
+        local utils = require("utils")
+        -- Add the same capabilities to ALL server configurations
+        vim.lsp.config("*", { capabilities = vim.lsp.protocol.make_client_capabilities() })
+        require("lsp.diag")
+        require("lsp.icons")
+        require("fidget").setup({})
+        require("mason").setup()
+        require("mason-lspconfig").setup({
+          ensure_installed = not utils.is_NetBSD()
+              and not utils.is_iSH()
+              and { "emmylua_ls" }
+              or nil,
+        })
+      end,
     },
-    config = function()
-      -- Add the same capabilities to ALL server configurations.
-      -- Refer to :h vim.lsp.config() for more information.
-      vim.lsp.config("*", {
-        capabilities = vim.lsp.protocol.make_client_capabilities()
-      })
-      require("lsp.diag")
-      require("lsp.icons")
-      require("fidget").setup({})
-      require("mason").setup()
-      require("mason-lspconfig").setup({
-        ensure_installed = not utils.is_NetBSD()
-            and not utils.is_iSH()
-            and { "emmylua_ls" }
-            or nil,
-      })
-    end,
-  },
-  {
-    "mfussenegger/nvim-jdtls",
-    ft = "java",
-  },
-  -- {
-  --   "folke/lazydev.nvim",
-  --   enabled = false,
-  --   ft = "lua",
-  --   opts = {
-  --     library = {
-  --       -- Load luvit types when the `vim.uv` word is found
-  --       { path = "$(3rd)/luv/library", words = { "vim%.uv" } },
-  --       -- Always luad fzf-lua
-  --       "fzf-lua",
-  --     },
-  --     -- uncomment to disable when a .luarc.json file is found
-  --     -- enabled = function(root_dir)
-  --     --   return not vim.uv.fs_stat(root_dir .. "/.luarc.json")
-  --     --       and not vim.uv.fs_stat(root_dir .. "/.luarc.jsonc")
-  --     -- end,
-  --   },
-  -- },
+  }
 }

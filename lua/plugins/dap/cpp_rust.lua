@@ -1,9 +1,9 @@
+---@diagnostic disable: need-check-nil
 local res, dap = pcall(require, "dap")
-if not res then
-  return
-end
+if not res then return end
 
 local utils = require("utils")
+local dap_utils = require("plugins.dap.utils")
 
 dap.adapters.gdb = {
   type = "executable",
@@ -30,7 +30,7 @@ dap.configurations.c = {
     name = "[CPPDBG] Launch Executable",
     type = "cppdbg",
     request = "launch",
-    program = utils.dap_pick_exec,
+    program = dap_utils.pick_exec,
     cwd = "${workspaceFolder}",
     stopAtEntry = false,
   },
@@ -38,7 +38,7 @@ dap.configurations.c = {
     name = "[CPPDBG] Launch Executable (External console)",
     type = "cppdbg",
     request = "launch",
-    program = utils.dap_pick_exec,
+    program = dap_utils.pick_exec,
     cwd = "${workspaceFolder}",
     stopAtEntry = false,
     externalConsole = true,
@@ -47,8 +47,8 @@ dap.configurations.c = {
     name = "[CPPDBG] Attach to process",
     type = "cppdbg",
     request = "attach",
-    processId = utils.dap_pick_process,
-    program = utils.dap_pick_exec,
+    processId = dap_utils.pick_proc,
+    program = dap_utils.pick_exec,
     args = {},
   },
   {
@@ -58,7 +58,7 @@ dap.configurations.c = {
     program = function()
       local nvim_bin = vim.fn.expand("$HOME/Sources/nvim/neovim/build/bin/nvim")
       if not vim.uv.fs_stat(nvim_bin) then
-        utils.warn(string.format("'%s' is not executable, aborting.", nvim_bin))
+        utils.warn("'%s' is not executable, aborting.", nvim_bin)
         return dap.ABORT
       end
       -- The idea for the below is taken from:
@@ -84,13 +84,12 @@ dap.configurations.c = {
         -- this event also gets called a second time for the child process but the pid
         -- will be nil the second time and will therefore do nothing
         local ppid = body.systemProcessId
-        utils.info(string.format("Launched nvim process (ppid=%s)", ppid))
+        utils.info("Launched nvim process (ppid=%s)", ppid)
         vim.wait(1000, function()
           return tonumber(vim.fn.system("ps -o pid= --ppid " .. tostring(ppid))) ~= nil
         end)
         local pid = tonumber(vim.fn.system("ps -o pid= --ppid " .. tostring(ppid)))
-        utils.info(
-          string.format("Attaching to nvim (ppid=%s) child process (pid=%s)", ppid, pid))
+        utils.info("Attaching to nvim (ppid=%s) child process (pid=%s)", ppid, pid)
         if pid then
           dap.run({
             name = "Neovim embedded",
@@ -123,14 +122,14 @@ dap.configurations.c = {
     program = function()
       local nvim_bin = vim.fn.expand("$HOME/Sources/nvim/neovim/build/bin/nvim")
       if not vim.uv.fs_stat(nvim_bin) then
-        utils.warn(string.format("'%s' is not executable, aborting.", nvim_bin))
+        utils.warn("'%s' is not executable, aborting.", nvim_bin)
         return dap.ABORT
       end
       return nvim_bin
     end,
     processId = function()
       -- attach to the `nvim --embed` process
-      return utils.dap_pick_process(
+      return dap_utils.pick_proc(
         { winopts = { height = 0.30 } },
         { filter = function(proc) return proc.name:match("nvim.*%-%-embed") end })
     end,
@@ -141,7 +140,7 @@ dap.configurations.c = {
     name = "[LLDB] Launch Executable",
     type = "lldb",
     request = "launch",
-    program = utils.dap_pick_exec,
+    program = dap_utils.pick_exec,
     cwd = "${workspaceFolder}",
     stopOnEntry = false,
     args = {},
@@ -150,14 +149,14 @@ dap.configurations.c = {
     name = "[LLDB] Attach to process",
     type = "lldb",
     request = "attach",
-    pid = utils.dap_pick_process,
+    pid = dap_utils.pick_proc,
     args = {},
   },
   {
     name = "[GDB] Launch Executable",
     type = "gdb",
     request = "launch",
-    program = utils.dap_pick_exec,
+    program = dap_utils.pick_exec,
     -- program = function()
     --   local bin
     --   vim.ui.input({ prompt = "Path to executable: " },
@@ -169,7 +168,7 @@ dap.configurations.c = {
     --   else
     --     -- ctrl-c'ing `vin.ui.input` returns "v:null"
     --     if bin ~= "v:null" and bin ~= "" then
-    --       utils.warn(string.format("'%s' is not executable, aborting.", bin))
+    --       utils.warn("'%s' is not executable, aborting.", bin)
     --     end
     --     return dap.ABORT
     --   end
@@ -181,7 +180,7 @@ dap.configurations.c = {
     name = "[GDB] Attach to process",
     type = "gdb",
     request = "attach",
-    pid = utils.dap_pick_process,
+    pid = dap_utils.pick_proc,
     args = {},
   },
 }
@@ -220,9 +219,11 @@ end
 
 for i, c in ipairs(dap.configurations.rust) do
   if c.type == "lldb" then
-    dap.configurations.rust[i] = vim.tbl_extend("force", dap.configurations.rust[i], {
-      env = build_env,
-      initCommands = rustInitCommands,
-    })
+    dap.configurations.rust[i] = vim.tbl_extend("force",
+      dap.configurations.rust[i] --[[@as table]],
+      {
+        env = build_env,
+        initCommands = rustInitCommands,
+      })
   end
 end

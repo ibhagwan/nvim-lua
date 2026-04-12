@@ -7,7 +7,7 @@ local utils = require("utils")
 local M = {}
 
 M.setup = function()
-  ---@diagnostic disable-next-line: missing-fields
+  ---@diagnostic disable-next-line: missing-fields, need-check-nil
   dapui.setup({
     layouts = {
       {
@@ -42,7 +42,7 @@ M.setup = function()
   end
   dap.listeners.before.event_terminated.dapui_config = function(e)
     require("utils").info(
-      string.format("program '%s' was terminated.", vim.fn.fnamemodify(e.config.program, ":t")))
+      "program '%s' was terminated.", vim.fn.fnamemodify(e.config.program, ":t"))
   end
   -- dap.listeners.before.event_exited.dapui_config = function(e)
   --   dapui.close()
@@ -56,11 +56,13 @@ M.open = function(reset, tmux_zoom)
       vim.cmd("sleep! 20m")
     end
   end
+  ---@diagnostic disable-next-line: need-check-nil
   dapui.open({ reset = reset == nil and true or reset })
   M._is_open = true
 end
 
 M.close = function(tmux_zoom)
+  ---@diagnostic disable-next-line: need-check-nil
   dapui.close()
   if tmux_zoom and M._tmux_was_unzoomed then
     utils.tmux_unzoom()

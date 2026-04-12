@@ -1,3 +1,4 @@
+---@diagnostic disable: undefined-global
 local section_mode = function(opts)
   -- Mode section hacked with faux "snippet mode"
   local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = opts.trunc_width })
@@ -36,15 +37,15 @@ end
 local section_lsp = function(args)
   if MiniStatusline.is_truncated(args.trunc_width) then return "" end
   local names = {}
-  for _, server in pairs(require("utils").lsp_get_clients({ bufnr = 0 }) or {}) do
+  for _, server in pairs(vim.lsp.get_clients({ bufnr = 0 }) or {}) do
     table.insert(names, server.name)
   end
   return table.concat(names, " ")
 end
 
 local section_opencode = function(args)
-  if MiniStatusline.is_truncated(args.trunc_width) then return "" end
-  if not package.loaded["opencode"] then return "" end
+  if MiniStatusline.is_truncated(args.trunc_width) then return "", "" end
+  if not package.loaded["opencode"] then return "", "" end
   local i = (function()
     local status = require("opencode.status").status
     if status == "idle" then
@@ -100,7 +101,7 @@ local active_content = function()
   local diag_w        = section_diagnostics({ trunc_width = 75, severity = "W" })
   local diag_h        = section_diagnostics({ trunc_width = 75, severity = "H" })
   local diag_i        = section_diagnostics({ trunc_width = 75, severity = "I" })
-  local location      = MiniStatusline.section_location({ trunc_width = 75 })
+  local location      = MiniStatusline.section_location({ trunc_width = 140 })
   local search        = MiniStatusline.section_searchcount({ trunc_width = 75 })
 
 

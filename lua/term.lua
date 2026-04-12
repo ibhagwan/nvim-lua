@@ -15,20 +15,13 @@ local function ensure_hl()
   return M._hl
 end
 
-local termopen = vim.fn.has("nvim-0.11") ~= 1 and vim.fn.termopen
-    or function(cmd, opts)
-      opts = opts or {}
-      opts.term = true
-      return vim.fn.jobstart(cmd, opts)
-    end
-
 M.toggleterm = function()
   if not M._buf or not vim.api.nvim_buf_is_valid(M._buf) then
     M._buf = vim.api.nvim_create_buf(false, false)
   end
 
-  M._win = vim.iter(vim.fn.win_findbuf(M._buf)):find(function(b_wid)
-    return vim.iter(vim.api.nvim_tabpage_list_wins(0)):any(function(t_wid)
+  M._win = vim.iter(vim.fn.win_findbuf(M._buf) --[[@as IterMod]]):find(function(b_wid)
+    return vim.iter(vim.api.nvim_tabpage_list_wins(0) --[[@as IterMod]]):any(function(t_wid)
       return b_wid == t_wid
     end)
   end) or (function()
@@ -47,7 +40,7 @@ M.toggleterm = function()
     vim.api.nvim_win_set_config(M._win, { hide = false })
     vim.api.nvim_set_current_win(M._win)
     if vim.bo[M._buf].channel <= 0 then
-      termopen({ vim.o.shell })
+      vim.fn.jobstart({ vim.o.shell }, { term = true })
       vim.keymap.set({ "n", "t" }, M._key, M.toggleterm, { buffer = M._buf, desc = M._desc })
     end
     vim.cmd("startinsert")
