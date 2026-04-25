@@ -122,7 +122,7 @@ vim.o.swapfile = false                   -- no swap file
   :rshada   - read the shada file (:rviminfo for vim)
   :wshada   - write the shada file (:wrviminfo for vim)
 ]]
-vim.o.shada = [[!,'100,<0,s100,h]]
+vim.o.shada = [[!,'10000,<0,s100,h]]
 vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize"
 
 -- use ':grep' to send resulsts to quickfix
