@@ -191,28 +191,31 @@ augroup("ibhagwan/nvim-pack", function(g)
   aucmd("PackChanged", {
     group = g,
     callback = function(e)
-      local name, _kind = e.data.spec.name, e.data.kind
-      if name == "blink.cmp" then
+      local function cargo_build(plug)
         if vim.fn.executable("cargo") ~= 1 then return end
         local plugin_dir = vim.fs.joinpath(vim.fn.stdpath("data") --[[@as string]],
-          "site", "pack", "core", "opt", "blink.cmp")
+          "site", "pack", "core", "opt", plug)
         vim.fn.jobstart({ "cargo", "+nightly", "build", "--release" }, {
           cwd = plugin_dir,
           on_stdout = function(_, data)
             vim.iter(data):each(function(s)
-              if #s > 0 then utils.info(s) end
+              if #s > 0 then utils.info("[%s] %s", plug, s) end
             end)
           end,
           on_stderr = function(_, data)
             vim.iter(data):each(function(s)
-              if #s > 0 then utils.warn(s) end
+              if #s > 0 then utils.warn("[%s] %s", plug, s) end
             end)
           end,
           on_exit = function(_, rc, _)
             local lvl = rc == 0 and "info" or "warn"
-            utils[lvl]("cargo finished with exit code %d", rc)
+            utils[lvl]("[%s] cargo finished with exit code %d", plug, rc)
           end
         })
+      end
+      local name, _kind = e.data.spec.name, e.data.kind
+      if name == "blink.cmp" then
+        cargo_build("blink.cmp")
       elseif name == "nvim-treesitter" then
         vim.defer_fn(vim.cmd.TSUpdate, 100)
       end

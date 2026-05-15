@@ -40,7 +40,7 @@ M._toggle = function(git_args)
 end
 
 return {
-  src = "https://github.com/sindrets/diffview.nvim",
+  src = "https://github.com/dlyongemallo/diffview.nvim",
   data = {
     cmd = { "DiffviewOpen", "DiffviewFileHistory" },
     beforeAll = function()
