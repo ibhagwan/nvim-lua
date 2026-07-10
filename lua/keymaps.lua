@@ -1,10 +1,16 @@
 local map = vim.keymap.set
 local utils = require("utils")
 
-vim.api.nvim_create_user_command("R", function()
-  vim.cmd.restart(
-    [[lua vim.defer_fn(function() vim.opt_local.bufhidden="wipe"; vim.cmd("norm! g`0 | zz") end, 50)]])
-end, {})
+if vim.fn.has("nvim-0.13") == 1 then
+  vim.api.nvim_create_user_command("R", function()
+    vim.cmd [[restart e!]]
+  end, {})
+else
+  vim.api.nvim_create_user_command("R", function()
+    vim.cmd.restart(
+      [[lua vim.defer_fn(function() vim.opt_local.bufhidden="wipe"; vim.cmd("norm! g`0 | zz") end, 50)]])
+  end, {})
+end
 
 map("", "<leader>R", "<cmd>R<CR>", { silent = true, desc = "restart nvim" })
 

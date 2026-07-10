@@ -47,6 +47,8 @@ table.insert(plugins, {
       then
         utils.warn("Unable to copy '%s' to previm jail.", hljs_ghdark_css)
       end
+    end,
+    after = function()
       -- Clear cache
       vim.fn["previm#wipe_cache"]()
     end,

@@ -4,8 +4,10 @@ return {
     event = "BufReadPost",
     after = function()
       require("conform").setup({
+        -- Downloaded by fzf-lua's `make deps/emmylua`
+        formatters = { luafmt = { command = ".emmylua/luafmt" } },
         formatters_by_ft = {
-          lua = { "stylua" },
+          lua = { "luafmt" },
           python = { "black" },
           css = { "prettier", "prettierd", stop_after_first = true },
           html = { "prettier", "prettierd", stop_after_first = true },

@@ -6,6 +6,7 @@ local function augroup(name, fnc)
 end
 
 if not package.loaded["smartyank"] then
+  local hl_op = vim.fn.has("nvim-0.13") == 1 and vim.hl.hl_op or vim.highlight.on_yank
   augroup("ibhagwan/SmartTextYankPost", function(g)
     -- highlight yanked text and copy to system clipboard
     -- TextYankPost is also called on deletion, limit to
@@ -33,7 +34,7 @@ if not package.loaded["smartyank"] then
           -- we use `-w` to also copy to client's clipboard
           vim.system({ "tmux", "set-buffer", "-w", yank_data }):wait()
         end
-        vim.highlight.on_yank({ higroup = "IncSearch", timeout = 1000 })
+        hl_op({ higroup = "IncSearch", timeout = 1000 })
       end
     })
   end)

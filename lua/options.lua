@@ -63,33 +63,32 @@ vim.opt.completeopt = {
   "fuzzy", -- nvim 0.11
 }
 
-vim.o.pumheight = 10     -- completion menu max height
+vim.o.pumheight = 10              -- completion menu max height
 
-vim.o.joinspaces = true  -- insert spaces after '.?!' when joining lines
-vim.o.smartindent = true -- add <tab> depending on syntax (C/C++)
+vim.o.joinspaces = true           -- insert spaces after '.?!' when joining lines
+vim.o.smartindent = true          -- add <tab> depending on syntax (C/C++)
 
-vim.o.tabstop = 4        -- Tab indentation levels every two columns
-vim.o.shiftwidth = 0     -- Use `tabstop` value for auto-indent
-vim.o.shiftround = true  -- Always indent/outdent to nearest tabstop
-vim.o.expandtab = true   -- Convert all tabs that are typed into spaces
+vim.o.tabstop = 4                 -- Tab indentation levels every two columns
+vim.o.shiftwidth = 0              -- Use `tabstop` value for auto-indent
+vim.o.shiftround = true           -- Always indent/outdent to nearest tabstop
+vim.o.expandtab = true            -- Convert all tabs that are typed into spaces
 
-vim.opt.formatoptions = vim.opt.formatoptions
-    - "a"                 -- auto-formatting
-    - "t"                 -- auto-wrap text using 'textwidth'
-    + "c"                 -- auto-wrap comments using 'textwidth'
-    + "q"                 -- allow formatting comments w/ `gq`
-    - "o"                 -- auto-continue comments on pressing `o|O`
-    + "r"                 -- auto-continue comments on pressing `enter`
-    + "n"                 -- recognize 'formatlistpat' while formatting
-    + "j"                 -- auto-remove comments when joining lines
-    - "2"                 -- disable heuristics in paragraph formatting
+vim.opt.formatoptions:remove("a") -- auto-formatting
+vim.opt.formatoptions:remove("t") -- auto-wrap text using 'textwidth'
+vim.opt.formatoptions:append("c") -- auto-wrap comments using 'textwidth'
+vim.opt.formatoptions:append("q") -- allow formatting comments w/ `gq`
+vim.opt.formatoptions:remove("o") -- auto-continue comments on pressing `o|O`
+vim.opt.formatoptions:append("r") -- auto-continue comments on pressing `enter`
+vim.opt.formatoptions:append("n") -- recognize 'formatlistpat' while formatting
+vim.opt.formatoptions:append("j") -- auto-remove comments when joining lines
+vim.opt.formatoptions:remove("2") -- disable heuristics in paragraph formatting
 
-vim.o.splitbelow = true   -- ':new' ':split' below current
-vim.o.splitright = true   -- ':vnew' ':vsplit' right of current
+vim.o.splitbelow = true           -- ':new' ':split' below current
+vim.o.splitright = true           -- ':vnew' ':vsplit' right of current
 
-vim.o.foldenable = true   -- enable folding
-vim.o.foldlevelstart = 99 -- open all folds by default
-vim.o.foldmethod = "expr" -- use treesitter for folding
+vim.o.foldenable = true           -- enable folding
+vim.o.foldlevelstart = 99         -- open all folds by default
+vim.o.foldmethod = "expr"         -- use treesitter for folding
 vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 
 vim.o.undofile = false                   -- no undo file
