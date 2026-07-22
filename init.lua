@@ -21,9 +21,9 @@ end
 -- we aren't using "VIMRUNTIME=.../build/runtime" as it's missing "lua" folder
 -- instead we use the source folder directly but since it's missing "doc/tasg"
 -- we can't use `:help`, this restores the help tags
-if vim.v.progpath:match("Sources") then
+if vim.v.progpath:match("Sources") or vim.v.progpath:match("rootfs") then
   local rtp = vim.fs.joinpath(vim.fn.fnamemodify(vim.v.progpath, ":h:h"), "runtime")
-  vim.opt.runtimepath:append(rtp)
+  vim.opt.runtimepath:prepend(rtp)
   vim.env.FZF_LUA_NVIM_BIN = vim.v.progpath
   vim.env.FZF_LUA_NVIM_RUNTIME = vim.env.VIMRUNTIME
 end
