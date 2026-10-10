@@ -3,7 +3,7 @@ local utils = require("utils")
 
 if vim.fn.has("nvim-0.13") == 1 then
   vim.api.nvim_create_user_command("R", function()
-    vim.cmd [[restart e!]]
+    vim.cmd [[restart]]
   end, {})
 else
   vim.api.nvim_create_user_command("R", function()

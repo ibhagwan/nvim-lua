@@ -219,6 +219,7 @@ local default_opts = {
     { "ivy" },
     fzf_opts = { ["--history"] = vim.fs.joinpath(vim.fn.stdpath("data"), "fzf_blines_hist") },
   },
+  btags = { { "ivy" } },
   git = {
     status = {
       actions = {

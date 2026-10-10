@@ -137,7 +137,7 @@ end
 local pack_plugs, dev_plugs = enum_plugin_specs()
 
 -- Bootstrap lz.n via vim.pack
-vim.pack.add({ "https://github.com/lumen-oss/lz.n" })
+vim.pack.add({ "https://github.com/lumen-oss/lz.n" }, { confirm = not require("utils").is_iSH() })
 
 -- Verify the user elected to install lz.n and it can be loaded
 local ok, lzn = pcall(require, "lz.n") ---@cast lzn lz.n.PluginBase
@@ -146,7 +146,8 @@ if not ok then return end
 ---@diagnostic disable-next-line: param-type-mismatch, need-check-nil
 if #dev_plugs > 0 then lzn.load(dev_plugs) end
 
-vim.pack.add(pack_plugs, { load = lzn.load } --[[@as vim.pack.keyset.add]])
+vim.pack.add(pack_plugs,
+  { confirm = not require("utils").is_iSH(), load = lzn.load } --[[@as vim.pack.keyset.add]])
 
 -- vim.pack management user command
 vim.api.nvim_create_user_command("Pack", function(e)
