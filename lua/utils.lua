@@ -12,6 +12,11 @@ M.__IS_WIN = jit.os == "Windows"
 -- M.__IS_WIN = vim.fn.has("win32") == 1 or vim.fn.has("win64") == 1
 -- M.__USE_SNACKS = M.__IS_WIN
 
+if M.__IS_WIN then
+  vim.env.CC = "zig cc"
+  vim.env.CC_KNOWN_WRAPPER_CUSTOM = "zig"
+end
+
 M._notify_header = "LineNr"
 
 --- Fancy notification wrapper, idea borrowed from blink.nvim

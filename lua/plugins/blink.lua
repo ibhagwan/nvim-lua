@@ -39,6 +39,7 @@ return {
             ["<S-up>"] = { "scroll_documentation_up", "fallback" },
             ["<S-down>"] = { "scroll_documentation_down", "fallback" },
           },
+          term = { enabled = false },
           cmdline = {
             enabled = true,
             completion = {

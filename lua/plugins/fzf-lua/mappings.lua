@@ -10,7 +10,11 @@ local yadm_grep_opts = {
   prompt = "YadmGrep❯ ",
   cwd_header = false,
   cwd = "$HOME",
-  cmd = "git --git-dir=${YADM_REPO} -C ${HOME} grep -i --line-number --column --color=always",
+  -- `cmd` runs through the platform shell (cmd.exe on Windows), which does
+  -- not expand POSIX `${VAR}`; expand the repo path here instead. `cwd`
+  -- already switches to $HOME, so `git -C` isn't needed.
+  cmd = ("git --git-dir=%s grep -i --line-number --column --color=always"):format(
+    vim.fn.shellescape(vim.fn.expand("$YADM_REPO"))),
   rg_glob = false, -- this isn't `rg`
 }
 
