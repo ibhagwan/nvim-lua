@@ -14,9 +14,9 @@ M.setup = function()
         position = "right",
         size = 0.40,
         elements = {
-          { id = "scopes",      size = 0.38, },
-          { id = "watches",     size = 0.16 },
-          { id = "stacks",      size = 0.28 },
+          { id = "scopes", size = 0.38 },
+          { id = "watches", size = 0.16 },
+          { id = "stacks", size = 0.28 },
           { id = "breakpoints", size = 0.18 },
         },
       },
@@ -24,7 +24,7 @@ M.setup = function()
         position = "bottom",
         size = 0.30,
         elements = {
-          { id = "repl",    size = 0.60, },
+          { id = "repl", size = 0.60 },
           { id = "console", size = 0.40 },
         },
       },
@@ -41,8 +41,7 @@ M.setup = function()
     M.open()
   end
   dap.listeners.before.event_terminated.dapui_config = function(e)
-    require("utils").info(
-      "program '%s' was terminated.", vim.fn.fnamemodify(e.config.program, ":t"))
+    utils.info("program '%s' was terminated.", vim.fn.fnamemodify(e.config.program, ":t"))
   end
   -- dap.listeners.before.event_exited.dapui_config = function(e)
   --   dapui.close()

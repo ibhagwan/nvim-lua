@@ -1,0 +1,94 @@
+#
+# Canonical formatter config for this project. `make fmt` and
+# `make fmtcheck` use this file explicitly; luafmt also discovers it
+# automatically when run from the repository root.
+#
+#  https://github.com/EmmyLuaLs/emmylua-analyzer-rust/blob/main/docs/emmylua_formatter/options_EN.md
+#
+level = "Lua51"
+
+[indent]
+# Use spaces instead of tabs for indentation.
+kind = "Space"
+# Number of spaces per indentation level.
+width = 2
+
+[layout]
+# Maximum line width before breaking.
+max_line_width = 100
+# Single new line between functions/statements.
+max_blank_lines = 1
+# Auto-expand multiline arrays/tables when they exceed line width.
+table_expand = "Auto"
+# Let the formatter choose flat or expanded call arguments based on width.
+call_args_expand = "Auto"
+# Prefer multiline breaking for fluent method chains in statements.
+# Keeps chain breaks on the tail of a statement.
+prefer_chain_break_on_statement_tail = true
+# Keep existing multiline array/table layout when the source already shows it.
+# Helps avoid collapsing multi-line arrays/tables.
+prefer_table_layout_from_source = true
+
+[spacing]
+# Do NOT add a space before function definition parentheses.
+space_before_func_paren = false
+# Do NOT add a space before anonymous function/closure parentheses.
+space_before_lambda_func_paren = false
+# Do NOT add a space before method/function call parentheses.
+space_before_call_paren = false
+# Add a space inside table braces (e.g., `{ a = 1 }`).
+space_inside_braces = true
+# Do NOT add spaces inside call/list parentheses.
+space_inside_parens = false
+# Do NOT add spaces inside square brackets.
+space_inside_brackets = false
+# Add spaces around math operators (+, -, *, /, etc.).
+space_around_math_operator = true
+# Add spaces around string concatenation operator (..).
+space_around_concat_operator = true
+# Add spaces around assignment operators (=, +=, etc.).
+space_around_assign_operator = true
+
+[comments]
+# Align line comments that appear at the end of lines.
+align_line_comments = true
+# Do NOT align trailing comments in statements.
+align_in_statements = false
+# Align trailing comments in table fields.
+align_in_table_fields = true
+# Align trailing comments in function parameters.
+align_in_params = true
+# Align trailing comments in call arguments.
+align_in_call_args = true
+# Disable adding a space after the comment dash prefix.
+# This prevents --[[ block comments from being corrupted into
+# -- [[ (which breaks the block comment syntax).  Note that
+# plain comments such as "--comment" will no longer be
+# auto-corrected to "-- comment".
+# space_after_comment_dash = false
+
+[emmy_doc]
+# Disable aligning EmmyLua @param/@return type columns.
+align_declaration_tags = false
+# Disable aligning all EmmyLua tag columns.
+align_tag_columns = false
+# Keep compact union types as used throughout the project (e.g. `string|integer`).
+compact_type_or = true
+# Keep plain doc descriptions unwrapped from the `---` prefix (e.g. `---text`).
+space_after_description_dash = false
+
+[align]
+# Disable aligning continuous assignment statements.
+continuous_assign_statement = false
+# Align table fields when the source shows alignment intent.
+table_field = true
+
+[output]
+# Always use double quotes for short strings (single quotes otherwise).
+quote_style = "Double"
+# Keep trailing commas for multiline tables/arrays.
+trailing_comma = "Multiline"
+# Always keep the final newline.
+insert_final_newline = true
+# Keep single-argument call parentheses.
+single_arg_call_parens = "Preserve"

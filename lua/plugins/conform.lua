@@ -3,9 +3,12 @@ return {
   data = {
     event = "BufReadPost",
     after = function()
+      -- `.emmylua/luafmt` is downloaded by this repo's `make deps/emmylua`;
+      -- fall back to `luafmt` on PATH (e.g. mason) when not present.
+      local luafmt = vim.fs.joinpath(vim.fn.stdpath("config"), ".emmylua", "luafmt")
+      if vim.fn.executable(luafmt) == 0 then luafmt = "luafmt" end
       require("conform").setup({
-        -- Downloaded by fzf-lua's `make deps/emmylua`
-        formatters = { luafmt = { command = ".emmylua/luafmt" } },
+        formatters = { luafmt = { command = luafmt } },
         formatters_by_ft = {
           lua = { "luafmt" },
           python = { "black" },

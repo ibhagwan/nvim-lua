@@ -1,7 +1,7 @@
 local utils = require("utils")
 
-vim.o.mouse = ""                    -- disable the mouse
-vim.o.termguicolors = true          -- enable 24bit colors
+vim.o.mouse = ""           -- disable the mouse
+vim.o.termguicolors = true -- enable 24bit colors
 
 vim.o.updatetime = 250              -- decrease update time for CursorHold
 vim.o.fileformat = "unix"           -- <nl> for EOL
@@ -63,15 +63,15 @@ vim.opt.completeopt = {
   "fuzzy", -- nvim 0.11
 }
 
-vim.o.pumheight = 10              -- completion menu max height
+vim.o.pumheight = 10 -- completion menu max height
 
-vim.o.joinspaces = true           -- insert spaces after '.?!' when joining lines
-vim.o.smartindent = true          -- add <tab> depending on syntax (C/C++)
+vim.o.joinspaces = true  -- insert spaces after '.?!' when joining lines
+vim.o.smartindent = true -- add <tab> depending on syntax (C/C++)
 
-vim.o.tabstop = 4                 -- Tab indentation levels every two columns
-vim.o.shiftwidth = 0              -- Use `tabstop` value for auto-indent
-vim.o.shiftround = true           -- Always indent/outdent to nearest tabstop
-vim.o.expandtab = true            -- Convert all tabs that are typed into spaces
+vim.o.tabstop = 4       -- Tab indentation levels every two columns
+vim.o.shiftwidth = 0    -- Use `tabstop` value for auto-indent
+vim.o.shiftround = true -- Always indent/outdent to nearest tabstop
+vim.o.expandtab = true  -- Convert all tabs that are typed into spaces
 
 vim.opt.formatoptions:remove("a") -- auto-formatting
 vim.opt.formatoptions:remove("t") -- auto-wrap text using 'textwidth'
@@ -83,25 +83,25 @@ vim.opt.formatoptions:append("n") -- recognize 'formatlistpat' while formatting
 vim.opt.formatoptions:append("j") -- auto-remove comments when joining lines
 vim.opt.formatoptions:remove("2") -- disable heuristics in paragraph formatting
 
-vim.o.splitbelow = true           -- ':new' ':split' below current
-vim.o.splitright = true           -- ':vnew' ':vsplit' right of current
+vim.o.splitbelow = true -- ':new' ':split' below current
+vim.o.splitright = true -- ':vnew' ':vsplit' right of current
 
-vim.o.foldenable = true           -- enable folding
-vim.o.foldlevelstart = 99         -- open all folds by default
-vim.o.foldmethod = "expr"         -- use treesitter for folding
+vim.o.foldenable = true   -- enable folding
+vim.o.foldlevelstart = 99 -- open all folds by default
+vim.o.foldmethod = "expr" -- use treesitter for folding
 vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 
-vim.o.undofile = false                   -- no undo file
-vim.o.hidden = true                      -- do not unload buffer when abandoned
-vim.o.confirm = true                     -- confirm before loss of data with `:q`
+vim.o.undofile = false -- no undo file
+vim.o.hidden = true    -- do not unload buffer when abandoned
+vim.o.confirm = true   -- confirm before loss of data with `:q`
 
 vim.o.ignorecase = true                  -- ignore case on search
 vim.o.smartcase = true                   -- case sensitive when search includes uppercase
 vim.o.showmatch = true                   -- highlight matching [{()}]
 vim.o.cpoptions = vim.o.cpoptions .. "x" -- stay on search item when <esc>
 
-vim.o.writebackup = false                -- do not backup file before write
-vim.o.swapfile = false                   -- no swap file
+vim.o.writebackup = false -- do not backup file before write
+vim.o.swapfile = false    -- no swap file
 
 --[[
   ShDa (viminfo for vim): session data history

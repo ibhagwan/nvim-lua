@@ -5,6 +5,6 @@ return {
       enabled = false,
       renderInline = false,
       localVariables = false,
-    }
-  }
+    },
+  },
 }

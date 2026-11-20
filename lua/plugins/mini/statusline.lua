@@ -61,12 +61,12 @@ local section_opencode = function(args)
     end
   end)()
   local s = assert(({
-    { "i", "MiniStatusLineModeInsert" },
-    { "r", "MiniStatusLineModeVisual" },
-    { "p", "MiniStatusLineModeCommand" },
-    { "e", "MiniStatusLineModeReplace" },
-    { "d", "MiniStatuslineDevinfo" }
-  })[i])
+      { "i", "MiniStatusLineModeInsert" },
+      { "r", "MiniStatusLineModeVisual" },
+      { "p", "MiniStatusLineModeCommand" },
+      { "e", "MiniStatusLineModeReplace" },
+      { "d", "MiniStatuslineDevinfo" },
+    })[i])
   return string.format("oc[%s]", s[1]), s[2]
 end
 
@@ -89,39 +89,38 @@ end
 
 local active_content = function()
   local mode, mode_hl = section_mode({ trunc_width = 40 })
-  local git           = MiniStatusline.section_git({ trunc_width = 40 })
-  local diff          = section_diff({ trunc_width = 75, icon = "" })
-  local fileicon      = section_fileicon({ trunc_width = 75 })
-  local fileinfo      = section_fileinfo({ trunc_width = 140 })
-  local filename      = MiniStatusline.section_filename({ trunc_width = 140 })
-  local lsp           = section_lsp({ trunc_width = 75 })
-  local oc, oc_hl     = section_opencode({ trunc_width = 75 })
+  local git = MiniStatusline.section_git({ trunc_width = 40 })
+  local diff = section_diff({ trunc_width = 75, icon = "" })
+  local fileicon = section_fileicon({ trunc_width = 75 })
+  local fileinfo = section_fileinfo({ trunc_width = 140 })
+  local filename = MiniStatusline.section_filename({ trunc_width = 140 })
+  local lsp = section_lsp({ trunc_width = 75 })
+  local oc, oc_hl = section_opencode({ trunc_width = 75 })
   -- local diagnostics   = MiniStatusline.section_diagnostics({ trunc_width = 75 })
-  local diag_e        = section_diagnostics({ trunc_width = 75, severity = "E" })
-  local diag_w        = section_diagnostics({ trunc_width = 75, severity = "W" })
-  local diag_h        = section_diagnostics({ trunc_width = 75, severity = "H" })
-  local diag_i        = section_diagnostics({ trunc_width = 75, severity = "I" })
-  local location      = MiniStatusline.section_location({ trunc_width = 140 })
-  local search        = MiniStatusline.section_searchcount({ trunc_width = 75 })
-
+  local diag_e = section_diagnostics({ trunc_width = 75, severity = "E" })
+  local diag_w = section_diagnostics({ trunc_width = 75, severity = "W" })
+  local diag_h = section_diagnostics({ trunc_width = 75, severity = "H" })
+  local diag_i = section_diagnostics({ trunc_width = 75, severity = "I" })
+  local location = MiniStatusline.section_location({ trunc_width = 140 })
+  local search = MiniStatusline.section_searchcount({ trunc_width = 75 })
 
   return MiniStatusline.combine_groups({
-    { hl = mode_hl,                     strings = { mode } },
-    { hl = "MiniStatuslineDevinfo",     strings = { git } },
-    { hl = "DiffAdd",                   strings = { diff } },
-    { hl = "MiniStatuslineFilename",    strings = { "%=" } }, -- Right align
-    { hl = "MiniStatuslineFilename",    strings = { fileicon, filename } },
-    { hl = "MiniStatuslineFilename",    strings = { "%=" } }, -- Left align
-    { hl = "MiniStatuslineFileinfo",    strings = { fileinfo } },
-    { hl = "MiniStatusLineModeOther",   strings = { lsp } },
-    { hl = oc_hl,                       strings = { oc } },
+    { hl = mode_hl, strings = { mode } },
+    { hl = "MiniStatuslineDevinfo", strings = { git } },
+    { hl = "DiffAdd", strings = { diff } },
+    { hl = "MiniStatuslineFilename", strings = { "%=" } }, -- Right align
+    { hl = "MiniStatuslineFilename", strings = { fileicon, filename } },
+    { hl = "MiniStatuslineFilename", strings = { "%=" } }, -- Left align
+    { hl = "MiniStatuslineFileinfo", strings = { fileinfo } },
+    { hl = "MiniStatusLineModeOther", strings = { lsp } },
+    { hl = oc_hl, strings = { oc } },
     -- { hl = "MiniStatusLineModeReplace", strings = { diagnostics } },
     { hl = "MiniStatusLineModeReplace", strings = { diag_e } },
     { hl = "MiniStatusLineModeCommand", strings = { diag_w } },
-    { hl = "MiniStatusLineModeVisual",  strings = { diag_h } },
-    { hl = "MiniStatusLineModeInsert",  strings = { diag_i } },
-    { hl = "MiniStatusLineModeVisual",  strings = { search } },
-    { hl = mode_hl,                     strings = { location } },
+    { hl = "MiniStatusLineModeVisual", strings = { diag_h } },
+    { hl = "MiniStatusLineModeInsert", strings = { diag_i } },
+    { hl = "MiniStatusLineModeVisual", strings = { search } },
+    { hl = mode_hl, strings = { location } },
   })
 end
 
@@ -142,5 +141,5 @@ return {
         inactive = inactive_content,
       },
     })
-  end
+  end,
 }

@@ -6,7 +6,9 @@ return {
       local map = vim.keymap.set
       map("n", "<leader>gr", "<Esc>:Gread<CR>", { silent = true, desc = "Gread (reset)" })
       map("n", "<leader>gw", "<Esc>:Gwrite<CR>", { silent = true, desc = "Gwrite (stage)" })
-      map("n", "<leader>gD", "<Esc>:Gvdiffsplit!<CR>", { silent = true, desc = "Git diff (buffer)" })
+      map(
+        "n", "<leader>gD", "<Esc>:Gvdiffsplit!<CR>", { silent = true, desc = "Git diff (buffer)" }
+      )
       map("n", "<leader>g+", "<Esc>:Git stash push<CR>", { silent = true, desc = "Git stash push" })
       map("n", "<leader>g-", "<Esc>:Git stash pop<CR>", { silent = true, desc = "Git stash pop" })
     end,
@@ -18,19 +20,22 @@ return {
 
       -- auto-complete for our custom fugitive Yadm command
       -- https://github.com/tpope/vim-fugitive/issues/1981#issuecomment-1113825991
-      vim.cmd(([[
+      vim.cmd(
+        ([[
         function! YadmComplete(A, L, P) abort
           return fugitive#Complete(a:A, a:L, a:P, {'git_dir': expand("%s")})
         endfunction
-      ]]):format(yadm_repo))
+      ]]):format(yadm_repo)
+      )
 
-      vim.cmd((
-        [[command! -bang -nargs=? -range=-1 -complete=customlist,YadmComplete Dot exe ]]
-        .. [[fugitive#Command(<line1>, <count>, +"<range>", <bang>0, "<mods>", <q-args>, ]]
-        .. [[{ 'git_dir': expand("%s") })]]):format(yadm_repo))
+      vim.cmd(
+        ([[command! -bang -nargs=? -range=-1 -complete=customlist,YadmComplete Dot exe ]] .. [[fugitive#Command(<line1>, <count>, +"<range>", <bang>0, "<mods>", <q-args>, ]]
+          .. [[{ 'git_dir': expand("%s") })]]):format(yadm_repo)
+      )
 
       local function fugitive_command(nargs, cmd_name, cmd_fugitive, cmd_comp)
-        vim.api.nvim_create_user_command(cmd_name,
+        vim.api.nvim_create_user_command(
+          cmd_name,
           function(t)
             local bufnr = vim.api.nvim_get_current_buf()
             local buf_git_dir = vim.b.git_dir

@@ -51,8 +51,8 @@ end
 
 function M.diagnostics_document(opts)
   opts = opts or {}
-  opts.diag_source = #vim.lsp.get_clients({ bufnr = vim.api.nvim_get_current_buf() }) > 1
-      and true or false
+  opts.diag_source = #vim.lsp.get_clients({ bufnr = vim.api.nvim_get_current_buf() }) > 1 and true
+    or false
   opts.icon_padding = opts.diag_source and "" or " "
   fzf_lua.diagnostics_document(opts)
 end

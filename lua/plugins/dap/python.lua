@@ -45,8 +45,15 @@ table.insert(require("dap").configurations.python, 4, {
     -- https://github.com/microsoft/debugpy/#attaching-to-a-running-process-by-id
     local port = 5678
     local pid = getpid()
-    local out = vim.fn.systemlist({ prefix .. bin_python, "-m", "debugpy",
-      "--listen", "localhost:" .. tostring(port), "--pid", tostring(pid) })
+    local out = vim.fn.systemlist({
+      prefix .. bin_python,
+      "-m",
+      "debugpy",
+      "--listen",
+      "localhost:" .. tostring(port),
+      "--pid",
+      tostring(pid),
+    })
     assert(vim.v.shell_error == 0, table.concat(out, "\n"))
     return { port = port }
   end,

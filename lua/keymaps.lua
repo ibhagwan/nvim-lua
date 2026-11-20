@@ -4,12 +4,15 @@ local utils = require("utils")
 if vim.fn.has("nvim-0.13") == 1 then
   vim.api.nvim_create_user_command("R", function()
     vim.cmd [[restart]]
-  end, {})
+  end, {}
+  )
 else
   vim.api.nvim_create_user_command("R", function()
     vim.cmd.restart(
-      [[lua vim.defer_fn(function() vim.opt_local.bufhidden="wipe"; vim.cmd("norm! g`0 | zz") end, 50)]])
-  end, {})
+      [[lua vim.defer_fn(function() vim.opt_local.bufhidden="wipe"; vim.cmd("norm! g`0 | zz") end, 50)]]
+    )
+  end, {}
+  )
 end
 
 map("", "<leader>R", "<cmd>R<CR>", { silent = true, desc = "restart nvim" })
@@ -18,7 +21,8 @@ map("", "<leader>r", function()
   vim.api.nvim_exec2("update", {})
   vim.api.nvim_exec2("so %", {})
   utils.info("Sourced '%s'", vim.fn.expand("%"))
-end, { silent = true, desc = "source current file" })
+end, { silent = true, desc = "source current file" }
+)
 
 -- Use ':Grep' or ':LGrep' to grep into quickfix|loclist
 -- without output or jumping to first match
@@ -45,7 +49,9 @@ do
     ["wa1"] = "wa!",
     ["Wa1"] = "wa!",
   }
-  for k, v in pairs(abbrevs) do map("ca", k, v) end
+  for k, v in pairs(abbrevs) do
+    map("ca", k, v)
+  end
   -- auto expand abbrevations on enter
   map({ "c" }, "<CR>", "<C-]><CR>")
 end
@@ -56,17 +62,21 @@ if utils.is_root() then
 else
   -- replace common actions with fzf-lua
   map("n", "<C-z>", "<cmd>detach<CR>", { desc = "Detach current neovim instance" })
-  map({ "n", "v", "i" }, "<C-x><C-f>",
+  map(
+    { "n", "v", "i" }, "<C-x><C-f>",
     function() require("fzf-lua").complete_path({ file_icons = true }) end,
-    { silent = true, desc = "Fuzzy complete path" })
+    { silent = true, desc = "Fuzzy complete path" }
+  )
 
-  map({ "n", "v", "i" }, "<C-x><C-l>",
-    function() require("fzf-lua").complete_line() end,
-    { silent = true, desc = "Fuzzy complete line" })
+  map(
+    { "n", "v", "i" }, "<C-x><C-l>", function() require("fzf-lua").complete_line() end,
+    { silent = true, desc = "Fuzzy complete line" }
+  )
 
-  map({ "n", "v", "i" }, "<C-x><C-s>",
-    function() require("fzf-lua").spell_suggest() end,
-    { silent = true, desc = "Fuzzy complete spelling" })
+  map(
+    { "n", "v", "i" }, "<C-x><C-s>", function() require("fzf-lua").spell_suggest() end,
+    { silent = true, desc = "Fuzzy complete spelling" }
+  )
 end
 
 -- <ctrl-s> to Save
@@ -77,7 +87,8 @@ map("c", "w!!", function()
   utils.sudo_write()
   -- exit command mode
   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", true)
-end, { silent = true })
+end, { silent = true }
+)
 
 -- Beginning and end of line in `:` command mode
 map("c", "<C-a>", "<home>", {})
@@ -91,20 +102,28 @@ map("t", "<M-r>", [['<C-\><C-N>"'.nr2char(getchar()).'pi']], { expr = true })
 for _, k in ipairs({ "h", "j", "k", "l", "o" }) do
   map({ "n", "x", "t" }, string.format("<M-%s>", k), function()
     utils.tmux_aware_navigate(k, true)
-  end, { silent = true })
+  end, { silent = true }
+  )
 end
 
 -- tmux like directional window resizes
-map("n", "<leader>=", "<C-w>=",
-  { silent = true, desc = "normalize split layout" })
-map("n", "<leader><Up>", function() utils.resize(false, -5) end,
-  { silent = true, desc = "horizontal split increase" })
-map("n", "<leader><Down>", function() utils.resize(false, 5) end,
-  { silent = true, desc = "horizontal split decrease" })
-map("n", "<leader><Left>", function() utils.resize(true, -5) end,
-  { silent = true, desc = "vertical split decrease" })
-map("n", "<leader><Right>", function() utils.resize(true, 5) end,
-  { silent = true, desc = "vertical split increase" })
+map("n", "<leader>=", "<C-w>=", { silent = true, desc = "normalize split layout" })
+map(
+  "n", "<leader><Up>", function() utils.resize(false, -5) end,
+  { silent = true, desc = "horizontal split increase" }
+)
+map(
+  "n", "<leader><Down>", function() utils.resize(false, 5) end,
+  { silent = true, desc = "horizontal split decrease" }
+)
+map(
+  "n", "<leader><Left>", function() utils.resize(true, -5) end,
+  { silent = true, desc = "vertical split decrease" }
+)
+map(
+  "n", "<leader><Right>", function() utils.resize(true, 5) end,
+  { silent = true, desc = "vertical split increase" }
+)
 
 -- Navigate buffers|tabs|quickfix|loclist
 for k, v in pairs({
@@ -129,8 +148,10 @@ map("n", "<leader>Q", function() utils.toggle_qf("l") end, { desc = "toggle loca
 
 -- shortcut to view :messages
 map({ "n", "v" }, "<leader>m", "<cmd>messages<CR>", { desc = "open :messages" })
-map({ "n", "v" }, "<leader>M", [[<cmd>mes clear|echo "cleared :messages"<CR>]],
-  { desc = "clear :messages" })
+map(
+  { "n", "v" }, "<leader>M", [[<cmd>mes clear|echo "cleared :messages"<CR>]],
+  { desc = "clear :messages" }
+)
 
 -- <leader>v|<leader>s act as <cmd-v>|<cmd-s>
 -- <leader>p|P paste from yank register (0)
@@ -167,31 +188,40 @@ for _, c in ipairs({
   { "k", "Line up" },
   { "j", "Line down" },
 }) do
-  map("n", c[1], ([[(v:count > 5 ? "m'" . v:count : "") . '%s']]):format(c[1]),
-    { expr = true, silent = true, desc = c[2] })
+  map(
+    "n", c[1], ([[(v:count > 5 ? "m'" . v:count : "") . '%s']]):format(c[1]),
+    { expr = true, silent = true, desc = c[2] }
+  )
 end
 
 -- move along visual lines, not numbered ones
 -- without interferring with {count}<down|up>
 for _, m in ipairs({ "n", "v" }) do
   for _, c in ipairs({
-    { "<up>",   "k", "Visual line up" },
-    { "<down>", "j", "Visual line down" }
+    { "<up>", "k", "Visual line up" },
+    { "<down>", "j", "Visual line down" },
   }) do
-    map(m, c[1], ([[v:count == 0 ? 'g%s' : '%s']]):format(c[2], c[2]),
-      { expr = true, silent = true, desc = c[3] })
+    map(
+      m, c[1], ([[v:count == 0 ? 'g%s' : '%s']]):format(c[2], c[2]),
+      { expr = true, silent = true, desc = c[3] }
+    )
   end
 end
 
 -- Search and Replace
 -- 'c.' for word, 'c>' for WORD
 -- 'c.' in visual mode for selection
-map("n", "c.", [[:%s/\<<C-r><C-w>\>//g<Left><Left>]],
-  { desc = "search and replace word under cursor" })
-map("n", "c>", [[:%s/\V<C-r><C-a>//g<Left><Left>]],
-  { desc = "search and replace WORD under cursor" })
-map("x", "c.",
-  [[:<C-u>%s/\V<C-r>=luaeval("require'utils'.get_visual_selection(true)")<CR>//g<Left><Left>]], {})
+map(
+  "n", "c.", [[:%s/\<<C-r><C-w>\>//g<Left><Left>]],
+  { desc = "search and replace word under cursor" }
+)
+map(
+  "n", "c>", [[:%s/\V<C-r><C-a>//g<Left><Left>]], { desc = "search and replace WORD under cursor" }
+)
+map(
+  "x", "c.",
+  [[:<C-u>%s/\V<C-r>=luaeval("require'utils'.get_visual_selection(true)")<CR>//g<Left><Left>]], {}
+)
 
 -- Turn off search matches with double-<Esc>
 map("n", "<Esc><Esc>", "<Esc>:nohlsearch<CR>", { silent = true })
@@ -207,14 +237,15 @@ map("n", "<leader>'", function()
       lead = "␣",
       space = "␣",
       trail = "•",
-      extends = "⟩", -- »
+      extends = "⟩",  -- »
       precedes = "⟨", -- «
     }
   else
     vim.o.listchars = _G._listchars
     _G._listchars = nil
   end
-end, { silent = true, desc = "toggle rich 'listchars' on/off" })
+end, { silent = true, desc = "toggle rich 'listchars' on/off" }
+)
 
 -- Toggle colored column at 81
 map("n", "<leader>|", function()
@@ -225,7 +256,8 @@ map("n", "<leader>|", function()
     assert(tonumber(vim.g._colorcolumn))
     vim.wo.colorcolumn = vim.g._colorcolumn
   end
-end, { silent = true, desc = "toggle color column on/off" })
+end, { silent = true, desc = "toggle color column on/off" }
+)
 
 -- Change current working dir (:pwd) to curent file's folder
 map("n", "<leader>%", utils.set_cwd, { silent = true, desc = "smart set cwd (git|file parent)" })
@@ -246,4 +278,5 @@ map("n", "<leader>%", utils.set_cwd, { silent = true, desc = "smart set cwd (git
 map("n", "<leader>gx", function()
   vim.cmd [[cexpr system("git diff --check --relative")]]
   vim.cmd "copen"
-end, { desc = "Git conflicts to quickfix" })
+end, { desc = "Git conflicts to quickfix" }
+)

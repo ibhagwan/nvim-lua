@@ -35,7 +35,7 @@ if not package.loaded["smartyank"] then
           vim.system({ "tmux", "set-buffer", "-w", yank_data }):wait()
         end
         hl_op({ higroup = "IncSearch", timeout = 1000 })
-      end
+      end,
     })
   end)
 end
@@ -45,7 +45,7 @@ augroup("ibhagwan/ColorScheme", function(g)
     group = g,
     callback = function(_)
       vim.g.fzf_colors = nil
-    end
+    end,
   })
   aucmd("ColorScheme", {
     group = g,
@@ -95,11 +95,8 @@ augroup("ibhagwan/MiniIndentscopeDisable", function(g)
   aucmd("BufEnter", {
     group = g,
     callback = function(_)
-      if vim.bo.filetype == "fzf"
-          or vim.bo.filetype == "help"
-          or vim.bo.buftype == "nofile"
-          or vim.bo.buftype == "terminal"
-      then
+      if vim.bo.filetype == "fzf" or vim.bo.filetype == "help"
+        or vim.bo.buftype == "nofile" or vim.bo.buftype == "terminal" then
         vim.b.miniindentscope_disable = true
       end
     end,
@@ -109,14 +106,14 @@ end)
 augroup("ibhagwan/TermOptions", function(g)
   aucmd("TermOpen", {
     group = g,
-    command = "setlocal listchars= nonumber norelativenumber"
+    command = "setlocal listchars= nonumber norelativenumber",
   })
 end)
 
 augroup("ibhagwan/ResizeWindows", function(g)
   aucmd("VimResized", {
     group = g,
-    command = "tabdo wincmd ="
+    command = "tabdo wincmd =",
   })
 end)
 
@@ -125,7 +122,7 @@ augroup("ibhagwan/ToggleSearchHL", function(g)
     group = g,
     callback = function()
       vim.schedule(function() vim.cmd("nohlsearch") end)
-    end
+    end,
   })
   aucmd("CursorMoved", {
     group = g,
@@ -154,7 +151,7 @@ augroup("ibhagwan/ToggleSearchHL", function(g)
       if vim.v.hlsearch == 1 and vim.fn.searchcount().exact_match == 0 then
         vim.schedule(function() vim.cmd.nohlsearch() end)
       end
-    end
+    end,
   })
 end)
 
@@ -177,7 +174,7 @@ augroup("ibhagwan/ui2.pager", function(g)
       if e.file and e.file:match("%[Pager%]") then
         vim.cmd.normal("G")
       end
-    end
+    end,
   })
 end)
 
@@ -187,15 +184,21 @@ augroup("ibhagwan/nvim-pack", function(g)
     pattern = "nvim-pack",
     callback = function(_)
       vim.keymap.set("n", "q", "<CMD>q<CR>", { buffer = true })
-    end
+    end,
   })
   aucmd("PackChanged", {
     group = g,
     callback = function(e)
       local function cargo_build(plug)
         if vim.fn.executable("cargo") ~= 1 then return end
-        local plugin_dir = vim.fs.joinpath(vim.fn.stdpath("data") --[[@as string]],
-          "site", "pack", "core", "opt", plug)
+        local plugin_dir = vim.fs.joinpath(
+          vim.fn.stdpath("data"), --[[@as string]]
+          "site",
+          "pack",
+          "core",
+          "opt",
+          plug
+        )
         vim.fn.jobstart({ "cargo", "+nightly", "build", "--release" }, {
           cwd = plugin_dir,
           on_stdout = function(_, data)
@@ -211,7 +214,7 @@ augroup("ibhagwan/nvim-pack", function(g)
           on_exit = function(_, rc, _)
             local lvl = rc == 0 and "info" or "warn"
             utils[lvl]("[%s] cargo finished with exit code %d", plug, rc)
-          end
+          end,
         })
       end
       local name, _kind = e.data.spec.name, e.data.kind
@@ -220,7 +223,7 @@ augroup("ibhagwan/nvim-pack", function(g)
       elseif name == "nvim-treesitter" then
         vim.defer_fn(vim.cmd.TSUpdate, 100)
       end
-    end
+    end,
   })
 end)
 
@@ -246,7 +249,7 @@ augroup("ibhagwan/Fugitive", function(g)
   aucmd("BufReadPost", {
     group = g,
     pattern = "fugitive:*",
-    command = "set bufhidden=delete"
+    command = "set bufhidden=delete",
   })
 end)
 
@@ -255,7 +258,7 @@ augroup("ibhagwan/SolidityABI", function(g)
   aucmd({ "BufRead", "BufNewFile" }, {
     group = g,
     pattern = "*.abi",
-    command = "set filetype=jsonc"
+    command = "set filetype=jsonc",
   })
 end)
 
@@ -266,12 +269,11 @@ augroup("ibhagwan/Help", function(g)
     -- the fzf-lua minimized help window (height=1)
     local cfg = vim.api.nvim_win_get_config(0)
     if cfg and (cfg.external or cfg.relative and #cfg.relative > 0)
-        or vim.api.nvim_win_get_height(0) == 1 then
+      or vim.api.nvim_win_get_height(0) == 1 then
       return
     end
     -- do not run if Diffview is open
-    if vim.g.diffview_nvim_loaded and
-        require "diffview.lib".get_current_view() then
+    if vim.g.diffview_nvim_loaded and require "diffview.lib".get_current_view() then
       return
     end
     local width = math.floor(vim.o.columns * 0.75)
@@ -294,7 +296,7 @@ augroup("ibhagwan/Help", function(g)
       if vim.bo.buftype == "help" then
         open_vert()
       end
-    end
+    end,
   })
   aucmd("BufHidden", {
     group = g,
@@ -308,26 +310,22 @@ augroup("ibhagwan/Help", function(g)
           end
         end, 0)
       end
-    end
+    end,
   })
 end)
 
 augroup("ibhagwan/GQFormatter", function(g)
-  aucmd({ "FileType", "LspAttach" },
-    {
-      group = g,
-      callback = function(e)
-        -- execlude diffview and vim-fugitive
-        if vim.bo.filetype == "fugitive"
-            or e.file:match("^fugitive:")
-            or e.file:match("^diffview:")
-            or e.file:match("^DiffViewFiles")
-        then
-          return
-        end
-        require("lsp.keymaps").setup_gq(e)
-      end,
-    })
+  aucmd({ "FileType", "LspAttach" }, {
+    group = g,
+    callback = function(e)
+      -- execlude diffview and vim-fugitive
+      if vim.bo.filetype == "fugitive" or e.file:match("^fugitive:")
+        or e.file:match("^diffview:") or e.file:match("^DiffViewFiles") then
+        return
+      end
+      require("lsp.keymaps").setup_gq(e)
+    end,
+  })
 end)
 
 augroup("ibhagwan/LspAttach", function(g)

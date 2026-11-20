@@ -1,0 +1,12 @@
+# Files excluded from luafmt.
+#
+# Patterns are matched relative to each directory passed to luafmt,
+# so `**/lib/...` covers both `./lua/lib/...` and direct
+# invocations from inside `lua/`.
+
+# Vendored third-party library: keep byte-identical to upstream.
+**/lib/jsonc.lua
+
+# Downloaded emmylua binaries (`make deps/emmylua`) if luafmt is run on
+# the repo root.
+.emmylua/**

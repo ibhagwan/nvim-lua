@@ -1,6 +1,5 @@
 return {
-  src = require("utils").exists("~/Sources/nvim/fzf-lua")
-      or "https://github.com/ibhagwan/fzf-lua",
+  src = require("utils").exists("~/Sources/nvim/fzf-lua") or "https://github.com/ibhagwan/fzf-lua",
   data = {
     cmd = { "FzfLua", "TogglePickers" },
     beforeAll = function()
@@ -24,7 +23,8 @@ return {
         u.info("Main picker set to %s", u.__USE_SNACKS and "Snacks" or "FzfLua")
         require("plugins.fzf-lua.mappings").map()
         require("plugins.snacks.mappings").map()
-      end, {})
+      end, {}
+      )
     end,
   },
 }

@@ -128,13 +128,12 @@ M.pick_proc = function(fzflua_opts, getproc_opts)
   return coroutine.create(function(dap_co)
     local dap_abort = function() coroutine.resume(dap_co, require("dap").ABORT) end
     local procs = require("dap.utils").get_processes(getproc_opts)
-    fzf.fzf_exec(
-      function(fzf_cb)
-        for _, p in pairs(procs) do
-          fzf_cb(string.format("[%d] %s", p.pid, p.name))
-        end
-        fzf_cb()
-      end,
+    fzf.fzf_exec(function(fzf_cb)
+      for _, p in pairs(procs) do
+        fzf_cb(string.format("[%d] %s", p.pid, p.name))
+      end
+      fzf_cb()
+    end,
       vim.tbl_deep_extend("keep", fzflua_opts or {}, {
         winopts = {
           preview = { hidden = "hidden" },

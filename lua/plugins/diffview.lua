@@ -48,21 +48,29 @@ return {
         if M._toggle() == 1 then
           M._tmux_was_unzoomed = utils.tmux_zoom()
         end
-      end, { silent = true, desc = "Git diff (project)" })
+      end, { silent = true, desc = "Git diff (project)" }
+      )
 
       vim.keymap.set({ "n", "x" }, "<leader>yd", function()
         if M._toggle({
-          "-c", "status.showUntrackedFiles=no",
-          "--git-dir", "$HOME/dots/.git",
-          "-C", "$HOME",
+          "-c",
+          "status.showUntrackedFiles=no",
+          "--git-dir",
+          "$HOME/dots/.git",
+          "-C",
+          "$HOME",
         }) == 1 then
           M._tmux_was_unzoomed = utils.tmux_zoom()
         end
-      end, { silent = true, desc = "Git diff (yadm)" })
+      end, { silent = true, desc = "Git diff (yadm)" }
+      )
     end,
     after = function()
       local gq_keymap_set_opts = {
-        { "n", "v" }, "gq", M._close, { silent = true, desc = "Close Diffview" }
+        { "n", "v" },
+        "gq",
+        M._close,
+        { silent = true, desc = "Close Diffview" },
       }
       require("diffview").setup({
         keymaps = {

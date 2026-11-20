@@ -13,7 +13,7 @@ dap.adapters.go = function(callback, config)
   local opts = {
     stdio = { nil, stdout },
     args = { "dap", "-l", addr },
-    detached = true
+    detached = true,
   }
   handle, pid_or_err = vim.uv.spawn("dlv", opts, function(code)
     stdout:close()
@@ -32,11 +32,9 @@ dap.adapters.go = function(callback, config)
     end
   end)
   -- Wait for delve to start
-  vim.defer_fn(
-    function()
-      callback({ type = "server", host = "127.0.0.1", port = port })
-    end,
-    100)
+  vim.defer_fn(function()
+    callback({ type = "server", host = "127.0.0.1", port = port })
+  end, 100)
 end
 
 dap.configurations.go = {
@@ -72,5 +70,5 @@ dap.configurations.go = {
     request = "launch",
     mode = "test",
     program = "./${relativeFileDirname}",
-  }
+  },
 }

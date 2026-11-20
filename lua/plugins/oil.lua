@@ -3,8 +3,9 @@ return {
   data = {
     cmd = { "Oil" },
     beforeAll = function()
-      vim.keymap.set({ "n", "v" }, "-", "<CMD>Oil<CR>",
-        { silent = true, desc = "Open parent directory [Oil]" })
+      vim.keymap.set(
+        { "n", "v" }, "-", "<CMD>Oil<CR>", { silent = true, desc = "Open parent directory [Oil]" }
+      )
     end,
     after = function()
       require("oil").setup({

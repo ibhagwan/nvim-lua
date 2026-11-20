@@ -19,9 +19,9 @@ end
 
 M._notify_header = "LineNr"
 
---- Fancy notification wrapper, idea borrowed from blink.nvim
---- @param lvl? number
---- @param ... any
+---Fancy notification wrapper, idea borrowed from blink.nvim
+---@param lvl? number
+---@param ... any
 function M.notify(lvl, ...)
   -- Message can be specified directly as table with highlights, i.e. { "foo", "Error" }
   -- or as a vararg of strings/numbers to be sent to string.format
@@ -107,8 +107,8 @@ function M.is_iSH()
   return vim.uv.os_uname().release:match("%-ish$") ~= nil
 end
 
---- @param path string
---- @return string?
+---@param path string
+---@return string?
 function M.exists(path)
   local normalized = vim.fs.normalize(path)
   local exists = vim.uv.fs_stat(normalized) ~= nil
@@ -118,12 +118,9 @@ function M.exists(path)
 end
 
 function M.have_compiler()
-  if vim.fn.executable("cc") == 1
-      or vim.fn.executable("gcc") == 1
-      or vim.fn.executable("clang") == 1
-      or vim.fn.executable("cl") == 1
-      or vim.fn.executable("zig") == 1
-  then
+  if vim.fn.executable("cc") == 1 or vim.fn.executable("gcc") == 1
+    or vim.fn.executable("clang") == 1 or vim.fn.executable("cl") == 1
+    or vim.fn.executable("zig") == 1 then
     return true
   end
   return false
@@ -169,7 +166,7 @@ function M.set_cwd(pwd)
     M.info("pwd set to %s", vim.fn.shellescape(pwd))
   else
     M.warn(("Unable to set pwd to %s, directory is not accessible")
-      :format(vim.fn.shellescape(pwd)))
+        :format(vim.fn.shellescape(pwd)))
   end
 end
 
@@ -192,14 +189,25 @@ function M.get_visual_selection(nl_literal)
     _, cerow, cecol, _ = unpack(vim.fn.getpos("'>"))
   end
   -- swap vars if needed
-  if cerow < csrow then csrow, cerow = cerow, csrow end
-  if cecol < cscol then cscol, cecol = cecol, cscol end
+  if cerow < csrow then
+    csrow, cerow = cerow, csrow
+  end
+  if cecol < cscol then
+    cscol, cecol = cecol, cscol
+  end
   local lines = vim.fn.getline(csrow, cerow) ---@cast lines string[]
   -- local n = cerow-csrow+1
   local n = #lines
   if n <= 0 then return "" end
-  lines[n] = string.sub(lines[n] --[[@as string]], 1, cecol)
-  lines[1] = string.sub(lines[1] --[[@as string]], cscol)
+  lines[n] = string.sub(
+    lines[n], --[[@as string]]
+    1,
+    cecol
+  )
+  lines[1] = string.sub(
+    lines[1], --[[@as string]]
+    cscol
+  )
   return table.concat(lines, nl_literal and "\\n" or "\n")
 end
 
@@ -312,8 +320,11 @@ M.sudo_exec = function(cmd, filepath, print_output)
     return false
   end
   local ok, res = pcall(function()
-    return vim.system({ "sh", "-c",
-      string.format("echo '%s' | sudo -p '' -S %s", password, cmd) }):wait()
+    return vim.system({
+      "sh",
+      "-c",
+      string.format("echo '%s' | sudo -p '' -S %s", password, cmd),
+    }):wait()
   end)
   if not ok or res.code ~= 0 then
     M.warn(not ok and res or assert(res).stderr)
@@ -335,9 +346,9 @@ M.sudo_write = function(tmpfile, filepath)
   local alt_buf = vim.fn.bufnr("#")
   -- `bs=1048576` is equivalent to `bs=1M` for GNU dd or `bs=1m` for BSD dd
   -- Both `bs=1M` and `bs=1m` are non-POSIX
-  local cmd = string.format("dd if=%s of=%s bs=1048576",
-    vim.fn.shellescape(tmpfile),
-    vim.fn.shellescape(filepath))
+  local cmd = string.format(
+    "dd if=%s of=%s bs=1048576", vim.fn.shellescape(tmpfile), vim.fn.shellescape(filepath)
+  )
   -- no need to check error as this fails the entire function
   vim.api.nvim_exec2(string.format("write! %s", tmpfile), { output = true })
   if M.sudo_exec(cmd, filepath, true) then
@@ -408,8 +419,9 @@ M.tmux_aware_navigate = function(direction, no_wrap)
     table.insert(args, "-F")
     table.insert(args, string.format("#{pane_at_%s}", tmux_pane_to[direction]))
     table.insert(args, "")
-    table.insert(args, string.format("select-pane -t %s %s",
-      vim.env.TMUX_PANE, tmux_pane_flag[direction]))
+    table.insert(
+      args, string.format("select-pane -t %s %s", vim.env.TMUX_PANE, tmux_pane_flag[direction])
+    )
   else
     table.insert(args, "select-pane")
     table.insert(args, "-t")
@@ -421,7 +433,9 @@ end
 
 M.tmux_is_zoomed = function()
   if not vim.env.TMUX then return end
-  local out = vim.system({ "tmux", "display-message", "-p", "#{window_flags}" }):wait().stdout
+  local out = vim.system({ "tmux", "display-message", "-p", "#{window_flags}" })
+    :wait()
+    .stdout
   return type(out) == "string" and out:match("Z") and 1 or 0
 end
 

@@ -10,7 +10,7 @@ return {
       cargo = { features = "all" },
       interpret = { tests = true },
       rustfmt = {
-        extraArgs = { "+nightly", },
+        extraArgs = { "+nightly" },
         -- overrideCommand = {
         --   "rustup",
         --   "run",
@@ -22,6 +22,6 @@ return {
         --   "--",
         -- },
       },
-    }
-  }
+    },
+  },
 }

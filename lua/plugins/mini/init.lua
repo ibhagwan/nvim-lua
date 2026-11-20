@@ -4,12 +4,18 @@ return {
     event = "DeferredUIEnter",
     beforeAll = function()
       -- Test keymaps
-      vim.keymap.set({ "n", "v" }, "<leader>tt", function() require("mini.test").run_file() end,
-        { silent = true, desc = "Run tests in current file" })
-      vim.keymap.set({ "n", "v" }, "<leader>tl", function() require("mini.test").run_at_location() end,
-        { silent = true, desc = "Run test at cursor" })
-      vim.keymap.set({ "n", "v" }, "<leader>ta", function() require("mini.test").run() end,
-        { silent = true, desc = "Run all tests" })
+      vim.keymap.set(
+        { "n", "v" }, "<leader>tt", function() require("mini.test").run_file() end,
+        { silent = true, desc = "Run tests in current file" }
+      )
+      vim.keymap.set({ "n", "v" }, "<leader>tl", function()
+        require("mini.test").run_at_location()
+      end, { silent = true, desc = "Run test at cursor" }
+      )
+      vim.keymap.set(
+        { "n", "v" }, "<leader>ta", function() require("mini.test").run() end,
+        { silent = true, desc = "Run all tests" }
+      )
     end,
     after = function()
       require("plugins.mini.surround")
@@ -20,8 +26,10 @@ return {
         collect = {
           find_files = function()
             local test_files = vim.fn.globpath("tests", "**/*_spec.lua", true, true)
-            vim.tbl_map(function(f) table.insert(test_files, f) end,
-              vim.fn.globpath("tests", "**/test_*.lua", true, true))
+            vim.tbl_map(
+              function(f) table.insert(test_files, f) end,
+              vim.fn.globpath("tests", "**/test_*.lua", true, true)
+            )
             return test_files
           end,
         },
@@ -89,7 +97,8 @@ return {
           hipatterns.disable(0)
           vim.b.minihipatterns_disable = true
         end
-      end, {})
+      end, {}
+      )
     end,
   },
 }

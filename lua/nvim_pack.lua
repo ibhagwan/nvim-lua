@@ -5,16 +5,24 @@ local PLUGS = {}
 local LOCK = nil
 local LOCK_UPDATE = nil
 
---- @param prefix string?
---- @return string
+---@param prefix string?
+---@return string
 local function get_plug_dir(prefix)
-  return vim.fs.joinpath(vim.fn.stdpath("data") --[[@as string]],
-    "site", "pack", prefix or "core", "opt")
+  return vim.fs.joinpath(
+    vim.fn.stdpath("data"), --[[@as string]]
+    "site",
+    "pack",
+    prefix or "core",
+    "opt"
+  )
 end
 
---- @return string
+---@return string
 local function lock_get_path()
-  return vim.fs.joinpath(vim.fn.stdpath("config") --[[@as string]], "nvim-pack-lock.json")
+  return vim.fs.joinpath(
+    vim.fn.stdpath("config"), --[[@as string]]
+    "nvim-pack-lock.json"
+  )
 end
 
 local function lock_read()
@@ -102,7 +110,9 @@ end
 local function enum_plugin_specs()
   lock_read()
   local remote, dev = {}, {}
-  local modpath = vim.fs.joinpath(unpack(vim.split("plugins", ".", { plain = true })) --[[@as string]])
+  local modpath = vim.fs.joinpath(
+    unpack(vim.split("plugins", ".", { plain = true })) --[[@as string]]
+  )
   local import_root = vim.api.nvim_get_runtime_file(vim.fs.joinpath("lua", modpath .. ".lua"), true)
   if #import_root == 1 then
     import_modname(modpath, remote, dev)
@@ -146,34 +156,40 @@ if not ok then return end
 ---@diagnostic disable-next-line: param-type-mismatch, need-check-nil
 if #dev_plugs > 0 then lzn.load(dev_plugs) end
 
-vim.pack.add(pack_plugs,
-  { confirm = not require("utils").is_iSH(), load = lzn.load } --[[@as vim.pack.keyset.add]])
+vim.pack.add(
+  pack_plugs,
+  { confirm = not require("utils").is_iSH(), load = lzn.load } --[[@as vim.pack.keyset.add]]
+)
 
 -- vim.pack management user command
-vim.api.nvim_create_user_command("Pack", function(e)
-  local cmd = #e.fargs > 0 and table.remove(e.fargs, 1) or "status"
-  local plugins = #e.fargs > 0 and e.fargs or nil
-  if cmd == "status" or cmd == "st" then
-    vim.pack.update(plugins, { offline = true })
-  elseif cmd == "update" or cmd == "up" then
-    vim.pack.update(plugins, {})
-  elseif cmd == "restore" or cmd == "rs" then
-    vim.pack.update(plugins, { target = "lockfile" })
-  elseif cmd == "remove" or cmd == "rm" or cmd == "delete" or cmd == "del" then
-    if plugins and #plugins > 0 then
-      vim.pack.del(plugins)
+vim.api.nvim_create_user_command(
+  "Pack",
+  function(e)
+    local cmd = #e.fargs > 0 and table.remove(e.fargs, 1) or "status"
+    local plugins = #e.fargs > 0 and e.fargs or nil
+    if cmd == "status" or cmd == "st" then
+      vim.pack.update(plugins, { offline = true })
+    elseif cmd == "update" or cmd == "up" then
+      vim.pack.update(plugins, {})
+    elseif cmd == "restore" or cmd == "rs" then
+      vim.pack.update(plugins, { target = "lockfile" })
+    elseif cmd == "remove" or cmd == "rm" or cmd == "delete" or cmd == "del" then
+      if plugins and #plugins > 0 then
+        vim.pack.del(plugins)
+      else
+        utils.warn("must specify plugin(s)", cmd)
+      end
     else
-      utils.warn("must specify plugin(s)", cmd)
+      utils.warn("unknown command '%s'", cmd)
     end
-  else
-    utils.warn("unknown command '%s'", cmd)
-  end
-end, {
-  nargs = "*",
-  range = true,
-  complete = function(_, line)
-    local fargs = vim.split(line, "%s+")
-    if #fargs[#fargs] == 0 then table.remove(fargs) end
-    return #fargs > 1 and PLUGS or { "status", "update", "restore", "remove", "delete" }
-  end
-})
+  end,
+  {
+    nargs = "*",
+    range = true,
+    complete = function(_, line)
+      local fargs = vim.split(line, "%s+")
+      if #fargs[#fargs] == 0 then table.remove(fargs) end
+      return #fargs > 1 and PLUGS or { "status", "update", "restore", "remove", "delete" }
+    end,
+  }
+)

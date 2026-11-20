@@ -6,14 +6,14 @@ local plugins = {}
 table.insert(plugins, {
   src = "https://github.com/bluz71/vim-moonfly-colors",
   data = {
-    after = function() vim.cmd.colorscheme("moonfly") end
+    after = function() vim.cmd.colorscheme("moonfly") end,
   },
 })
 
 -- SmartYank.nvim with local dev support
 table.insert(plugins, {
   src = utils.exists("~/Sources/nvim/smartyank.nvim")
-      or "https://github.com/ibhagwan/smartyank.nvim",
+    or "https://github.com/ibhagwan/smartyank.nvim",
   data = {
     enabled = false,
     after = function()
@@ -35,16 +35,17 @@ table.insert(plugins, {
       vim.g.previm_disable_default_css = 1
       vim.g.previm_custom_css_path = vim.fn.stdpath("config") .. "/css/previm-gh-dark.css"
       local hljs_ghdark_css = "highlight-gh-dark.css"
-      vim.g.previm_extra_libraries = { {
-        name = "highlight-gh-dark",
-        files = { { type = "css", path = "_/css/lib/highlight-gh-dark.css" } },
-      } }
+      vim.g.previm_extra_libraries = {
+        {
+          name = "highlight-gh-dark",
+          files = { { type = "css", path = "_/css/lib/highlight-gh-dark.css" } },
+        },
+      }
       -- Copy custom CSS to previm jail
       if not vim.uv.fs_copyfile(
-            vim.fn.stdpath("config") .. "/css/" .. hljs_ghdark_css,
-            vim.fn.stdpath("data") .. "/site/pack/core/opt/previm/preview/_/css/lib/"
-            .. hljs_ghdark_css)
-      then
+        vim.fn.stdpath("config") .. "/css/" .. hljs_ghdark_css,
+        vim.fn.stdpath("data") .. "/site/pack/core/opt/previm/preview/_/css/lib/" .. hljs_ghdark_css
+      ) then
         utils.warn("Unable to copy '%s' to previm jail.", hljs_ghdark_css)
       end
     end,
@@ -65,8 +66,7 @@ end
 
 -- fzf.vim with local dev support
 table.insert(plugins, {
-  src = utils.exists("~/Sources/nvim/fzf.vim")
-      or "https://github.com/junegunn/fzf.vim",
+  src = utils.exists("~/Sources/nvim/fzf.vim") or "https://github.com/junegunn/fzf.vim",
   data = {
     event = { "DeferredUIEnter" },
     before = function()

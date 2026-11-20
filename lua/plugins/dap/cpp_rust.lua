@@ -8,14 +8,14 @@ local dap_utils = require("plugins.dap.utils")
 dap.adapters.gdb = {
   type = "executable",
   command = "gdb",
-  args = { "-i", "dap" }
+  args = { "-i", "dap" },
 }
 
 -- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#ccrust-via-lldb-vscode
 dap.adapters.lldb = {
   type = "executable",
   command = "/usr/bin/lldb-vscode",
-  name = "lldb"
+  name = "lldb",
 }
 
 -- https://github.com/mfussenegger/nvim-dap/wiki/C-C---Rust-(gdb-via--vscode-cpptools)
@@ -108,7 +108,7 @@ dap.configurations.c = {
       -- https://code.visualstudio.com/docs/cpp/launch-json-reference
       return {
         -- Neovim needs it's source directory `runtimepath`
-        { name = "VIMRUNTIME", value = vim.fn.expand("$HOME/Sources/nvim/neovim/runtime") }
+        { name = "VIMRUNTIME", value = vim.fn.expand("$HOME/Sources/nvim/neovim/runtime") },
       }
     end,
     cwd = "${workspaceFolder}",
@@ -131,7 +131,8 @@ dap.configurations.c = {
       -- attach to the `nvim --embed` process
       return dap_utils.pick_proc(
         { winopts = { height = 0.30 } },
-        { filter = function(proc) return proc.name:match("nvim.*%-%-embed") end })
+        { filter = function(proc) return proc.name:match("nvim.*%-%-embed") end }
+      )
     end,
     cwd = "${workspaceFolder}",
     stopAtEntry = false,
@@ -200,8 +201,8 @@ end
 local rustInitCommands = function()
   -- Find out where to look for the pretty printer Python module
   local rustc_sysroot = vim.fn.trim(vim.fn.system("rustc --print sysroot"))
-  local script_import = 'command script import "' ..
-      rustc_sysroot .. '/lib/rustlib/etc/lldb_lookup.py"'
+  local script_import = 'command script import "' .. rustc_sysroot
+    .. '/lib/rustlib/etc/lldb_lookup.py"'
   local commands_file = rustc_sysroot .. "/lib/rustlib/etc/lldb_commands"
 
   local commands = {}
@@ -219,11 +220,13 @@ end
 
 for i, c in ipairs(dap.configurations.rust) do
   if c.type == "lldb" then
-    dap.configurations.rust[i] = vim.tbl_extend("force",
-      dap.configurations.rust[i] --[[@as table]],
+    dap.configurations.rust[i] = vim.tbl_extend(
+      "force",
+      dap.configurations.rust[i], --[[@as table]]
       {
         env = build_env,
         initCommands = rustInitCommands,
-      })
+      }
+    )
   end
 end

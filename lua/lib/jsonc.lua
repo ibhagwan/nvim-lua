@@ -1,5 +1,6 @@
 -- https://github.com/actboy168/json.lua
 -- slightly modified to only decode jsonc
+---@diagnostic disable
 local type = type
 local next = next
 local error = error

@@ -14,12 +14,14 @@ return {
       lazy = true,
       cmd = { "TSContextEnable", "TSContextDisable", "TSContextToggle" },
       beforeAll = function()
-        vim.keymap.set({ "n" }, "[C",
-          function() require("treesitter-context").go_to_context(vim.v.count1) end,
-          { silent = true, desc = "Goto treesitter context" })
-        vim.keymap.set({ "n" }, "]C",
-          function() require("treesitter-context").toggle() end,
-          { silent = true, desc = "Toggle treesitter context" })
+        vim.keymap.set(
+          { "n" }, "[C", function() require("treesitter-context").go_to_context(vim.v.count1) end,
+          { silent = true, desc = "Goto treesitter context" }
+        )
+        vim.keymap.set(
+          { "n" }, "]C", function() require("treesitter-context").toggle() end,
+          { silent = true, desc = "Toggle treesitter context" }
+        )
       end,
       after = function()
         require("treesitter-context").setup({ enable = true })
@@ -72,22 +74,28 @@ return {
         local ts_move = require("nvim-treesitter-textobjects.move")
         vim.keymap.set({ "n", "x", "o" }, "]f", function()
           ts_move.goto_next("@function.outer", "textobjects")
-        end, { desc = "Next function boundary" })
+        end, { desc = "Next function boundary" }
+        )
         vim.keymap.set({ "n", "x", "o" }, "[f", function()
           ts_move.goto_previous("@function.outer", "textobjects")
-        end, { desc = "Previous function boundary" })
+        end, { desc = "Previous function boundary" }
+        )
         vim.keymap.set({ "n", "x", "o" }, "]F", function()
           ts_move.goto_next_start("@function.outer", "textobjects")
-        end, { desc = "Next function start" })
+        end, { desc = "Next function start" }
+        )
         vim.keymap.set({ "n", "x", "o" }, "[F", function()
           ts_move.goto_previous_start("@function.outer", "textobjects")
-        end, { desc = "Previous function start" })
+        end, { desc = "Previous function start" }
+        )
         vim.keymap.set({ "n", "x", "o" }, "]p", function()
           ts_move.goto_next_start("@parameter.inner", "textobjects")
-        end, { desc = "Next parameter" })
+        end, { desc = "Next parameter" }
+        )
         vim.keymap.set({ "n", "x", "o" }, "[p", function()
           ts_move.goto_previous_start("@parameter.inner", "textobjects")
-        end, { desc = "Previous parameter" })
+        end, { desc = "Previous parameter" }
+        )
 
         -- Repeat moves with ;,
         local ts_repeat_move = require("nvim-treesitter-textobjects.repeatable_move")
@@ -99,5 +107,5 @@ return {
         vim.keymap.set({ "n", "x", "o" }, "T", ts_repeat_move.builtin_T_expr, { expr = true })
       end,
     },
-  }
+  },
 }

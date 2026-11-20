@@ -13,9 +13,11 @@ local nvim_chanID
 -- once the instance is running we can call `:luafile <file>` in order
 -- to start debugging
 local function dap_server(opts)
-  assert(dap.adapters.nlua,
-    "nvim-dap adapter configuration for nlua not found. " ..
-    "Please refer to the README.md or :help osv.txt")
+  assert(
+    dap.adapters.nlua,
+    "nvim-dap adapter configuration for nlua not found. "
+      .. "Please refer to the README.md or :help osv.txt"
+  )
 
   -- server already started?
   if nvim_chanID then
@@ -35,12 +37,15 @@ local function dap_server(opts)
   assert(not mode.blocking, "Neovim is waiting for input at startup. Aborting.")
 
   -- make sure OSV is loaded
-  vim.fn.rpcrequest(nvim_chanID, "nvim_exec_lua",
-    [[vim.opt.packpath:append({ vim.fn.stdpath("data") .. "/site" })]], {})
+  vim.fn.rpcrequest(
+    nvim_chanID, "nvim_exec_lua", [[vim.opt.packpath:append({ vim.fn.stdpath("data") .. "/site" })]],
+    {}
+  )
   vim.fn.rpcrequest(nvim_chanID, "nvim_command", "packadd one-small-step-for-vimkind")
 
-  nvim_server = vim.fn.rpcrequest(nvim_chanID, "nvim_exec_lua",
-    [[return require"osv".launch(...)]], { opts })
+  nvim_server = vim.fn.rpcrequest(
+    nvim_chanID, "nvim_exec_lua", [[return require"osv".launch(...)]], { opts }
+  )
 
   vim.wait(100)
 
@@ -59,7 +64,6 @@ dap.adapters.nlua = function(callback, config)
     config.post()
   end
 end
-
 
 dap.configurations.lua = {
   {
@@ -101,6 +105,6 @@ dap.configurations.lua = {
       --     print(k, "called")
       --   end
       -- end
-    end
-  }
+    end,
+  },
 }

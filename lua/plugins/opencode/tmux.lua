@@ -3,7 +3,7 @@
 ---@field focus? boolean
 ---@field allow_passthrough? boolean
 
----@class opencode.provider.Tmux : opencode.Provider
+---@class opencode.provider.Tmux: opencode.Provider
 ---@field opts opencode.provider.tmux.Opts
 ---@field pane_id? string
 ---@field opencode_pid? number
@@ -21,9 +21,8 @@ local function get_process_tree(pid)
   local children = vim.api.nvim_get_proc_children(pid)
   table.insert(children, 1, pid)
   for _, child_pid in ipairs(children) do
-    local ps_cmd = jit.os == "OSX"
-        and { "ps", "-p", tostring(child_pid), "-o", "args=" }
-        or { "ps", "-p", tostring(child_pid), "-o", "command=" }
+    local ps_cmd = jit.os == "OSX" and { "ps", "-p", tostring(child_pid), "-o", "args=" }
+      or { "ps", "-p", tostring(child_pid), "-o", "command=" }
     table.insert(tree, { child_pid, sys(ps_cmd) or "<unknown>" })
   end
   return tree
@@ -41,7 +40,9 @@ local function get_opencode_pid(pane_pid)
   local pid = tonumber(pane_pid)
   if not pid then return nil end
 
-  for _, e in ipairs(get_process_tree(pid --[[@as integer]])) do
+  for _, e in ipairs(get_process_tree(
+      pid --[[@as integer]]
+    )) do
     if e[2]:match("opencode") then
       return e[1]
     end
@@ -67,7 +68,9 @@ local function is_shell_process(pane_pid)
     return false
   end
 
-  for _, comm in ipairs(get_process_commands(pid --[[@as integer]])) do
+  for _, comm in ipairs(get_process_commands(
+      pid --[[@as integer]]
+    )) do
     local basename = comm:match("%a+$") or comm
     if not SHELLS[basename] then
       return false
@@ -85,12 +88,16 @@ local function validate_pane(pane_id)
     return false
   end
 
-  local procs = get_process_commands(pid --[[@as integer]])
+  local procs = get_process_commands(
+    pid --[[@as integer]]
+  )
   if not is_shell_process(pane_pid) then
-    vim.notify(string.format(
+    vim.notify(
+      string.format(
         "Other pane has existing process [%s], close it or use a different pane.",
-        table.concat(procs, ", ")),
-      vim.log.levels.ERROR, { title = "opencode" })
+        table.concat(procs, ", ")
+      ), vim.log.levels.ERROR, { title = "opencode" }
+    )
     return false
   end
   return true
@@ -144,14 +151,14 @@ end
 function Tmux.health()
   if vim.fn.executable("tmux") ~= 1 then
     return "`tmux` executable not found in `$PATH`.", {
-      "Install `tmux` and ensure it's in your `$PATH`.",
-    }
+        "Install `tmux` and ensure it's in your `$PATH`.",
+      }
   end
 
   if not vim.env.TMUX then
     return "Not running in a `tmux` session.", {
-      "Launch Neovim in a `tmux` session.",
-    }
+        "Launch Neovim in a `tmux` session.",
+      }
   end
 
   return true

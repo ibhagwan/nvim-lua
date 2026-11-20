@@ -38,9 +38,10 @@ require("mini.indentscope").setup({
   symbol = "╎",
 })
 
-vim.keymap.set("", [[<leader>"]],
-  "<cmd>lua require'plugins.mini.indentscope'.btoggle()<CR>",
-  { silent = true, desc = "toggle 'mini.indentscope' on/off" })
+vim.keymap.set(
+  "", [[<leader>"]], "<cmd>lua require'plugins.mini.indentscope'.btoggle()<CR>",
+  { silent = true, desc = "toggle 'mini.indentscope' on/off" }
+)
 
 local M = {}
 

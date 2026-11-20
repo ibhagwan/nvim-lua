@@ -8,10 +8,9 @@ local img_prev_bin = (function()
   if package.loaded["snacks"] and require("snacks.image").supports_terminal() then
     return nil
   else
-    return vim.fn.executable("ueberzug") == 1 and { "ueberzug" }
-        or vim.fn.executable("chafa") == 1 and { "chafa", "--format=symbols" }
-        or vim.fn.executable("viu") == 1 and { "viu", "-b" }
-        or nil
+    return vim.fn.executable("ueberzug") == 1 and { "ueberzug" } or vim.fn.executable("chafa") == 1
+        and { "chafa", "--format=symbols" } or vim.fn.executable("viu") == 1 and { "viu", "-b" }
+      or nil
   end
 end)()
 
@@ -78,11 +77,15 @@ local default_opts = {
   -- { "ivy" },
   -- fzf_opts = { ["--tmux"] = "80%,60%", ["--border"] = "rounded" },
   fzf_opts = function(o)
-    return FzfLua.utils.has(o, "sk", { 1, 5, 3 }) and {
-      ["--algo"] = "frizbee",
-      ["--tiebreak"] = "score",
-      -- ["--border"] = "plain",
-    } or {}
+    return FzfLua.utils.has(o, "sk", { 1, 5, 3 })
+      and {
+        ["--algo"] = "frizbee",
+        ["--tiebreak"] = "score",
+        -- ["--border"] = "plain",
+      }
+      or {
+        ["--gutter"] = " ",
+      }
   end,
   fzf_bin = require("utils").is_iSH() and "sk" or nil,
   -- fzf_bin = jit.os == "Linux" and "~/Sources/nvim/skim/target/release/sk" or nil,
@@ -126,8 +129,7 @@ local default_opts = {
     end
   end,
   winopts = function()
-    return
-    {
+    return {
       -- border = { {'╭', 'IncSearch'}, {'─', 'IncSearch'}, {'╮', 'IncSearch'}, '│', '╯', '─', '╰', '│' },
       split     = (function()
         -- do not use split from float wins
@@ -161,8 +163,9 @@ local default_opts = {
         vim.b.miniindentscope_disable = true
         vim.keymap.set("t", "<C-\\>", "<C-\\>", { buffer = e.bufnr, nowait = true })
         vim.keymap.set("t", "<M-h>", "<M-h>", { buffer = e.bufnr, nowait = true })
-        vim.keymap.set("t", "<C-r>", [['<C-\><C-N>"'.nr2char(getchar()).'pi']],
-          { buffer = e.bufnr, expr = true })
+        vim.keymap.set(
+          "t", "<C-r>", [['<C-\><C-N>"'.nr2char(getchar()).'pi']], { buffer = e.bufnr, expr = true }
+        )
       end,
     }
   end,
@@ -198,7 +201,7 @@ local default_opts = {
         ["jpg"]  = img_prev_bin,
         ["jpeg"] = img_prev_bin,
         ["svg"]  = { "chafa" },
-      }
+      },
     },
   },
   actions = {
@@ -238,7 +241,7 @@ local default_opts = {
           fn = FzfLua.actions.git_worktree_add,
           header = "add worktree",
           reload = true,
-        }
+        },
       },
     },
   },
@@ -247,15 +250,15 @@ local default_opts = {
     finder = {
       { "ivy" },
       providers = {
-        { "definitions",     prefix = fzf_lua.utils.ansi_codes.green("def ") },
-        { "declarations",    prefix = fzf_lua.utils.ansi_codes.magenta("decl") },
+        { "definitions", prefix = fzf_lua.utils.ansi_codes.green("def ") },
+        { "declarations", prefix = fzf_lua.utils.ansi_codes.magenta("decl") },
         { "implementations", prefix = fzf_lua.utils.ansi_codes.green("impl") },
-        { "typedefs",        prefix = fzf_lua.utils.ansi_codes.red("tdef") },
-        { "references",      prefix = fzf_lua.utils.ansi_codes.blue("ref ") },
-        { "incoming_calls",  prefix = fzf_lua.utils.ansi_codes.cyan("in  ") },
-        { "outgoing_calls",  prefix = fzf_lua.utils.ansi_codes.yellow("out ") },
-        { "type_sub",        prefix = fzf_lua.utils.ansi_codes.cyan("sub ") },
-        { "type_super",      prefix = fzf_lua.utils.ansi_codes.yellow("supr") },
+        { "typedefs", prefix = fzf_lua.utils.ansi_codes.red("tdef") },
+        { "references", prefix = fzf_lua.utils.ansi_codes.blue("ref ") },
+        { "incoming_calls", prefix = fzf_lua.utils.ansi_codes.cyan("in  ") },
+        { "outgoing_calls", prefix = fzf_lua.utils.ansi_codes.yellow("out ") },
+        { "type_sub", prefix = fzf_lua.utils.ansi_codes.cyan("sub ") },
+        { "type_super", prefix = fzf_lua.utils.ansi_codes.yellow("supr") },
       },
     },
     document_symbols = {
@@ -277,7 +280,7 @@ local default_opts = {
         row      = 1,
         col      = 0,
         height   = 0.4,
-        preview  = { vertical = "down:70%" }
+        preview  = { vertical = "down:70%" },
       },
       previewer = vim.fn.executable("delta") == 1 and "codeaction_native" or nil,
       preview_pager = "delta --width=$COLUMNS --hunk-header-style=omit --file-style=omit",
@@ -285,8 +288,10 @@ local default_opts = {
   },
   diagnostics = { file_icons = false, diag_source = true },
   awesome_colorschemes = {
-    actions = { ["ctrl-r"] = false, ["ctrl-d"] = { fn = fzf_lua.actions.cs_update, reload = true }
-    }
+    actions = {
+      ["ctrl-r"] = false,
+      ["ctrl-d"] = { fn = fzf_lua.actions.cs_update, reload = true },
+    },
   },
   builtin = { { "border-fused" } },
   spell_suggest = { { "default" } },
@@ -315,7 +320,7 @@ return {
 
     vim.api.nvim_create_autocmd("ColorScheme", {
       callback = function() symbol_hls = nil end,
-      group = vim.api.nvim_create_augroup("FzfLuaColor", { clear = true })
+      group = vim.api.nvim_create_augroup("FzfLuaColor", { clear = true }),
     })
-  end
+  end,
 }

@@ -5,16 +5,36 @@ local keys = {
   -- Picker
   { "<leader>;", function() require "snacks".picker.buffers() end, desc = "Buffers" },
   { "<leader>F?", function() require "snacks".picker.pickers() end, desc = "Snacks Pickers" },
-  { "<leader>F/", function() require "snacks".picker.search_history() end, desc = "Command History" },
-  { "<leader>F:", function() require "snacks".picker.command_history() end, desc = "Command History" },
+  {
+    "<leader>F/",
+    function() require "snacks".picker.search_history() end,
+    desc = "Command History",
+  },
+  {
+    "<leader>F:",
+    function() require "snacks".picker.command_history() end,
+    desc = "Command History",
+  },
   { "<leader>Fx", function() require "snacks".picker.commands() end, desc = "Commands" },
   { "<leader><F1>", function() require "snacks".picker.help() end, desc = "Help Pages" },
   -- find
   { "<leader><C-p>", function() require "snacks".picker.files() end, desc = "Find Files" },
   { "<leader><C-k>", function() require "snacks".picker.zoxide() end, desc = "Zoxide" },
-  { "<leader>Fp", function() require "snacks".picker.files({
-    cwd = vim.fs.joinpath(vim.fn.stdpath("data") --[[@as string]], "site", "pack", "core", "opt")
-  }) end, desc = "Find Plugin File" },
+  {
+    "<leader>Fp",
+    function()
+      require "snacks".picker.files({
+        cwd = vim.fs.joinpath(
+          vim.fn.stdpath("data"), --[[@as string]]
+          "site",
+          "pack",
+          "core",
+          "opt"
+        ),
+      })
+    end,
+    desc = "Find Plugin File",
+  },
   { "<leader>Ff", function() require "snacks".picker.resume() end, desc = "Resume" },
   { "<leader>FF", function() require "snacks".picker.resume() end, desc = "Resume" },
   { "<leader>Fh", function() require "snacks".picker.recent() end, desc = "Recent" },
@@ -28,8 +48,17 @@ local keys = {
   -- Grep
   { "<leader>Fl", function() require "snacks".picker.grep() end, desc = "Grep" },
   { "<leader>Fb", function() require "snacks".picker.lines() end, desc = "Buffer Lines" },
-  { "<leader>FB", function() require "snacks".picker.grep_buffers() end, desc = "Grep Open Buffers" },
-  { "<leader>Fw", function() require "snacks".picker.grep_word() end, desc = "Visual selection or word", mode = { "n", "v" } },
+  {
+    "<leader>FB",
+    function() require "snacks".picker.grep_buffers() end,
+    desc = "Grep Open Buffers",
+  },
+  {
+    "<leader>Fw",
+    function() require "snacks".picker.grep_word() end,
+    desc = "Visual selection or word",
+    mode = { "n", "v" },
+  },
   -- search
   { '<leader>F"', function() require "snacks".picker.registers() end, desc = "Registers" },
   { "<leader>Fa", function() require "snacks".picker.autocmds() end, desc = "Autocmds" },
@@ -44,15 +73,52 @@ local keys = {
   { "<leader>FP", function() require "snacks".picker.projects() end, desc = "Projects" },
   { "<leader>Fz", function() require "snacks".picker.spelling() end, desc = "Zoxide" },
   -- LSP
-  { "<leader>Ld", function() require "snacks".picker.lsp_definitions() end, desc = "Goto Definition" },
-  { "<leader>LD", function() require "snacks".picker.lsp_declarations() end, desc = "Goto Declaration" },
-  { "<leader>Lr", function() require "snacks".picker.lsp_references() end, nowait = true, desc = "References" },
-  { "<leader>Lm", function() require "snacks".picker.lsp_implementations() end, desc = "Goto Implementation" },
-  { "<leader>Ly", function() require "snacks".picker.lsp_type_definitions() end, desc = "Goto T[y]pe Definition" },
-  { "<leader>Ls", function() require "snacks".picker.lsp_symbols() end, desc = "LSP Symbols (buffer)" },
-  { "<leader>LS", function() require "snacks".picker.lsp_workspace_symbols() end, desc = "LSP Symbols (workspace)" },
-  { "<leader>Lg", function() require "snacks".picker.diagnostics_buffer() end, desc = "Buffer Diagnostics" },
-  { "<leader>LG", function() require "snacks".picker.diagnostics() end, desc = "Workspace Diagnostics" },
+  {
+    "<leader>Ld",
+    function() require "snacks".picker.lsp_definitions() end,
+    desc = "Goto Definition",
+  },
+  {
+    "<leader>LD",
+    function() require "snacks".picker.lsp_declarations() end,
+    desc = "Goto Declaration",
+  },
+  {
+    "<leader>Lr",
+    function() require "snacks".picker.lsp_references() end,
+    nowait = true,
+    desc = "References",
+  },
+  {
+    "<leader>Lm",
+    function() require "snacks".picker.lsp_implementations() end,
+    desc = "Goto Implementation",
+  },
+  {
+    "<leader>Ly",
+    function() require "snacks".picker.lsp_type_definitions() end,
+    desc = "Goto T[y]pe Definition",
+  },
+  {
+    "<leader>Ls",
+    function() require "snacks".picker.lsp_symbols() end,
+    desc = "LSP Symbols (buffer)",
+  },
+  {
+    "<leader>LS",
+    function() require "snacks".picker.lsp_workspace_symbols() end,
+    desc = "LSP Symbols (workspace)",
+  },
+  {
+    "<leader>Lg",
+    function() require "snacks".picker.diagnostics_buffer() end,
+    desc = "Buffer Diagnostics",
+  },
+  {
+    "<leader>LG",
+    function() require "snacks".picker.diagnostics() end,
+    desc = "Workspace Diagnostics",
+  },
 }
 
 return {
@@ -73,7 +139,8 @@ return {
       vim.keymap.set(m.mode or "n", key, function()
         require("lz.n").trigger_load({ "snacks.nvim" })
         m[2]()
-      end, opts)
+      end, opts
+      )
     end
-  end
+  end,
 }

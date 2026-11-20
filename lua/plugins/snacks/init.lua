@@ -19,7 +19,9 @@ return {
         },
         picker = {
           ui_select = false,
-          layout = { preset = function() return vim.o.columns >= 140 and "default" or "vertical" end },
+          layout = {
+            preset = function() return vim.o.columns >= 140 and "default" or "vertical" end,
+          },
           previewers = {
             git = { native = true },
           },
