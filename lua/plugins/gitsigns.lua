@@ -15,7 +15,8 @@ local set_hunk_navigation_keymaps = function(bufnr)
     else
       gs.nav_hunk("next")
     end
-  end, { buffer = bufnr, desc = "Next hunk" })
+  end, { buffer = bufnr, desc = "Next hunk" }
+  )
   vim.keymap.set("n", "[c", function()
     if vim.wo.diff then
       vim.cmd.normal({ "[c", bang = true })
@@ -24,14 +25,17 @@ local set_hunk_navigation_keymaps = function(bufnr)
     else
       gs.nav_hunk("prev")
     end
-  end, { buffer = bufnr, desc = "Previous hunk" })
+  end, { buffer = bufnr, desc = "Previous hunk" }
+  )
 end
 
 return {
-  src = "https://github.com/lewis6991/gitsigns.nvim",
+  src = utils.exists("~/Sources/nvim/gitsigns.nvim") or "https://github.com/lewis6991/gitsigns.nvim",
   data = {
     event = "BufReadPre",
     after = function()
+      -- Local fix for clean filters (git-crypt) when gitsigns is loaded upstream.
+      require("lib.gitsigns_patch").apply()
       require("gitsigns").setup({
         signs = { change = { text = "┋" } },
         signs_staged = { change = { text = "┋" } },
@@ -40,12 +44,13 @@ return {
         linehl = false,
         word_diff = false,
         sign_priority = 4,
-        worktrees = not utils.__IS_WIN and {
-          {
-            toplevel = vim.env.HOME,
-            gitdir = vim.env.HOME .. "/dots/.git",
-          }
-        } or nil,
+        worktrees = not utils.__IS_WIN
+          and {
+            {
+              toplevel = vim.env.HOME,
+              gitdir = vim.env.HOME .. "/dots/.git",
+            },
+          } or nil,
         on_attach = function(bufnr)
           local gs = assert(package.loaded.gitsigns)
 
@@ -63,29 +68,39 @@ return {
           map("n", "<leader>hr", gs.reset_hunk, { desc = "Reset hunk" })
           map("v", "<leader>hs", function()
             gs.stage_hunk { vim.fn.line("."), vim.fn.line("v") }
-          end, { desc = "Stage hunk" })
+          end, { desc = "Stage hunk" }
+          )
           map("v", "<leader>hr", function()
             gs.reset_hunk { vim.fn.line("."), vim.fn.line("v") }
-          end, { desc = "Reset hunk" })
+          end, { desc = "Reset hunk" }
+          )
           map("n", "<leader>hu", gs.undo_stage_hunk, { desc = "Undo stage hunk" })
           map("n", "<leader>hS", gs.stage_buffer, { desc = "Stage buffer" })
           map("n", "<leader>hR", gs.reset_buffer, { desc = "Reset buffer" })
           map("n", "<leader>hp", gs.preview_hunk_inline, { desc = "preview hunk (inline)" })
           map("n", "<leader>hP", gs.preview_hunk, { desc = "preview hunk (float)" })
-          map("n", "<leader>hb", function() gs.blame_line({ full = true }) end,
-            { desc = "Line blame (float)" })
+          map(
+            "n", "<leader>hb", function() gs.blame_line({ full = true }) end,
+            { desc = "Line blame (float)" }
+          )
           map("n", "<leader>hB", gs.toggle_current_line_blame, { desc = "line blame (toggle)" })
           map("n", "<leader>hd", gs.diffthis, { desc = "diff against the index" })
-          map("n", "<leader>hD", function() gs.diffthis("~1") end,
-            { desc = "diff against previous commit" })
+          map(
+            "n", "<leader>hD", function() gs.diffthis("~1") end,
+            { desc = "diff against previous commit" }
+          )
           map("n", "<leader>hx", gs.toggle_deleted, { desc = "toggle deleted lines" })
 
           -- Text object
           map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>")
-          map({ "n", "x" }, "[h", ":<C-U>Gitsigns select_hunk<CR>o^<Esc>",
-            { silent = true, desc = "Hunk top" })
-          map({ "n", "x" }, "]h", ":<C-U>Gitsigns select_hunk<CR>^g_<Esc>",
-            { silent = true, desc = "Hunk bottom" })
+          map(
+            { "n", "x" }, "[h", ":<C-U>Gitsigns select_hunk<CR>o^<Esc>",
+            { silent = true, desc = "Hunk top" }
+          )
+          map(
+            { "n", "x" }, "]h", ":<C-U>Gitsigns select_hunk<CR>^g_<Esc>",
+            { silent = true, desc = "Hunk bottom" }
+          )
         end,
       })
       -- restore hunk navigation on CodeDiff.nvim close
