@@ -230,6 +230,7 @@ map("n", "<Esc><Esc>", "<Esc>:nohlsearch<CR>", { silent = true })
 map("n", "<leader>'", function()
   if not _G._listchars then
     _G._listchars = vim.o.listchars
+    ---@diagnostic disable-next-line: missing-fields -- nightly types vim.opt.X as the vim.Option class
     vim.opt.listchars = {
       tab = "→ ",
       eol = "↲",

@@ -1,5 +1,11 @@
 nvim ?= nvim
 
+# Prefer the locally built Neovim nightly when present (same as the `vi`
+# alias: VIMRUNTIME=<src>/runtime <src>/build/bin/nvim); fall back to `nvim`
+# on PATH (CI installs nightly via rhysd/action-setup-vim).
+NIGHTLY_NVIM := /home/bhagwan/Sources/nvim/neovim/build/bin/nvim
+NIGHTLY_RUNTIME := /home/bhagwan/Sources/nvim/neovim/runtime
+
 #
 # Run under git-bash on Windows (requires: scoop install make git)
 #
@@ -24,7 +30,7 @@ endif
 EMMYLUA_DIR=.emmylua
 # Pin the emmylua release tag to download. Set to an empty
 # string (EMMYLUA_VERSION=) to fetch the latest release instead.
-EMMYLUA_VERSION=0.25.1
+# EMMYLUA_VERSION=0.25.1
 # OS arch detection for the emmylua binaries (Darwin/Linux/Windows,
 # x64/arm64). Falls back to linux-x64 on unknown platforms; override
 # by passing EMMY_CHECK_ASSET=<asset filename> or LUA_FMT_ASSET=<asset
@@ -49,6 +55,12 @@ EMMY_CHECK_ASSET=emmylua_check-$(EMMY_OS)-$(EMMY_ARCH_ASSET)$(EMMY_EXT_ARCHIVE)
 LUA_FMT_ASSET=luafmt-$(EMMY_OS)-$(EMMY_ARCH_ASSET)$(EMMY_EXT_ARCHIVE)
 EMMY_CHECK_BIN=$(EMMYLUA_DIR)/emmylua_check$(EMMY_EXT)
 LUA_FMT_BIN=$(EMMYLUA_DIR)/luafmt$(EMMY_EXT)
+
+# Download the emmylua binaries (emmylua_check + luafmt) into .emmylua/.
+# Convenience alias used by CI (`make deps`); both binaries are fetched by
+# the single deps/emmylua rule below.
+.PHONY: deps
+deps: deps/emmylua
 
 .PHONY: deps/emmylua
 deps/emmylua:
@@ -96,8 +108,12 @@ emmylua-check: | deps/emmylua
 	else \
 		EMMY="emmylua_check" ; \
 	fi ; \
-	VIMRUNTIME="$$($(nvim) --clean --headless +'echo $$VIMRUNTIME' +q 2>&1)" \
-		$$EMMY . --ignore '.emmylua/**/*' --warnings-as-errors
+	if [ -x "$(NIGHTLY_NVIM)" ]; then \
+		VR="$(NIGHTLY_RUNTIME)" ; \
+	else \
+		VR="$$($(nvim) --clean --headless +'echo $$VIMRUNTIME' +q 2>&1 | tr -d '\r')" ; \
+	fi ; \
+	VIMRUNTIME="$$VR" $$EMMY . --ignore '.emmylua/**/*' --warnings-as-errors
 
 # Lua sources formatted by `make fmt` / `make fmtcheck`. Vendored files are
 # excluded via `.luafmtignore`.

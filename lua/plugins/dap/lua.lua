@@ -23,7 +23,7 @@ local function dap_server(opts)
   -- server already started?
   if nvim_chanID then
     local pid = vim.fn.jobpid(nvim_chanID)
-    vim.fn.rpcnotify(nvim_chanID, "nvim_exec_lua", [[return require"osv".stop()]])
+    vim.rpcnotify(nvim_chanID, "nvim_exec_lua", [[return require"osv".stop()]])
     vim.fn.jobstop(nvim_chanID)
     if type(vim.uv.os_getpriority(pid)) == "number" then
       vim.uv.kill(pid, 9)
@@ -34,17 +34,18 @@ local function dap_server(opts)
   nvim_chanID = vim.fn.jobstart({ vim.v.progpath, "--embed", "--headless" }, { rpc = true })
   assert(nvim_chanID > 0, "Could not create neovim instance with jobstart!")
 
-  local mode = vim.fn.rpcrequest(nvim_chanID, "nvim_get_mode")
+  -- vim.rpcrequest() has no @return on stable <=0.12 (typed nil); guard for the linter
+  local mode = vim.rpcrequest(nvim_chanID, "nvim_get_mode") or { blocking = false }
   assert(not mode.blocking, "Neovim is waiting for input at startup. Aborting.")
 
   -- make sure OSV is loaded
-  vim.fn.rpcrequest(
+  vim.rpcrequest(
     nvim_chanID, "nvim_exec_lua", [[vim.opt.packpath:append({ vim.fn.stdpath("data") .. "/site" })]],
     {}
   )
-  vim.fn.rpcrequest(nvim_chanID, "nvim_command", "packadd one-small-step-for-vimkind")
+  vim.rpcrequest(nvim_chanID, "nvim_command", "packadd one-small-step-for-vimkind")
 
-  nvim_server = vim.fn.rpcrequest(
+  nvim_server = vim.rpcrequest(
     nvim_chanID, "nvim_exec_lua", [[return require"osv".launch(...)]], { opts }
   )
 
@@ -100,7 +101,7 @@ dap.configurations.lua = {
         if not nvim_chanID or nvim_chanID <= 0 then
           error("Fatal: neovim RPC channel is nil!")
         end
-        vim.fn.rpcnotify(nvim_chanID, "nvim_command", "luafile " .. vim.fn.expand("%:p"))
+        vim.rpcnotify(nvim_chanID, "nvim_command", "luafile " .. vim.fn.expand("%:p"))
         -- clear the lisener or we get called in any dap-config run
         dap.listeners.after["setBreakpoints"]["osv"] = nil
       end

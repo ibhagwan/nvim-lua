@@ -1,0 +1,88 @@
+name: CI
+
+# Lint/format checks only (this config has no test suite).
+# Modeled after fzf-lua's .github/workflows/{ci,lint}.yaml, extended with a
+# macOS/Windows matrix so `make fmtcheck`/`make lint` run on every push on
+# all three platforms.
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.actor }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Install neovim
+        uses: rhysd/action-setup-vim@v1
+        with:
+          neovim: true
+          # nightly: `make lint` type-checks against $VIMRUNTIME of the nvim
+          # on PATH; locally the Makefile prefers the neovim.git nightly
+          # build, so CI must lint against nightly types too.
+          version: nightly
+
+      # `make deps` downloads both emmylua binaries (emmylua_check + luafmt)
+      # into .emmylua/ (git-ignored); the fmt/lint targets prefer those over
+      # PATH lookups. Requires `gh`, authenticated via GITHUB_TOKEN.
+      - name: Install emmylua (emmylua_check + luafmt)
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: make deps
+
+      # emmylua resolves `require(...)` against the library paths in
+      # .emmyrc.json: the vim.pack plugins under
+      # $XDG_DATA_HOME/nvim/site/pack/core/opt/* (pinned in
+      # nvim-pack-lock.json) and $HOME/Sources/nvim/fzf-lua. Clone them at
+      # their pinned revs so lint sees the same plugin sources as locally.
+      - name: Install pinned plugins (type resolution)
+        shell: bash
+        run: |
+          export XDG_DATA_HOME="$HOME/.local/share"
+          PLUGDIR="$XDG_DATA_HOME/nvim/site/pack/core/opt"
+          mkdir -p "$PLUGDIR"
+          python3 -c '
+          import json
+          for name, p in json.load(open("nvim-pack-lock.json"))["plugins"].items():
+              print(name, p["src"], p["rev"])
+          ' | tr -d '\r' | while read -r name src rev; do
+            if [ ! -d "$PLUGDIR/$name/.git" ]; then
+              git clone --quiet "$src" "$PLUGDIR/$name"
+            fi
+            git -C "$PLUGDIR/$name" checkout --quiet "$rev"
+            echo "installed $name @ $rev"
+          done
+          # fzf-lua is a local dev plugin (symlinked into pack/dev), pin the
+          # same rev as the local checkout for stable type resolution.
+          FZF_REV=a8312697c30b4d3b110fa3dc56e3699107aed9a0
+          mkdir -p "$HOME/Sources/nvim"
+          if [ ! -d "$HOME/Sources/nvim/fzf-lua/.git" ]; then
+            git clone --quiet https://github.com/ibhagwan/fzf-lua "$HOME/Sources/nvim/fzf-lua"
+          fi
+          git -C "$HOME/Sources/nvim/fzf-lua" checkout --quiet "$FZF_REV"
+
+      - name: Check formatting
+        shell: bash
+        run: make fmtcheck
+
+      - name: Lint
+        shell: bash
+        run: |
+          export XDG_DATA_HOME="$HOME/.local/share"
+          make lint

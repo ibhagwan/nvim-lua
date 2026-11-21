@@ -104,7 +104,9 @@ function M.is_NetBSD()
 end
 
 function M.is_iSH()
-  return vim.uv.os_uname().release:match("%-ish$") ~= nil
+  local uname = vim.uv.os_uname()
+  if not uname then return false end
+  return uname.release:match("%-ish$") ~= nil
 end
 
 ---@param path string

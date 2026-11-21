@@ -41,6 +41,7 @@
       "$XDG_DATA_HOME/nvim/site/pack/core/opt/snacks.nvim",
       "$XDG_DATA_HOME/nvim/site/pack/core/opt/ts-vimdoc.nvim",
       "$XDG_DATA_HOME/nvim/site/pack/core/opt/gitsigns.nvim",
+      "$XDG_DATA_HOME/nvim/site/pack/core/opt/fzf-lua",
       "$HOME/Sources/nvim/fzf-lua"
     ],
     "preloadFileSize": 1000

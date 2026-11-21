@@ -43,6 +43,7 @@ vim.o.linebreak = true                           -- do not break words on line w
 -- `xfd -fa "InputMonoNerdFont:style:Regular"` or
 -- `xfd -fn "-misc-fixed-medium-r-semicondensed-*-13-*-*-*-*-*-iso10646-1"`
 -- input special chars with the sequence <C-v-u> followed by the hex code
+---@diagnostic disable-next-line: missing-fields -- nightly types vim.opt.X as the vim.Option class
 vim.opt.listchars = {
   tab = "▏ ",
   trail = "·",
