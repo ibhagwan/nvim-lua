@@ -56,7 +56,7 @@ dap.configurations.c = {
     type = "cppdbg",
     request = "launch",
     program = function()
-      local nvim_bin = vim.fn.expand("$HOME/Sources/nvim/neovim/build/bin/nvim")
+      local nvim_bin = vim.fn.expand("$HOME/Sources/nvim/neovim/build/bin/nvim") --[[@as string]]
       if not vim.uv.fs_stat(nvim_bin) then
         utils.warn("'%s' is not executable, aborting.", nvim_bin)
         return dap.ABORT
@@ -120,7 +120,7 @@ dap.configurations.c = {
     type = "cppdbg",
     request = "attach",
     program = function()
-      local nvim_bin = vim.fn.expand("$HOME/Sources/nvim/neovim/build/bin/nvim")
+      local nvim_bin = vim.fn.expand("$HOME/Sources/nvim/neovim/build/bin/nvim") --[[@as string]]
       if not vim.uv.fs_stat(nvim_bin) then
         utils.warn("'%s' is not executable, aborting.", nvim_bin)
         return dap.ABORT
@@ -220,13 +220,11 @@ end
 
 for i, c in ipairs(dap.configurations.rust) do
   if c.type == "lldb" then
-    dap.configurations.rust[i] = vim.tbl_extend(
-      "force",
-      dap.configurations.rust[i], --[[@as table]]
-      {
-        env = build_env,
-        initCommands = rustInitCommands,
-      }
-    )
+    local cfg = dap.configurations.rust[i]
+    ---@cast cfg table
+    dap.configurations.rust[i] = vim.tbl_extend("force", cfg, {
+      env = build_env,
+      initCommands = rustInitCommands,
+    })
   end
 end

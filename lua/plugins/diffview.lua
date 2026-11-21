@@ -28,7 +28,7 @@ M._toggle = function(git_args)
       utils.warn(ret.stderr)
       return
     end
-    local no_changes = ret.stdout:match("nothing to commit")
+    local no_changes = (ret.stdout or ""):match("nothing to commit")
     local diffview_cmd = { "DiffviewOpen" }
     for i = 1, #git_args, 2 do
       table.insert(diffview_cmd, string.format("%s=%s", git_args[i], git_args[i + 1]))

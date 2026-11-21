@@ -24,15 +24,13 @@ M.toggleterm = function()
     M._buf = vim.api.nvim_create_buf(false, false)
   end
 
-  M._win = vim.iter(
-    vim.fn.win_findbuf(M._buf) --[[@as IterMod]]
-  ):find(function(b_wid)
-    return vim.iter(
-      vim.api.nvim_tabpage_list_wins(0) --[[@as IterMod]]
-    ):any(function(t_wid)
+  ---@diagnostic disable: redundant-parameter
+  M._win = vim.iter(vim.fn.win_findbuf(M._buf)):find(function(b_wid)
+    return vim.iter(vim.api.nvim_tabpage_list_wins(0)):any(function(t_wid)
       return b_wid == t_wid
     end)
   end)
+  ---@diagnostic enable: redundant-parameter
     or (function()
       M._new = true
       local height = math.floor(vim.o.lines * M._size)

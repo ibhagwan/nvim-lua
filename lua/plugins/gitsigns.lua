@@ -6,11 +6,12 @@ local set_hunk_navigation_keymaps = function(bufnr)
   local gs = package.loaded.gitsigns
   if not gs then return end
   local codediff = package.loaded.codediff
-  local lifecycle = codediff and assert(require("codediff.ui.lifecycle"))
+  ---@type table?
+  local lifecycle = codediff and require("codediff.ui.lifecycle") or nil
   vim.keymap.set("n", "]c", function()
     if vim.wo.diff then
       vim.cmd.normal({ "]c", bang = true })
-    elseif codediff and lifecycle.get_session(vim.api.nvim_get_current_tabpage()) then
+    elseif codediff and lifecycle and lifecycle.get_session(vim.api.nvim_get_current_tabpage()) then
       codediff.next_hunk()
     else
       gs.nav_hunk("next")
@@ -20,7 +21,7 @@ local set_hunk_navigation_keymaps = function(bufnr)
   vim.keymap.set("n", "[c", function()
     if vim.wo.diff then
       vim.cmd.normal({ "[c", bang = true })
-    elseif codediff and lifecycle.get_session(vim.api.nvim_get_current_tabpage()) then
+    elseif codediff and lifecycle and lifecycle.get_session(vim.api.nvim_get_current_tabpage()) then
       codediff.prev_hunk()
     else
       gs.nav_hunk("prev")

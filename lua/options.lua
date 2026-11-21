@@ -52,16 +52,11 @@ vim.opt.listchars = {
 vim.o.list = true
 vim.o.showbreak = "↪ "
 
+---@diagnostic disable-next-line: undefined-field, call-non-callable, need-check-nil
 vim.opt.diffopt:append("linematch:60") -- As suggested by `:help diffopt`
 
 -- show menu even for one item do not auto select/insert
-vim.opt.completeopt = {
-  "noselect",
-  "menu",
-  "menuone",
-  "popup",
-  "fuzzy", -- nvim 0.11
-}
+vim.o.completeopt = "noselect,menu,menuone,popup,fuzzy" -- `fuzzy` needs nvim 0.11
 
 vim.o.pumheight = 10 -- completion menu max height
 
@@ -220,7 +215,7 @@ if vim.env.SSH_TTY then
 end
 
 local ok, ui2 = pcall(require, "vim._core.ui2")
-if ok then
+if ok and ui2 then
   vim.o.cmdheight = 1
   ui2.enable({
     enable = true,

@@ -1,5 +1,5 @@
 local res, dap_python = pcall(require, "dap-python")
-if not res then
+if not res or not dap_python then
   return
 end
 
@@ -19,7 +19,7 @@ else
     return require("mason-registry").get_package("debugpy")
   end)
   if ok and pkg and pkg:is_installed() then
-    prefix = vim.fs.joinpath(vim.env.MASON, "packages", "debugpy", "venv")
+    prefix = vim.fs.joinpath(assert(os.getenv("MASON")), "packages", "debugpy", "venv")
   end
 end
 

@@ -30,8 +30,8 @@ return {
         require("fidget").setup({})
         require("mason").setup()
         require("mason-lspconfig").setup({
-          ensure_installed = not utils.is_NetBSD() and not utils.is_iSH() and { "emmylua_ls" }
-            or nil,
+          ensure_installed = not utils.is_NetBSD() and not utils.is_iSH() and { "emmylua_ls" } or {},
+          automatic_enable = true,
         })
       end,
     },

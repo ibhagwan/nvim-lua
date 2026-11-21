@@ -98,10 +98,6 @@
       "rev": "1af6ffb9b5229a856e8090fa2f690e0931a5aace",
       "src": "https://github.com/jbyuki/one-small-step-for-vimkind"
     },
-    "opencode.nvim": {
-      "rev": "4851ae503585dc5142ad66a98e8952a74e1f7b3a",
-      "src": "https://github.com/NickvanDyke/opencode.nvim"
-    },
     "previm": {
       "rev": "8d414bf9b38d2a7c65a313775e26c03a0169f67f",
       "src": "https://github.com/previm/previm",

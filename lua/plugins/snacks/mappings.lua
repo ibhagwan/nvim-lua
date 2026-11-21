@@ -24,13 +24,7 @@ local keys = {
     "<leader>Fp",
     function()
       require "snacks".picker.files({
-        cwd = vim.fs.joinpath(
-          vim.fn.stdpath("data"), --[[@as string]]
-          "site",
-          "pack",
-          "core",
-          "opt"
-        ),
+        cwd = vim.fs.joinpath(tostring(vim.fn.stdpath("data")), "site", "pack", "core", "opt"),
       })
     end,
     desc = "Find Plugin File",

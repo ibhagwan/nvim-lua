@@ -7,11 +7,7 @@ return {
       local function docgen(opts)
         require("lz.n").trigger_load("ts-vimdoc.nvim")
         local vimdoc = require("ts-vimdoc")
-        opts.project_name = opts.project_name
-          or vim.fn.fnamemodify(
-            vim.uv.cwd(), --[[@as string]]
-            ":t:r"
-          )
+        opts.project_name = opts.project_name or vim.fn.fnamemodify(tostring(vim.uv.cwd()), ":t:r")
         opts.input_file = vim.fn.fnamemodify(opts.input_file, ":p")
         opts.output_file = opts.output_file
           or vim.fn.fnamemodify(string.format("doc/%s.txt", opts.project_name), ":p")

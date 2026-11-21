@@ -213,9 +213,11 @@ end
 
 local function patch_repo()
   local Repo = require("gitsigns.git.repo")
+  ---@diagnostic disable-next-line: undefined-field
   if Repo._filter_patch then
     return
   end
+  ---@diagnostic disable-next-line: inject-field
   Repo._filter_patch = true
 
   local errors = require("gitsigns.git.errors")
@@ -229,6 +231,7 @@ local function patch_repo()
   ---@return string[] stdout
   ---@return string? stderr
   ---@return boolean filtered True when git filters were applied.
+  ---@diagnostic disable-next-line: duplicate-set-field
   function Repo:get_show_text(object, encoding, path)
     -- Some upstream call sites pass only "<rev>:<path>". Recover the path so
     -- git can resolve the matching attributes and filters.
@@ -269,10 +272,13 @@ local function patch_repo()
   ---@return string[] stdout
   ---@return string? stderr
   ---@return boolean filtered
+  ---@diagnostic disable-next-line: duplicate-set-field
   function Repo:get_show_text_at_revision(revision, relpath, encoding)
+    ---@diagnostic disable: redundant-parameter
     local stdout, stderr, filtered = self:get_show_text(
       revision .. ":" .. relpath, encoding, relpath
     )
+    ---@diagnostic enable: redundant-parameter
 
     if stderr
       and (stderr:match(errors.e.path_does_not_exist)
@@ -282,12 +288,15 @@ local function patch_repo()
         or self:log_rename_status(revision, relpath)
       if old_path then
         log.dprintf("found rename %s -> %s", old_path, relpath)
+        ---@diagnostic disable: redundant-parameter
         stdout, stderr, filtered = self:get_show_text(
           revision .. ":" .. old_path, encoding, old_path
         )
+        ---@diagnostic enable: redundant-parameter
       end
     end
 
+    ---@cast filtered boolean
     return stdout, stderr, filtered
   end
 end
@@ -308,6 +317,7 @@ local function patch_obj()
   ---@return string[] stdout
   ---@return string? stderr
   ---@return boolean? filtered
+  ---@diagnostic disable-next-line: duplicate-set-field
   function Obj:get_show_text(revision, relpath)
     relpath = relpath or self.relpath
     if revision and not relpath then
@@ -321,14 +331,19 @@ local function patch_obj()
     end
 
     local stdout, stderr, filtered
+    ---@cast stdout string[]
+    local encoding = self.encoding
+    ---@cast encoding string
     if revision then
       stdout, stderr, filtered = self.repo:get_show_text_at_revision(
-        revision, relpath, self.encoding
+        revision, assert(relpath), encoding
       )
     else
+      ---@diagnostic disable: redundant-parameter
       stdout, stderr, filtered = self.repo:get_show_text(
-        assert(self.object_name), self.encoding, self.relpath
+        assert(self.object_name), encoding, self.relpath
       )
+      ---@diagnostic enable: redundant-parameter
     end
 
     if not filtered and not self.i_crlf and self.w_crlf then
@@ -364,6 +379,7 @@ local function patch_obj()
   ---@param hunks Gitsigns.Hunk.Hunk[]
   ---@param invert? boolean
   ---@return string? err
+  ---@diagnostic disable-next-line: duplicate-set-field
   function Obj:stage_hunks_filtered(hunks, invert)
     local relpath = assert(self.relpath)
     local text, stderr, filtered = self:get_show_text()
@@ -402,12 +418,15 @@ local function patch_obj()
   ---@param hunks Gitsigns.Hunk.Hunk[]
   ---@param invert? boolean
   ---@return string? err
+  ---@diagnostic disable-next-line: duplicate-set-field
   function Obj:stage_hunks(hunks, invert)
     self:ensure_file_in_index()
 
     local relpath = assert(self.relpath)
-    local filter = self.repo:check_attr("filter", { relpath })
-      [relpath]
+    local attrs = self.repo:check_attr("filter", { relpath })
+    ---@cast attrs table<string, string>
+    ---@diagnostic disable-next-line: undefined-field
+    local filter = attrs[relpath]
 
     if filter and filter ~= "unspecified" and filter ~= "unset" then
       return self:stage_hunks_filtered(hunks, invert)
@@ -446,7 +465,9 @@ local function patch_cache()
 
     table.sort(range)
     local top, bot = range[1], range[2]
-    local hunk = Hunks.create_partial_hunk(hunks or {}, top, bot)
+    local partial_hunks = hunks or {}
+    ---@cast partial_hunks Gitsigns.Hunk.Hunk[]
+    local hunk = Hunks.create_partial_hunk(partial_hunks, top, bot)
     if not hunk then
       return
     end
@@ -454,13 +475,16 @@ local function patch_cache()
     local compare_text = assert(self.compare_text)
 
     if staged then
-      local staged_top, staged_bot = top, bot
+      ---@type integer
+      local staged_top = top
+      ---@type integer
+      local staged_bot = bot
       for _, h in ipairs(assert(self.hunks)) do
         if top > h.vend then
-          staged_top = staged_top - (h.added.count - h.removed.count)
+          staged_top = (staged_top - (h.added.count - h.removed.count)) --[[@as integer]]
         end
         if bot > h.vend then
-          staged_bot = staged_bot - (h.added.count - h.removed.count)
+          staged_bot = (staged_bot - (h.added.count - h.removed.count)) --[[@as integer]]
         end
       end
 
@@ -483,9 +507,11 @@ end
 
 local function patch_actions()
   local actions = require("gitsigns.actions")
+  ---@diagnostic disable-next-line: undefined-field
   if actions._filter_patch then
     return
   end
+  ---@diagnostic disable-next-line: inject-field
   actions._filter_patch = true
 
   local async = require("gitsigns.async")
@@ -529,6 +555,7 @@ local function patch_actions()
   ---- {async}
   ---
   ---@param callback? fun(err?: string)
+  ---@diagnostic disable-next-line: duplicate-set-field
   function actions.stage_buffer(callback)
     async_run(callback, function()
       local bufnr = api.nvim_get_current_buf()

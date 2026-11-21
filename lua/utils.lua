@@ -199,15 +199,12 @@ function M.get_visual_selection(nl_literal)
   -- local n = cerow-csrow+1
   local n = #lines
   if n <= 0 then return "" end
-  lines[n] = string.sub(
-    lines[n], --[[@as string]]
-    1,
-    cecol
-  )
-  lines[1] = string.sub(
-    lines[1], --[[@as string]]
-    cscol
-  )
+  local last_line = lines[n]
+  ---@cast last_line string
+  lines[n] = string.sub(last_line, 1, cecol)
+  local first_line = lines[1]
+  ---@cast first_line string
+  lines[1] = string.sub(first_line, cscol)
   return table.concat(lines, nl_literal and "\\n" or "\n")
 end
 

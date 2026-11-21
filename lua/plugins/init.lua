@@ -17,6 +17,7 @@ table.insert(plugins, {
   data = {
     enabled = false,
     after = function()
+      ---@diagnostic disable-next-line: unresolved-require
       require("smartyank").setup({ highlight = { timeout = 1000 } })
     end,
   },
@@ -89,18 +90,19 @@ table.insert(plugins, {
   data = {
     ft = "markdown",
     after = function()
-      require("render-markdown").setup({
-        file_types = { "markdown" },
-        code = {
-          sign = false,
-          width = "block",
-          right_pad = 4,
-          position = "right",
-        },
-        heading = {
-          sign = false,
-        },
-      })
+      require("render-markdown") --[[@as render.md.Init]]
+        .setup({
+          file_types = { "markdown" },
+          code = {
+            sign = false,
+            width = "block",
+            right_pad = 4,
+            position = "right",
+          },
+          heading = {
+            sign = false,
+          },
+        })
     end,
   },
 })

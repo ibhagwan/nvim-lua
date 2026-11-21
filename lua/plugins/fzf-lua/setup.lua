@@ -216,11 +216,15 @@ local default_opts = {
   buffers = { no_action_zz = true },
   files = {},
   grep = {
-    fzf_opts = { ["--history"] = vim.fs.joinpath(vim.fn.stdpath("data"), "fzf_search_hist") },
+    fzf_opts = {
+      ["--history"] = vim.fs.joinpath(tostring(vim.fn.stdpath("data")), "fzf_search_hist"),
+    },
   },
   blines = {
     { "ivy" },
-    fzf_opts = { ["--history"] = vim.fs.joinpath(vim.fn.stdpath("data"), "fzf_blines_hist") },
+    fzf_opts = {
+      ["--history"] = vim.fs.joinpath(tostring(vim.fn.stdpath("data")), "fzf_blines_hist"),
+    },
   },
   btags = { { "ivy" } },
   git = {

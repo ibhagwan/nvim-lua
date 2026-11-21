@@ -20,7 +20,8 @@ if not package.loaded["smartyank"] then
       --   .. "lua vim.highlight.on_yank{higroup='IncSearch', timeout=2000}"
       desc = "Copy to clipboard/tmux/OSC52",
       callback = function()
-        local ok, yank_data = pcall(vim.fn.getreg, "0")
+        local ok, yank_data = pcall(function() return vim.fn.getreg("0") end)
+        ---@cast yank_data string
         local valid_yank = ok and #yank_data > 0 and vim.v.operator == "y"
         if valid_yank and vim.fn.has("clipboard") == 1 then
           pcall(vim.fn.setreg, "+", yank_data)
@@ -192,21 +193,18 @@ augroup("ibhagwan/nvim-pack", function(g)
       local function cargo_build(plug)
         if vim.fn.executable("cargo") ~= 1 then return end
         local plugin_dir = vim.fs.joinpath(
-          vim.fn.stdpath("data"), --[[@as string]]
-          "site",
-          "pack",
-          "core",
-          "opt",
-          plug
+          tostring(vim.fn.stdpath("data")), "site", "pack", "core", "opt", plug
         )
         vim.fn.jobstart({ "cargo", "+nightly", "build", "--release" }, {
           cwd = plugin_dir,
           on_stdout = function(_, data)
+            ---@diagnostic disable-next-line: redundant-parameter
             vim.iter(data):each(function(s)
               if #s > 0 then utils.info("[%s] %s", plug, s) end
             end)
           end,
           on_stderr = function(_, data)
+            ---@diagnostic disable-next-line: redundant-parameter
             vim.iter(data):each(function(s)
               if #s > 0 then utils.warn("[%s] %s", plug, s) end
             end)

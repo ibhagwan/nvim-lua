@@ -14,7 +14,9 @@ local yadm_grep_opts = {
   -- not expand POSIX `${VAR}`; expand the repo path here instead. `cwd`
   -- already switches to $HOME, so `git -C` isn't needed.
   cmd = ("git --git-dir=%s grep -i --line-number --column --color=always"):format(
-    vim.fn.shellescape(vim.fn.expand("$YADM_REPO"))
+    vim.fn.shellescape(
+      vim.fn.expand("$YADM_REPO") --[[@as string]]
+    )
   ),
   rg_glob = false, -- this isn't `rg`
 }
@@ -42,13 +44,7 @@ local keys = {
     "<leader>fp",
     function()
       require "fzf-lua".files({
-        cwd = vim.fs.joinpath(
-          vim.fn.stdpath("data"), --[[@as string]]
-          "site",
-          "pack",
-          "core",
-          "opt"
-        ),
+        cwd = vim.fs.joinpath(tostring(vim.fn.stdpath("data")), "site", "pack", "core", "opt"),
       })
     end,
     desc = "Find Plugin File",

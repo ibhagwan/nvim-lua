@@ -19,6 +19,7 @@ return {
 
       vim.api.nvim_create_user_command("TogglePickers", function()
         local u = require("utils")
+        ---@diagnostic disable-next-line: inject-field
         u.__USE_SNACKS = not u.__USE_SNACKS
         u.info("Main picker set to %s", u.__USE_SNACKS and "Snacks" or "FzfLua")
         require("plugins.fzf-lua.mappings").map()

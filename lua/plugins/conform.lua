@@ -5,7 +5,7 @@ return {
     after = function()
       -- `.emmylua/luafmt` is downloaded by this repo's `make deps/emmylua`;
       -- fall back to `luafmt` on PATH (e.g. mason) when not present.
-      local luafmt = vim.fs.joinpath(vim.fn.stdpath("config"), ".emmylua", "luafmt")
+      local luafmt = vim.fs.joinpath(tostring(vim.fn.stdpath("config")), ".emmylua", "luafmt")
       if vim.fn.executable(luafmt) == 0 then luafmt = "luafmt" end
       require("conform").setup({
         formatters = { luafmt = { command = luafmt } },

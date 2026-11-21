@@ -1,8 +1,9 @@
 local res, dap = pcall(require, "dap")
-if not res then
+if not res or not dap then
   return
 end
 
+---@type table?
 local nvim_server
 local nvim_chanID
 
@@ -31,7 +32,7 @@ local function dap_server(opts)
   end
 
   nvim_chanID = vim.fn.jobstart({ vim.v.progpath, "--embed", "--headless" }, { rpc = true })
-  assert(nvim_chanID, "Could not create neovim instance with jobstart!")
+  assert(nvim_chanID > 0, "Could not create neovim instance with jobstart!")
 
   local mode = vim.fn.rpcrequest(nvim_chanID, "nvim_get_mode")
   assert(not mode.blocking, "Neovim is waiting for input at startup. Aborting.")
@@ -49,6 +50,7 @@ local function dap_server(opts)
 
   vim.wait(100)
 
+  assert(nvim_server, "neovim server failed to start")
   require("utils").info("Server started on port %d, channel-id %d", nvim_server.port, nvim_chanID)
   return nvim_server
 end
@@ -94,8 +96,10 @@ dap.configurations.lua = {
     -- host = function() end,
     -- port = function() end,
     post = function()
-      dap.listeners.after["setBreakpoints"]["osv"] = function(session, body)
-        assert(nvim_chanID, "Fatal: neovim RPC channel is nil!")
+      dap.listeners.after["setBreakpoints"]["osv"] = function(_session, _body)
+        if not nvim_chanID or nvim_chanID <= 0 then
+          error("Fatal: neovim RPC channel is nil!")
+        end
         vim.fn.rpcnotify(nvim_chanID, "nvim_command", "luafile " .. vim.fn.expand("%:p"))
         -- clear the lisener or we get called in any dap-config run
         dap.listeners.after["setBreakpoints"]["osv"] = nil

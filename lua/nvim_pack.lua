@@ -8,21 +8,12 @@ local LOCK_UPDATE = nil
 ---@param prefix string?
 ---@return string
 local function get_plug_dir(prefix)
-  return vim.fs.joinpath(
-    vim.fn.stdpath("data"), --[[@as string]]
-    "site",
-    "pack",
-    prefix or "core",
-    "opt"
-  )
+  return vim.fs.joinpath(tostring(vim.fn.stdpath("data")), "site", "pack", prefix or "core", "opt")
 end
 
 ---@return string
 local function lock_get_path()
-  return vim.fs.joinpath(
-    vim.fn.stdpath("config"), --[[@as string]]
-    "nvim-pack-lock.json"
-  )
+  return vim.fs.joinpath(tostring(vim.fn.stdpath("config")), "nvim-pack-lock.json")
 end
 
 local function lock_read()
@@ -98,6 +89,7 @@ local function import_modname(modname, remote, dev)
     add_plugin_spec(mod, remote, dev)
   else
     -- Nested plugin setup
+    ---@diagnostic disable-next-line: redundant-parameter
     vim.iter(mod):each(function(sp) add_plugin_spec(sp, remote, dev) end)
   end
 end
