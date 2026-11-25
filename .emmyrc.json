@@ -21,7 +21,7 @@
       "$XDG_DATA_HOME/nvim/site/pack/core/opt/blink.cmp",
       "$XDG_DATA_HOME/nvim/site/pack/core/opt/codediff.nvim",
       "$XDG_DATA_HOME/nvim/site/pack/core/opt/conform.nvim",
-      "$XDG_DATA_HOME/nvim/site/pack/core/opt/diffview.nvim",
+      "$XDG_DATA_HOME/nvim/site/pack/core/opt/diffview-plus.nvim",
       "$XDG_DATA_HOME/nvim/site/pack/core/opt/fidget.nvim",
       "$XDG_DATA_HOME/nvim/site/pack/core/opt/lz.n",
       "$XDG_DATA_HOME/nvim/site/pack/core/opt/mason-lspconfig.nvim",

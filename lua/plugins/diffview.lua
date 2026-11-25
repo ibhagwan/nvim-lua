@@ -40,7 +40,7 @@ M._toggle = function(git_args)
 end
 
 return {
-  src = "https://github.com/dlyongemallo/diffview.nvim",
+  src = "https://github.com/dlyongemallo/diffview-plus.nvim",
   data = {
     cmd = { "DiffviewOpen", "DiffviewFileHistory" },
     beforeAll = function()
@@ -66,18 +66,21 @@ return {
       )
     end,
     after = function()
-      local gq_keymap_set_opts = {
-        { "n", "v" },
-        "gq",
-        M._close,
-        { silent = true, desc = "Close Diffview" },
-      }
+      local a = require("diffview.config").actions
+      local function keymap_opts(k, fn, desc)
+        return { { "n", "v" }, k, fn, { silent = true, desc = desc } }
+      end
+      local q_keymap = keymap_opts("q", M._close, "Close Diffview")
+      local gq_keymap = keymap_opts("gq", M._close, "Close Diffview")
+      local next_entry_keymap = keymap_opts("]f", a.select_next_entry, "Next file")
+      local prev_entry_keymap = keymap_opts("[f", a.select_prev_entry, "Previous file")
+      local keymaps = { q_keymap, gq_keymap, next_entry_keymap, prev_entry_keymap }
       require("diffview").setup({
         keymaps = {
-          view = { gq_keymap_set_opts },
-          file_panel = { gq_keymap_set_opts },
-          file_history_panel = { gq_keymap_set_opts },
-          option_panel = { gq_keymap_set_opts },
+          view = { unpack(keymaps) },
+          file_panel = { unpack(keymaps) },
+          file_history_panel = { unpack(keymaps) },
+          option_panel = { unpack(keymaps) },
         },
         hooks = {
           view_closed = function()

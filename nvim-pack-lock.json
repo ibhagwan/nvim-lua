@@ -16,9 +16,9 @@
       "rev": "016802de402556da54c36bd7359b441266b01cdd",
       "src": "https://github.com/stevearc/conform.nvim"
     },
-    "diffview.nvim": {
-      "rev": "fae72d6c981075dce2e0f946f002382ce0cb44e1",
-      "src": "https://github.com/dlyongemallo/diffview.nvim"
+    "diffview-plus.nvim": {
+      "rev": "5e8ea53418336be4b9a10600318cae8749063fdb",
+      "src": "https://github.com/dlyongemallo/diffview-plus.nvim"
     },
     "fidget.nvim": {
       "rev": "9e0201673e08e997e7cf52afca5565c70bd117f3",
@@ -29,11 +29,11 @@
       "src": "https://github.com/junegunn/fzf.vim"
     },
     "gitsigns.nvim": {
-      "rev": "c0862d382a35b7b45757d8d151a6a634c09bf3ce",
+      "rev": "166c03131e6a3528f692dd89f37668d991f17baa",
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
     "lz.n": {
-      "rev": "b2ba4e3cc35faa44e5bb56e95dc63b3fa7642ca4",
+      "rev": "e17deca39dabe0d9c274547c10c25e3c8352d5d2",
       "src": "https://github.com/lumen-oss/lz.n"
     },
     "mason-lspconfig.nvim": {
@@ -45,7 +45,7 @@
       "src": "https://github.com/mason-org/mason.nvim"
     },
     "mini.nvim": {
-      "rev": "22619434ccca787cdb34406c97f0e395d4debadc",
+      "rev": "24cf4ad5840f0d092e3d8296b17eaf7026bf27f3",
       "src": "https://github.com/echasnovski/mini.nvim"
     },
     "nvim-dap": {
@@ -65,7 +65,7 @@
       "src": "https://github.com/mfussenegger/nvim-jdtls"
     },
     "nvim-lspconfig": {
-      "rev": "4648fd8ba5c678d7e2db75ae44ffac269bb589d8",
+      "rev": "9691c9af52cd12c9accc6dc6d0540593c705bca8",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-nio": {
@@ -73,7 +73,7 @@
       "src": "https://github.com/nvim-neotest/nvim-nio"
     },
     "nvim-treesitter": {
-      "rev": "37e52c733ada9d8d544d53a763140ef1ba404353",
+      "rev": "52773f0d13a0c11d0c3ef33c14ab6ecc1c17148b",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter",
       "version": "'main'"
     },

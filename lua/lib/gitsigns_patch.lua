@@ -118,8 +118,13 @@ function M.check()
   local Obj = git and git.Obj
   local CacheEntry = cache and cache.CacheEntry
 
-  if git and type(Obj) ~= "table" then
-    add_issue(issues, "gitsigns.git Obj is missing")
+  if git then
+    if type(Obj) ~= "table" then
+      add_issue(issues, "gitsigns.git Obj is missing")
+    end
+    expect_function_exists(
+      issues, "gitsigns.git.should_normalize_crlf", git, "should_normalize_crlf"
+    )
   end
   if cache and type(CacheEntry) ~= "table" then
     add_issue(issues, "gitsigns.cache CacheEntry is missing")
@@ -143,10 +148,7 @@ function M.check()
   end
 
   if CacheEntry then
-    expect_function(issues, "CacheEntry:get_hunk", CacheEntry, "get_hunk", 4)
-    expect_function(issues, "CacheEntry:wait_for_hunks", CacheEntry, "wait_for_hunks", 2)
-    expect_function(issues, "CacheEntry:get_hunks", CacheEntry, "get_hunks", 3)
-    expect_function(issues, "CacheEntry:get_cursor_hunk", CacheEntry, "get_cursor_hunk", 2)
+    expect_function(issues, "CacheEntry:buffer_lines", CacheEntry, "buffer_lines", 1)
     expect_function(issues, "CacheEntry:schedule", CacheEntry, "schedule", 2)
     expect_function(issues, "CacheEntry:invalidate", CacheEntry, "invalidate", 2)
   end
@@ -169,7 +171,8 @@ function M.check()
   end
 
   if util then
-    expect_function(issues, "util.buf_lines", util, "buf_lines", 2)
+    expect_function(issues, "util.buf_lines", util, "buf_lines", 3)
+    expect_function(issues, "util.strip_cr", util, "strip_cr", 3)
     expect_function(issues, "util.iconv", util, "iconv", 3)
     if type(util.Path) ~= "table" then
       add_issue(issues, "gitsigns.util Path is missing")
@@ -346,10 +349,12 @@ local function patch_obj()
       ---@diagnostic enable: redundant-parameter
     end
 
-    if not filtered and not self.i_crlf and self.w_crlf then
-      -- Add cr, but not to the newline at the end of file.
-      for i = 1, #stdout - 1 do
-        stdout[i] = stdout[i] .. "\r"
+    if filtered and self.normalize_crlf then
+      -- `cat-file --filters` returns working-tree line endings, while current
+      -- gitsigns compares against buffer text normalized to the index form.
+      local git = require("gitsigns.git")
+      if git.should_normalize_crlf(stdout, stdout, encoding, self.normalize_crlf) then
+        stdout = require("gitsigns.util").strip_cr(stdout, stdout[#stdout] ~= "")
       end
     end
 
@@ -436,75 +441,6 @@ local function patch_obj()
   end
 end
 
-local function patch_cache()
-  local CacheEntry = require("gitsigns.cache").CacheEntry
-  if CacheEntry._filter_patch then
-    return
-  end
-  CacheEntry._filter_patch = true
-
-  local util = require("gitsigns.util")
-
-  ---@async
-  ---@param range? [integer, integer]
-  ---@param greedy? boolean
-  ---@param staged? boolean
-  ---@return Gitsigns.Hunk.Hunk?
-  function CacheEntry:get_hunk(range, greedy, staged)
-    local Hunks = require("gitsigns.hunks")
-
-    if not self:wait_for_hunks(staged) then
-      return
-    end
-
-    local hunks = self:get_hunks(greedy, staged)
-
-    if not range then
-      return (self:get_cursor_hunk(hunks))
-    end
-
-    table.sort(range)
-    local top, bot = range[1], range[2]
-    local partial_hunks = hunks or {}
-    ---@cast partial_hunks Gitsigns.Hunk.Hunk[]
-    local hunk = Hunks.create_partial_hunk(partial_hunks, top, bot)
-    if not hunk then
-      return
-    end
-
-    local compare_text = assert(self.compare_text)
-
-    if staged then
-      ---@type integer
-      local staged_top = top
-      ---@type integer
-      local staged_bot = bot
-      for _, h in ipairs(assert(self.hunks)) do
-        if top > h.vend then
-          staged_top = (staged_top - (h.added.count - h.removed.count)) --[[@as integer]]
-        end
-        if bot > h.vend then
-          staged_bot = (staged_bot - (h.added.count - h.removed.count)) --[[@as integer]]
-        end
-      end
-
-      hunk.added.lines = vim.list_slice(compare_text, staged_top, staged_bot)
-      hunk.removed.lines = vim.list_slice(
-        assert(self.compare_text_head), hunk.removed.start,
-        hunk.removed.start + hunk.removed.count - 1
-      )
-    else
-      -- Use util.buf_lines() rather than nvim_buf_get_lines() so CR is retained
-      -- for dos buffers.
-      hunk.added.lines = vim.list_slice(util.buf_lines(self.bufnr), top, bot)
-      hunk.removed.lines = vim.list_slice(
-        compare_text, hunk.removed.start, hunk.removed.start + hunk.removed.count - 1
-      )
-    end
-    return hunk
-  end
-end
-
 local function patch_actions()
   local actions = require("gitsigns.actions")
   ---@diagnostic disable-next-line: undefined-field
@@ -587,9 +523,10 @@ local function patch_actions()
           table.insert(bcache.staged_diffs, hunk)
         end
 
-        -- Everything was staged, so the index now matches the buffer.
+        -- Everything was staged, so the index now matches the buffer. Keep
+        -- comparison text in the same normalized form as CacheEntry:get_hunks().
         if bcache.compare_text then
-          bcache.compare_text = util.buf_lines(bufnr)
+          bcache.compare_text = bcache:buffer_lines()
         end
       end)
 
@@ -616,7 +553,6 @@ function M.apply()
 
   patch_repo()
   patch_obj()
-  patch_cache()
   patch_actions()
   M._applied = true
   return true
